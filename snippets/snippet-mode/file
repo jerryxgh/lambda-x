@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: file name nondirectory
+# key: file
+# contributor: jerryxgh@gmail.com
+# --
+\`(file-name-nondirectory (buffer-file-name))\`

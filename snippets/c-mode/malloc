@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: malloc
+# key: malloc
+# contributor: jerryxgh@gmail.com
+# --
+malloc($1);$0 

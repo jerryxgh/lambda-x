@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: file name without extension
+# key: filesans
+# contributor: jerryxgh@gmail.com
+# --
+\`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))\`

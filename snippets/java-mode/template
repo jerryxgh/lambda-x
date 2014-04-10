@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: template    
+# key: template
+# contributor: jerryxgh@.gmail.com
+# --
+/* @(#)`(file-name-nondirectory (buffer-file-name))`
+ */
+/**
+ * $1
+ *
+ * @author <a href="mailto:jerryxgh@.gmail.com">`user-full-name`</a>
+ */
+
+public class `(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`${2: extends $3}${4: implements $5} {
+    $6
+}
