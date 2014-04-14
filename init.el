@@ -1,6 +1,9 @@
-;;; init.el --- 
+;;; init.el --- start point
+;;; Commentary:
+;; start point of all settings
 
-(defconst lambda-x-direcotry (file-name-directory 
+;;; Code:
+(defconst lambda-x-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
   "Root directory of lambda-x.")
 
@@ -20,7 +23,9 @@
 (package-initialize)
 
 (defun lambda-package-ensure-install (package)
-  "This is like `package-install', the difference is that if PACKAGE is already installed(checked through `package-installed-p'), it will not be installed again."
+  "This is like `package-install', the difference is that if PACKAGE is \
+already installed(checked through `package-installed-p'), it will not be \
+installed again."
   (unless (or (member package package-activated-list)
               (package-installed-p package)
               (featurep package)
@@ -37,5 +42,9 @@
 (require 'lambda-core)
 (require 'lambda-cc)
 (require 'lambda-web)
+(require 'lambda-writing)
+(require 'lambda-emacs-lisp)
+(require 'lambda-java)
 
+(provide 'init)
 ;;; init.el ends here

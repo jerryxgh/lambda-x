@@ -1,3 +1,10 @@
+;;; lambda-web.el --- Web
+;; Time-stamp: <2014-04-13 12:57:55 Jerry Xu>
+;;; Commentary:
+
+;;; Code:
+
+(require 'lambda-core)
 
 (lambda-package-ensure-install 'web-mode)
 (require 'web-mode)
@@ -18,5 +25,15 @@
 (setq web-mode-code-indent-offset 4)
 (setq web-mode-disable-autocompletion t)
 
+;; less-css-mode --------------------------------------------------------------
+(lambda-package-ensure-install 'less-css-mode)
+(require 'less-css-mode)
+(setq less-css-compile-at-save t)
+
+;; rainbow-mode ---------------------------------------------------------------
+(lambda-package-ensure-install 'rainbow-mode)
+(add-hook 'css-mode-hook 'rainbow-mode)
+
 
 (provide 'lambda-web)
+;;; lambda-web.el ends here
