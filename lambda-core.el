@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-14 18:44:19 Jerry Xu>
+;; Time-stamp: <2014-04-15 16:25:22 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -24,10 +24,8 @@
       ring-bell-function 'ignore ; inhibit annoying warning sound
       x-select-enable-clipboard t 
       enable-recursive-minibuffers t 
-      ;;confirm-kill-emacs 'y-or-n-p 
-      ;; TODO: move it to appropriate palce
-      ;;inhibit-eol-conversion t
-      )
+      confirm-kill-emacs 'y-or-n-p
+	  )
 
 ;; hippie expand is dabbrev expand on steroids
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -139,19 +137,6 @@
             (outline-minor-mode t)))
 (diminish 'outline-minor-mode)
 
-;; saveplace --- When you visit a file, point goes to the last place where
-;; it was when you previously visited the same file.----------------------------
-(require 'saveplace)
-;; Your saved places are written to the file stored in the file specified by
-;; save-place-file. This defaults to ~/.emacs-places. You may want to change it
-;; to keep your home directory uncluttered, for example:
-(setq save-place-file (expand-file-name 
-					   "auto-save-list/saved-places"
-					   user-emacs-directory))
-;; activate it for all buffers
-(setq-default save-place t)
-      ;; TODO: move it to appropriate palce
-
 ;; flyspell --------------------------------------------------------------------
 (if (eq system-type 'windows-nt)
 	(add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
@@ -160,7 +145,10 @@
 
 ;; flycheck --------------------------------------------------------------------
 (lambda-package-ensure-install 'flycheck)
-(add-hook 'prog-mode-hook 'flycheck-mode)
+;; enable on-the-fly syntax checking
+(if (fboundp 'global-flycheck-mode)
+    (global-flycheck-mode 1)
+  (add-hook 'prog-mode-hook 'flycheck-mode))
 
 ;; whitespace-mode config ------------------------------------------------------
 (require 'whitespace)
@@ -174,27 +162,6 @@
 ;; ediff - don't start another frame -------------------------------------------
 (require 'ediff)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;; savehist keeps track of some history ----------------------------------------
-(require 'savehist)
-(setq savehist-additional-variables
-      ;; search entries
-      '(search ring regexp-search-ring)
-      ;; save every minute
-      savehist-autosave-interval 60
-      ;; keep the home clean
-      savehist-file (expand-file-name
-					 "auto-save-list/savehist"
-					 user-emacs-directory))
-(savehist-mode 1)
-;; save recent files -----------------------------------------------------------
-(require 'recentf)
-(setq recentf-save-file (expand-file-name
-						 "auto-save-list/recentf"
-						 user-emacs-directory)
-      recentf-max-saved-items 500
-      recentf-max-menu-items 15)
-(recentf-mode 1)
 
 ;; use shift + arrow keys to switch between visible buffers --------------------
 (require 'windmove)
@@ -229,7 +196,6 @@
 (lambda-package-ensure-install 'powerline)
 (powerline-default-theme)
 
-
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
 (global-undo-tree-mode 1)
@@ -249,7 +215,7 @@
 ;;(setq switch-window-shortcut-style 'qwerty)
 
 (defun create-scratch-buffer nil
-  "create a scratch buffer"
+  "Create a scratch buffer with the scratch message."
   (interactive)
   (unless (get-buffer "*scratch*")
     (switch-to-buffer (get-buffer-create "*scratch*"))
@@ -258,7 +224,7 @@
     (lisp-interaction-mode)))
 
 (defun clear-scratch-buffer nil 
-  "Clear the scratch buffer."
+  "Clear the scratch buffer and keep the scratch message."
   (interactive)
   (when (equal (buffer-name (current-buffer)) "*scratch*")
     (delete-region (point-min) (point-max))
@@ -266,7 +232,7 @@
     (goto-char (point-max))))
 
 (defun interactive-shell-on-exit-kill-buffer nil
-  "kill the buffer on exit of interactive shell"
+  "Kill the buffer on exit of interactive shell."
   (let ((process (get-buffer-process (current-buffer))))
     (if process
         (set-process-sentinel 
@@ -276,7 +242,8 @@
 					 (string-match "finished" state))
 			 (kill-buffer (current-buffer))))))))
 
-(load "lambda-custom") 
+;; Do not load custom file, all the configuration should be done by code
+;;(load "lambda-custom") 
 
 (add-hook 'comint-mode-hook 'interactive-shell-on-exit-kill-buffer)
 ;; always insert at the bottom
@@ -293,7 +260,7 @@
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
       ido-save-directory-list-file
-	  (expand-file-name "auto-save-list/ido.last" user-emacs-directory)
+	  (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
       ido-default-file-method 'selected-window)
 ;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
 (ido-mode t)
@@ -621,7 +588,10 @@
 (require 'projectile)
 (setq projectile-cache-file (expand-file-name 
 							 "auto-save-list/projectile.cache"
-							 user-emacs-directory))
+							 user-emacs-directory)
+	  projectile-known-projects-file (expand-file-name 
+									  "auto-save-list/projectile-bookmarks.eld"
+									  user-emacs-directory))
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode "Prjl")
 (diminish 'projectile-mode)
@@ -644,15 +614,15 @@
 
 ;; ace jump --------------------------------------------------------------------
 (lambda-package-ensure-install 'ace-jump-mode)
+(require 'ace-jump-mode)
 (when (and (featurep 'evil) (featurep 'evil-leader))
   (evil-leader/set-key
 	"c" 'ace-jump-char-mode
 	"w" 'ace-jump-word-mode
 	"l" 'ace-jump-line-mode))
-(require 'ace-jump-mode)
 (lambda-package-ensure-install 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
-(global-set-key (kbd "M-p") 'ace-jump-buffer)
+;;(global-set-key (kbd "M-p") 'ace-jump-buffer)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     
 ;; anzu-mode enhances isearch by showing total matches and current match 

@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++ Java
-;; Time-stamp: <2014-04-14 18:45:51 Jerry Xu>
+;; Time-stamp: <2014-04-15 09:42:52 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -70,14 +70,13 @@ echo \"\" | g++ -v -x c++ -E -")
 
 ;; global ------- code navigating ----------------------------------------------
 (lambda-package-ensure-install 'ggtags)
+(if (featurep 'evil)
+	(define-key evil-normal-state-map
+	  (kbd "M-.") 'ggtags-find-tag-dwim))
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (ggtags-mode 1)
-			  (define-key
-				ggtags-mode-map
-				(kbd "C-<enter>")
-				'ggtags-find-tag-dwim))))
+              (ggtags-mode 1))))
 
 
 (provide 'lambda-cc)

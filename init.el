@@ -45,6 +45,9 @@ installed again."
 (require 'lambda-writing)
 (require 'lambda-emacs-lisp)
 (require 'lambda-java)
+;; This should be loaded at last, restore buffers, minibuffer history, last
+;; place of cursor
+(require 'lambda-session)
 
 (provide 'init)
 ;;; init.el ends here
