@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-15 16:25:22 Jerry Xu>
+;; Time-stamp: <2014-04-16 18:50:28 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -13,7 +13,7 @@
 (setq user-full-name "Jerry Xu"
       user-mail-address "jerryxgh@gmail.com"
       inhibit-startup-screen t 
-      abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs" 
+      abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
 										 user-emacs-directory)
 
       custom-file (concat lambda-x-direcotry "lambda-custom.el")
@@ -24,7 +24,7 @@
       ring-bell-function 'ignore ; inhibit annoying warning sound
       x-select-enable-clipboard t 
       enable-recursive-minibuffers t 
-      confirm-kill-emacs 'y-or-n-p
+      ;;confirm-kill-emacs 'y-or-n-p
 	  )
 
 ;; hippie expand is dabbrev expand on steroids
@@ -105,7 +105,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (mouse-avoidance-mode 'animate) 
-(show-paren-mode 1) 
+;; (show-paren-mode 0)
 (setq show-paren-style 'mixed)
 (tooltip-mode 0) 
 ;; highlight current line
@@ -333,6 +333,8 @@
   (if (and (eq system-type 'windows-nt)
            (file-exists-p git-executable-windows))
       (setq magit-git-executable git-executable-windows)))
+(setenv "PATH" (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))
+;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
 
 ;;; dired-x --------------------------------------------------------------------
 (require 'dired-x)
@@ -415,9 +417,11 @@
 	  (evil-leader/set-key "xx" 'er/expand-region)))
 
 ;; evil-exchange ---------------------------------------------------------------
+;; gx (evil-exchange)
+;; gX (evil-exchange-cancel)
+;; evil-exchange can be used with ace-jump, it's perfect
 (lambda-package-ensure-install 'evil-exchange)
 (require 'evil-exchange)
-(setq evil-exchange-key (kbd "zx"))
 (evil-exchange-install)
 
 ;; evil-matchit ----------------------------------------------------------------
@@ -636,66 +640,30 @@
 (lambda-package-ensure-install 'rainbow-delimiters)
 (global-rainbow-delimiters-mode)
 
+;; global ------- code navigating ----------------------------------------------
+(lambda-package-ensure-install 'ggtags)
+(if (featurep 'evil)
+	(define-key evil-normal-state-map
+	  (kbd "M-.") 'ggtags-find-tag-dwim))
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (ggtags-mode 1))))
+
 ;; smartparens -----------------------------------------------------------------
 ;; global
 (lambda-package-ensure-install 'smartparens)
-(require 'smartparens-config)
+;; setq should before (require 'smartparens-config)
+(setq sp-base-key-bindings 'sp)
 (setq sp-autoskip-closing-pair 'always)
 (setq sp-navigate-close-if-unbalanced t)
+(setq sp-show-pair-from-inside t)
+(require 'smartparens-config)
+;; use smartparens key bindings
 (smartparens-global-mode t)
+(smartparens-global-strict-mode t)
+(show-smartparens-global-mode t)
 (diminish 'smartparens-mode)
-
-;; do not highlights matching pairs, use evil style
-;;(show-smartparens-global-mode -1)
-
-;; keybinding management
-(define-key sp-keymap (kbd "M-s f") 'sp-forward-sexp)
-(define-key sp-keymap (kbd "M-s b") 'sp-backward-sexp)
-
-(define-key sp-keymap (kbd "M-s d") 'sp-down-sexp)
-(define-key sp-keymap (kbd "M-s D") 'sp-backward-down-sexp)
-(define-key sp-keymap (kbd "M-s a") 'sp-beginning-of-sexp)
-(define-key sp-keymap (kbd "M-s e") 'sp-end-of-sexp)
-
-(define-key sp-keymap (kbd "M-s u") 'sp-up-sexp)
-;; (define-key emacs-lisp-mode-map (kbd ")") 'sp-up-sexp)
-(define-key sp-keymap (kbd "M-s U") 'sp-backward-up-sexp)
-(define-key sp-keymap (kbd "M-s t") 'sp-transpose-sexp)
-
-(define-key sp-keymap (kbd "M-s n") 'sp-next-sexp)
-(define-key sp-keymap (kbd "M-s p") 'sp-previous-sexp)
-
-(define-key sp-keymap (kbd "M-s k") 'sp-kill-sexp)
-(define-key sp-keymap (kbd "M-s w") 'sp-copy-sexp)
-
-(define-key sp-keymap (kbd "M-s s") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "M-s r") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "M-s S") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "M-s R") 'sp-backward-barf-sexp)
-(define-key sp-keymap (kbd "M-s F") 'sp-forward-symbol)
-(define-key sp-keymap (kbd "M-s B") 'sp-backward-symbol)
-
-(define-key sp-keymap (kbd "M-s [") 'sp-select-previous-thing)
-(define-key sp-keymap (kbd "M-s ]") 'sp-select-next-thing)
-
-(define-key sp-keymap (kbd "M-s M-i") 'sp-splice-sexp)
-(define-key sp-keymap (kbd "M-s <delete>") 'sp-splice-sexp-killing-forward)
-(define-key sp-keymap (kbd "M-s <backspace>") 'sp-splice-sexp-killing-backward)
-(define-key sp-keymap (kbd "M-s M-<backspace>") 'sp-splice-sexp-killing-around)
-
-(define-key sp-keymap (kbd "M-s M-d") 'sp-unwrap-sexp)
-(define-key sp-keymap (kbd "M-s M-b") 'sp-backward-unwrap-sexp)
-
-(define-key sp-keymap (kbd "M-s M-t") 'sp-prefix-tag-object)
-(define-key sp-keymap (kbd "M-s M-p") 'sp-prefix-pair-object)
-(define-key sp-keymap (kbd "M-s M-c") 'sp-convolute-sexp)
-(define-key sp-keymap (kbd "M-s M-a") 'sp-absorb-sexp)
-(define-key sp-keymap (kbd "M-s M-e") 'sp-emit-sexp)
-(define-key sp-keymap (kbd "M-s M-p") 'sp-add-to-previous-sexp)
-(define-key sp-keymap (kbd "M-s M-n") 'sp-add-to-next-sexp)
-(define-key sp-keymap (kbd "M-s M-j") 'sp-join-sexp)
-(define-key sp-keymap (kbd "M-s M-s") 'sp-split-sexp)
-(define-key sp-keymap (kbd "M-s M-r") 'sp-raise-sexp)
 
 ;; pair management
 (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)

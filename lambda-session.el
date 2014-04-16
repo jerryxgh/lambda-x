@@ -78,13 +78,14 @@
 (workgroups-mode 1)
 (diminish 'workgroups-mode)
 
-;; Restore frame ---------------------------------------------------------------
-(lambda-package-ensure-install 'frame-restore)
-(setq frame-restore-parameters-file
-	  (locate-user-emacs-file
-	   "auto-save-list/frame-restore-parameters"))
-(require 'frame-restore)
-(frame-restore-mode 1)
+;; Maxmize frame(Full Screen) --------------------------------------------------
+(defun lambda-full-screen ()
+  "Make Emacs full-screen after init."
+  (if (and (eq system-type 'windows-nt)
+		   (fboundp 'w32-send-sys-command))
+	  (w32-send-sys-command 61488)))
+(add-hook 'after-init-hook 'lambda-full-screen)
+
 
 (provide 'lambda-session)
 
