@@ -1,10 +1,19 @@
 ;;; lambda-cc.el --- c&c++ Java
-;; Time-stamp: <2014-04-16 13:53:40 Jerry Xu>
+;; Time-stamp: <2014-04-16 19:25:51 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'lambda-core)
+(require 'cc-mode)
+
+(setq c-default-style '((java-mode . "java")
+                        (awk-mode . "awk")
+                        (c-mode . "k&r")
+                        (c++-mode . "stroustrup")
+                        (other . "linux")))
+
+(define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
 
 (defvar lambda-cc-system-include
   (split-string
@@ -61,7 +70,10 @@ echo \"\" | g++ -v -x c++ -E -")
 							ac-source-gtags
 							;;ac-source-semantic
                             ac-source-yasnippet)
-                          ac-sources))))
+                          ac-sources))
+			(add-to-list 'c-cleanup-list 'defun-close-semi)
+			(c-toggle-auto-newline 1)
+			(c-toggle-hungry-state 1)))
 
 
 (setq ac-clang-flags

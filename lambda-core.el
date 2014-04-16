@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-16 18:50:28 Jerry Xu>
+;; Time-stamp: <2014-04-16 19:09:48 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -659,6 +659,8 @@
 (setq sp-navigate-close-if-unbalanced t)
 (setq sp-show-pair-from-inside t)
 (require 'smartparens-config)
+(define-key smartparens-strict-mode-map
+  [remap c-electric-backspace] 'sp-backward-delete-char)
 ;; use smartparens key bindings
 (smartparens-global-mode t)
 (smartparens-global-strict-mode t)
