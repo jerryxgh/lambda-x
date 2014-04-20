@@ -1,8 +1,13 @@
 ;;; init.el --- start point
+
 ;;; Commentary:
+;; system-type: OS type
+;; emacs-version: just as it's name applies
+;; executable-find: find whether there is a command in PATH
 ;; start point of all settings
 
 ;;; Code:
+
 (defconst lambda-x-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
   "Root directory of lambda-x.")
@@ -49,5 +54,7 @@ installed again."
 ;; place of cursor
 (require 'lambda-session)
 
+
 (provide 'init)
+
 ;;; init.el ends here

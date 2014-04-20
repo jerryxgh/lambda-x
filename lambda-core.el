@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-16 19:09:48 Jerry Xu>
+;; Time-stamp: <2014-04-20 23:15:34 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -124,7 +124,7 @@
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
-(setq face-font-rescale-alist (list (cons "΢���ź�" 1.1)
+(setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)
 									(cons "Microsoft Yahei" 1.1)))
 (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))
 (setq-default indicate-buffer-boundaries '((top . left) (t . right))
@@ -358,6 +358,8 @@
 (global-set-key (kbd "C-\\") 'toggle-truncate-lines)
 (global-set-key (kbd "C-<") 'shrink-window)
 (global-set-key (kbd "C->") 'enlarge-window)
+(global-set-key (kbd "M-n") 'next-error)
+(global-set-key (kbd "M-p") 'previous-error)
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (define-key lisp-interaction-mode-map (kbd "C-x k") 'clear-scratch-buffer)
 (global-set-key (kbd "C-x j") '(lambda () (interactive)
@@ -580,12 +582,16 @@
 (yas-global-mode 1)
 (diminish 'yas-minor-mode)
 
-;; ag --- front end of The Silver Searcher -------------------------------------
-(lambda-package-ensure-install 'ag)
-(setq ag-highlight-search t)
-(setq ag-reuse-window 't)
-;; change ag executable path
-;;(setq ag-executable "C:/Wherever/I/Installed/Ag/ag.exe")
+;; Ack A better grep for programmers -------------------------------------------
+(lambda-package-ensure-install 'ack-and-a-half)
+;; Put the ack script in no-elpa
+(setq ack-and-a-half-executable (concat lambda-x-direcotry "non-elpa/ack"))
+(setq ack-and-a-half-use-ido t)
+;; Create shorter aliases
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
 
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
