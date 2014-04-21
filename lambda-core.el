@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-20 23:15:34 Jerry Xu>
+;; Time-stamp: <2014-04-21 18:44:13 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -26,6 +26,11 @@
       enable-recursive-minibuffers t 
       ;;confirm-kill-emacs 'y-or-n-p
 	  )
+;; abbrev-mode -----------------------------------------------------------------
+(setq-default abbrev-mode t)
+(diminish 'abbrev-mode)
+(if (file-exists-p abbrev-file-name)
+    (quietly-read-abbrev-file))
 
 ;; hippie expand is dabbrev expand on steroids
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -40,6 +45,9 @@
                                          try-complete-lisp-symbol))
 ;; set text-mode as the default major mode, instead of fundamental-mode
 (setq-default major-mode 'text-mode)
+;; let one line display as one line, even if it over the window
+(setq-default truncate-lines t)
+
 
 ;; if there is a dired buffer displayed in the next window, use its
 ;; current subdir, instead of the current subdir of this dired buffer
@@ -105,7 +113,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (mouse-avoidance-mode 'animate) 
-;; (show-paren-mode 0)
+(show-paren-mode 1)
 (setq show-paren-style 'mixed)
 (tooltip-mode 0) 
 ;; highlight current line
@@ -124,8 +132,10 @@
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
-(setq face-font-rescale-alist (list (cons "脦藰膶铆艃墓艧脷" 1.1)
-									(cons "Microsoft Yahei" 1.1)))
+(if (eq system-type 'windows-nt)
+	(setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
+  (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
+
 (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))
 (setq-default indicate-buffer-boundaries '((top . left) (t . right))
               indicate-empty-lines t)
@@ -330,10 +340,12 @@
 ;;(require 'magit)
 (lambda-package-ensure-install 'magit)
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
-  (if (and (eq system-type 'windows-nt)
-           (file-exists-p git-executable-windows))
-      (setq magit-git-executable git-executable-windows)))
-(setenv "PATH" (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))
+  (when (and (eq system-type 'windows-nt)
+             (file-exists-p git-executable-windows))
+    (setq magit-git-executable git-executable-windows)
+    (setenv "PATH"
+            (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+
 ;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
 
 ;;; dired-x --------------------------------------------------------------------
@@ -611,6 +623,8 @@
 (setq eshell-directory-name (expand-file-name
 							 "auto-save-list/eshell/"
 							 user-emacs-directory))
+;; When input things in eshell, goto the end of the buffer automatically.
+(setq eshell-scroll-to-bottom-on-input 'this)
 (add-hook 'eshell-mode-hook
           (lambda ()
             (add-to-list 'ac-sources 'ac-source-pcomplete)))
@@ -663,14 +677,14 @@
 (setq sp-base-key-bindings 'sp)
 (setq sp-autoskip-closing-pair 'always)
 (setq sp-navigate-close-if-unbalanced t)
-(setq sp-show-pair-from-inside t)
+;; (setq sp-show-pair-from-inside t)
 (require 'smartparens-config)
 (define-key smartparens-strict-mode-map
   [remap c-electric-backspace] 'sp-backward-delete-char)
 ;; use smartparens key bindings
 (smartparens-global-mode t)
 (smartparens-global-strict-mode t)
-(show-smartparens-global-mode t)
+;; (show-smartparens-global-mode t)
 (diminish 'smartparens-mode)
 
 ;; pair management
