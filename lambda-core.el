@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-04-21 18:44:13 Jerry Xu>
+;; Time-stamp: <2014-05-03 21:17:16 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -14,7 +14,7 @@
       user-mail-address "jerryxgh@gmail.com"
       inhibit-startup-screen t 
       abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
-										 user-emacs-directory)
+					 user-emacs-directory)
 
       custom-file (concat lambda-x-direcotry "lambda-custom.el")
       use-dialog-box nil 
@@ -25,7 +25,7 @@
       x-select-enable-clipboard t 
       enable-recursive-minibuffers t 
       ;;confirm-kill-emacs 'y-or-n-p
-	  )
+      )
 ;; abbrev-mode -----------------------------------------------------------------
 (setq-default abbrev-mode t)
 (diminish 'abbrev-mode)
@@ -72,15 +72,16 @@
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
       '("[" invocation-name " lambda-x] - "
-		(:eval (if (buffer-file-name)
-				   (abbreviate-file-name (buffer-file-name)) "%b"))))
+	(:eval (if (buffer-file-name)
+		   (abbreviate-file-name (buffer-file-name)) "%b"))))
 (setq-default tab-width 4)
 ;;(add-to-list 'Info-default-directory-list " ")
 (cond ((eq system-type 'windows-nt)
        (setq dired-listing-switches "-AlX"))
       (t (setq dired-listing-switches "-AlX  --group-directories-first")))
 
-;; store all backup and autosave files in the tmp dir
+;; store all backup and autosave files in the tmp dir, in the expression `,
+;; expression after , will be evaluated.
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -94,7 +95,7 @@
 ;; auto-fill-mode was disabled by users.
 (global-visual-line-mode t)
 (if (string< emacs-version "24.3.50")
-	(diminish 'global-visual-line-mode))
+    (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
 (global-auto-revert-mode 1) 
 ;; enable to support navigate in camelCase words
@@ -126,15 +127,12 @@
   (tool-bar-mode -1))
 (set-frame-font "Consolas-11")
 ;;(set-background-color "#CCE8CF") 
-;;(set-fontset-font t 'unicode (font-spec :family "Microsoft Yahei" 
-;;									:registry "unicode-bmp"
-;;										:size 1.1))
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
 (if (eq system-type 'windows-nt)
-	(setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
-  (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
+    (setq face-font-rescale-alist (list (cons "脦藰膶铆艃墓艧脷" 1.1)))
+  (setq face-font-rescale-alist (list (cons "寰蒋闆呴粦" 1.1))))
 
 (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))
 (setq-default indicate-buffer-boundaries '((top . left) (t . right))
@@ -149,7 +147,7 @@
 
 ;; flyspell --------------------------------------------------------------------
 (if (eq system-type 'windows-nt)
-	(add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
+    (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
 (setq ispell-program-name "aspell")
 (setq ispell-personal-dictionary (expand-file-name "ispell" lambda-x-direcotry))
 
@@ -246,11 +244,11 @@
   (let ((process (get-buffer-process (current-buffer))))
     (if process
         (set-process-sentinel 
-		 process
-		 (lambda (process state)
-		   (when (or (string-match "exited abnormally with code." state)
-					 (string-match "finished" state))
-			 (kill-buffer (current-buffer))))))))
+	 process
+	 (lambda (process state)
+	   (when (or (string-match "exited abnormally with code." state)
+		     (string-match "finished" state))
+	     (kill-buffer (current-buffer))))))))
 
 ;; Do not load custom file, all the configuration should be done by code
 ;;(load "lambda-custom") 
@@ -270,7 +268,7 @@
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
       ido-save-directory-list-file
-	  (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
+      (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
       ido-default-file-method 'selected-window)
 ;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
 (ido-mode t)
@@ -283,7 +281,7 @@
 (lambda-package-ensure-install 'smex)
 (require 'smex)
 (setq smex-save-file (expand-file-name "auto-save-list/smex-items"
-									   user-emacs-directory))
+				       user-emacs-directory))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -291,6 +289,7 @@
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
 (lambda-package-ensure-install 'helm-projectile)
+(require 'helm)
 (require 'helm-config)
 (helm-mode 1)
 (diminish 'helm-mode)
@@ -298,20 +297,19 @@
 
 ;;; tramp ----------------------------------------------------------------------
 ;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
+(setq tramp-auto-save-directory  temporary-file-directory
+      ido-enable-tramp-completion t
+      tramp-persistency-file-name (expand-file-name "auto-save-list/tramp"
+						    user-emacs-directory))
+(if (eq system-type 'windows-nt)
+    (setq tramp-default-method "plink")
+  (setq tramp-default-method "ssh"))
 (require 'tramp)
 (when (> emacs-major-version 23)
   (require 'tramp-sh)
   (delete "LC_ALL=C" tramp-remote-process-environment)
   (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
   (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
-
-(setq tramp-auto-save-directory  (expand-file-name "auto-save-list/tramp"
-												   user-emacs-directory)
-
-      ido-enable-tramp-completion t)
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
 
 ;;; ibuffer --------------------------------------------------------------------
 (global-set-key (kbd "C-x C-b") 'ibuffer) 
@@ -357,8 +355,8 @@
 ;;(require 'fill-column-indicator)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'prog-mode-hook '(lambda ()
-							 (turn-on-auto-fill)
-							 (turn-on-fci-mode)))
+			     (turn-on-auto-fill)
+			     (turn-on-fci-mode)))
 ;; Mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
 (diminish 'auto-fill-function)
@@ -386,7 +384,7 @@
 ;;; bookmark -------------------------------------------------------------------
 (require 'bookmark)
 (setq bookmark-default-file (expand-file-name "auto-save-list/bookmarks"
-											  user-emacs-directory))
+					      user-emacs-directory))
 
 (defun clear ()
   "Clear `eshell' or submode of `comint-mode' buffer."
@@ -426,9 +424,9 @@
 (lambda-package-ensure-install 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (if (featurep 'evil-leader)
-	(progn
-	  (setq expand-region-contract-fast-key "z")
-	  (evil-leader/set-key "xx" 'er/expand-region)))
+    (progn
+      (setq expand-region-contract-fast-key "z")
+      (evil-leader/set-key "xx" 'er/expand-region)))
 
 ;; evil-exchange ---------------------------------------------------------------
 ;; gx (evil-exchange)
@@ -452,12 +450,12 @@
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
 (if (featurep 'helm)
-	(evil-leader/set-key
-	  "e" 'helm-find-files
-	  "b" 'helm-buffers-list)
+    (evil-leader/set-key
+      "e" 'helm-find-files
+      "b" 'helm-buffers-list)
   (evil-leader/set-key
-	"e" 'find-file
-	"b" 'switch-to-buffer))
+    "e" 'find-file
+    "b" 'switch-to-buffer))
 (evil-leader/set-key
   "k" 'kill-this-buffer)
 (global-evil-leader-mode 1)
@@ -474,7 +472,7 @@
              (concat lambda-x-direcotry "ac-dict/auto-complete.dict"))
 (setq ac-auto-start 1 
       ac-comphist-file (expand-file-name "auto-save-list/ac-comphist.dat"
-										 user-emacs-directory)
+					 user-emacs-directory)
       ac-modes 
       (append
        ac-modes
@@ -488,56 +486,10 @@
 (setq-default ac-sources (append '(ac-source-filename ac-source-yasnippet)
                                  ac-sources))
 
-;;(define-key ac-mode-map (kbd "M-/") 'auto-complete)
+(define-key ac-mode-map (kbd "M-/") 'auto-complete)
 (define-key ac-completing-map (kbd "<tab>") 'ac-expand)
 (define-key ac-completing-map (kbd "<backtab>") 'ac-previous)
 (define-key ac-completing-map (kbd "<return>") 'ac-complete)
-(defun ac-pcomplete ()
-  ;; eshell uses `insert-and-inherit' to insert a \t if no completion
-  ;; can be found, but this must not happen as auto-complete source
-  (flet ((insert-and-inherit (&rest args)))
-    ;; this code is stolen from `pcomplete' in pcomplete.el
-    (let* (tramp-mode ;; do not automatically complete remote stuff
-           (pcomplete-stub)
-           (pcomplete-show-list t) ;; inhibit patterns like * being deleted
-           pcomplete-seen pcomplete-norm-func
-           pcomplete-args pcomplete-last pcomplete-index
-           (pcomplete-autolist pcomplete-autolist)
-           (pcomplete-suffix-list pcomplete-suffix-list)
-           (candidates (pcomplete-completions))
-           (beg (pcomplete-begin))
-           ;; note, buffer text and completion argument may be
-           ;; different because the buffer text may bet transformed
-           ;; before being completed (e.g. variables like $HOME may be
-           ;; expanded)
-           (buftext (buffer-substring beg (point)))
-           (arg (nth pcomplete-index pcomplete-args)))
-      ;; we auto-complete only if the stub is non-empty and matches
-      ;; the end of the buffer text
-      (when (and (not (zerop (length pcomplete-stub)))
-                 (or (string= pcomplete-stub ; Emacs 23
-                              (substring buftext
-                                         (max 0
-                                              (- (length buftext)
-                                                 (length pcomplete-stub)))))
-                     (string= pcomplete-stub ; Emacs 24
-                              (substring arg
-                                         (max 0
-                                              (- (length arg)
-                                                 (length pcomplete-stub)))))))
-        ;; Collect all possible completions for the stub. Note that
-        ;; `candidates` may be a function, that's why we use
-        ;; `all-completions`.
-        (let* ((cnds (all-completions pcomplete-stub candidates))
-               (bnds (completion-boundaries pcomplete-stub
-                                            candidates
-                                            nil
-                                            ""))
-               (skip (- (length pcomplete-stub) (car bnds))))
-          ;; We replace the stub at the beginning of each candidate by
-          ;; the real buffer content.
-          (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
-                  cnds))))))
 
 (defvar ac-source-pcomplete
   '((candidates . ac-pcomplete)))
@@ -609,11 +561,13 @@
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
 (setq projectile-cache-file (expand-file-name 
-							 "auto-save-list/projectile.cache"
-							 user-emacs-directory)
-	  projectile-known-projects-file (expand-file-name 
-									  "auto-save-list/projectile-bookmarks.eld"
-									  user-emacs-directory))
+			     "auto-save-list/projectile.cache"
+			     user-emacs-directory)
+	  projectile-enable-caching t
+	  projectile-require-project-root nil
+      projectile-known-projects-file (expand-file-name 
+				      "auto-save-list/projectile-bookmarks.eld"
+				      user-emacs-directory))
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode "Prjl")
 (diminish 'projectile-mode)
@@ -621,8 +575,8 @@
 ;; eshell ----------------------------------------------------------------------
 (require 'eshell)
 (setq eshell-directory-name (expand-file-name
-							 "auto-save-list/eshell/"
-							 user-emacs-directory))
+			     "auto-save-list/eshell/"
+			     user-emacs-directory))
 ;; When input things in eshell, goto the end of the buffer automatically.
 (setq eshell-scroll-to-bottom-on-input 'this)
 (add-hook 'eshell-mode-hook
@@ -641,14 +595,14 @@
 (require 'ace-jump-mode)
 (when (and (featurep 'evil) (featurep 'evil-leader))
   (evil-leader/set-key
-	"c" 'ace-jump-char-mode
-	"w" 'ace-jump-word-mode
-	"l" 'ace-jump-line-mode))
+    "c" 'ace-jump-char-mode
+    "w" 'ace-jump-word-mode
+    "l" 'ace-jump-line-mode))
 (lambda-package-ensure-install 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 ;;(global-set-key (kbd "M-p") 'ace-jump-buffer)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    
+
 ;; anzu-mode enhances isearch by showing total matches and current match 
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
@@ -663,8 +617,8 @@
 ;; global ------- code navigating ----------------------------------------------
 (lambda-package-ensure-install 'ggtags)
 (if (featurep 'evil)
-	(define-key evil-normal-state-map
-	  (kbd "M-.") 'ggtags-find-tag-dwim))
+    (define-key evil-normal-state-map
+      (kbd "M-.") 'ggtags-find-tag-dwim))
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
@@ -692,29 +646,29 @@
 
 ;; markdown-mode
 (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-			   (sp-local-pair "*" "*" :bind "C-*")
-			   (sp-local-tag "2" "**" "**")
-			   (sp-local-tag "s" "```scheme" "```")
-			   (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+  (sp-local-pair "*" "*" :bind "C-*")
+  (sp-local-tag "2" "**" "**")
+  (sp-local-tag "s" "```scheme" "```")
+  (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
 ;; tex-mode latex-mode
 (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
-			   (sp-local-tag "i" "\"<" "\">"))
+  (sp-local-tag "i" "\"<" "\">"))
 
 ;; html-mode
 (sp-with-modes '(html-mode sgml-mode)
-			   (sp-local-pair "<" ">"))
+  (sp-local-pair "<" ">"))
 
 ;; lisp modes
 (sp-with-modes sp--lisp-modes
-			   (sp-local-pair "(" nil :bind "C-("))
+  (sp-local-pair "(" nil :bind "C-("))
 
 (dolist (mode '(c-mode c++-mode java-mode js2-mode sh-mode css-mode))
   (sp-local-pair mode
-				 "{"
-				 nil
-				 :post-handlers
-				 '((ome-create-newline-and-enter-sexp "RET"))))
+		 "{"
+		 nil
+		 :post-handlers
+		 '((ome-create-newline-and-enter-sexp "RET"))))
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------
 (require 'unicad)

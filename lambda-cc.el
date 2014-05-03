@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++ Java
-;; Time-stamp: <2014-04-16 19:25:51 Jerry Xu>
+;; Time-stamp: <2014-04-30 16:09:58 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -29,11 +29,11 @@ echo \"\" | g++ -v -x c++ -E -")
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                   global-semantic-idle-scheduler-mode
-                                  global-semantic-idle-summary-mode
+                                  ;;global-semantic-idle-summary-mode
                                   ;;global-semantic-decoration-mode
                                   ;;global-semantic-highlight-func-mode
                                   ;;global-semantic-stickyfunc-mode
-                                  global-semantic-mru-bookmark-mode
+                                  ;;global-semantic-mru-bookmark-mode
                                   ))
 (semantic-mode 1)
 ;(global-semantic-highlight-edits-mode 1)
