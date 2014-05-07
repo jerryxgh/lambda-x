@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-07 20:16:13 Jerry Xu>
+;; Time-stamp: <2014-05-07 20:25:32 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -115,7 +115,7 @@
 
 (mouse-avoidance-mode 'animate) 
 (show-paren-mode 1)
-(setq show-paren-style 'mixed)
+;; (setq show-paren-style 'mixed)
 (tooltip-mode 0) 
 ;; highlight current line
 (global-hl-line-mode 1)
