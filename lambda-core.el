@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-03 21:17:16 Jerry Xu>
+;; Time-stamp: <2014-05-07 20:05:55 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -93,7 +93,7 @@
 ;; and all derived modes, which may make it useless to turn on visual-line-mode
 ;; most of the time. But we still turn on it globally to make it a fallback when
 ;; auto-fill-mode was disabled by users.
-(global-visual-line-mode t)
+;;(global-visual-line-mode t)
 (if (string< emacs-version "24.3.50")
     (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
@@ -207,6 +207,7 @@
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
 (global-undo-tree-mode 1)
+;(add-to-list 'warning-suppress-types '(undo discard-info))
 
 ;; volatile-highlights ---------------------------------------------------------
 (lambda-package-ensure-install 'volatile-highlights)
@@ -396,6 +397,7 @@
          (let ((comint-buffer-maximum-size 0))
            (comint-truncate-buffer)))))
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
+(define-key shell-mode-map (kbd "C-l") 'clear)
 
 ;; Evil ------- A wonderful editor in Emacs ------------------------------------
 (lambda-package-ensure-install 'evil)
@@ -406,6 +408,7 @@
       ;;evil-want-C-i-jump nil
       evil-want-fine-undo t
       evil-cross-lines t)
+;; Settings below restore key bindings in emacs in insert state
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
 (define-key evil-insert-state-map (kbd "C-n") 'next-line)
@@ -429,6 +432,7 @@
       (evil-leader/set-key "xx" 'er/expand-region)))
 
 ;; evil-exchange ---------------------------------------------------------------
+;; Powerful tool to exchange text.
 ;; gx (evil-exchange)
 ;; gX (evil-exchange-cancel)
 ;; evil-exchange can be used with ace-jump, it's perfect
@@ -437,11 +441,12 @@
 (evil-exchange-install)
 
 ;; evil-matchit ----------------------------------------------------------------
+;; Jump between beginning and ending of structure like parens, html tags etc..
 (lambda-package-ensure-install 'evil-matchit)
 (require 'evil-matchit)
 (global-evil-matchit-mode 1)
 
-;; evil-visualstar ------------------------------------------------------------
+;; evil-visualstar -------------------------------------------------------------
 (lambda-package-ensure-install 'evil-visualstar)
 (require 'evil-visualstar)
 
@@ -460,6 +465,12 @@
   "k" 'kill-this-buffer)
 (global-evil-leader-mode 1)
 
+;; evil-surround ---------------------------------------------------------------
+;; evil-urround.vim is all about "surroundings": parentheses, brackets, quotes,
+;; XML tags, and more. The plugin provides mappings to easily delete, change and
+;; add such surroundings in pairs.
+(lambda-package-ensure-install 'evil-surround)
+
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
 (global-auto-complete-mode 1)
@@ -476,11 +487,9 @@
       ac-modes 
       (append
        ac-modes
-       '(shell-mode
-         graphviz-dot-mode conf-xdefaults-mode html-mode nxml-mode objc-mode
-         sql-mode change-log-mode text-mode makefile-gmake-mode
-         makefile-bsdmake-mo autoconf-mode makefile-automake-mode
-         snippet-mode eshell-mode))
+       '(shell-mode graphviz-dot-mode conf-xdefaults-mode html-mode nxml-mode
+         objc-mode sql-mode change-log-mode text-mode makefile-gmake-mode
+         makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
       ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename ac-source-yasnippet)
@@ -491,8 +500,6 @@
 (define-key ac-completing-map (kbd "<backtab>") 'ac-previous)
 (define-key ac-completing-map (kbd "<return>") 'ac-complete)
 
-(defvar ac-source-pcomplete
-  '((candidates . ac-pcomplete)))
 ;; pos-tip ---------------------------------------------------------------------
 (lambda-package-ensure-install 'pos-tip)
 (require 'pos-tip)
@@ -547,27 +554,27 @@
 (diminish 'yas-minor-mode)
 
 ;; Ack A better grep for programmers -------------------------------------------
-(lambda-package-ensure-install 'ack-and-a-half)
-;; Put the ack script in no-elpa
-(setq ack-and-a-half-executable (concat lambda-x-direcotry "non-elpa/ack"))
-(setq ack-and-a-half-use-ido t)
-;; Create shorter aliases
-(defalias 'ack 'ack-and-a-half)
-(defalias 'ack-same 'ack-and-a-half-same)
-(defalias 'ack-find-file 'ack-and-a-half-find-file)
-(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+(lambda-package-ensure-install 'ack)
+(lambda-package-ensure-install 'wgrep-ack)
+(setq ack-command (concat (file-name-nondirectory 
+                           (or (executable-find "ag")
+                               (executable-find "ack")
+                               (executable-find "ack-grep")
+                               "ack")) " "))
+(require 'ack)
+(require 'wgrep-ack)
 
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
 (setq projectile-cache-file (expand-file-name 
-			     "auto-save-list/projectile.cache"
-			     user-emacs-directory)
+                             "auto-save-list/projectile.cache"
+                             user-emacs-directory)
 	  projectile-enable-caching t
 	  projectile-require-project-root nil
       projectile-known-projects-file (expand-file-name 
-				      "auto-save-list/projectile-bookmarks.eld"
-				      user-emacs-directory))
+                                      "auto-save-list/projectile-bookmarks.eld"
+                                      user-emacs-directory))
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode "Prjl")
 (diminish 'projectile-mode)
@@ -575,17 +582,67 @@
 ;; eshell ----------------------------------------------------------------------
 (require 'eshell)
 (setq eshell-directory-name (expand-file-name
-			     "auto-save-list/eshell/"
-			     user-emacs-directory))
+                             "auto-save-list/eshell/"
+                             user-emacs-directory))
 ;; When input things in eshell, goto the end of the buffer automatically.
 (setq eshell-scroll-to-bottom-on-input 'this)
+(defun ac-pcomplete ()
+  "Use auto-complete in eshell."
+  ;; eshell uses `insert-and-inherit' to insert a \t if no completion
+  ;; can be found, but this must not happen as auto-complete source
+  (flet ((insert-and-inherit (&rest args)))
+    ;; this code is stolen from `pcomplete' in pcomplete.el
+    (let* (tramp-mode ;; do not automatically complete remote stuff
+           (pcomplete-stub)
+           (pcomplete-show-list t) ;; inhibit patterns like * being deleted
+           pcomplete-seen pcomplete-norm-func
+           pcomplete-args pcomplete-last pcomplete-index
+           (pcomplete-autolist pcomplete-autolist)
+           (pcomplete-suffix-list pcomplete-suffix-list)
+           (candidates (pcomplete-completions))
+           (beg (pcomplete-begin))
+           ;; note, buffer text and completion argument may be
+           ;; different because the buffer text may bet transformed
+           ;; before being completed (e.g. variables like $HOME may be
+           ;; expanded)
+           (buftext (buffer-substring beg (point)))
+           (arg (nth pcomplete-index pcomplete-args)))
+      ;; we auto-complete only if the stub is non-empty and matches
+      ;; the end of the buffer text
+      (when (and (not (zerop (length pcomplete-stub)))
+                 (or (string= pcomplete-stub ; Emacs 23
+                              (substring buftext
+                                         (max 0
+                                              (- (length buftext)
+                                                 (length pcomplete-stub)))))
+                     (string= pcomplete-stub ; Emacs 24
+                              (substring arg
+                                         (max 0
+                                              (- (length arg)
+                                                 (length pcomplete-stub)))))))
+        ;; Collect all possible completions for the stub. Note that
+        ;; `candidates` may be a function, that's why we use
+        ;; `all-completions`.
+        (let* ((cnds (all-completions pcomplete-stub candidates))
+               (bnds (completion-boundaries pcomplete-stub
+                                            candidates
+                                            nil
+                                            ""))
+               (skip (- (length pcomplete-stub) (car bnds))))
+          ;; We replace the stub at the beginning of each candidate by
+          ;; the real buffer content.
+          (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
+                  cnds))))))
+(defvar ac-source-pcomplete
+  '((candidates . ac-pcomplete)))
 (add-hook 'eshell-mode-hook
           (lambda ()
-            (add-to-list 'ac-sources 'ac-source-pcomplete)))
-
+            (add-to-list 'ac-sources 'ac-source-pcomplete)
+			(turn-on-eldoc-mode)
+			(ac-emacs-lisp-mode-setup)
+			(define-key eshell-mode-map (kbd "C-l") 'clear)))
 (add-to-list 'ac-modes 'eshell-mode)
-(add-hook 'eshell-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'eshell-mode-hook 'ac-emacs-lisp-mode-setup)
+
 
 ;; unbound ---------------------------------------------------------------------
 (lambda-package-ensure-install 'unbound)
@@ -665,10 +722,10 @@
 
 (dolist (mode '(c-mode c++-mode java-mode js2-mode sh-mode css-mode))
   (sp-local-pair mode
-		 "{"
-		 nil
-		 :post-handlers
-		 '((ome-create-newline-and-enter-sexp "RET"))))
+                 "{"
+                 nil
+                 :post-handlers
+                 '((ome-create-newline-and-enter-sexp "RET"))))
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------
 (require 'unicad)

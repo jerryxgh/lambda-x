@@ -51,6 +51,7 @@ installed again."
 (require 'lambda-emacs-lisp)
 (require 'lambda-java)
 (require 'lambda-python)
+(require 'lambda-js)
 ;; This should be loaded at last, restore buffers, minibuffer history, last
 ;; place of cursor
 (require 'lambda-session)
