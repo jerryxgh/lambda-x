@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-07 20:05:55 Jerry Xu>
+;; Time-stamp: <2014-05-07 20:16:13 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -466,10 +466,18 @@
 (global-evil-leader-mode 1)
 
 ;; evil-surround ---------------------------------------------------------------
-;; evil-urround.vim is all about "surroundings": parentheses, brackets, quotes,
-;; XML tags, and more. The plugin provides mappings to easily delete, change and
-;; add such surroundings in pairs.
-(lambda-package-ensure-install 'evil-surround)
+;; Add surrounding 
+;; visual-state: s<textobject><trigger>, normal-state: ys<textobject><trigger>.
+
+;; Change surrounding
+;; cs<old-trigger><new-trigger>
+
+;; Delete surrounding
+;; ds<trigger>.
+
+(lambda-package-ensure-install 'surround)
+(require 'surround)
+(global-surround-mode 1)
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
