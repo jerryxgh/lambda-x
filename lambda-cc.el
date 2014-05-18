@@ -1,5 +1,5 @@
-;;; lambda-cc.el --- c&c++ Java
-;; Time-stamp: <2014-04-30 16:09:58 Jerry Xu>
+;;; lambda-cc.el --- c&c++
+;; Time-stamp: <2014-05-12 10:17:01 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -61,20 +61,26 @@ echo \"\" | g++ -v -x c++ -E -")
 (require 'auto-complete-clang)
 
 (add-hook 'c-mode-common-hook
-          (lambda nil
+          (lambda ()
             ;;(setq ac-sources (append
             ;;(list 'ac-source-gtags
             ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
             (setq ac-sources
-                  (append '(ac-source-clang
-							ac-source-gtags
+                  (append '(;;ac-source-gtags
 							;;ac-source-semantic
-                            ac-source-yasnippet)
+                            ;;ac-source-yasnippet
+							)
                           ac-sources))
 			(add-to-list 'c-cleanup-list 'defun-close-semi)
 			(c-toggle-auto-newline 1)
 			(c-toggle-hungry-state 1)))
 
+(add-hook 'c-mode-hook
+		  (lambda ()
+			"Use clang to complete c."
+			(setq ac-sources
+                  (append '(ac-source-clang)
+                          ac-sources))))
 
 (setq ac-clang-flags
 	  (mapcar (lambda (item) (concat "-I" item))

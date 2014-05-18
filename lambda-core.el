@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-07 20:25:32 Jerry Xu>
+;; Time-stamp: <2014-05-18 21:05:45 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -295,6 +295,7 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 (require 'helm-projectile)
+(global-set-key (kbd "C-S-r") 'helm-projectile)
 
 ;;; tramp ----------------------------------------------------------------------
 ;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
@@ -375,6 +376,14 @@
 (define-key lisp-interaction-mode-map (kbd "C-x k") 'clear-scratch-buffer)
 (global-set-key (kbd "C-x j") '(lambda () (interactive)
                                  (ido-find-file-in-dir lambda-x-direcotry)))
+(global-set-key (kbd "C-x C-c") '(lambda () (interactive)
+								   "Stop eclimd and "
+								   (when (and  (functionp 'eclimd--running-p)
+											   (eclimd--running-p))
+									 (message "Stopping eclimd ...")
+									 (stop-eclimd)
+									 (message "Eclimd stopped."))
+								   (save-buffers-kill-terminal)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling
@@ -385,7 +394,7 @@
 ;;; bookmark -------------------------------------------------------------------
 (require 'bookmark)
 (setq bookmark-default-file (expand-file-name "auto-save-list/bookmarks"
-					      user-emacs-directory))
+											  user-emacs-directory))
 
 (defun clear ()
   "Clear `eshell' or submode of `comint-mode' buffer."
@@ -454,13 +463,10 @@
 (lambda-package-ensure-install 'evil-leader)
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
-(if (featurep 'helm)
-    (evil-leader/set-key
-      "e" 'helm-find-files
-      "b" 'helm-buffers-list)
-  (evil-leader/set-key
-    "e" 'find-file
-    "b" 'switch-to-buffer))
+(evil-leader/set-key
+  "e" 'helm-projectile
+  "b" 'switch-to-buffer)
+
 (evil-leader/set-key
   "k" 'kill-this-buffer)
 (global-evil-leader-mode 1)
@@ -491,16 +497,18 @@
              (concat lambda-x-direcotry "ac-dict/auto-complete.dict"))
 (setq ac-auto-start 1 
       ac-comphist-file (expand-file-name "auto-save-list/ac-comphist.dat"
-					 user-emacs-directory)
+										 user-emacs-directory)
       ac-modes 
       (append
        ac-modes
        '(shell-mode graphviz-dot-mode conf-xdefaults-mode html-mode nxml-mode
-         objc-mode sql-mode change-log-mode text-mode makefile-gmake-mode
-         makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
+					objc-mode sql-mode change-log-mode text-mode makefile-gmake-mode
+					makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
       ac-use-menu-map t)
 
-(setq-default ac-sources (append '(ac-source-filename ac-source-yasnippet)
+(setq-default ac-sources (append '(ac-source-filename 
+								   ;;ac-source-yasnippet
+								   )
                                  ac-sources))
 
 (define-key ac-mode-map (kbd "M-/") 'auto-complete)
@@ -586,6 +594,21 @@
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode "Prjl")
 (diminish 'projectile-mode)
+(defun projectile-ack (regexp &optional arg)
+  "Run an ack search with REGEXP in the project.
+
+With a prefix argument ARG prompts you for a directory on which the search is performed ."
+  (interactive
+   (list (read-from-minibuffer
+          (projectile-prepend-project-name "Ack search for: ")
+          (projectile-symbol-at-point))
+         current-prefix-arg))
+  (if (require 'ack nil 'noerror)
+      (let* ((root (if arg
+                       (projectile-complete-dir)
+                     (projectile-project-root))))
+        (ack (concat ack-command regexp) root))
+    (error "ack not available")))
 
 ;; eshell ----------------------------------------------------------------------
 (require 'eshell)
@@ -728,7 +751,7 @@
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "(" nil :bind "C-("))
 
-(dolist (mode '(c-mode c++-mode java-mode js2-mode sh-mode css-mode))
+(dolist (mode '(c-mode c++-mode java-mode sh-mode css-mode))
   (sp-local-pair mode
                  "{"
                  nil

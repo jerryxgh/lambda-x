@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2014-04-13 12:57:55 Jerry Xu>
+;; Time-stamp: <2014-05-12 14:28:29 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -24,6 +24,20 @@
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 4)
 (setq web-mode-disable-autocompletion t)
+
+(add-hook 'web-mode-hook '(lambda ()
+							"Disable auto-fill-mode and fci-mode in web mode,
+and set yas--extra-mode to use html snippets."
+							(auto-fill-mode -1)
+							(fci-mode -1)
+							(make-local-variable 'yas-extra-modes)
+                            (add-to-list 'yas-extra-modes 'html-mode)))
+
+;; Work with auto-complete
+(setq ac-modes (append ac-modes '(web-mode)))
+
+;; Work with yasnippet
+
 
 ;; less-css-mode --------------------------------------------------------------
 (lambda-package-ensure-install 'less-css-mode)
