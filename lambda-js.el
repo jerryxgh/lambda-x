@@ -32,10 +32,12 @@
 (lambda-package-ensure-install 'tern)
 (lambda-package-ensure-install 'tern-auto-complete)
 (setq tern-command (cons (executable-find "tern") '()))
+
 (eval-after-load 'tern
   '(progn
 	 (require 'tern-auto-complete)
-	 (tern-ac-setup)))
+	 (tern-ac-setup)
+	 (diminish 'tern-mode)))
 
 ;; nodejs-repl -----------------------------------------------------------------
 (lambda-package-ensure-install 'nodejs-repl)

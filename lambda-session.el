@@ -8,16 +8,6 @@
 
 (require 'lambda-core)
 
-;; Restore buffers automaticly -------------------------------------------------
-(require 'desktop)
-(setq desktop-path (list (expand-file-name "auto-save-list/"
-										   user-emacs-directory)))
-
-(setq desktop-dirname (expand-file-name "auto-save-list/"
-										user-emacs-directory))
-(setq desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
-
 ;; savehist keeps track of some history ----------------------------------------
 (require 'savehist)
 (setq savehist-additional-variables
@@ -85,6 +75,16 @@
 		   (fboundp 'w32-send-sys-command))
 	  (w32-send-sys-command 61488)))
 (add-hook 'after-init-hook 'lambda-full-screen)
+
+;; Restore buffers automaticly -------------------------------------------------
+(require 'desktop)
+(setq desktop-path (list (expand-file-name "auto-save-list/"
+										   user-emacs-directory)))
+
+(setq desktop-dirname (expand-file-name "auto-save-list/"
+										user-emacs-directory))
+(setq desktop-base-file-name "emacs-desktop")
+(desktop-save-mode 1)
 
 
 (provide 'lambda-session)

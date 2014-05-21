@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-18 21:05:45 Jerry Xu>
+;; Time-stamp: <2014-05-21 17:49:52 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -711,6 +711,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1))))
+(eval-after-load 'ggtags
+  (lambda
+	(diminish 'ggtags-mode)))
 
 ;; smartparens -----------------------------------------------------------------
 ;; global
