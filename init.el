@@ -52,6 +52,7 @@ installed again."
 (require 'lambda-java)
 (require 'lambda-python)
 (require 'lambda-js)
+(require 'lambda-ecb)
 ;; This should be loaded at last, restore buffers, minibuffer history, last
 ;; place of cursor
 (require 'lambda-session)

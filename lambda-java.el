@@ -28,7 +28,7 @@
 ;; eclim-mode
 (help-at-pt-set-timer)
 
-;; Hook eclim up with auto complete mode
+;; Hook eclim up with auto complete mode ---------------------------------------
 (defun ac-prefix-eclim-java-dot ()
   "Do eclim-complete in auto-complete when encounter dot. To be compatible with
 eclim--completion-action, call `eclim-completion-start' to set variable
@@ -48,6 +48,7 @@ eclim--completion-action, call `eclim-completion-start' to set variable
     (symbol . "f")))
 (add-hook 'java-mode-hook
 		  (lambda ()
+			(semantic-mode -1)
 			(add-to-list 'ac-sources 'ac-source-eclim-java)))
 
 (defcustom eclim-highlight-problems-modes '(java-mode)
@@ -58,6 +59,20 @@ eclim--completion-action, call `eclim-completion-start' to set variable
   (around modes-run-eclim-problems-highlight activate)
   (if (memq major-mode eclim-highlight-problems-modes)
 	  ad-do-it))
+
+;; mvn facility ----------------------------------------------------------------
+(defun mvn (phase)
+  "Run mvn using PHASE."
+  (interactive (list (eclim--maven-lifecycle-phase-read)))
+  (let ((pom-path (concat (projectile-project-root) "pom.xml")))
+	(if (file-exists-p pom-path)
+		(compile (concat "mvn -f " pom-path " " phase))
+	  (message "Please go to mvn project and insure that \".projectile\" is in \
+your project root path."))))
+(setq compilation-error-regexp-alist 
+	  (delete
+	   '("^\\(.*\\):\\[\\([0-9]*\\),\\([0-9]*\\)\\]" 1 2 3)
+	   compilation-error-regexp-alist))
 
 ;; java-snippets A set of java-mode snippets for YASnippet. --------------------
 (lambda-package-ensure-install 'java-snippets)

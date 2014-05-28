@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-21 17:49:52 Jerry Xu>
+;; Time-stamp: <2014-05-28 20:42:18 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -268,6 +268,11 @@
 (require 'flx-ido)
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
+	  ido-ignore-buffers '("\\` " 
+						   "^\\*helm.*\\*$"
+						   "^\\*Compile-Log\\*$"
+						   "^\\*Messages\\*$"
+						   "^\\*Help\\*$")
       ido-save-directory-list-file
       (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
       ido-default-file-method 'selected-window)
@@ -295,7 +300,6 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 (require 'helm-projectile)
-(global-set-key (kbd "C-S-r") 'helm-projectile)
 
 ;;; tramp ----------------------------------------------------------------------
 ;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
@@ -416,6 +420,7 @@
 (setq evil-want-visual-char-semi-exclusive t
       ;;evil-want-C-i-jump nil
       evil-want-fine-undo t
+	  evil-auto-balance-windows nil
       evil-cross-lines t)
 ;; Settings below restore key bindings in emacs in insert state
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
