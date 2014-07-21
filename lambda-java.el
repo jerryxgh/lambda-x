@@ -16,6 +16,10 @@
 	  help-at-pt-display-when-idle t
 	  help-at-pt-timer-delay 0.1)
 
+(setq eclim-maven-lifecycle-phases (delete "compile"
+										   eclim-maven-lifecycle-phases))
+(add-to-list 'eclim-maven-lifecycle-phases "compile")
+
 (when (eq system-type 'gnu/linux)
   (add-to-list 'eclim-eclipse-dirs
 			   "/home/xgh/local/sts-bundle/sts-3.5.0.RELEASE/")

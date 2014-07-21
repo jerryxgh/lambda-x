@@ -30,8 +30,16 @@
                                        '("semantic-tag-boundary" . t))
       ;; ecb-create-layout-frame-height 40
       ;; ecb-create-layout-frame-width 110
-      ecb-auto-activate t
+	  ecb-auto-activate t
+	  ;;  Split the edit-area as before the ECB-start, i.e. the edit-area will
+	  ;;  have after start a window-layout as the whole frame had before the
+	  ;;  start of ECB.
+	  ecb-split-edit-window-after-start 'before-activation
       )
+
+;; (add-to-list 'ecb-compilation-buffer-names '("*MATLAB*"))
+
+;;(defadvice ecb-redraw-layout-full ())
 
 (add-to-list 'ecb-compilation-buffer-names '("*slime-repl sbcl*"))
 ;;(add-to-list 'ecb-source-path  '("~/Git Repositories/Workspaces" "/root"))
@@ -88,10 +96,6 @@ equal to the screen resolution"
                    (display-pixel-width)))
       (set-frame-width (selected-frame) (+ (frame-width) (+ ecb-windows-width 2))))))
 
-;; (defadvice ecb-activate (after ecb-activate-after activate)
-;;   "Redraw layout after activation of ecb."
-;;   (ecb-redraw-layout))
-
 (define-key ecb-mode-map (kbd "<f9>") 'ecb-toggle-ecb-windows)
 
 ;; Layout jerry -----------------------------------------------------
@@ -126,17 +130,17 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. This layout works best if it is contained in
 `ecb-show-sources-in-directories-buffer'!"
 				   (ecb-set-directories-buffer)
-				   (ecb-split-ver 0.4)
-				   (ecb-set-methods-buffer)
+				   ;;(ecb-split-ver 0.4)
+				   ;;(ecb-set-methods-buffer)
 				   (ecb-split-ver 0.5)
 				   (ecb-set-history-buffer)
 				   (select-window (next-window)))
 (add-to-list 'ecb-show-sources-in-directories-buffer "jerry")
 
-
-
-(add-hook 'ecb-activate-hook (lambda ()
-                               (ecb-hide-ecb-windows-internal 'all)))
+(add-hook 'ecb-activate-hook
+		  (lambda ()
+			(ecb-hide-ecb-windows-internal 'all)
+			))
 
 (provide 'lambda-ecb)
 

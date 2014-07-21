@@ -11,7 +11,10 @@
 (add-hook 'python-mode-hook '(lambda ()
                                (jedi:setup)
                                (fci-mode -1)))
-(setq jedi:complete-on-dot t)
+(setq jedi:complete-on-dot t
+	  python-environment-directory (expand-file-name
+									"auto-save-list/python-environments"
+									user-emacs-directory))
 
 
 (provide 'lambda-python)

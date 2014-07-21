@@ -19,7 +19,8 @@
 ;; Add more package sources
 (dolist (pkg-arch '(;;("marmalade" . "http://marmalade-repo.org/packages/")
                     ;;("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.milkbox.net/packages/")))
+					;;("melpa" . "http://melpa.milkbox.net/packages/") t)
+                    ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
          (add-to-list 'package-archives pkg-arch))
 
 ;; Do not auto load packages
@@ -41,7 +42,7 @@ installed again."
     (package-install package)))
 
 (add-to-list 'load-path lambda-x-direcotry)
-(add-to-list 'load-path (concat lambda-x-direcotry "non-elpa/"))
+(add-to-list 'load-path (expand-file-name "non-elpa/" lambda-x-direcotry))
 
 ;; Load modules
 (require 'lambda-core)
@@ -52,11 +53,13 @@ installed again."
 (require 'lambda-java)
 (require 'lambda-python)
 (require 'lambda-js)
+(require 'lambda-json)
+(require 'lambda-matlab)
 (require 'lambda-ecb)
+(require 'lambda-eden)
 ;; This should be loaded at last, restore buffers, minibuffer history, last
 ;; place of cursor
 (require 'lambda-session)
-
 
 (provide 'init)
 

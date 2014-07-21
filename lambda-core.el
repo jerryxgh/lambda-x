@@ -1,22 +1,23 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-05-28 20:42:18 Jerry Xu>
+;; Time-stamp: <2014-06-12 13:31:45 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
 ;;; Code:
 
-;; diminish keeps the modeline tidy --------------------------------------------
+;; diminish keeps the modeline tidy, this package is needed by others, so put
+;; this in the beginning -------------------------------------------------------
 (lambda-package-ensure-install 'diminish)
 (require 'diminish)
 
-;; Miscellaneous basic settings ------------------------------------------------
+;; Miscellaneous basic settings
 (setq user-full-name "Jerry Xu"
       user-mail-address "jerryxgh@gmail.com"
       inhibit-startup-screen t 
       abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
-					 user-emacs-directory)
+										 user-emacs-directory)
 
-      custom-file (concat lambda-x-direcotry "lambda-custom.el")
+      custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
       use-dialog-box nil 
       sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8") 
       make-backup-files nil 
@@ -26,7 +27,7 @@
       enable-recursive-minibuffers t 
       ;;confirm-kill-emacs 'y-or-n-p
       )
-;; abbrev-mode -----------------------------------------------------------------
+;; abbrev-mode
 (setq-default abbrev-mode t)
 (diminish 'abbrev-mode)
 (if (file-exists-p abbrev-file-name)
@@ -43,11 +44,12 @@
                                          try-expand-line
                                          try-complete-lisp-symbol-partially
                                          try-complete-lisp-symbol))
+
 ;; set text-mode as the default major mode, instead of fundamental-mode
 (setq-default major-mode 'text-mode)
+
 ;; let one line display as one line, even if it over the window
 (setq-default truncate-lines t)
-
 
 ;; if there is a dired buffer displayed in the next window, use its
 ;; current subdir, instead of the current subdir of this dired buffer
@@ -72,8 +74,8 @@
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
       '("[" invocation-name " lambda-x] - "
-	(:eval (if (buffer-file-name)
-		   (abbreviate-file-name (buffer-file-name)) "%b"))))
+		(:eval (if (buffer-file-name)
+				   (abbreviate-file-name (buffer-file-name)) "%b"))))
 (setq-default tab-width 4)
 ;;(add-to-list 'Info-default-directory-list " ")
 (cond ((eq system-type 'windows-nt)
@@ -138,18 +140,83 @@
 (setq-default indicate-buffer-boundaries '((top . left) (t . right))
               indicate-empty-lines t)
 
-;; outline mode ----------------------------------------------------------------
+;; outline mode
 (require 'outline)
 (add-hook 'prog-mode-hook
           (lambda ()
             (outline-minor-mode t)))
 (diminish 'outline-minor-mode)
 
-;; flyspell --------------------------------------------------------------------
+;; flyspell
 (if (eq system-type 'windows-nt)
     (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
 (setq ispell-program-name "aspell")
 (setq ispell-personal-dictionary (expand-file-name "ispell" lambda-x-direcotry))
+
+;; whitespace-mode config
+(require 'whitespace)
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face tabs empty trailing lines-tail
+							  newline indentation ))
+
+;; saner regex syntax
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
+;; ediff - don't start another frame
+(require 'ediff)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; use shift + arrow keys to switch between visible buffers
+(require 'windmove)
+(windmove-default-keybindings)
+
+;; uniquify --- easy to distinguish same name buffers
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+;;; dired-x
+(require 'dired-x)
+
+;;; tramp
+;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
+(setq tramp-auto-save-directory  temporary-file-directory
+      ido-enable-tramp-completion t
+      tramp-persistency-file-name (expand-file-name "auto-save-list/tramp"
+													user-emacs-directory))
+(if (eq system-type 'windows-nt)
+    (setq tramp-default-method "plink")
+  (setq tramp-default-method "ssh"))
+(require 'tramp)
+(when (> emacs-major-version 23)
+  (require 'tramp-sh)
+  (delete "LC_ALL=C" tramp-remote-process-environment)
+  (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
+  (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
+
+;;; ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer) 
+;;(setq ibuffer-never-show-predicates (list "^ ?\\*.*\\*$"))
+
+;;; time-stamp
+(setq time-stamp-active t
+      time-stamp-warn-inactive t
+      time-stamp-format "%:y-%02m-%02d %02H:%02M:%02S %U")
+(add-hook 'before-save-hook 'time-stamp)
+
+;;; easypg
+;;(require 'epa) 
+(setq epa-file-encrypt-to nil
+      epa-file-cache-passphrase-for-symmetric-encryption t 
+      epa-file-inhibit-auto-save t) 
+(setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
+
+;;; cal-china-x ----------------------------------------------------------------
+(require 'cal-china-x)
+(setq calendar-mark-holidays-flag t)
+(setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
+(setq calendar-holidays cal-china-x-important-holidays)
 
 ;; flycheck --------------------------------------------------------------------
 (lambda-package-ensure-install 'flycheck)
@@ -157,28 +224,6 @@
 (if (fboundp 'global-flycheck-mode)
     (global-flycheck-mode 1)
   (add-hook 'prog-mode-hook 'flycheck-mode))
-
-;; whitespace-mode config ------------------------------------------------------
-(require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face tabs empty trailing lines-tail))
-
-;; saner regex syntax ----------------------------------------------------------
-(require 're-builder)
-(setq reb-re-syntax 'string)
-
-;; ediff - don't start another frame -------------------------------------------
-(require 'ediff)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;; use shift + arrow keys to switch between visible buffers --------------------
-(require 'windmove)
-(windmove-default-keybindings)
-
-;; uniquify --- easy to distinguish same name buffers---------------------------
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
 ;; theme -----------------------------------------------------------------------
 (lambda-package-ensure-install 'solarized-theme)
@@ -207,7 +252,7 @@
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
 (global-undo-tree-mode 1)
-;(add-to-list 'warning-suppress-types '(undo discard-info))
+										;(add-to-list 'warning-suppress-types '(undo discard-info))
 
 ;; volatile-highlights ---------------------------------------------------------
 (lambda-package-ensure-install 'volatile-highlights)
@@ -245,11 +290,11 @@
   (let ((process (get-buffer-process (current-buffer))))
     (if process
         (set-process-sentinel 
-	 process
-	 (lambda (process state)
-	   (when (or (string-match "exited abnormally with code." state)
-		     (string-match "finished" state))
-	     (kill-buffer (current-buffer))))))))
+		 process
+		 (lambda (process state)
+		   (when (or (string-match "exited abnormally with code." state)
+					 (string-match "finished" state))
+			 (kill-buffer (current-buffer))))))))
 
 ;; Do not load custom file, all the configuration should be done by code
 ;;(load "lambda-custom") 
@@ -287,7 +332,7 @@
 (lambda-package-ensure-install 'smex)
 (require 'smex)
 (setq smex-save-file (expand-file-name "auto-save-list/smex-items"
-				       user-emacs-directory))
+									   user-emacs-directory))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -300,45 +345,13 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 (require 'helm-projectile)
+(defalias 'helm-buffer-match-major-mode 'helm-buffer--match-mjm)
 
-;;; tramp ----------------------------------------------------------------------
-;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
-(setq tramp-auto-save-directory  temporary-file-directory
-      ido-enable-tramp-completion t
-      tramp-persistency-file-name (expand-file-name "auto-save-list/tramp"
-						    user-emacs-directory))
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
-(require 'tramp)
-(when (> emacs-major-version 23)
-  (require 'tramp-sh)
-  (delete "LC_ALL=C" tramp-remote-process-environment)
-  (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
-  (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
-
-;;; ibuffer --------------------------------------------------------------------
-(global-set-key (kbd "C-x C-b") 'ibuffer) 
-;;(setq ibuffer-never-show-predicates (list "^ ?\\*.*\\*$"))
-
-;;; time-stamp -----------------------------------------------------------------
-(setq time-stamp-active t
-      time-stamp-warn-inactive t
-      time-stamp-format "%:y-%02m-%02d %02H:%02M:%02S %U")
-(add-hook 'before-save-hook 'time-stamp)
-
-;;; cal-china-x ----------------------------------------------------------------
-(require 'cal-china-x)
-(setq calendar-mark-holidays-flag t)
-(setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
-(setq calendar-holidays cal-china-x-important-holidays)
-
-;;; easypg ---------------------------------------------------------------------
-;;(require 'epa) 
-(setq epa-file-encrypt-to nil
-      epa-file-cache-passphrase-for-symmetric-encryption t 
-      epa-file-inhibit-auto-save t) 
-(setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
+;; helm-ls-git Yet another helm for listing the files in a git repo. -----------
+(lambda-package-ensure-install 'helm-ls-git)
+(require 'helm-ls-git)
+(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 ;;(require 'magit)
@@ -352,17 +365,14 @@
 
 ;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
 
-;;; dired-x --------------------------------------------------------------------
-(require 'dired-x)
-
 ;;; fill-column ----------------------------------------------------------------
 (setq-default fill-column 80)
 (lambda-package-ensure-install 'fill-column-indicator)
-;;(require 'fill-column-indicator)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'prog-mode-hook '(lambda ()
-			     (turn-on-auto-fill)
-			     (turn-on-fci-mode)))
+							 (turn-on-auto-fill)
+							 ;;(turn-on-fci-mode)
+							 ))
 ;; Mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
 (diminish 'auto-fill-function)
@@ -414,6 +424,7 @@
 
 ;; Evil ------- A wonderful editor in Emacs ------------------------------------
 (lambda-package-ensure-install 'evil)
+(require 'evil)
 (evil-mode 1)
 (diminish 'undo-tree-mode)
 
@@ -430,6 +441,23 @@
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
 (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
+
+(defun copy-to-end-of-line ()
+  "Copy to end of line, and bind this funciton to Y in normal mode."
+  (interactive)
+  (evil-yank (point) (point-at-eol)))
+
+(define-key evil-normal-state-map (kbd "Y") 'copy-to-end-of-line)
+(loop for (mode . state) in '((calendar-mode . emacs)
+                              (help-mode . emacs)
+                              (Info-mode . emacs)
+                              (dired-mode . emacs)
+                              (Man-mode . emacs)
+                              (grep-mode . emacs)
+                              (view-mode . emacs)
+                              (ack-mode . emacs)
+                              (image-mode . emacs))
+      do (evil-set-initial-state mode state))
 
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
 (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
@@ -497,9 +525,9 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (add-to-list 'ac-dictionary-directories
-             (concat lambda-x-direcotry "ac-dict"))
+             (expand-file-name "ac-dict" lambda-x-direcotry))
 (add-to-list 'ac-dictionary-files
-             (concat lambda-x-direcotry "ac-dict/auto-complete.dict"))
+             (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
 (setq ac-auto-start 1 
       ac-comphist-file (expand-file-name "auto-save-list/ac-comphist.dat"
 										 user-emacs-directory)
@@ -529,7 +557,7 @@
 ;; YASnippet -------------------------------------------------------------------
 (lambda-package-ensure-install 'yasnippet)
 (require 'yasnippet)
-(add-to-list 'yas-snippet-dirs (concat lambda-x-direcotry "snippets"))
+(add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
 ;; Delete dirs that don't exist in yas-snippet-dirs
 (dolist (dir yas-snippet-dirs)
   (unless (file-directory-p dir)
@@ -606,7 +634,8 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
   (interactive
    (list (read-from-minibuffer
           (projectile-prepend-project-name "Ack search for: ")
-          (projectile-symbol-at-point))
+          ;;(projectile-symbol-at-point)
+		  )
          current-prefix-arg))
   (if (require 'ack nil 'noerror)
       (let* ((root (if arg
@@ -699,9 +728,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;; anzu-mode enhances isearch by showing total matches and current match 
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
-(require 'anzu)
-(global-anzu-mode)
-(diminish 'anzu-mode)
+										;(require 'anzu)
+										;(global-anzu-mode)
+										;(diminish 'anzu-mode)
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)
@@ -715,10 +744,8 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (ggtags-mode 1))))
-(eval-after-load 'ggtags
-  (lambda
-	(diminish 'ggtags-mode)))
+              (ggtags-mode 1)
+			  (diminish 'ggtags-mode))))
 
 ;; smartparens -----------------------------------------------------------------
 ;; global

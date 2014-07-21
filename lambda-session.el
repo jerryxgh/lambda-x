@@ -17,15 +17,15 @@
       savehist-autosave-interval 60
       ;; keep the home clean
       savehist-file (expand-file-name
-					 "auto-save-list/savehist"
-					 user-emacs-directory))
+		     "auto-save-list/savehist"
+		     user-emacs-directory))
 (savehist-mode 1)
 
 ;; save recent files -----------------------------------------------------------
 (require 'recentf)
 (setq recentf-save-file (expand-file-name
-						 "auto-save-list/recentf"
-						 user-emacs-directory)
+			 "auto-save-list/recentf"
+			 user-emacs-directory)
       recentf-max-saved-items 500
       recentf-max-menu-items 15)
 (recentf-mode 1)
@@ -37,10 +37,32 @@
 ;; save-place-file. This defaults to ~/.emacs-places. You may want to change it
 ;; to keep your home directory uncluttered, for example:
 (setq save-place-file (expand-file-name
-					   "auto-save-list/saved-places"
-					   user-emacs-directory))
+		       "auto-save-list/saved-places"
+		       user-emacs-directory))
 ;; activate it for all buffers
 (setq-default save-place t)
+
+;; Maxmize frame(Full Screen) --------------------------------------------------
+(defun lambda-full-screen ()
+  "Make Emacs full-screen after init."
+  (interactive)
+  (cond ((and (eq system-type 'windows-nt)
+			  (fboundp 'w32-send-sys-command))
+		 (w32-send-sys-command 61488))
+		((eq system-type 'gnu/linux)
+		 (set-frame-parameter nil 'fullscreen 'maximized))))
+(add-hook 'after-init-hook 'lambda-full-screen)
+
+;; Restore buffers automaticly -------------------------------------------------
+(require 'desktop)
+(setq desktop-path (list (expand-file-name "auto-save-list/"
+					   user-emacs-directory))
+      history-length 250
+      desktop-dirname (expand-file-name "auto-save-list/"
+					user-emacs-directory)
+      desktop-base-file-name "emacs-desktop")
+
+;(desktop-save-mode 1)
 
 ;; Workgroup2 Use --------------------------------------------------------------
 ;; Most commands start with prefix `wg-prefix-key'.
@@ -62,29 +84,17 @@
 
 ;;Change workgroups session file
 (setq wg-default-session-file (locate-user-emacs-file
-							   "auto-save-list/emacs-workgroups"))
+                               "auto-save-list/emacs-workgroups"))
 
 ;; put this one at the bottom of this file
 (workgroups-mode 1)
 (diminish 'workgroups-mode)
 
-;; Maxmize frame(Full Screen) --------------------------------------------------
-(defun lambda-full-screen ()
-  "Make Emacs full-screen after init."
-  (if (and (eq system-type 'windows-nt)
-		   (fboundp 'w32-send-sys-command))
-	  (w32-send-sys-command 61488)))
-(add-hook 'after-init-hook 'lambda-full-screen)
-
-;; Restore buffers automaticly -------------------------------------------------
-(require 'desktop)
-(setq desktop-path (list (expand-file-name "auto-save-list/"
-										   user-emacs-directory)))
-
-(setq desktop-dirname (expand-file-name "auto-save-list/"
-										user-emacs-directory))
-(setq desktop-base-file-name "emacs-desktop")
-(desktop-save-mode 1)
+;; psession Persistent save of elisp objects -----------------------------------
+(lambda-package-ensure-install 'psession)
+(require 'psession)
+(setq psession-elisp-objects-default-directory (locate-user-emacs-file
+												"auto-save-list/elisp-objects"))
 
 
 (provide 'lambda-session)

@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-05-12 10:17:01 Jerry Xu>
+;; Time-stamp: <2014-07-20 17:39:58 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -72,7 +72,7 @@ echo \"\" | g++ -v -x c++ -E -")
 							)
                           ac-sources))
 			(add-to-list 'c-cleanup-list 'defun-close-semi)
-			(c-toggle-auto-newline 1)
+			;; (c-toggle-auto-newline 1)
 			(c-toggle-hungry-state 1)))
 
 (add-hook 'c-mode-hook
@@ -82,9 +82,9 @@ echo \"\" | g++ -v -x c++ -E -")
                   (append '(ac-source-clang)
                           ac-sources))))
 
-(setq ac-clang-flags
-	  (mapcar (lambda (item) (concat "-I" item))
-			  lambda-cc-system-include))
+;; (setq ac-clang-flags
+;; 	  (mapcar (lambda (item) (concat "-I" item))
+;; 			  lambda-cc-system-include))
 
 
 (provide 'lambda-cc)
