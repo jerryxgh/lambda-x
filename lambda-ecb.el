@@ -140,6 +140,9 @@ little more place. This layout works best if it is contained in
 (add-hook 'ecb-activate-hook
 		  (lambda ()
 			(ecb-hide-ecb-windows-internal 'all)
+			(pop ecb-key-map)
+			(push "C-c /" ecb-key-map)
+			(custom-set-variables (quote (ecb-key-map ecb-key-map)))
 			))
 
 (provide 'lambda-ecb)
