@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-06-12 13:31:45 Jerry Xu>
+;; Time-stamp: <2014-08-01 22:40:22 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -128,7 +128,7 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 (set-frame-font "Consolas-11")
-;;(set-background-color "#CCE8CF") 
+(set-background-color "#CCE8CF") 
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
@@ -237,13 +237,13 @@
 (setq solarized-use-more-italic t)
 ;; Use less colors for indicators such as git:gutter, flycheck and similar.
 ;;(setq solarized-emphasize-indicators nil)
-(load-theme 'solarized-dark t)
-(set-face-attribute 'mode-line nil :box nil)
-(set-face-attribute 'mode-line nil :underline nil)
-(set-face-attribute 'mode-line-highlight nil :box nil)
-(set-face-attribute 'mode-line-highlight nil :underline nil)
-(set-face-attribute 'mode-line-inactive nil :box nil)
-(set-face-attribute 'mode-line-inactive nil :underline nil)
+;;(load-theme 'solarized-light t)
+;;(set-face-attribute 'mode-line nil :box nil)
+;;(set-face-attribute 'mode-line nil :underline nil)
+;;(set-face-attribute 'mode-line-highlight nil :box nil)
+;;(set-face-attribute 'mode-line-highlight nil :underline nil)
+;;(set-face-attribute 'mode-line-inactive nil :box nil)
+;;(set-face-attribute 'mode-line-inactive nil :underline nil)
 
 ;; powerline -------------------------------------------------------------------
 (lambda-package-ensure-install 'powerline)

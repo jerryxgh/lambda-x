@@ -62,7 +62,7 @@
 					user-emacs-directory)
       desktop-base-file-name "emacs-desktop")
 
-;(desktop-save-mode 1)
+(desktop-save-mode 1)
 
 ;; Workgroup2 Use --------------------------------------------------------------
 ;; Most commands start with prefix `wg-prefix-key'.

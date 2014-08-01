@@ -30,7 +30,7 @@
                                        '("semantic-tag-boundary" . t))
       ;; ecb-create-layout-frame-height 40
       ;; ecb-create-layout-frame-width 110
-	  ecb-auto-activate t
+	  ;; ecb-auto-activate t
 	  ;;  Split the edit-area as before the ECB-start, i.e. the edit-area will
 	  ;;  have after start a window-layout as the whole frame had before the
 	  ;;  start of ECB.
