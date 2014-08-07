@@ -1,9 +1,46 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-08-07 21:38:21 Jerry Xu>
+;; Time-stamp: <2014-08-07 22:12:56 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
 ;;; Code:
+
+;; definitions, used by all other modules
+(unless  (boundp 'lambda-x-direcotry)
+  (defconst lambda-x-direcotry (file-name-directory
+                                (or load-file-name (buffer-file-name)))
+    "Root directory of lambda-x."))
+
+
+(require 'package)
+
+(defun lambda-package-ensure-install (package)
+  "This is like `package-install', the difference is that if PACKAGE is \
+already installed(checked through `package-installed-p'), it will not be \
+installed again."
+  (unless (or (member package package-activated-list)
+              (package-installed-p package)
+              (featurep package)
+              (functionp package))
+    (message "Installing %s" (symbol-name package))
+    (when (not package-archive-contents)
+      (package-refresh-contents))
+    (package-install package)))
+
+;; Place package files in git repository directory
+(setq package-user-dir (expand-file-name "elpa" lambda-x-direcotry))
+(require 'package)
+;; Add more package sources
+(dolist (pkg-arch '(;;("marmalade" . "http://marmalade-repo.org/packages/")
+                    ;;("org" . "http://orgmode.org/elpa/")
+                    ;;("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+					("melpa" . "http://melpa.milkbox.net/packages/")))
+         (add-to-list 'package-archives pkg-arch))
+
+;; Do not auto load packages
+(setq package-enable-at-startup nil)
+;; Load packages explictly
+(package-initialize)
 
 ;; diminish keeps the modeline tidy, this package is needed by others, so put
 ;; this in the beginning -------------------------------------------------------
@@ -15,7 +52,7 @@
       user-mail-address "gh_xu@qq.com"
       inhibit-startup-screen t 
       abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
-										 user-emacs-directory)
+                                         user-emacs-directory)
 
       custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
       use-dialog-box nil 
@@ -74,8 +111,8 @@
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
       '("[" invocation-name " lambda-x] - "
-		(:eval (if (buffer-file-name)
-				   (abbreviate-file-name (buffer-file-name)) "%b"))))
+        (:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name)) "%b"))))
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
 ;;(add-to-list 'Info-default-directory-list " ")
@@ -158,7 +195,7 @@
 (require 'whitespace)
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face tabs empty trailing lines-tail
-							  newline indentation ))
+                              newline indentation ))
 
 ;; saner regex syntax
 (require 're-builder)
@@ -185,7 +222,7 @@
 (setq tramp-auto-save-directory  temporary-file-directory
       ido-enable-tramp-completion t
       tramp-persistency-file-name (expand-file-name "auto-save-list/tramp"
-													user-emacs-directory))
+                                                    user-emacs-directory))
 (if (eq system-type 'windows-nt)
     (setq tramp-default-method "plink")
   (setq tramp-default-method "ssh"))
@@ -288,11 +325,11 @@
   (let ((process (get-buffer-process (current-buffer))))
     (if process
         (set-process-sentinel 
-		 process
-		 (lambda (process state)
-		   (when (or (string-match "exited abnormally with code." state)
-					 (string-match "finished" state))
-			 (kill-buffer (current-buffer))))))))
+         process
+         (lambda (process state)
+           (when (or (string-match "exited abnormally with code." state)
+                     (string-match "finished" state))
+             (kill-buffer (current-buffer))))))))
 
 ;; Do not load custom file, all the configuration should be done by code
 ;;(load "lambda-custom") 
@@ -307,7 +344,7 @@
 (lambda-package-ensure-install 'smex)
 (require 'smex)
 (setq smex-save-file (expand-file-name "auto-save-list/smex-items"
-									   user-emacs-directory))
+                                       user-emacs-directory))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -337,11 +374,11 @@
 (require 'flx-ido)
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
-	  ido-ignore-buffers '("\\` " 
-						   "^\\*helm.*\\*$"
-						   "^\\*Compile-Log\\*$"
-						   "^\\*Messages\\*$"
-						   "^\\*Help\\*$")
+      ido-ignore-buffers '("\\` " 
+                           "^\\*helm.*\\*$"
+                           "^\\*Compile-Log\\*$"
+                           "^\\*Messages\\*$"
+                           "^\\*Help\\*$")
       ido-save-directory-list-file
       (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
       ido-default-file-method 'selected-window
@@ -374,9 +411,9 @@
 (lambda-package-ensure-install 'fill-column-indicator)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'prog-mode-hook '(lambda ()
-							 (turn-on-auto-fill)
-							 ;;(turn-on-fci-mode)
-							 ))
+                             (turn-on-auto-fill)
+                             ;;(turn-on-fci-mode)
+                             ))
 ;; Mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
 (diminish 'auto-fill-function)
@@ -395,13 +432,13 @@
 (global-set-key (kbd "C-x j") '(lambda () (interactive)
                                  (ido-find-file-in-dir lambda-x-direcotry)))
 (global-set-key (kbd "C-x C-c") '(lambda () (interactive)
-								   "Stop eclimd and "
-								   (when (and  (functionp 'eclimd--running-p)
-											   (eclimd--running-p))
-									 (message "Stopping eclimd ...")
-									 (stop-eclimd)
-									 (message "Eclimd stopped."))
-								   (save-buffers-kill-terminal)))
+                                   "Stop eclimd and "
+                                   (when (and  (functionp 'eclimd--running-p)
+                                               (eclimd--running-p))
+                                     (message "Stopping eclimd ...")
+                                     (stop-eclimd)
+                                     (message "Eclimd stopped."))
+                                   (save-buffers-kill-terminal)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling
@@ -412,7 +449,7 @@
 ;;; bookmark -------------------------------------------------------------------
 (require 'bookmark)
 (setq bookmark-default-file (expand-file-name "auto-save-list/bookmarks"
-											  user-emacs-directory))
+                                              user-emacs-directory))
 
 (defun clear ()
   "Clear `eshell' or submode of `comint-mode' buffer."
@@ -435,7 +472,7 @@
 (setq evil-want-visual-char-semi-exclusive t
       ;;evil-want-C-i-jump nil
       evil-want-fine-undo t
-	  evil-auto-balance-windows nil
+      evil-auto-balance-windows nil
       evil-cross-lines t)
 ;; Settings below restore key bindings in emacs in insert state
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
@@ -537,18 +574,18 @@
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
 (setq ac-auto-start 1 
       ac-comphist-file (expand-file-name "auto-save-list/ac-comphist.dat"
-										 user-emacs-directory)
+                                         user-emacs-directory)
       ac-modes 
       (append
        ac-modes
        '(shell-mode graphviz-dot-mode conf-xdefaults-mode html-mode nxml-mode
-					objc-mode sql-mode change-log-mode text-mode makefile-gmake-mode
-					makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
+                    objc-mode sql-mode change-log-mode text-mode makefile-gmake-mode
+                    makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
       ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename 
-								   ac-source-yasnippet
-								   )
+                                   ac-source-yasnippet
+                                   )
                                  ac-sources))
 
 (define-key ac-mode-map (kbd "M-/") 'auto-complete)
@@ -626,8 +663,8 @@
 (setq projectile-cache-file (expand-file-name 
                              "auto-save-list/projectile.cache"
                              user-emacs-directory)
-	  projectile-enable-caching t
-	  projectile-require-project-root nil
+      projectile-enable-caching t
+      projectile-require-project-root nil
       projectile-known-projects-file (expand-file-name 
                                       "auto-save-list/projectile-bookmarks.eld"
                                       user-emacs-directory))
@@ -642,7 +679,7 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
    (list (read-from-minibuffer
           (projectile-prepend-project-name "Ack search for: ")
           ;;(projectile-symbol-at-point)
-		  )
+          )
          current-prefix-arg))
   (if (require 'ack nil 'noerror)
       (let* ((root (if arg
@@ -710,9 +747,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (add-hook 'eshell-mode-hook
           (lambda ()
             (add-to-list 'ac-sources 'ac-source-pcomplete)
-			(turn-on-eldoc-mode)
-			(ac-emacs-lisp-mode-setup)
-			(define-key eshell-mode-map (kbd "C-l") 'clear)))
+            (turn-on-eldoc-mode)
+            (ac-emacs-lisp-mode-setup)
+            (define-key eshell-mode-map (kbd "C-l") 'clear)))
 (add-to-list 'ac-modes 'eshell-mode)
 
 
@@ -735,9 +772,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;; anzu-mode enhances isearch by showing total matches and current match 
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
-										;(require 'anzu)
-										;(global-anzu-mode)
-										;(diminish 'anzu-mode)
+                                        ;(require 'anzu)
+                                        ;(global-anzu-mode)
+                                        ;(diminish 'anzu-mode)
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)
@@ -752,7 +789,7 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1)
-			  (diminish 'ggtags-mode))))
+              (diminish 'ggtags-mode))))
 
 ;; smartparens -----------------------------------------------------------------
 ;; global
@@ -806,4 +843,5 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;; Issues: ---------------------------------------------------------------------
 
 (provide 'lambda-core)
+
 ;;; lambda-core.el ends here

@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-07-20 17:39:58 Jerry Xu>
+;; Time-stamp: <2014-08-07 21:53:03 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -71,6 +71,8 @@ echo \"\" | g++ -v -x c++ -E -")
                             ;;ac-source-yasnippet
 							)
                           ac-sources))
+            ;;(setq flycheck-clang-include-path
+                           ;;(list (expand-file-name "~/local/include/")))
 			(add-to-list 'c-cleanup-list 'defun-close-semi)
 			;; (c-toggle-auto-newline 1)
 			(c-toggle-hungry-state 1)))
@@ -88,4 +90,5 @@ echo \"\" | g++ -v -x c++ -E -")
 
 
 (provide 'lambda-cc)
+
 ;;; lambda-cc.el ends here
