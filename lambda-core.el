@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-08-01 22:40:22 Jerry Xu>
+;; Time-stamp: <2014-08-07 21:38:21 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -12,7 +12,7 @@
 
 ;; Miscellaneous basic settings
 (setq user-full-name "Jerry Xu"
-      user-mail-address "jerryxgh@gmail.com"
+      user-mail-address "gh_xu@qq.com"
       inhibit-startup-screen t 
       abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
 										 user-emacs-directory)
@@ -77,6 +77,7 @@
 		(:eval (if (buffer-file-name)
 				   (abbreviate-file-name (buffer-file-name)) "%b"))))
 (setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
 ;;(add-to-list 'Info-default-directory-list " ")
 (cond ((eq system-type 'windows-nt)
        (setq dired-listing-switches "-AlX"))
@@ -120,7 +121,7 @@
 ;; (setq show-paren-style 'mixed)
 (tooltip-mode 0) 
 ;; highlight current line
-(global-hl-line-mode 1)
+;;(global-hl-line-mode 1)
 (scroll-bar-mode 0) 
 ;; the toolbar is just a waste of valuable screen estate
 ;; in a tty tool-bar-mode does not properly auto-load, and is
@@ -128,7 +129,7 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 (set-frame-font "Consolas-11")
-(set-background-color "#CCE8CF") 
+;; (set-background-color "#CCE8CF") 
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
@@ -229,30 +230,27 @@
 (lambda-package-ensure-install 'solarized-theme)
 ;; make the fringe stand out from the background
 (setq solarized-distinct-fringe-background t)
+;; Use more italics
+(setq solarized-use-more-italic t)
+(if (eq system-type 'gnu/linux)
+    (setq x-underline-at-descent-line t))
 ;; make the modeline high contrast
 ;;(setq solarized-high-contrast-mode-line t)
 ;; Use less bolding
 ;;(setq solarized-use-less-bold t)
-;; Use more italics
-(setq solarized-use-more-italic t)
 ;; Use less colors for indicators such as git:gutter, flycheck and similar.
 ;;(setq solarized-emphasize-indicators nil)
-;;(load-theme 'solarized-light t)
-;;(set-face-attribute 'mode-line nil :box nil)
-;;(set-face-attribute 'mode-line nil :underline nil)
-;;(set-face-attribute 'mode-line-highlight nil :box nil)
-;;(set-face-attribute 'mode-line-highlight nil :underline nil)
-;;(set-face-attribute 'mode-line-inactive nil :box nil)
-;;(set-face-attribute 'mode-line-inactive nil :underline nil)
-
-;; powerline -------------------------------------------------------------------
-(lambda-package-ensure-install 'powerline)
-(powerline-default-theme)
+(load-theme 'solarized-dark t)
+(set-face-attribute 'mode-line nil :box nil)
+(set-face-attribute 'mode-line nil :overline "#0A4460")
+(set-face-attribute 'mode-line nil :underline "#031C22")
+(set-face-attribute 'mode-line-inactive nil :box nil)
+(set-face-attribute 'mode-line-inactive nil :underline "#073642")
 
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
 (global-undo-tree-mode 1)
-										;(add-to-list 'warning-suppress-types '(undo discard-info))
+;;(add-to-list 'warning-suppress-types '(undo discard-info))
 
 ;; volatile-highlights ---------------------------------------------------------
 (lambda-package-ensure-install 'volatile-highlights)
@@ -305,29 +303,6 @@
 ;; no duplicates in command history
 (setq comint-input-ignoredups t)
 
-;;; ido --- interactively do things---------------------------------------------
-(lambda-package-ensure-install 'ido-ubiquitous)
-(lambda-package-ensure-install 'flx-ido)
-(require 'ido)
-(require 'ido-ubiquitous)
-(require 'flx-ido)
-(setq ido-enable-flex-matching t
-      ido-auto-merge-work-directories-length -1
-	  ido-ignore-buffers '("\\` " 
-						   "^\\*helm.*\\*$"
-						   "^\\*Compile-Log\\*$"
-						   "^\\*Messages\\*$"
-						   "^\\*Help\\*$")
-      ido-save-directory-list-file
-      (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
-      ido-default-file-method 'selected-window)
-;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
-(ido-mode t)
-(ido-everywhere t)
-(ido-ubiquitous-mode 1)
-;;; smarter fuzzy matching for ido
-(flx-ido-mode 1)
-
 ;;; smex, remember recently and most frequently used commands ------------------
 (lambda-package-ensure-install 'smex)
 (require 'smex)
@@ -345,13 +320,42 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 (require 'helm-projectile)
-(defalias 'helm-buffer-match-major-mode 'helm-buffer--match-mjm)
+;;(defalias 'helm-buffer-match-major-mode 'helm-buffer--match-mjm)
+;; to use with ido, customize helm-completing-read-handlers-alist
 
 ;; helm-ls-git Yet another helm for listing the files in a git repo. -----------
 (lambda-package-ensure-install 'helm-ls-git)
 (require 'helm-ls-git)
 (global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
+
+;;; ido --- interactively do things---------------------------------------------
+(lambda-package-ensure-install 'ido-ubiquitous)
+(lambda-package-ensure-install 'flx-ido)
+(require 'ido)
+(require 'ido-ubiquitous)
+(require 'flx-ido)
+(setq ido-enable-flex-matching t
+      ido-auto-merge-work-directories-length -1
+	  ido-ignore-buffers '("\\` " 
+						   "^\\*helm.*\\*$"
+						   "^\\*Compile-Log\\*$"
+						   "^\\*Messages\\*$"
+						   "^\\*Help\\*$")
+      ido-save-directory-list-file
+      (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
+      ido-default-file-method 'selected-window
+      ;;ido-use-filename-at-point 'guess ; for find-file-at-point
+      ;;ido-use-url-at-point t ; look for URLs at point
+      ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f 
+      )
+;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
+;;(put 'dired-do-rename 'ido 'find-file)
+(ido-mode t)
+(ido-everywhere t)
+(ido-ubiquitous-mode 1)
+;;; smarter fuzzy matching for ido
+(flx-ido-mode 1)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 ;;(require 'magit)
@@ -446,8 +450,8 @@
   "Copy to end of line, and bind this funciton to Y in normal mode."
   (interactive)
   (evil-yank (point) (point-at-eol)))
-
 (define-key evil-normal-state-map (kbd "Y") 'copy-to-end-of-line)
+
 (loop for (mode . state) in '((calendar-mode . emacs)
                               (help-mode . emacs)
                               (Info-mode . emacs)
@@ -464,6 +468,9 @@
 
 (define-key evil-window-map (kbd "w") 'ace-window)
 (define-key evil-window-map (kbd "C-w") 'ace-window)
+
+(require 'evil-tab-minor-mode)
+(global-evil-tab-mode t)
 
 ;; Expand-region ---------------------------------------------------------------
 (lambda-package-ensure-install 'expand-region)
@@ -514,9 +521,9 @@
 ;; Delete surrounding
 ;; ds<trigger>.
 
-(lambda-package-ensure-install 'surround)
-(require 'surround)
-(global-surround-mode 1)
+(lambda-package-ensure-install 'evil-surround)
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
@@ -540,7 +547,7 @@
       ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename 
-								   ;;ac-source-yasnippet
+								   ac-source-yasnippet
 								   )
                                  ac-sources))
 

@@ -1,5 +1,5 @@
 ;;; lambda-writing.el --- org, confluence wiki
-;; Time-stamp: <2014-04-14 13:41:21 Jerry Xu>
+;; Time-stamp: <2014-08-06 16:08:21 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -7,12 +7,13 @@
 
 (require 'lambda-core)
 
-;; org -------------------------------------------------------------------------
+;; org-mode
 (setq org-use-speed-commands t)
 
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
 
+;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)
 (defadvice htmlize-buffer-1 (around ome-htmlize-buffer-1 disable)
   "Rainbow-delimiters-mode has some problems with htmlize, this advice disable\

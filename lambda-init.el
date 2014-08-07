@@ -19,8 +19,8 @@
 ;; Add more package sources
 (dolist (pkg-arch '(;;("marmalade" . "http://marmalade-repo.org/packages/")
                     ;;("org" . "http://orgmode.org/elpa/")
-					;;("melpa" . "http://melpa.milkbox.net/packages/") t)
-                    ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+                    ;;("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+					("melpa" . "http://melpa.milkbox.net/packages/")))
          (add-to-list 'package-archives pkg-arch))
 
 ;; Do not auto load packages
@@ -46,20 +46,20 @@ installed again."
 
 ;; Load modules
 (require 'lambda-core)
-(require 'lambda-cc)
-(require 'lambda-web)
-(require 'lambda-writing)
-(require 'lambda-emacs-lisp)
-(require 'lambda-java)
-(require 'lambda-python)
-(require 'lambda-js)
-(require 'lambda-json)
-(require 'lambda-matlab)
-(require 'lambda-ecb)
-(require 'lambda-eden)
+;(require 'lambda-cc)
+;(require 'lambda-web)
+;(require 'lambda-writing)
+;(require 'lambda-emacs-lisp)
+;(require 'lambda-java)
+;(require 'lambda-python)
+;(require 'lambda-js)
+;(require 'lambda-json)
+;(require 'lambda-matlab)
+;(require 'lambda-ecb)
+;(require 'lambda-eden)
 ;; This should be loaded at last, restore buffers, minibuffer history, last
 ;; place of cursor
-(require 'lambda-session)
+;(require 'lambda-session)
 
 (provide 'init)
 

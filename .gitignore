@@ -1,1 +1,5 @@
 /elpa/
+*.elc
+GPATH
+GRTAGS
+GTAGS
