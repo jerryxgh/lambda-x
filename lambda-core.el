@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-08-07 22:12:56 Jerry Xu>
+;; Time-stamp: <2014-08-08 10:29:03 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -269,19 +269,12 @@ installed again."
 (setq solarized-distinct-fringe-background t)
 ;; Use more italics
 (setq solarized-use-more-italic t)
-(if (eq system-type 'gnu/linux)
-    (setq x-underline-at-descent-line t))
-;; make the modeline high contrast
-;;(setq solarized-high-contrast-mode-line t)
-;; Use less bolding
-;;(setq solarized-use-less-bold t)
-;; Use less colors for indicators such as git:gutter, flycheck and similar.
-;;(setq solarized-emphasize-indicators nil)
 (load-theme 'solarized-dark t)
-(set-face-attribute 'mode-line nil :box nil)
+;; Tweak mode line
 (set-face-attribute 'mode-line nil :overline "#0A4460")
-(set-face-attribute 'mode-line nil :underline "#031C22")
+(set-face-attribute 'mode-line nil :box nil)
 (set-face-attribute 'mode-line-inactive nil :box nil)
+(set-face-attribute 'mode-line nil :overline "#284B54")
 (set-face-attribute 'mode-line-inactive nil :underline "#073642")
 
 ;; sensible undo ---------------------------------------------------------------
