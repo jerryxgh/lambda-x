@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-08-08 10:29:03 Jerry Xu>
+;; Time-stamp: <2014-08-11 10:40:57 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -265,13 +265,14 @@ installed again."
 
 ;; theme -----------------------------------------------------------------------
 (lambda-package-ensure-install 'solarized-theme)
+(if (eq system-type 'gnu/linux)
+    (setq x-underline-at-descent-line t))
 ;; make the fringe stand out from the background
 (setq solarized-distinct-fringe-background t)
 ;; Use more italics
 (setq solarized-use-more-italic t)
 (load-theme 'solarized-dark t)
 ;; Tweak mode line
-(set-face-attribute 'mode-line nil :overline "#0A4460")
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-attribute 'mode-line-inactive nil :box nil)
 (set-face-attribute 'mode-line nil :overline "#284B54")
