@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-08-11 10:40:57 Jerry Xu>
+;; Time-stamp: <2014-09-09 23:24:17 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -31,11 +31,13 @@ installed again."
 (setq package-user-dir (expand-file-name "elpa" lambda-x-direcotry))
 (require 'package)
 ;; Add more package sources
-(dolist (pkg-arch '(;;("marmalade" . "http://marmalade-repo.org/packages/")
-                    ;;("org" . "http://orgmode.org/elpa/")
-                    ;;("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
-					("melpa" . "http://melpa.milkbox.net/packages/")))
-         (add-to-list 'package-archives pkg-arch))
+(dolist (pkg-arch
+         '(;;("marmalade" . "http://marmalade-repo.org/packages/")
+           ;;("org" . "http://orgmode.org/elpa/")
+           ;;("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+           ("melpa" . "http://melpa.milkbox.net/packages/")
+           ))
+  (add-to-list 'package-archives pkg-arch))
 
 ;; Do not auto load packages
 (setq package-enable-at-startup nil)
@@ -50,18 +52,19 @@ installed again."
 ;; Miscellaneous basic settings
 (setq user-full-name "Jerry Xu"
       user-mail-address "gh_xu@qq.com"
-      inhibit-startup-screen t 
+      inhibit-startup-screen t
       abbrev-file-name (expand-file-name "auto-save-list/abbrev_defs"
                                          user-emacs-directory)
 
       custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
-      use-dialog-box nil 
-      sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8") 
-      make-backup-files nil 
-      resize-mini-windows t 
+      use-dialog-box nil
+      sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8")
+      make-backup-files nil
+      resize-mini-windows t
       ring-bell-function 'ignore ; inhibit annoying warning sound
-      x-select-enable-clipboard t 
-      enable-recursive-minibuffers t 
+      x-select-enable-clipboard t
+      enable-recursive-minibuffers t
+      gc-cons-threshold 20480000
       ;;confirm-kill-emacs 'y-or-n-p
       )
 ;; abbrev-mode
@@ -137,7 +140,7 @@ installed again."
 (if (string< emacs-version "24.3.50")
     (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
-(global-auto-revert-mode 1) 
+(global-auto-revert-mode 1)
 ;; enable to support navigate in camelCase words
 (global-subword-mode 1)
 (auto-compression-mode t)
@@ -146,27 +149,27 @@ installed again."
 (column-number-mode t)
 (line-number-mode t)
 (size-indication-mode t)
-
+                                        ;
 ;; enable winner-mode to manage window configurations
 (winner-mode 1)
 
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(mouse-avoidance-mode 'animate) 
+(mouse-avoidance-mode 'animate)
 (show-paren-mode 1)
 ;; (setq show-paren-style 'mixed)
-(tooltip-mode 0) 
+(tooltip-mode 0)
 ;; highlight current line
-;;(global-hl-line-mode 1)
-(scroll-bar-mode 0) 
+(global-hl-line-mode 1)
+(scroll-bar-mode 0)
 ;; the toolbar is just a waste of valuable screen estate
 ;; in a tty tool-bar-mode does not properly auto-load, and is
 ;; already disabled anyway
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 (set-frame-font "Consolas-11")
-;; (set-background-color "#CCE8CF") 
+;; (set-background-color "#CCE8CF")
 (setq scalable-fonts-allowed t)
 ;; Align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
@@ -234,7 +237,7 @@ installed again."
   (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
 
 ;;; ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer) 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 ;;(setq ibuffer-never-show-predicates (list "^ ?\\*.*\\*$"))
 
 ;;; time-stamp
@@ -244,10 +247,10 @@ installed again."
 (add-hook 'before-save-hook 'time-stamp)
 
 ;;; easypg
-;;(require 'epa) 
+;;(require 'epa)
 (setq epa-file-encrypt-to nil
-      epa-file-cache-passphrase-for-symmetric-encryption t 
-      epa-file-inhibit-auto-save t) 
+      epa-file-cache-passphrase-for-symmetric-encryption t
+      epa-file-inhibit-auto-save t)
 (setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
 
 ;;; cal-china-x ----------------------------------------------------------------
@@ -265,6 +268,7 @@ installed again."
 
 ;; theme -----------------------------------------------------------------------
 (lambda-package-ensure-install 'solarized-theme)
+(require 'solarized)
 (if (eq system-type 'gnu/linux)
     (setq x-underline-at-descent-line t))
 ;; make the fringe stand out from the background
@@ -275,8 +279,8 @@ installed again."
 ;; Tweak mode line
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-attribute 'mode-line-inactive nil :box nil)
-(set-face-attribute 'mode-line nil :overline "#284B54")
-(set-face-attribute 'mode-line-inactive nil :underline "#073642")
+;;(set-face-attribute 'mode-line nil :overline "#284B54")
+;;(set-face-attribute 'mode-line-inactive nil :underline "#073642")
 
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
@@ -306,10 +310,10 @@ installed again."
     (goto-char (point-max))
     (lisp-interaction-mode)))
 
-(defun clear-scratch-buffer nil 
+(defun clear-scratch-buffer nil
   "Clear the scratch buffer and keep the scratch message."
   (interactive)
-  (when (equal (buffer-name (current-buffer)) "*scratch*")
+  (when (string-match "\*scratch\*.*" (buffer-name (current-buffer)))
     (delete-region (point-min) (point-max))
     (insert initial-scratch-message)
     (goto-char (point-max))))
@@ -318,7 +322,7 @@ installed again."
   "Kill the buffer on exit of interactive shell."
   (let ((process (get-buffer-process (current-buffer))))
     (if process
-        (set-process-sentinel 
+        (set-process-sentinel
          process
          (lambda (process state)
            (when (or (string-match "exited abnormally with code." state)
@@ -326,7 +330,7 @@ installed again."
              (kill-buffer (current-buffer))))))))
 
 ;; Do not load custom file, all the configuration should be done by code
-;;(load "lambda-custom") 
+;;(load "lambda-custom")
 
 (add-hook 'comint-mode-hook 'interactive-shell-on-exit-kill-buffer)
 ;; always insert at the bottom
@@ -347,20 +351,89 @@ installed again."
 (lambda-package-ensure-install 'helm)
 (lambda-package-ensure-install 'helm-projectile)
 (require 'helm)
+;; must set before helm-config,  otherwise helm use default
+;; prefix "C-x c", which is inconvenient because you can
+;; accidentially pressed "C-x C-c"
+(setq helm-command-prefix-key "C-c h")
 (require 'helm-config)
+(require 'helm-eshell)
+(require 'helm-files)
+(require 'helm-grep)
+
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+;; rebihnd tab to do persistent action
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+;; make TAB works in terminal
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+;; list actions using C-z
+(define-key helm-map (kbd "C-z")  'helm-select-action)
+
+(define-key helm-grep-mode-map (kbd "<return>")
+  'helm-grep-mode-jump-other-window)
+(define-key helm-grep-mode-map (kbd "n")
+  'helm-grep-mode-jump-other-window-forward)
+(define-key helm-grep-mode-map (kbd "p")
+  'helm-grep-mode-jump-other-window-backward)
+(setq
+ helm-google-suggest-use-curl-p t
+ helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
+ helm-quick-update t ; do not display invisible candidates
+ ;; be idle for this many seconds, before updating in delayed sources.
+ helm-idle-delay 0.01
+ ;; be idle for this many seconds, before updating candidate buffer
+ helm-input-idle-delay 0.01
+ ;; search for library in `require' and `declare-function' sexp.
+ helm-ff-search-library-in-sexp t
+
+ ;; open helm buffer in another window
+ helm-split-window-default-side 'other
+ ;; open helm buffer inside current window, not occupy whole other window
+ helm-split-window-in-side-p t
+ helm-buffers-favorite-modes (append helm-buffers-favorite-modes
+                                     '(picture-mode artist-mode))
+ ;; limit the number of displayed canidates
+ helm-candidate-number-limit 200
+ ;; show all candidates when set to 0
+ helm-M-x-requires-pattern 0
+ helm-boring-file-regexp-list
+ ;; do not show these files in helm buffer
+ '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$")
+ helm-ff-file-name-history-use-recentf t
+ helm-move-to-line-cycle-in-source t ; move to end or beginning of source
+ ;; when reaching top or bottom of source.
+ ido-use-virtual-buffers t      ; Needed in helm-buffers-list
+ helm-buffers-fuzzy-matching t  ; fuzzy matching buffer names when non--nil
+                                        ; useful in helm-mini that lists buffers
+ )
+
+;; Save current position to mark ring when jumping to a different place
+(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
 (helm-mode 1)
 (diminish 'helm-mode)
 (require 'helm-projectile)
-;;(defalias 'helm-buffer-match-major-mode 'helm-buffer--match-mjm)
+
 ;; to use with ido, customize helm-completing-read-handlers-alist
+(setq helm-completing-read-handlers-alist
+      '((describe-function . ido)
+        (describe-variable . ido)
+        (debug-on-entry . ido)
+        (dired-do-copy . ido)
+        (find-function . ido)
+        (find-tag . ido)
+        (ffap-alternate-file . nil)
+        (tmm-menubar . nil)
+        ))
 
 ;; helm-ls-git Yet another helm for listing the files in a git repo. -----------
-(lambda-package-ensure-install 'helm-ls-git)
-(require 'helm-ls-git)
-(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
-(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+;;(lambda-package-ensure-install 'helm-ls-git)
+;;(require 'helm-ls-git)
+;;(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
+;;(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
 ;;; ido --- interactively do things---------------------------------------------
+;; ffap - find file at point is not userful when ido-mode is on
 (lambda-package-ensure-install 'ido-ubiquitous)
 (lambda-package-ensure-install 'flx-ido)
 (require 'ido)
@@ -368,7 +441,7 @@ installed again."
 (require 'flx-ido)
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
-      ido-ignore-buffers '("\\` " 
+      ido-ignore-buffers '("\\` "
                            "^\\*helm.*\\*$"
                            "^\\*Compile-Log\\*$"
                            "^\\*Messages\\*$"
@@ -376,12 +449,17 @@ installed again."
       ido-save-directory-list-file
       (expand-file-name "auto-save-list/ido.hist" user-emacs-directory)
       ido-default-file-method 'selected-window
-      ;;ido-use-filename-at-point 'guess ; for find-file-at-point
-      ;;ido-use-url-at-point t ; look for URLs at point
-      ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f 
+      ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
       )
+(defun lambda-x-ido-find-file-at-point ()
+  "Use ffap as wanted."
+  (interactive)
+  (let ((ido-use-filename-at-point 'guess)
+        (ido-use-url-at-point 'guess))
+    (ido-find-file)))
+
 ;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
-;;(put 'dired-do-rename 'ido 'find-file)
+(put 'dired-do-rename 'ido 'find-file)
 (ido-mode t)
 (ido-everywhere t)
 (ido-ubiquitous-mode 1)
@@ -457,6 +535,23 @@ installed again."
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
 (define-key shell-mode-map (kbd "C-l") 'clear)
 
+;; YASnippet -------------------------------------------------------------------
+(lambda-package-ensure-install 'yasnippet)
+(require 'yasnippet)
+(add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
+;; Delete dirs that don't exist in yas-snippet-dirs
+(dolist (dir yas-snippet-dirs)
+  (if (stringp dir)
+      (unless (file-directory-p dir)
+        (setq yas-snippet-dirs (delete dir yas-snippet-dirs)))
+    ))
+
+(setq yas-trigger-key "<tab>"
+      yas-next-field-key "<tab>"
+      ;; menu only show the mode according to the major-mode of the current
+      ;;buffer
+      yas-use-menu 'abbreviate)
+
 ;; Evil ------- A wonderful editor in Emacs ------------------------------------
 (lambda-package-ensure-install 'evil)
 (require 'evil)
@@ -482,6 +577,7 @@ installed again."
   (interactive)
   (evil-yank (point) (point-at-eol)))
 (define-key evil-normal-state-map (kbd "Y") 'copy-to-end-of-line)
+(define-key evil-normal-state-map (kbd "g f") 'lambda-x-ido-find-file-at-point)
 
 (loop for (mode . state) in '((calendar-mode . emacs)
                               (help-mode . emacs)
@@ -543,7 +639,7 @@ installed again."
 (global-evil-leader-mode 1)
 
 ;; evil-surround ---------------------------------------------------------------
-;; Add surrounding 
+;; Add surrounding
 ;; visual-state: s<textobject><trigger>, normal-state: ys<textobject><trigger>.
 
 ;; Change surrounding
@@ -566,10 +662,10 @@ installed again."
              (expand-file-name "ac-dict" lambda-x-direcotry))
 (add-to-list 'ac-dictionary-files
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
-(setq ac-auto-start 1 
+(setq ac-auto-start 1
       ac-comphist-file (expand-file-name "auto-save-list/ac-comphist.dat"
                                          user-emacs-directory)
-      ac-modes 
+      ac-modes
       (append
        ac-modes
        '(shell-mode graphviz-dot-mode conf-xdefaults-mode html-mode nxml-mode
@@ -577,7 +673,7 @@ installed again."
                     makefile-bsdmake-mo autoconf-mode makefile-automake-mode snippet-mode))
       ac-use-menu-map t)
 
-(setq-default ac-sources (append '(ac-source-filename 
+(setq-default ac-sources (append '(ac-source-filename
                                    ac-source-yasnippet
                                    )
                                  ac-sources))
@@ -590,22 +686,7 @@ installed again."
 ;; pos-tip ---------------------------------------------------------------------
 (lambda-package-ensure-install 'pos-tip)
 (require 'pos-tip)
-(setq ac-quick-help-prefer-pos-tip t) 
-
-;; YASnippet -------------------------------------------------------------------
-(lambda-package-ensure-install 'yasnippet)
-(require 'yasnippet)
-(add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
-;; Delete dirs that don't exist in yas-snippet-dirs
-(dolist (dir yas-snippet-dirs)
-  (unless (file-directory-p dir)
-    (setq yas-snippet-dirs (delete dir yas-snippet-dirs))))
-
-(setq yas-trigger-key "<tab>"
-      yas-next-field-key "<tab>"
-      ;; menu only show the mode according to the major-mode of the current
-      ;;buffer
-      yas-use-menu 'abbreviate)
+(setq ac-quick-help-prefer-pos-tip t)
 
 ;;popup ------------------------------------------------------------------------
 (lambda-package-ensure-install 'popup)
@@ -643,7 +724,7 @@ installed again."
 ;; Ack A better grep for programmers -------------------------------------------
 (lambda-package-ensure-install 'ack)
 (lambda-package-ensure-install 'wgrep-ack)
-(setq ack-command (concat (file-name-nondirectory 
+(setq ack-command (concat (file-name-nondirectory
                            (or (executable-find "ag")
                                (executable-find "ack")
                                (executable-find "ack-grep")
@@ -654,17 +735,18 @@ installed again."
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
-(setq projectile-cache-file (expand-file-name 
+(setq projectile-cache-file (expand-file-name
                              "auto-save-list/projectile.cache"
                              user-emacs-directory)
       projectile-enable-caching t
       projectile-require-project-root nil
-      projectile-known-projects-file (expand-file-name 
+      projectile-remember-window-configs t
+      projectile-known-projects-file (expand-file-name
                                       "auto-save-list/projectile-bookmarks.eld"
                                       user-emacs-directory))
-(projectile-global-mode t)
+;;(projectile-global-mode t)
 ;;(diminish 'projectile-mode "Prjl")
-(diminish 'projectile-mode)
+;;(diminish 'projectile-mode)
 (defun projectile-ack (regexp &optional arg)
   "Run an ack search with REGEXP in the project.
 
@@ -763,16 +845,12 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;;(global-set-key (kbd "M-p") 'ace-jump-buffer)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
-;; anzu-mode enhances isearch by showing total matches and current match 
+;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
-                                        ;(require 'anzu)
-                                        ;(global-anzu-mode)
-                                        ;(diminish 'anzu-mode)
-
-;; highlights parentheses, brackets, and braces according to their depth--------
-(lambda-package-ensure-install 'rainbow-delimiters)
-(global-rainbow-delimiters-mode)
+;;(require 'anzu)
+;;(global-anzu-mode)
+;;(diminish 'anzu-mode)
 
 ;; global ------- code navigating ----------------------------------------------
 (lambda-package-ensure-install 'ggtags)
@@ -783,6 +861,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1)
+              ;; do not echo help message when point is on a tag, it's annoying
+              (if (get 'ggtags-active-tag 'help-echo)
+                  (put 'ggtags-active-tag 'help-echo nil))
               (diminish 'ggtags-mode))))
 
 ;; smartparens -----------------------------------------------------------------
@@ -835,6 +916,11 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (require 'unicad)
 
 ;; Issues: ---------------------------------------------------------------------
+;; highlights parentheses, brackets, and braces according to their depth--------
+(lambda-package-ensure-install 'rainbow-delimiters)
+;; global-rainbow-delimiters-mode will bring errors
+;;(global-rainbow-delimiters-mode 1)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 (provide 'lambda-core)
 

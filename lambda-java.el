@@ -69,6 +69,8 @@ eclim--completion-action, call `eclim-completion-start' to set variable
   "Run mvn using PHASE."
   (interactive (list (eclim--maven-lifecycle-phase-read)))
   (let ((pom-path (concat (projectile-project-root) "pom.xml")))
+    (if (equal phase "")
+        (setq phase (car eclim-maven-lifecycle-phases)))
 	(if (file-exists-p pom-path)
 		(compile (concat "mvn -f " pom-path " " phase))
 	  (message "Please go to mvn project and insure that \".projectile\" is in \

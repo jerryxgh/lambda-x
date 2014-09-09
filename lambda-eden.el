@@ -10,8 +10,10 @@
 (lambda-package-ensure-install 'iedit)
 ;; fold about things -----------------------------------------------------------
 (lambda-package-ensure-install 'fold-this)
-(lambda-package-ensure-install 'fold-dwim)
 
+(defun view-time (time-seconds)
+  "Convert TIME-SECONDS from the epoch (0:00 January 1, 1970 UTC) to time string."
+  (current-time-string (seconds-to-time time-seconds)))
 
 (provide 'lambda-eden)
 

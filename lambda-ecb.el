@@ -130,8 +130,6 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. This layout works best if it is contained in
 `ecb-show-sources-in-directories-buffer'!"
 				   (ecb-set-directories-buffer)
-				   ;;(ecb-split-ver 0.4)
-				   ;;(ecb-set-methods-buffer)
 				   (ecb-split-ver 0.5)
 				   (ecb-set-history-buffer)
 				   (select-window (next-window)))

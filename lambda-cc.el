@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-08-07 21:53:03 Jerry Xu>
+;; Time-stamp: <2014-08-21 10:06:50 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -29,11 +29,11 @@ echo \"\" | g++ -v -x c++ -E -")
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                   global-semantic-idle-scheduler-mode
-                                  ;;global-semantic-idle-summary-mode
+                                  global-semantic-idle-summary-mode
                                   ;;global-semantic-decoration-mode
                                   ;;global-semantic-highlight-func-mode
                                   ;;global-semantic-stickyfunc-mode
-                                  ;;global-semantic-mru-bookmark-mode
+                                  global-semantic-mru-bookmark-mode
                                   ))
 (semantic-mode 1)
 ;(global-semantic-highlight-edits-mode 1)
@@ -88,6 +88,15 @@ echo \"\" | g++ -v -x c++ -E -")
 ;; 	  (mapcar (lambda (item) (concat "-I" item))
 ;; 			  lambda-cc-system-include))
 
+;; ffap - find file at point ---------------------------------------------------
+
+(autoload 'ffap-href-enable "ffap-href" nil t)
+(eval-after-load "ffap" '(ffap-href-enable))
+
+(autoload 'ffap-I-option-enable "ffap-I-option" nil t)
+(eval-after-load "ffap" '(ffap-I-option-enable))
+(eval-after-load "ffap" '(require 'ffap-include-start))
+(eval-after-load "ffap" '(require 'ffap-gcc-path))
 
 (provide 'lambda-cc)
 
