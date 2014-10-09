@@ -14,8 +14,10 @@
 ;; <tab> to yas-expand if possible, else bind it to the major mode of C-i or
 ;; else to the global-map of C-i.
 
-;; Installtion: put this file into your load-path and the following into your ~/.emacs:
-;;   (require 'evil-tab-minor-mode)
+;; Installtion: put this file into your load-path and the following into your
+;;   ~/.emacs:
+
+;; (require 'evil-tab-minor-mode)
 
 ;;; Code:
 

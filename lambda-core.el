@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-09-09 23:24:17 Jerry Xu>
+;; Time-stamp: <2014-10-09 11:39:07 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -161,7 +161,7 @@ installed again."
 ;; (setq show-paren-style 'mixed)
 (tooltip-mode 0)
 ;; highlight current line
-(global-hl-line-mode 1)
+;;(global-hl-line-mode 1)
 (scroll-bar-mode 0)
 ;; the toolbar is just a waste of valuable screen estate
 ;; in a tty tool-bar-mode does not properly auto-load, and is
@@ -259,7 +259,7 @@ installed again."
 (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
 (setq calendar-holidays cal-china-x-important-holidays)
 
-;; flycheck --------------------------------------------------------------------
+;; flycheck flycheck is much better than flymake -------------------------------
 (lambda-package-ensure-install 'flycheck)
 ;; enable on-the-fly syntax checking
 (if (fboundp 'global-flycheck-mode)
@@ -571,6 +571,14 @@ installed again."
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
 (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
+(defun lambda-hs-hide-level-1 ()
+  "Just fold level 1 elements."
+  (hs-hide-level 1))
+(define-key evil-normal-state-map (kbd "zM")
+  '(lambda ()
+     (interactive)
+     (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
+       (evil-close-folds))))
 
 (defun copy-to-end-of-line ()
   "Copy to end of line, and bind this funciton to Y in normal mode."
@@ -744,9 +752,8 @@ installed again."
       projectile-known-projects-file (expand-file-name
                                       "auto-save-list/projectile-bookmarks.eld"
                                       user-emacs-directory))
-;;(projectile-global-mode t)
-;;(diminish 'projectile-mode "Prjl")
-;;(diminish 'projectile-mode)
+(projectile-global-mode t)
+(diminish 'projectile-mode)
 (defun projectile-ack (regexp &optional arg)
   "Run an ack search with REGEXP in the project.
 

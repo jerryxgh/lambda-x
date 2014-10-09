@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-08-21 10:06:50 Jerry Xu>
+;; Time-stamp: <2014-09-17 14:19:14 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -60,6 +60,10 @@ echo \"\" | g++ -v -x c++ -E -")
 (lambda-package-ensure-install 'auto-complete-clang)
 (require 'auto-complete-clang)
 
+;; google-c-style --------------------------------------------------------------
+(lambda-package-ensure-install 'google-c-style)
+(require 'google-c-style)
+
 (add-hook 'c-mode-common-hook
           (lambda ()
             ;;(setq ac-sources (append
@@ -75,7 +79,11 @@ echo \"\" | g++ -v -x c++ -E -")
                            ;;(list (expand-file-name "~/local/include/")))
 			(add-to-list 'c-cleanup-list 'defun-close-semi)
 			;; (c-toggle-auto-newline 1)
-			(c-toggle-hungry-state 1)))
+            (c-set-style "stroustrup")
+			(c-toggle-hungry-state 1)
+            (whitespace-mode 1)
+            ;;(google-set-c-style)
+            ))
 
 (add-hook 'c-mode-hook
 		  (lambda ()
