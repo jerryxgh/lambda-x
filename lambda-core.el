@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-10-09 11:39:07 Jerry Xu>
+;; Time-stamp: <2014-10-16 09:34:15 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -594,6 +594,7 @@ installed again."
                               (Man-mode . emacs)
                               (grep-mode . emacs)
                               (view-mode . emacs)
+                              (special-mode . emacs)
                               (ack-mode . emacs)
                               (image-mode . emacs))
       do (evil-set-initial-state mode state))
@@ -639,11 +640,10 @@ installed again."
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
+  "b" 'switch-to-buffer
   "e" 'helm-projectile
-  "b" 'switch-to-buffer)
-
-(evil-leader/set-key
-  "k" 'kill-this-buffer)
+  "k" 'kill-this-buffer
+  "o" 'helm-occur)
 (global-evil-leader-mode 1)
 
 ;; evil-surround ---------------------------------------------------------------

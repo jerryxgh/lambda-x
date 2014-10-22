@@ -92,6 +92,23 @@ Normally it is indent function."
              (memq (following-char) '(?\) ?\} ?\] ?\> ?\' ?\")))
         (forward-char))))
 
+(defadvice yas-expand
+  (around modes-and-states-run-yas-expand activate)
+  "Run `yas-expand-from-trigger-key' only when current state is writable."
+  (if (and (not buffer-read-only)
+           (or (evil-insert-state-p)
+               (evil-emacs-state-p)))
+	  ad-do-it
+    (evil-tab-yas-fallback-behavior)))
+(defadvice yas-expand-from-trigger-key
+  (around modes-and-states-run-yas-expand activate)
+  "Run `yas-expand-from-trigger-key' only when current state is writable."
+  (if (and (not buffer-read-only)
+           (or (evil-insert-state-p)
+               (evil-emacs-state-p)))
+	  ad-do-it
+    (evil-tab-yas-fallback-behavior)))
+
 (provide 'evil-tab-minor-mode)
 
 ;;; evil-tab-minor-mode.el ends here
