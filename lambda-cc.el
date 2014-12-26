@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-09-17 14:19:14 Jerry Xu>
+;; Time-stamp: <2014-12-09 16:25:10 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -105,6 +105,19 @@ echo \"\" | g++ -v -x c++ -E -")
 (eval-after-load "ffap" '(ffap-I-option-enable))
 (eval-after-load "ffap" '(require 'ffap-include-start))
 (eval-after-load "ffap" '(require 'ffap-gcc-path))
+
+;; gdb configs -----------------------------------------------------------------
+;; (add-hook 'gdb-mode-hook 'kill-buffer-when-shell-command-exit)
+(require 'gud)
+(define-key gud-mode-map (kbd "<f5>") 'gud-step)
+(define-key gud-mode-map (kbd "<f6>") 'gud-next)
+(define-key gud-mode-map (kbd "<f7>") 'gud-up)
+(define-key gud-mode-map (kbd "<f8>") 'gud-go)
+(setq gdb-show-main t
+      gdb-many-windows t)
+;;(add-hook 'gdb-mode-hook 
+;;          '(lambda ()
+;;             ))
 
 (provide 'lambda-cc)
 

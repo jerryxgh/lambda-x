@@ -59,7 +59,7 @@ not wanted, change it by using emulation-mode-map-alists"
 ;;;###autoload
 (defun evil-tab-minor-mode-on ()
   "Turn on evil-tab minor mode."
-  (unless (and (minibufferp) (featurep 'evil) evil-mode)
+  (unless (minibufferp)
     (evil-tab-minor-mode 1)))
 
 ;;;###autoload
@@ -86,28 +86,12 @@ Normally it is indent function."
   (interactive)
   (let ((tab-command (evil-tab-get-TAB-command))
         (old-point (point)))
-    (if (functionp tab-command)
-        (funcall tab-command))
+    ;;(if (functionp tab-command)
+    (if (commandp tab-command)
+        (command-execute tab-command))
     (if (and (eq (point) old-point)
              (memq (following-char) '(?\) ?\} ?\] ?\> ?\' ?\")))
         (forward-char))))
-
-(defadvice yas-expand
-  (around modes-and-states-run-yas-expand activate)
-  "Run `yas-expand-from-trigger-key' only when current state is writable."
-  (if (and (not buffer-read-only)
-           (or (evil-insert-state-p)
-               (evil-emacs-state-p)))
-	  ad-do-it
-    (evil-tab-yas-fallback-behavior)))
-(defadvice yas-expand-from-trigger-key
-  (around modes-and-states-run-yas-expand activate)
-  "Run `yas-expand-from-trigger-key' only when current state is writable."
-  (if (and (not buffer-read-only)
-           (or (evil-insert-state-p)
-               (evil-emacs-state-p)))
-	  ad-do-it
-    (evil-tab-yas-fallback-behavior)))
 
 (provide 'evil-tab-minor-mode)
 

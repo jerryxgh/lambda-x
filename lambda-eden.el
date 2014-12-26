@@ -6,6 +6,12 @@
 
 (require 'lambda-core)
 
+(if (eq emacs-major-version 24)
+    (add-hook 'prog-mode-hook #'hs-minor-mode)
+  (add-hook 'c-mode-common-hook #'hs-minor-mode))
+;; vlf - view large file -------------------------------------------------------
+(lambda-package-ensure-install 'vlf)
+(require 'vlf-integrate)
 ;; iedit -----------------------------------------------------------------------
 (lambda-package-ensure-install 'iedit)
 ;; fold about things -----------------------------------------------------------
@@ -42,6 +48,9 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;; (global-set-key "\C-c\C-d" 'insert-current-date-time)
 ;; (global-set-key "\C-c\C-t" 'insert-current-time)
+
+;; to try
+;; window-numbering evil-jumper Comment-dwim-2 evil-nerd-commenter
 
 (provide 'lambda-eden)
 

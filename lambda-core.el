@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-10-16 09:34:15 Jerry Xu>
+;; Time-stamp: <2014-12-11 15:39:27 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -49,7 +49,7 @@ installed again."
 (lambda-package-ensure-install 'diminish)
 (require 'diminish)
 
-;; Miscellaneous basic settings
+;; Miscellaneous basic settings ------------------------------------------------
 (setq user-full-name "Jerry Xu"
       user-mail-address "gh_xu@qq.com"
       inhibit-startup-screen t
@@ -161,7 +161,7 @@ installed again."
 ;; (setq show-paren-style 'mixed)
 (tooltip-mode 0)
 ;; highlight current line
-;;(global-hl-line-mode 1)
+(global-hl-line-mode 1)
 (scroll-bar-mode 0)
 ;; the toolbar is just a waste of valuable screen estate
 ;; in a tty tool-bar-mode does not properly auto-load, and is
@@ -207,6 +207,23 @@ installed again."
 ;; ediff - don't start another frame
 (require 'ediff)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(defvar ediff-saved-window-configuration nil
+  "Window configuration before ediff.")
+
+(add-hook 'ediff-before-setup-hook
+          (lambda ()
+            (setq ediff-saved-window-configuration 
+                  (current-window-configuration))))
+(add-hook 'ediff-quit-hook
+          (lambda ()
+            (set-window-configuration 
+             ediff-saved-window-configuration))
+          'append)
+(add-hook 'ediff-suspend-hook 
+          (lambda ()
+            (set-window-configuration 
+             ediff-saved-window-configuration))             
+          'append)
 
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
@@ -247,7 +264,8 @@ installed again."
 (add-hook 'before-save-hook 'time-stamp)
 
 ;;; easypg
-;;(require 'epa)
+(require 'epa)
+(require 'epa-file)
 (setq epa-file-encrypt-to nil
       epa-file-cache-passphrase-for-symmetric-encryption t
       epa-file-inhibit-auto-save t)
@@ -275,7 +293,8 @@ installed again."
 (setq solarized-distinct-fringe-background t)
 ;; Use more italics
 (setq solarized-use-more-italic t)
-(load-theme 'solarized-dark t)
+;; (load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 ;; Tweak mode line
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-attribute 'mode-line-inactive nil :box nil)
@@ -297,9 +316,29 @@ installed again."
 (lambda-package-ensure-install 'temp-buffer-browse)
 (temp-buffer-browse-mode 1)
 
-;;switch-window ----------------------------------------------------------------
+;; switch-window ---------------------------------------------------------------
 ;;(lambda-package-ensure-install 'switch-window)
 ;;(setq switch-window-shortcut-style 'qwerty)
+
+;; Shell configs ---------------------------------------------------------------
+(defun kill-buffer-when-shell-command-exit nil
+  "Kill the buffer on exit of interactive shell."
+  (let ((process (get-buffer-process (current-buffer))))
+    (if process
+        (set-process-sentinel
+         process
+         (lambda (process state)
+           (when (or (string-match "exited abnormally with code." state)
+                     (string-match "\\(finished\\|exited\\)" state))
+             (quit-window t (get-buffer-window (process-buffer process)))))))))
+;; 编译成功后自动关闭*compilation* buffer
+;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
+(add-hook 'comint-mode-hook 'kill-buffer-when-shell-command-exit)
+;; always insert at the bottom
+(setq comint-scroll-to-bottom-on-input t)
+;; no duplicates in command history
+(setq comint-input-ignoredups t)
+
 
 (defun create-scratch-buffer nil
   "Create a scratch buffer with the scratch message."
@@ -318,25 +357,8 @@ installed again."
     (insert initial-scratch-message)
     (goto-char (point-max))))
 
-(defun interactive-shell-on-exit-kill-buffer nil
-  "Kill the buffer on exit of interactive shell."
-  (let ((process (get-buffer-process (current-buffer))))
-    (if process
-        (set-process-sentinel
-         process
-         (lambda (process state)
-           (when (or (string-match "exited abnormally with code." state)
-                     (string-match "finished" state))
-             (kill-buffer (current-buffer))))))))
-
 ;; Do not load custom file, all the configuration should be done by code
 ;;(load "lambda-custom")
-
-(add-hook 'comint-mode-hook 'interactive-shell-on-exit-kill-buffer)
-;; always insert at the bottom
-(setq comint-scroll-to-bottom-on-input t)
-;; no duplicates in command history
-(setq comint-input-ignoredups t)
 
 ;;; smex, remember recently and most frequently used commands ------------------
 (lambda-package-ensure-install 'smex)
@@ -467,7 +489,7 @@ installed again."
 (flx-ido-mode 1)
 
 ;;; magit --- use git in emacs--------------------------------------------------
-;;(require 'magit)
+(require 'magit)
 (lambda-package-ensure-install 'magit)
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
   (when (and (eq system-type 'windows-nt)
@@ -475,6 +497,7 @@ installed again."
     (setq magit-git-executable git-executable-windows)
     (setenv "PATH"
             (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+;; magit-ediff-restore
 
 ;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
 
@@ -594,7 +617,6 @@ installed again."
                               (Man-mode . emacs)
                               (grep-mode . emacs)
                               (view-mode . emacs)
-                              (special-mode . emacs)
                               (ack-mode . emacs)
                               (image-mode . emacs))
       do (evil-set-initial-state mode state))
@@ -739,6 +761,15 @@ installed again."
                                "ack")) " "))
 (require 'ack)
 (require 'wgrep-ack)
+;; C-c C-e : Apply the changes to file buffers.
+;; C-c C-u : All changes are unmarked and ignored.
+;; C-c C-d : Mark as delete to current line (including newline).
+;; C-c C-r : Remove the changes in the region (these changes are not
+;;           applied to the files. Of course, the remaining
+;;           changes can still be applied to the files.)
+;; C-c C-p : Toggle read-only area.
+;; C-c C-k : Discard all changes and exit.
+;; C-x C-q : Exit wgrep mode.
 
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
@@ -855,9 +886,9 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
-;;(require 'anzu)
-;;(global-anzu-mode)
-;;(diminish 'anzu-mode)
+(require 'anzu)
+(global-anzu-mode)
+(diminish 'anzu-mode)
 
 ;; global ------- code navigating ----------------------------------------------
 (lambda-package-ensure-install 'ggtags)

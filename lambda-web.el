@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2014-09-09 23:25:36 Jerry Xu>
+;; Time-stamp: <2014-12-18 13:54:43 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -23,26 +23,22 @@
 (add-to-list 'auto-mode-alist '("\\.ftl?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
 
-(setq web-mode-engines-alist
-	  '(("php" . "\\.phtml\\'")
-		("blade" . "\\.blade\\."))
-	  )
-
-
-
-
+;; Use web-mode instead of html-mode.
+(setq auto-mode-alist
+      (delete
+       '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . html-mode) auto-mode-alist))
 
 (setq web-mode-markup-indent-offset 4)
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 4)
-(setq web-mode-disable-autocompletion t)
+;; (setq web-mode-disable-autocompletion t)
 
 (add-hook 'web-mode-hook '(lambda ()
-							"Disable auto-fill-mode and fci-mode in web mode,
+                            "Disable auto-fill-mode and fci-mode in web mode,
 and set yas--extra-mode to use html snippets."
-							(auto-fill-mode -1)
-							(fci-mode -1)
-							(make-local-variable 'yas-extra-modes)
+                            (auto-fill-mode -1)
+                            (fci-mode -1)
+                            (make-local-variable 'yas-extra-modes)
                             (add-to-list 'yas-extra-modes 'html-mode)))
 
 ;; Work with auto-complete
@@ -60,6 +56,17 @@ and set yas--extra-mode to use html snippets."
 (lambda-package-ensure-install 'rainbow-mode)
 (add-hook 'prog-mode-hook 'rainbow-mode)
 
+;; ac-html --------------------------------------------------------------------
+(lambda-package-ensure-install 'ac-html)
+(require 'ac-html)
+(add-to-list 'web-mode-ac-sources-alist
+             '("html" . (
+                         ;; attribute-value better to be first
+                         ac-source-html-attribute-value
+                         ac-source-html-tag
+                         ac-source-html-attribute)))
+
 
 (provide 'lambda-web)
+
 ;;; lambda-web.el ends here

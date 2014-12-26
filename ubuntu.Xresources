@@ -1,7 +1,8 @@
-Emacs24.Fullscreen:maximized
 Emacs24.Geometry:81x40+303
 Emacs24.ScrollBars:off
 Emacs24.ToolBar:off
-Emacs24.Background:#CCE8CF
+Emacs24.Background:#fdf6e3
+Emacs24.Foreground:#657b83
 Emacs24.Font:Consolas-11
 Emacs24.LineSpacing:0
+Emacs24.Fullscreen:maximized

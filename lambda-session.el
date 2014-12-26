@@ -95,7 +95,8 @@
 (require 'psession)
 (setq psession-elisp-objects-default-directory (locate-user-emacs-file
 												"auto-save-list/elisp-objects"))
-
+;;加快emacs的启动速度
+(server-start)
 
 (provide 'lambda-session)
 
