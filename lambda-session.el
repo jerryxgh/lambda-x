@@ -60,6 +60,7 @@
       history-length 250
       desktop-dirname (expand-file-name "auto-save-list/"
 					user-emacs-directory)
+      desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
       desktop-base-file-name "emacs-desktop")
 
 (desktop-save-mode 1)

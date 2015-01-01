@@ -1,5 +1,8 @@
-/elpa/
+*~
 *.elc
+.tern-port
+.projectile
+elpa
 GPATH
 GRTAGS
 GTAGS

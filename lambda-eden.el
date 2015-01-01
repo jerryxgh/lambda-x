@@ -6,6 +6,12 @@
 
 (require 'lambda-core)
 
+;;; TODO
+;; evil-nerd-commenter
+;; window-numbering
+;; elnode emacs server
+;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
+
 (if (eq emacs-major-version 24)
     (add-hook 'prog-mode-hook #'hs-minor-mode)
   (add-hook 'c-mode-common-hook #'hs-minor-mode))

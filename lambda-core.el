@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by most other modules
-;; Time-stamp: <2014-12-11 15:39:27 Jerry Xu>
+;; Time-stamp: <2014-12-31 14:31:32 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -189,16 +189,18 @@ installed again."
 (diminish 'outline-minor-mode)
 
 ;; flyspell
+(require 'flyspell)
 (if (eq system-type 'windows-nt)
     (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
-(setq ispell-program-name "aspell")
+(setq ispell-program-name "aspell"
+      ispell-extra-args '("--sug-mode=ultra"))
 (setq ispell-personal-dictionary (expand-file-name "ispell" lambda-x-direcotry))
 
 ;; whitespace-mode config
 (require 'whitespace)
 (setq whitespace-line-column 80) ;; limit line length
 (setq whitespace-style '(face tabs empty trailing lines-tail
-                              newline indentation ))
+                              newline indentation))
 
 ;; saner regex syntax
 (require 're-builder)
@@ -225,6 +227,59 @@ installed again."
              ediff-saved-window-configuration))             
           'append)
 
+;; clean up obsolete buffers automatically
+(require 'midnight)
+
+(defmacro with-region-or-buffer (func)
+  "When called with no active region, call FUNC on current buffer."
+  `(defadvice ,func (before with-region-or-buffer activate compile)
+     (interactive
+      (if mark-active
+          (list (region-beginning) (region-end))
+        (list (point-min) (point-max))))))
+
+(with-region-or-buffer indent-region)
+(with-region-or-buffer untabify)
+
+;; automatically indenting yanked text if in programming-modes
+(defun yank-advised-indent-function (beg end)
+  "Do indentation, as long as the region isn't too large."
+  (if (<= (- end beg) prelude-yank-indent-threshold)
+      (indent-region beg end nil)))
+
+;; make a shell script executable automatically on save
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+;; .zsh file is shell script too
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+
+;; diff-hl
+(lambda-package-ensure-install 'diff-hl)
+(global-diff-hl-mode +1)
+(add-hook 'dired-mode-hook 'diff-hl-dired-mode)
+
+;; easy-kill
+(lambda-package-ensure-install 'easy-kill)
+(global-set-key [remap kill-ring-save] 'easy-kill)
+(global-set-key [remap mark-sexp] 'easy-mark)
+
+;; operate-on-number
+(lambda-package-ensure-install 'operate-on-number)
+(lambda-package-ensure-install 'smartrep)
+(require 'operate-on-number)
+(smartrep-define-key global-map "C-c ."
+  '(("+" . apply-operation-to-number-at-point)
+    ("-" . apply-operation-to-number-at-point)
+    ("*" . apply-operation-to-number-at-point)
+    ("/" . apply-operation-to-number-at-point)
+    ("\\" . apply-operation-to-number-at-point)
+    ("^" . apply-operation-to-number-at-point)
+    ("<" . apply-operation-to-number-at-point)
+    (">" . apply-operation-to-number-at-point)
+    ("#" . apply-operation-to-number-at-point)
+    ("%" . apply-operation-to-number-at-point)
+    ("'" . operate-on-number-at-point)))
+
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
 (windmove-default-keybindings)
@@ -239,6 +294,7 @@ installed again."
 
 ;;; tramp
 ;; Usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
+(require 'tramp)
 (setq tramp-auto-save-directory  temporary-file-directory
       ido-enable-tramp-completion t
       tramp-persistency-file-name (expand-file-name "auto-save-list/tramp"
@@ -246,12 +302,13 @@ installed again."
 (if (eq system-type 'windows-nt)
     (setq tramp-default-method "plink")
   (setq tramp-default-method "ssh"))
-(require 'tramp)
 (when (> emacs-major-version 23)
   (require 'tramp-sh)
   (delete "LC_ALL=C" tramp-remote-process-environment)
   (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
   (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
+
+(set-default 'imenu-auto-rescan t)
 
 ;;; ibuffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -656,6 +713,7 @@ installed again."
 ;; evil-visualstar -------------------------------------------------------------
 (lambda-package-ensure-install 'evil-visualstar)
 (require 'evil-visualstar)
+(global-evil-visualstar-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)
@@ -670,7 +728,7 @@ installed again."
 
 ;; evil-surround ---------------------------------------------------------------
 ;; Add surrounding
-;; visual-state: s<textobject><trigger>, normal-state: ys<textobject><trigger>.
+;; visual-state: S<textobject><trigger>, normal-state: ys<textobject><trigger>.
 
 ;; Change surrounding
 ;; cs<old-trigger><new-trigger>
