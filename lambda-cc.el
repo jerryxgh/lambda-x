@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2014-12-09 16:25:10 Jerry Xu>
+;; Time-stamp: <2015-01-14 18:42:39 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -42,9 +42,9 @@ echo \"\" | g++ -v -x c++ -E -")
 ;;(global-semantic-show-unmatched-syntax-mode 1)
 ;(global-semantic-show-parser-state-mode 1)
 (setq semanticdb-default-save-directory
-      (expand-file-name "auto-save-list/semanticdb" user-emacs-directory))
+      (expand-file-name "semanticdb" lambda-savefile-dir))
 (setq ede-project-placeholder-cache-file
-      (expand-file-name "auto-save-list/ede-projects.el" user-emacs-directory))
+      (expand-file-name "ede-projects.el" lambda-savefile-dir))
 ;(semanticdb-enable-gnu-global-databases 'c-mode)
 ;(semanticdb-enable-gnu-global-databases 'c++-mode)
 (add-hook 'semantic-init-hook
@@ -71,7 +71,7 @@ echo \"\" | g++ -v -x c++ -E -")
             ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
             (setq ac-sources
                   (append '(;;ac-source-gtags
-							;;ac-source-semantic
+                            ;;ac-source-semantic
                             ;;ac-source-yasnippet
 							)
                           ac-sources))
@@ -81,16 +81,13 @@ echo \"\" | g++ -v -x c++ -E -")
 			;; (c-toggle-auto-newline 1)
             (c-set-style "stroustrup")
 			(c-toggle-hungry-state 1)
-            (whitespace-mode 1)
             ;;(google-set-c-style)
             ))
 
 (add-hook 'c-mode-hook
-		  (lambda ()
-			"Use clang to complete c."
-			(setq ac-sources
-                  (append '(ac-source-clang)
-                          ac-sources))))
+          (lambda ()
+            "Use clang to complete c."
+            (add-to-list 'ac-sources 'ac-source-clang t)))
 
 ;; (setq ac-clang-flags
 ;; 	  (mapcar (lambda (item) (concat "-I" item))
@@ -115,9 +112,37 @@ echo \"\" | g++ -v -x c++ -E -")
 (define-key gud-mode-map (kbd "<f8>") 'gud-go)
 (setq gdb-show-main t
       gdb-many-windows t)
-;;(add-hook 'gdb-mode-hook 
+
+;; global ------- code navigating ----------------------------------------------
+(lambda-package-ensure-install 'ggtags)
+(if (featurep 'evil)
+    (define-key evil-normal-state-map
+      (kbd "M-.") 'ggtags-find-tag-dwim))
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+	      (ggtags-mode 1)
+	      ;; do not echo help message when point is on a tag, it's annoying
+	      (if (get 'ggtags-active-tag 'help-echo)
+		  (put 'ggtags-active-tag 'help-echo nil))
+	      (diminish 'ggtags-mode))))
+
+;;(add-hook 'gdb-mode-hook
 ;;          '(lambda ()
 ;;             ))
+
+;; cmake -----------------------------------------------------------------------
+(lambda-package-ensure-install 'cpputils-cmake)
+;;(require 'cpputils-cmake)
+;; (add-hook 'c-mode-common-hook
+;;           (lambda ()
+;;             (if (derived-mode-p 'c-mode 'c++-mode)
+;;                 ;; (cppcm-reload-all)
+;;               )))
+(global-set-key (kbd "C-c C-g")
+ '(lambda ()
+    (interactive)
+    (gud-gdb (concat "gdb -i=mi --fullname " "~/repository/soc-agent/build/src/zabbix_agent/soc_agentd"))))
 
 (provide 'lambda-cc)
 

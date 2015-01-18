@@ -17,17 +17,22 @@
       savehist-autosave-interval 60
       ;; keep the home clean
       savehist-file (expand-file-name
-		     "auto-save-list/savehist"
-		     user-emacs-directory))
+		     "savehist"
+		     lambda-savefile-dir))
 (savehist-mode 1)
 
 ;; save recent files -----------------------------------------------------------
 (require 'recentf)
 (setq recentf-save-file (expand-file-name
-			 "auto-save-list/recentf"
-			 user-emacs-directory)
+			 "recentf"
+			 lambda-savefile-dir)
       recentf-max-saved-items 500
-      recentf-max-menu-items 15)
+      recentf-max-menu-items 15
+      ;; disable recentf-cleanup on Emacs start, because it can cause
+      ;; problems with remote files
+      recentf-auto-cleanup 'never)
+;; ignore magit's commit message files
+(add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
 (recentf-mode 1)
 
 ;; saveplace --- When you visit a file, point goes to the last place where
@@ -37,33 +42,41 @@
 ;; save-place-file. This defaults to ~/.emacs-places. You may want to change it
 ;; to keep your home directory uncluttered, for example:
 (setq save-place-file (expand-file-name
-		       "auto-save-list/saved-places"
-		       user-emacs-directory))
+		       "savedplace"
+		       lambda-savefile-dir))
 ;; activate it for all buffers
 (setq-default save-place t)
 
 ;; Maxmize frame(Full Screen) --------------------------------------------------
-(defun lambda-full-screen ()
-  "Make Emacs full-screen after init."
+(defun lambda-maxmize-frame ()
+  "Make Emacs frame maxmized."
   (interactive)
   (cond ((and (eq system-type 'windows-nt)
 			  (fboundp 'w32-send-sys-command))
 		 (w32-send-sys-command 61488))
 		((eq system-type 'gnu/linux)
 		 (set-frame-parameter nil 'fullscreen 'maximized))))
-(add-hook 'after-init-hook 'lambda-full-screen)
+(add-hook 'after-init-hook 'lambda-maxmize-frame)
+
+(defun lambda--full-screen ()
+  "Make Emacs frame fullscreen.
+
+This follows freedesktop standards, should work in X servers."
+  (interactive)
+  (if (eq window-system 'x)
+      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                             '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+    (error "Only X server is supported")))
 
 ;; Restore buffers automaticly -------------------------------------------------
 (require 'desktop)
-(setq desktop-path (list (expand-file-name "auto-save-list/"
-					   user-emacs-directory))
+(setq desktop-path (list (expand-file-name lambda-savefile-dir))
       history-length 250
-      desktop-dirname (expand-file-name "auto-save-list/"
-					user-emacs-directory)
+      desktop-dirname (expand-file-name lambda-savefile-dir)
       desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
       desktop-base-file-name "emacs-desktop")
 
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 ;; Workgroup2 Use --------------------------------------------------------------
 ;; Most commands start with prefix `wg-prefix-key'.
@@ -84,8 +97,11 @@
 (setq wg-prefix-key (kbd "C-c z"))
 
 ;;Change workgroups session file
-(setq wg-default-session-file (locate-user-emacs-file
-                               "auto-save-list/emacs-workgroups"))
+(setq wg-default-session-file (expand-file-name
+                               "emacs-workgroups"
+                               lambda-savefile-dir))
+
+(setq wg-associate-blacklist '("*helm mini*" "*Messages*" "*helm action*"))
 
 ;; put this one at the bottom of this file
 (workgroups-mode 1)
@@ -94,8 +110,10 @@
 ;; psession Persistent save of elisp objects -----------------------------------
 (lambda-package-ensure-install 'psession)
 (require 'psession)
-(setq psession-elisp-objects-default-directory (locate-user-emacs-file
-												"auto-save-list/elisp-objects"))
+(setq psession-elisp-objects-default-directory
+      (expand-file-name
+       "elisp-objects"
+       lambda-savefile-dir))
 ;;加快emacs的启动速度
 (server-start)
 

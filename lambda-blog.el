@@ -1,5 +1,5 @@
-;;; lambda-writing.el --- org, confluence wiki
-;; Time-stamp: <2014-08-06 16:08:21 Jerry Xu>
+;;; lambda-blog.el --- org, confluence wiki
+;; Time-stamp: <2015-01-04 22:55:36 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -25,5 +25,6 @@ rainbow-delimiters-mode temporarily when using htmlize."
 (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
         (ad-activate 'htmlize-buffer-1)
 
-(provide 'lambda-writing)
-;;; lambda-writing.el ends here
+(provide 'lambda-blog)
+
+;;; lambda-blog.el ends here

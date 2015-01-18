@@ -12,12 +12,10 @@
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
-(if (eq emacs-major-version 24)
-    (add-hook 'prog-mode-hook #'hs-minor-mode)
-  (add-hook 'c-mode-common-hook #'hs-minor-mode))
+(add-hook 'c-mode-common-hook #'hs-minor-mode)
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
-(require 'vlf-integrate)
+(require 'vlf-setup)
 ;; iedit -----------------------------------------------------------------------
 (lambda-package-ensure-install 'iedit)
 ;; fold about things -----------------------------------------------------------
@@ -57,6 +55,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;; to try
 ;; window-numbering evil-jumper Comment-dwim-2 evil-nerd-commenter
+
 
 (provide 'lambda-eden)
 

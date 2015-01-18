@@ -23,6 +23,9 @@
 
 (require 'yasnippet)
 
+(defgroup evil-tab nil
+  "Customized tab in evil-mode."
+  :group 'convenience)
 
 ;;;###autoload
 (define-minor-mode evil-tab-minor-mode
