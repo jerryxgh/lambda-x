@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-01-14 18:42:39 Jerry Xu>
+;; Time-stamp: <2015-01-28 15:04:54 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -139,10 +139,6 @@ echo \"\" | g++ -v -x c++ -E -")
 ;;             (if (derived-mode-p 'c-mode 'c++-mode)
 ;;                 ;; (cppcm-reload-all)
 ;;               )))
-(global-set-key (kbd "C-c C-g")
- '(lambda ()
-    (interactive)
-    (gud-gdb (concat "gdb -i=mi --fullname " "~/repository/soc-agent/build/src/zabbix_agent/soc_agentd"))))
 
 (provide 'lambda-cc)
 

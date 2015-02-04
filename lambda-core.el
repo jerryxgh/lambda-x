@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-01-18 15:15:45 Jerry Xu>
+;; Time-stamp: <2015-02-04 10:02:51 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -331,16 +331,17 @@ This follows freedesktop standards, should work in X servers."
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
-(setq projectile-cache-file (expand-file-name
+(setq projectile-enable-caching t
+      projectile-completion-system 'helm
+      ;; projectile-require-project-root nil
+      projectile-cache-file (expand-file-name
 			     "projectile.cache"
 			     lambda-savefile-dir)
-      projectile-enable-caching t
-      ;; projectile-require-project-root nil
       projectile-known-projects-file (expand-file-name
 				      "projectile-bookmarks.eld"
 				      lambda-savefile-dir))
 (projectile-global-mode t)
-(diminish 'projectile-mode)
+;;(diminish 'projectile-mode)
 (defun projectile-ack (regexp &optional arg)
   "Run an ack search with REGEXP in the project.
 
@@ -619,7 +620,6 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
-(lambda-package-ensure-install 'helm-projectile)
 
 (require 'helm)
 ;; must set before helm-config,  otherwise helm use default
@@ -683,12 +683,16 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 
 (helm-mode 1)
 (diminish 'helm-mode)
+
+(lambda-package-ensure-install 'helm-projectile)
 (require 'helm-projectile)
+;; (helm-projectile-on)
 
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq helm-completing-read-handlers-alist
       '((describe-function . ido)
 	(describe-variable . ido)
+        (load-library . ido)
 	(debug-on-entry . ido)
 	(dired-do-copy . ido)
 	(find-function . ido)
@@ -713,16 +717,17 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
       ido-ignore-buffers '("\\` "
+			   "^\\*Ibuffer\\*$"
 			   "^\\*helm.*\\*$"
 			   "^\\*Compile-Log\\*$"
 			   "^\\*Messages\\*$"
 			   "^\\*Help\\*$")
       ido-save-directory-list-file
       (expand-file-name "ido.hist" lambda-savefile-dir)
-      ido-default-file-method 'selected-window
+      ;; ido-default-file-method 'selected-window
       ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
       )
-(defun lambda-x-ido-find-file-at-point ()
+(defun lambda-ido-find-file-at-point ()
   "Use ffap as wanted."
   (interactive)
   (let ((ido-use-filename-at-point 'guess)
@@ -738,6 +743,21 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (flx-ido-mode 1)
 
 ;;; magit --- use git in emacs--------------------------------------------------
+(defun lambda-get-magit-dir ()
+  "Get the directory magit installed."
+  (let ((elpa-dir (expand-file-name "elpa" lambda-x-direcotry)))
+    (if (and (stringp elpa-dir) (file-directory-p elpa-dir))
+        (catch 'break
+          (dolist (file (directory-files elpa-dir))
+            (let ((subfile (expand-file-name file elpa-dir)))
+              (if (and (file-directory-p subfile)
+                       (string-prefix-p "magit-" file))
+                  (throw 'break subfile)))
+            ))
+      nil)))
+(eval-after-load 'info
+  '(progn (info-initialize)
+          (add-to-list 'Info-directory-list (lambda-get-magit-dir))))
 (require 'magit)
 (lambda-package-ensure-install 'magit)
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
@@ -813,11 +833,8 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 	(setq yas-snippet-dirs (delete dir yas-snippet-dirs)))
     ))
 
-(setq yas-trigger-key "<tab>"
-      yas-next-field-key "<tab>"
-      ;; menu only show the mode according to the major-mode of the current
-      ;;buffer
-      yas-use-menu 'abbreviate)
+;; menu only show modes according to the major-mode of the current buffer
+(setq yas-use-menu 'abbreviate)
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
@@ -987,18 +1004,39 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;; convenience =================================================================
 (lambda-package-ensure-install 'popwin)
 (require 'popwin)
-(popwin-mode 1)
 (dolist (special-buffer
          '((" *undo-tree*")
            ("^\\*shell\\*.*$" :regexp t :stick t)
-           ("^\\*eshell\\*.*$" :regexp t :stick t)
-           ("^\\*magit: .*\\*$" :regexp t :stick t)
-           ("*magit-commit*" :stick t)
+           ("^\\*eshell\\*.*$" :regexp t :noselect t)
+           ("^\\*magit: .*\\*$" :regexp t)
+           ("*magit-commit*")
            ))
   (push special-buffer popwin:special-display-config))
-
+;;(popwin-mode 1)
+;; use popwin to visit buffer
+;;(setq ido-default-buffer-method 'popwin)
+;;(defadvice ido-visit-buffer (around ido-visit-buffer-popwin activate)
+;;  "Use popwin to visit buffer if `ido-default-buffer-method' is popwin."
+;;  (let ((buffer (ad-get-arg 0))
+;;        (method (ad-get-arg 1)))
+;;    (if (eq method 'popwin)
+;;        (let ((win (get-buffer-window buffer)))
+;;          (if win
+;;              (select-window win)
+;;            ad-do-it))
+;;      ad-do-it)))
+;;(push #'(lambda (name)
+;;          (let ((buffer (get-buffer name)))
+;;            (if buffer
+;;                (popwin:match-config buffer)
+;;              nil)))
+;;      ido-ignore-buffers)
 
 (lambda-package-ensure-install 'import-popwin)
+
+(require 'smartwin)
+;;(smartwin-mode 1)
+
 ;; convenience ends here =======================================================
 
 ;;; lambda-core.el ends here

@@ -9,19 +9,17 @@
 (require 'lambda-core)
 
 ;; savehist keeps track of some history ----------------------------------------
+;; very useful
 (require 'savehist)
-(setq savehist-additional-variables
-      ;; search entries
-      '(search ring regexp-search-ring)
-      ;; save every minute
-      savehist-autosave-interval 60
-      ;; keep the home clean
-      savehist-file (expand-file-name
+(setq savehist-additional-variables '(search ring regexp-search-ring)
+      savehist-autosave-interval 60 ; save every minute
+      savehist-file (expand-file-name ; keep the home clean
 		     "savehist"
 		     lambda-savefile-dir))
 (savehist-mode 1)
 
 ;; save recent files -----------------------------------------------------------
+;; very useful
 (require 'recentf)
 (setq recentf-save-file (expand-file-name
 			 "recentf"
@@ -38,9 +36,7 @@
 ;; saveplace --- When you visit a file, point goes to the last place where
 ;; it was when you previously visited the same file.----------------------------
 (require 'saveplace)
-;; Your saved places are written to the file stored in the file specified by
-;; save-place-file. This defaults to ~/.emacs-places. You may want to change it
-;; to keep your home directory uncluttered, for example:
+;; to keep home clean
 (setq save-place-file (expand-file-name
 		       "savedplace"
 		       lambda-savefile-dir))
@@ -52,10 +48,10 @@
   "Make Emacs frame maxmized."
   (interactive)
   (cond ((and (eq system-type 'windows-nt)
-			  (fboundp 'w32-send-sys-command))
-		 (w32-send-sys-command 61488))
-		((eq system-type 'gnu/linux)
-		 (set-frame-parameter nil 'fullscreen 'maximized))))
+              (fboundp 'w32-send-sys-command))
+         (w32-send-sys-command 61488))
+        ((eq system-type 'gnu/linux)
+         (set-frame-parameter nil 'fullscreen 'maximized))))
 (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
 (defun lambda--full-screen ()
@@ -76,7 +72,7 @@ This follows freedesktop standards, should work in X servers."
       desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
       desktop-base-file-name "emacs-desktop")
 
-;; (desktop-save-mode 1)
+(desktop-save-mode 1)
 
 ;; Workgroup2 Use --------------------------------------------------------------
 ;; Most commands start with prefix `wg-prefix-key'.
@@ -91,21 +87,21 @@ This follows freedesktop standards, should work in X servers."
 ;; <prefix> v    - switch to workgroup
 ;; <prefix> C-s  - save session
 ;; <prefix> C-f  - load session
-(lambda-package-ensure-install 'workgroups2)
-(require 'workgroups2)
-;;Change prefix key (before activating WG)
-(setq wg-prefix-key (kbd "C-c z"))
-
-;;Change workgroups session file
-(setq wg-default-session-file (expand-file-name
-                               "emacs-workgroups"
-                               lambda-savefile-dir))
-
-(setq wg-associate-blacklist '("*helm mini*" "*Messages*" "*helm action*"))
-
-;; put this one at the bottom of this file
-(workgroups-mode 1)
-(diminish 'workgroups-mode)
+;;(lambda-package-ensure-install 'workgroups2)
+;;(require 'workgroups2)
+;;;;Change prefix key (before activating WG)
+;;(setq wg-prefix-key (kbd "C-c z"))
+;;
+;;;;Change workgroups session file
+;;(setq wg-default-session-file (expand-file-name
+;;                               "emacs-workgroups"
+;;                               lambda-savefile-dir))
+;;
+;;(setq wg-associate-blacklist '("*helm mini*" "*Messages*" "*helm action*"))
+;;
+;;;; put this one at the bottom of this file
+;;(workgroups-mode 1)
+;;(diminish 'workgroups-mode)
 
 ;; psession Persistent save of elisp objects -----------------------------------
 (lambda-package-ensure-install 'psession)

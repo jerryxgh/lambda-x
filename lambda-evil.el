@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-01-18 13:32:48 Jerry Xu>
+;; Time-stamp: <2015-01-28 13:50:22 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -39,7 +39,7 @@
   (interactive)
   (evil-yank (point) (point-at-eol)))
 (define-key evil-normal-state-map (kbd "Y") 'copy-to-end-of-line)
-(define-key evil-normal-state-map (kbd "g f") 'lambda-x-ido-find-file-at-point)
+(define-key evil-normal-state-map (kbd "g f") 'lambda-ido-find-file-at-point)
 
 (loop for (mode . state) in '((calendar-mode . emacs)
 			      (help-mode . emacs)
@@ -128,7 +128,6 @@
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
-(provide 'lambda-evil)
 (lambda-package-ensure-install 'evil-commentary)
 (evil-commentary-default-setup)
 
@@ -173,4 +172,9 @@
 (define-key evil-normal-state-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
 (define-key evil-visual-state-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
+;; anzu for evil ---------------------------------------------------------------
+(lambda-package-ensure-install 'evil-anzu)
+(require 'evil-anzu)
+
+(provide 'lambda-evil)
 ;;; lambda-evil.el ends here
