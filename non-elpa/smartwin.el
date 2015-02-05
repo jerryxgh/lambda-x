@@ -55,7 +55,6 @@ But smart window can be higher if run `delete-other-window' when is is already
     ;; t
     ;; Emacs
     ("*Miniedit Help*" :noselect t)
-    help-mode
     (completion-list-mode :noselect t)
     (compilation-mode :noselect t)
     (grep-mode :noselect t)
@@ -159,8 +158,7 @@ window and will not be selected."
         (if (and smartwin-previous-buffer
                  (buffer-live-p smartwin-previous-buffer))
             (if (not (eq smartwin-previous-buffer (window-buffer window)))
-                (set-window-buffer window smartwin-previous-buffer))
-          (set-window-buffer window (get-buffer "*scratch*"))))))
+                (set-window-buffer window smartwin-previous-buffer))))))
 
 (defun smartwin-hide (&optional force)
   "Hide smart window.
@@ -196,7 +194,11 @@ If succeed, created window is returned, else return nil."
                    (condition-case nil
                        (split-window root-win (- root-height 4) 'below)
                      (error nil)))
-             (set-window-parameter window 'smartwinp t))
+             (if window
+                 (progn
+                   (set-window-parameter window 'smartwinp t)
+                   (set-window-buffer window (get-buffer "*scratch*"))
+                   (set-window-prev-buffers window nil))))
         window)))
 
 ;; switch-to-buffer-other-window
