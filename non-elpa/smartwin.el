@@ -26,6 +26,7 @@
 ;; 2. add exceptions config
 ;; 3. process wrong scroll when enlarge smart window
 ;; 4. window-text-change-functions
+;; 5. smart window scroll problem
 
 ;;; Code:
 
@@ -153,14 +154,13 @@ window and will not be selected."
   "Show smart window."
   (interactive)
   (if (and smartwin-mode
-           smartwin-previous-buffer
            (not (smartwin-find-smart-win)))
       (let ((window (smartwin-get-smart-win)))
         (if (and smartwin-previous-buffer
-                 (not (eq smartwin-previous-buffer (window-buffer window)))
                  (buffer-live-p smartwin-previous-buffer))
-            (set-window-buffer window smartwin-previous-buffer))
-        )))
+            (if (not (eq smartwin-previous-buffer (window-buffer window)))
+                (set-window-buffer window smartwin-previous-buffer))
+          (set-window-buffer window (get-buffer "*scratch*"))))))
 
 (defun smartwin-hide (&optional force)
   "Hide smart window.
@@ -257,13 +257,26 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
     (if (smartwin-smart-window-p window)
         (smartwin-hide))))
 
-(defadvice kill-buffer (before smartwin-kill-buffer)
-  "When run `kill-buffer' in smart window, hide smart window."
-  (let ((buffer (ad-get-arg 0)))
+(defadvice kill-buffer (around smartwin-kill-buffer)
+  "When run `kill-buffer' in smart window, find right buffer to show.
+If no buffer can be showed in smart window, hide it."
+  (let ((buffer (ad-get-arg 0))
+        window)
     (if (not buffer)
         (setq buffer (current-buffer)))
-    (if (smartwin-smart-window-p (get-buffer-window buffer))
-        (smartwin-hide t))))
+    (setq window (get-buffer-window buffer))
+    ad-do-it
+    (if (smartwin-smart-window-p window)
+        (progn
+          (setq buffer
+                (catch 'break
+                  (dolist (b (window-prev-buffers window))
+                    (if (smartwin-match-buffer b)
+                        (throw 'break b)))
+                  (throw 'break nil)))
+          (if buffer
+              (set-window-buffer winodw buffer)
+            (smartwin-hide t))))))
 
 (defadvice select-window (after smartwin-select-window)
   "Enlarge or shringe smart window when select window."
@@ -436,19 +449,16 @@ split smart window."
       ad-do-it)))
 
 (defadvice switch-to-buffer (around smartwin-switch-to-buffer)
-  "When a bffer should be show in smart window, chage window to smart window."
+  "When a bffer should be shown in smart window, chage window to smart window."
   (let ((buffer-or-name (ad-get-arg 0)))
     (if (smartwin-match-buffer buffer-or-name)
         (let ((smart-win (smartwin-get-smart-win)))
           (with-selected-window smart-win
             ad-do-it)
-          (select-window smart-win)
-          (smartwin-enlarge-window smart-win))
+          (select-window smart-win))
       (let ((window (selected-window)))
         (if (smartwin-smart-window-p window)
-            (progn
-              (switch-to-buffer-other-window buffer-or-name)
-              (minimize-window window))
+            (switch-to-buffer-other-window buffer-or-name)
           ad-do-it)))))
 
 (defadvice switch-to-buffer-other-window
@@ -460,11 +470,8 @@ split smart window."
           (with-selected-window smart-win
             ad-do-it)
           (select-window smart-win)
-          (smartwin-enlarge-window smart-win))
-      (let ((window (selected-window)))
-        (if (smartwin-smart-window-p window)
-            (minimize-window window))
-        ad-do-it))))
+          )
+      ad-do-it)))
 
 (defadvice display-buffer-pop-up-window
   (around smartwin-display-buffer-pop-up-window)
@@ -510,8 +517,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
         (if smartwin-mode
             (progn
               (push pair display-buffer-alist)
-              ;;(ad-activate 'switch-to-buffer)
-              ;;(ad-activate 'switch-to-buffer-other-window)
+              (ad-activate 'switch-to-buffer)
+              (ad-activate 'switch-to-buffer-other-window)
               ;;(ad-activate 'windmove-do-window-select)
               ;;(ad-activate 'evil-window-move-very-top)
               ;;(ad-activate 'evil-window-move-far-left)
@@ -519,6 +526,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               ;;(ad-activate 'evil-window-move-very-bottom)
               ;;(ad-activate 'evil-window-rotate-upwards)
               ;;(ad-activate 'evil-window-rotate-downwards)
+              ;;(ad-activate 'kill-buffer)
+              ;;(ad-activate 'quit-window)
               (ad-activate 'split-window)
               (ad-activate 'display-buffer-pop-up-window)
               (ad-activate 'window-splittable-p)
@@ -529,12 +538,10 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'delete-other-windows)
               (ad-activate 'balance-windows)
               (ad-activate 'select-window)
-              ;;(ad-activate 'kill-buffer)
-              ;;(ad-activate 'quit-window)
               (smartwin-show))
           (setq display-buffer-alist (delete pair display-buffer-alist))
-          ;;(ad-deactivate 'switch-to-buffer)
-          ;;(ad-deactivate 'switch-to-buffer-other-window)
+          (ad-deactivate 'switch-to-buffer)
+          (ad-deactivate 'switch-to-buffer-other-window)
           ;;(ad-deactivate 'windmove-do-window-select)
           ;;(ad-deactivate 'evil-window-move-very-top)
           ;;(ad-deactivate 'evil-window-move-far-left)
@@ -542,6 +549,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           ;;(ad-deactivate 'evil-window-move-very-bottom)
           ;;(ad-deactivate 'evil-window-rotate-upwards)
           ;;(ad-deactivate 'evil-window-rotate-downwards)
+          ;;(ad-deactivate 'kill-buffer)
+          ;;(ad-deactivate 'quit-window)
           (ad-deactivate 'split-window)
           (ad-deactivate 'display-buffer-pop-up-window)
           (ad-deactivate 'window-splittable-p)
@@ -552,8 +561,6 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           (ad-deactivate 'delete-other-windows)
           (ad-deactivate 'balance-windows)
           (ad-deactivate 'select-window)
-          ;;(ad-deactivate 'kill-buffer)
-          ;;(ad-deactivate 'quit-window)
           (smartwin-hide)
           ))
     (with-no-warnings
