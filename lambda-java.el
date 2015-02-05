@@ -30,17 +30,17 @@
         ))
 
 ;; call the help framework with the settings above & activate eclim-mode
-(help-at-pt-set-timer)
+;;(help-at-pt-set-timer)
 ;; add the emacs-eclim source
 (require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
-(defadvice eclim-completion-start
-  (around eclim-completion-start-when-dot activate)
-  "Only use eclim to complete when encounter dot."
-  (let ((dot-p (ac-prefix-c-dot)))
-    (when dot-p
-      ad-do-it
-      dot-p)))
+;;(ac-emacs-eclim-config)
+;;(defadvice eclim-completion-start
+;;  (around eclim-completion-start-when-dot activate)
+;;  "Only use eclim to complete when encounter dot."
+;;  (let ((dot-p (ac-prefix-c-dot)))
+;;    (when dot-p
+;;      ad-do-it
+;;      dot-p)))
 
 ;; Hook eclim up with auto complete mode ---------------------------------------
 ;;(defun ac-prefix-eclim-java-dot ()

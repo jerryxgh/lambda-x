@@ -51,7 +51,7 @@ But smart window can be higher if run `delete-other-window' when is is already
 
 (defcustom smartwin-buffers
   '(;; all buffers that have no file
-    t
+    ;; t
     ;; Emacs
     ("*Miniedit Help*" :noselect t)
     help-mode
@@ -60,6 +60,8 @@ But smart window can be higher if run `delete-other-window' when is is already
     (grep-mode :noselect t)
     (occur-mode :noselect t)
     "*scratch*"
+    "*shell*"
+    "*eshell*"
     ("*Pp Macroexpand Output*" :noselect t)
     "*Shell Command Output*"
     ;; VC
@@ -160,14 +162,17 @@ window and will not be selected."
             (set-window-buffer window smartwin-previous-buffer))
         )))
 
-(defun smartwin-hide ()
-  "Hide smart window."
+(defun smartwin-hide (&optional force)
+  "Hide smart window.
+If FORCE is non nil, hide smart window forcely."
   (interactive)
-  (if (smartwin-find-smart-win)
-      (let ((window (smartwin-get-smart-win)))
-        (setq smartwin-previous-buffer (window-buffer window))
-        (with-selected-window window
-          (delete-window)))))
+  (let ((window (smartwin-get-smart-win)))
+    (if window
+        (progn
+          (setq smartwin-previous-buffer (window-buffer window))
+          (if force
+              (minimize-window window))
+          (delete-window (smartwin-get-smart-win))))))
 
 
 
@@ -245,6 +250,20 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
     best-window))
 
 ;;; advices
+
+(defadvice quit-window (after smartwin-quit-window)
+  "When run `quit-window' in smart window, select other window."
+  (let ((window (selected-window)))
+    (if (smartwin-smart-window-p window)
+        (smartwin-hide))))
+
+(defadvice kill-buffer (before smartwin-kill-buffer)
+  "When run `kill-buffer' in smart window, hide smart window."
+  (let ((buffer (ad-get-arg 0)))
+    (if (not buffer)
+        (setq buffer (current-buffer)))
+    (if (smartwin-smart-window-p (get-buffer-window buffer))
+        (smartwin-hide t))))
 
 (defadvice select-window (after smartwin-select-window)
   "Enlarge or shringe smart window when select window."
@@ -360,7 +379,9 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
 
 (defadvice delete-window (around smartwin-delete-window)
   "If the window is last oridnary window(not smart window), do not kill it."
-  (let ((window (selected-window)))
+  (let ((window (ad-get-arg 0)))
+    (if (not window)
+        (setq window (selected-window)))
     (if (smartwin-smart-window-p window)
         (if (< window-min-height (window-height window))
             (minimize-window window)
@@ -508,6 +529,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'delete-other-windows)
               (ad-activate 'balance-windows)
               (ad-activate 'select-window)
+              ;;(ad-activate 'kill-buffer)
+              ;;(ad-activate 'quit-window)
               (smartwin-show))
           (setq display-buffer-alist (delete pair display-buffer-alist))
           ;;(ad-deactivate 'switch-to-buffer)
@@ -529,6 +552,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           (ad-deactivate 'delete-other-windows)
           (ad-deactivate 'balance-windows)
           (ad-deactivate 'select-window)
+          ;;(ad-deactivate 'kill-buffer)
+          ;;(ad-deactivate 'quit-window)
           (smartwin-hide)
           ))
     (with-no-warnings

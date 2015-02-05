@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-02-04 10:02:51 Jerry Xu>
+;; Time-stamp: <2015-02-04 10:20:55 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -1033,9 +1033,6 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;;      ido-ignore-buffers)
 
 (lambda-package-ensure-install 'import-popwin)
-
-(require 'smartwin)
-;;(smartwin-mode 1)
 
 ;; convenience ends here =======================================================
 

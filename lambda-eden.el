@@ -56,6 +56,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; to try
 ;; window-numbering evil-jumper Comment-dwim-2 evil-nerd-commenter
 
+(require 'smartwin)
+(smartwin-mode 1)
 
 (provide 'lambda-eden)
 
