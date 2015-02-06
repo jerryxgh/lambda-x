@@ -14,11 +14,12 @@
 ;; point move to the smart window, it is enlarged automaticly, when leave the
 ;; window, it is shrinked automaticly.
 ;;
-;; To use smartwin, just add the following code into your .emacs:
+;; To use smartwin, place this file to load path and add this to .emacs:
 ;;
 ;;     (require 'smartwin)
 ;;     (smartwin-mode 1)
-;; Then try run shell or show some help, the window will show up.
+;; Then try run shell or or eshell, if you want to show more buffers in smart
+;; window, please customize variable: smartwin-buffers.
 
 ;;; TODO:
 
@@ -521,15 +522,10 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (push pair display-buffer-alist)
               (ad-activate 'switch-to-buffer)
               (ad-activate 'switch-to-buffer-other-window)
-              ;;(ad-activate 'windmove-do-window-select)
-              ;;(ad-activate 'evil-window-move-very-top)
-              ;;(ad-activate 'evil-window-move-far-left)
-              ;;(ad-activate 'evil-window-move-far-right)
-              ;;(ad-activate 'evil-window-move-very-bottom)
-              ;;(ad-activate 'evil-window-rotate-upwards)
-              ;;(ad-activate 'evil-window-rotate-downwards)
-              ;;(ad-activate 'kill-buffer)
-              ;;(ad-activate 'quit-window)
+              (ad-activate 'evil-window-move-very-top)
+              (ad-activate 'evil-window-move-far-left)
+              (ad-activate 'evil-window-move-far-right)
+              (ad-activate 'evil-window-move-very-bottom)
               (ad-activate 'split-window)
               (ad-activate 'display-buffer-pop-up-window)
               (ad-activate 'window-splittable-p)
@@ -540,19 +536,19 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'delete-other-windows)
               (ad-activate 'balance-windows)
               (ad-activate 'select-window)
+              ;;(ad-activate 'windmove-do-window-select)
+              ;;(ad-activate 'evil-window-rotate-upwards)
+              ;;(ad-activate 'evil-window-rotate-downwards)
+              ;;(ad-activate 'kill-buffer)
+              ;;(ad-activate 'quit-window)
               (smartwin-show))
           (setq display-buffer-alist (delete pair display-buffer-alist))
           (ad-deactivate 'switch-to-buffer)
           (ad-deactivate 'switch-to-buffer-other-window)
-          ;;(ad-deactivate 'windmove-do-window-select)
-          ;;(ad-deactivate 'evil-window-move-very-top)
-          ;;(ad-deactivate 'evil-window-move-far-left)
-          ;;(ad-deactivate 'evil-window-move-far-right)
-          ;;(ad-deactivate 'evil-window-move-very-bottom)
-          ;;(ad-deactivate 'evil-window-rotate-upwards)
-          ;;(ad-deactivate 'evil-window-rotate-downwards)
-          ;;(ad-deactivate 'kill-buffer)
-          ;;(ad-deactivate 'quit-window)
+          (ad-deactivate 'evil-window-move-very-top)
+          (ad-deactivate 'evil-window-move-far-left)
+          (ad-deactivate 'evil-window-move-far-right)
+          (ad-deactivate 'evil-window-move-very-bottom)
           (ad-deactivate 'split-window)
           (ad-deactivate 'display-buffer-pop-up-window)
           (ad-deactivate 'window-splittable-p)
@@ -563,6 +559,11 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           (ad-deactivate 'delete-other-windows)
           (ad-deactivate 'balance-windows)
           (ad-deactivate 'select-window)
+          ;;(ad-deactivate 'windmove-do-window-select)
+          ;;(ad-deactivate 'evil-window-rotate-upwards)
+          ;;(ad-deactivate 'evil-window-rotate-downwards)
+          ;;(ad-deactivate 'kill-buffer)
+          ;;(ad-deactivate 'quit-window)
           (smartwin-hide)
           ))
     (with-no-warnings
