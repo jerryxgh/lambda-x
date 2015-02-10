@@ -46,7 +46,7 @@
 But smart window can be higher if run `delete-other-window' when is is already
   to this height.")
 
-(defvar smartwin-min-window-height 4
+(defvar smartwin-min-window-height 6
   "Maximum hight of smart window.
 But smart window can be higher if run `delete-other-window' when is is already
   to this height.")
@@ -541,7 +541,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               ;;(ad-activate 'evil-window-rotate-downwards)
               ;;(ad-activate 'kill-buffer)
               ;;(ad-activate 'quit-window)
-              (smartwin-show))
+              ;;(smartwin-show)
+              )
           (setq display-buffer-alist (delete pair display-buffer-alist))
           (ad-deactivate 'switch-to-buffer)
           (ad-deactivate 'switch-to-buffer-other-window)

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-02-04 10:04:19 Jerry Xu>
+;; Time-stamp: <2015-02-10 13:49:21 Jerry Xu>
 
 ;;; Commentary:
 
@@ -41,11 +41,11 @@
 (require 'lambda-js)
 (require 'lambda-json)
 (require 'lambda-matlab)
-;; (require 'lambda-ecb)
+;;; (require 'lambda-ecb)
 (require 'lambda-lua)
 (require 'lambda-eden)
-;; this should be loaded at last, restore buffers, minibuffer history, last
-;; place of cursor, etc.
+;;; this should be loaded at last, restore buffers, minibuffer history, last
+;;; place of cursor, etc.
 (require 'lambda-session)
 
 ;;; init.el ends here

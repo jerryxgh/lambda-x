@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-02-04 10:20:55 Jerry Xu>
+;; Time-stamp: <2015-02-10 11:21:34 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -345,7 +345,8 @@ This follows freedesktop standards, should work in X servers."
 (defun projectile-ack (regexp &optional arg)
   "Run an ack search with REGEXP in the project.
 
-With a prefix argument ARG prompts you for a directory on which the search is performed ."
+With a prefix argument ARG prompts you for a directory on which
+the search is performed ."
   (interactive
    (list (read-from-minibuffer
 	  (projectile-prepend-project-name "Ack search for: ")
@@ -639,6 +640,11 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 ;; list actions using C-z
 (define-key helm-map (kbd "C-z")  'helm-select-action)
+(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+(require 'helm-eshell)
+(add-hook 'eshell-mode-hook
+          #'(lambda ()
+              (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
 
 (define-key helm-grep-mode-map (kbd "<return>")
   'helm-grep-mode-jump-other-window)
@@ -684,10 +690,6 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 (helm-mode 1)
 (diminish 'helm-mode)
 
-(lambda-package-ensure-install 'helm-projectile)
-(require 'helm-projectile)
-;; (helm-projectile-on)
-
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq helm-completing-read-handlers-alist
       '((describe-function . ido)
@@ -706,6 +708,21 @@ With a prefix argument ARG prompts you for a directory on which the search is pe
 ;;(require 'helm-ls-git)
 ;;(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 ;;(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+
+(lambda-package-ensure-install 'helm-projectile)
+(require 'helm-projectile)
+;; (helm-projectile-on)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PACKAGE: helm-descbinds                      ;;
+;;                                              ;;
+;; GROUP: Convenience -> Helm -> Helm Descbinds ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(lambda-package-ensure-install 'helm-descbinds)
+(require 'helm-descbinds)
+(helm-descbinds-mode 1)
+(lambda-package-ensure-install 'helm-ag)
+
 
 ;;; ido --- interactively do things---------------------------------------------
 ;; ffap - find file at point is not userful when ido-mode is on
