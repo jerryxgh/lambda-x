@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-02-10 13:49:21 Jerry Xu>
+;; Time-stamp: <2015-02-10 16:57:29 Jerry Xu>
 
 ;;; Commentary:
 
@@ -36,6 +36,7 @@
 (require 'lambda-blog)
 (require 'lambda-web)
 (require 'lambda-emacs-lisp)
+(require 'lambda-scheme)
 (require 'lambda-java)
 (require 'lambda-python)
 (require 'lambda-js)
