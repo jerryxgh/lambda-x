@@ -112,26 +112,27 @@ window and will not be selected."
 
 (defun smartwin-match-buffer (buffer-or-name)
   "Judge whether to use smartwin to show BUFFER-OR-NAME."
-  (let* ((buffer (if (stringp buffer-or-name)
-                     (get-buffer buffer-or-name)
-                   buffer-or-name))
-         (name (buffer-name buffer))
-         (mode (buffer-local-value 'major-mode buffer)))
-    (catch 'break
-      (dolist (config smartwin-buffers)
-        (let ((pattern (if (consp config) (car config) config))
-              (keywords (if (consp config) (cadr config) nil)))
-          (if (cond ((eq pattern t) (not (buffer-file-name buffer)))
-                    ((and (stringp pattern) (plist-get keywords :regexp))
-                     (string-match pattern name))
-                    ((stringp pattern)
-                     (string= pattern name))
-                    ((symbolp pattern)
-                     (eq pattern mode))
-                    ((functionp pattern)
-                     (funcall pattern buffer))
-                    (t (error "Invalid pattern: %s" pattern)))
-              (throw 'break config)))))))
+  (let ((buffer (if (stringp buffer-or-name)
+                    (get-buffer buffer-or-name)
+                  buffer-or-name)))
+    (if buffer
+        (let ((name (buffer-name buffer))
+              (mode (buffer-local-value 'major-mode buffer)))
+          (catch 'break
+            (dolist (config smartwin-buffers)
+              (let ((pattern (if (consp config) (car config) config))
+                    (keywords (if (consp config) (cadr config) nil)))
+                (if (cond ((eq pattern t) (not (buffer-file-name buffer)))
+                          ((and (stringp pattern) (plist-get keywords :regexp))
+                           (string-match pattern name))
+                          ((stringp pattern)
+                           (string= pattern name))
+                          ((symbolp pattern)
+                           (eq pattern mode))
+                          ((functionp pattern)
+                           (funcall pattern buffer))
+                          (t (error "Invalid pattern: %s" pattern)))
+                    (throw 'break config)))))))))
 
 (defun smartwin-smart-window-p (window)
   "To judge whether WINDOW is smart window or not."
@@ -140,15 +141,17 @@ window and will not be selected."
 (defun smartwin-enlarge-window (window)
   "Try to enlarge smart WINDOW, but not too large."
   (let ((height-before (window-height window)))
-    (fit-window-to-buffer window
-                          smartwin-max-window-height
-                          smartwin-min-window-height)
     ;; set smart window start
-    (set-window-start window
-                      (save-excursion
-                        (goto-char (window-start))
-                        (forward-line (- height-before (window-height window))))
-                      t)))
+    (if (> (fit-window-to-buffer window
+                                 smartwin-max-window-height
+                                 smartwin-min-window-height)
+           0)
+        (set-window-start
+         window
+         (save-excursion
+           (goto-char (window-start))
+           (forward-line (- height-before (window-height window))))
+         t))))
 
 (defun smartwin-show ()
   "Show smart window."
@@ -252,38 +255,27 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
 	(setq best-window window)))
     best-window))
 
+;;; work with others
+;; ediff
+(add-hook 'ediff-before-setup-hook
+	  (lambda ()
+	    (smartwin-hide t)))
+
 ;;; advices
 
-(defadvice quit-window (after smartwin-quit-window)
-  "When run `quit-window' in smart window, select other window."
-  (let ((window (selected-window)))
-    (if (smartwin-smart-window-p window)
-        (smartwin-hide))))
+(defadvice gdb (before smartwin-gdb-hide)
+  "When run `gdb', hide smart window."
+  (smartwin-hide t))
 
-(defadvice kill-buffer (around smartwin-kill-buffer)
-  "When run `kill-buffer' in smart window, find right buffer to show.
-If no buffer can be showed in smart window, hide it."
-  (let ((buffer (ad-get-arg 0))
-        window)
-    (if (not buffer)
-        (setq buffer (current-buffer)))
-    (setq window (get-buffer-window buffer))
-    ad-do-it
-    (if (smartwin-smart-window-p window)
-        (progn
-          (setq buffer
-                (catch 'break
-                  (dolist (b (window-prev-buffers window))
-                    (if (smartwin-match-buffer b)
-                        (throw 'break b)))
-                  (throw 'break nil)))
-          (if buffer
-              (set-window-buffer winodw buffer)
-            (smartwin-hide t))))))
+(defadvice mwheel-scroll (around smartwin-scroll-up)
+  "When scroll window by mouse, let smartwin known."
+  (let ((in-smartwin-scroll t))
+    ad-do-it))
 
 (defadvice select-window (after smartwin-select-window)
   "Enlarge or shringe smart window when select window."
-  (if (not (boundp 'in-smartwin-select-window))
+  (if (and (not (boundp 'in-smartwin-select-window))
+           (not (boundp 'in-smartwin-scroll)))
       (let ((in-smartwin-select-window t)
             (window (ad-get-arg 0)))
         (if window
@@ -291,7 +283,8 @@ If no buffer can be showed in smart window, hide it."
               (if smart-win
                   (if (eq window smart-win)
                       (smartwin-enlarge-window smart-win)
-                    (minimize-window smart-win))))))))
+                    (if (< window-min-height (window-height smart-win))
+                        (minimize-window smart-win)))))))))
 
 (defadvice balance-windows (around smartwin-balance-window-ignore)
   "When `balance-windows', ignore smart window."
@@ -349,38 +342,6 @@ If no buffer can be showed in smart window, hide it."
             (smartwin-show))
         ad-do-it)
     (message "Attempt to move smart window")))
-
-(defadvice evil-window-rotate-upwards (around smartwin-rotate-upwards-ignore)
-  "When `evil-window-rotate-upwards', ignore smart window."
-  (if (not (smartwin-smart-window-p (selected-window)))
-      (if (smartwin-find-smart-win)
-          (progn
-            (smartwin-hide)
-            ad-do-it
-            (smartwin-show))
-        ad-do-it)))
-
-(defadvice evil-window-rotate-downwards (around smartwin-rotate-downwards-ignore)
-  "When `evil-window-rotate-downwards', ignore smart window."
-  (if (not (smartwin-smart-window-p (selected-window)))
-      (if (smartwin-find-smart-win)
-          (progn
-            (smartwin-hide)
-            ad-do-it
-            (smartwin-show))
-        ad-do-it)))
-
-(defadvice windmove-do-window-select (around smartwin-ignore-smart-window)
-  "When move to smart window, enlarge it, when leave it, shringe it."
-  (let ((window-before (selected-window)))
-    ad-do-it
-    (let ((window-after (selected-window)))
-      (if (and (smartwin-smart-window-p window-before)
-               (neq window-before window-after))
-          (minimize-window window-before)
-        (if (and (smartwin-smart-window-p window-after)
-                 (neq window-before window-after))
-            (smartwin-enlarge-window window-after))))))
 
 (defadvice delete-other-windows (around smartwin-delete-other-windows)
   "If in smart window, just enlarge it instead of `delete-other-windows'."
@@ -472,8 +433,7 @@ split smart window."
         (let ((smart-win (smartwin-get-smart-win)))
           (with-selected-window smart-win
             ad-do-it)
-          (select-window smart-win)
-          )
+          (select-window smart-win))
       ad-do-it)))
 
 (defadvice display-buffer-pop-up-window
@@ -535,13 +495,10 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'delete-window)
               (ad-activate 'delete-other-windows)
               (ad-activate 'balance-windows)
+              (ad-activate 'mwheel-scroll)
               (ad-activate 'select-window)
-              ;;(ad-activate 'windmove-do-window-select)
-              ;;(ad-activate 'evil-window-rotate-upwards)
-              ;;(ad-activate 'evil-window-rotate-downwards)
-              ;;(ad-activate 'kill-buffer)
-              ;;(ad-activate 'quit-window)
-              ;;(smartwin-show)
+              (ad-activate 'gdb)
+              (smartwin-show)
               )
           (setq display-buffer-alist (delete pair display-buffer-alist))
           (ad-deactivate 'switch-to-buffer)
@@ -559,12 +516,9 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           (ad-deactivate 'delete-window)
           (ad-deactivate 'delete-other-windows)
           (ad-deactivate 'balance-windows)
+          (ad-deactivate 'mwheel-scroll)
           (ad-deactivate 'select-window)
-          ;;(ad-deactivate 'windmove-do-window-select)
-          ;;(ad-deactivate 'evil-window-rotate-upwards)
-          ;;(ad-deactivate 'evil-window-rotate-downwards)
-          ;;(ad-deactivate 'kill-buffer)
-          ;;(ad-deactivate 'quit-window)
+          (ad-deactivate 'gdb)
           (smartwin-hide)
           ))
     (with-no-warnings
