@@ -23,12 +23,6 @@
 
 ;;; TODO:
 
-;; 1. enlarge smart window when chosen by mouse
-;; 2. add exceptions config
-;; 3. process wrong scroll when enlarge smart window
-;; 4. window-text-change-functions
-;; 5. smart window scroll problem
-
 ;;; Code:
 
 (defgroup smartwin nil
