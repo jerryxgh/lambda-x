@@ -64,6 +64,8 @@ But smart window can be higher if run `delete-other-window' when is is already
     "*vc-change-log*"
     ;; Undo-Tree
     " *undo-tree*"
+    ;; geiser
+    " Chicken REPL *"
     ;; Anything
     ("^\\*anything.*\\*$" :regexp t)
     ;; SLIME
@@ -492,7 +494,7 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'mwheel-scroll)
               (ad-activate 'select-window)
               (ad-activate 'gdb)
-              (smartwin-show)
+              ;;(smartwin-show)
               )
           (setq display-buffer-alist (delete pair display-buffer-alist))
           (ad-deactivate 'switch-to-buffer)
