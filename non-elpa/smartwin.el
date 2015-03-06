@@ -494,7 +494,6 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'mwheel-scroll)
               (ad-activate 'select-window)
               (ad-activate 'gdb)
-              ;;(smartwin-show)
               )
           (setq display-buffer-alist (delete pair display-buffer-alist))
           (ad-deactivate 'switch-to-buffer)
