@@ -16,8 +16,9 @@
 ;;
 ;; To use smartwin, place this file to load path and add this to .emacs:
 ;;
-;;     (require 'smartwin)
-;;     (smartwin-mode 1)
+;; (require 'smartwin)
+;; (smartwin-mode 1)
+;;
 ;; Then try run shell or or eshell, if you want to show more buffers in smart
 ;; window, please customize variable: smartwin-buffers.
 
@@ -457,12 +458,7 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
   (let ((buffer (window-normalize-buffer-to-switch-to buffer-or-name))
         (smart-win (smartwin-get-smart-win)))
     (with-selected-window smart-win
-      (set-window-buffer smart-win buffer)
-      ;; (with-no-warnings
-      ;;   (if (>= emacs-major-version 24)
-      ;;       (switch-to-buffer buffer-or-name nil t)
-      ;;     (switch-to-buffer buffer-or-name nil)))
-      )
+      (set-window-buffer smart-win buffer))
     smart-win))
 
 ;;;###autoload
