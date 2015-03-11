@@ -56,8 +56,8 @@ But smart window can be higher if run `delete-other-window' when is is already
     (grep-mode :noselect t)
     (occur-mode :noselect t)
     "*scratch*"
-    "*shell*"
-    "*eshell*"
+    ;; shell and eshell buffers
+    ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
     ("*Pp Macroexpand Output*" :noselect t)
     "*Shell Command Output*"
     ;; VC
@@ -118,7 +118,7 @@ window and will not be selected."
           (catch 'break
             (dolist (config smartwin-buffers)
               (let ((pattern (if (consp config) (car config) config))
-                    (keywords (if (consp config) (cadr config) nil)))
+                    (keywords (if (consp config) (cdr config) nil)))
                 (if (cond ((eq pattern t) (not (buffer-file-name buffer)))
                           ((and (stringp pattern) (plist-get keywords :regexp))
                            (string-match pattern name))
