@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-03-05 14:07:16 Jerry Xu>
+;; Time-stamp: <2015-03-24 18:24:28 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -175,11 +175,6 @@ This follows freedesktop standards, should work in X servers."
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-
-;; autosave the undo-tree history
-(setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq undo-tree-auto-save-history t)
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
@@ -408,7 +403,8 @@ the search is performed ."
                               indentation))
 (setq whitespace-global-modes '(c-mode c++-mode java-mode emacs-lisp-mode
                                        scheme-mode lisp-mode python-mode
-                                       lua-mode))
+                                       lua-mode perl-mode haskell-mode
+                                       scala-mode))
 (global-whitespace-mode 1)
 
 ;; saner regex syntax
@@ -432,7 +428,7 @@ the search is performed ."
       )
 
 ;; let one line display as one line, even if it over the window
-(setq-default truncate-lines t)
+;; (setq-default truncate-lines t)
 (setq-default indent-tabs-mode nil)
 ;; set text-mode as the default major mode, instead of fundamental-mode
 (setq-default major-mode 'text-mode)
@@ -543,6 +539,11 @@ the search is performed ."
 
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
+;; autosave the undo-tree history
+(setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq undo-tree-auto-save-history t)
+
 (global-undo-tree-mode 1)
 ;;(add-to-list 'warning-suppress-types '(undo discard-info))
 
@@ -868,10 +869,13 @@ the search is performed ."
 					 lambda-savefile-dir)
       ac-modes
       (append ac-modes '(eshell-mode shell-mode graphviz-dot-mode
-                                     conf-xdefaults-mode html-mode nxml-mode objc-mode sql-mode
-                                     change-log-mode text-mode makefile-gmake-mode
-                                     makefile-bsdmake-mo autoconf-mode makefile-automake-mode
-                                     snippet-mode cmake-mode)) ac-use-menu-map t)
+                         conf-xdefaults-mode html-mode nxml-mode
+                         objc-mode sql-mode change-log-mode
+                         text-mode makefile-gmake-mode
+                         makefile-bsdmake-mo autoconf-mode
+                         makefile-automake-mode snippet-mode
+                         cmake-mode matlab-mode)) ac-use-menu-map
+                         t)
 
 (setq-default ac-sources (append '(ac-source-filename
 				   ac-source-yasnippet
@@ -950,7 +954,7 @@ the search is performed ."
 (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
 (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
 (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
-(define-key popup-menu-keymap (kbd "<escape>") 
+(define-key popup-menu-keymap (kbd "<escape>")
   #'(lambda nil
       (interactive)
       (if (featurep 'evil)

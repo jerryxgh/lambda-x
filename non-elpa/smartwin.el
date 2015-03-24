@@ -56,6 +56,7 @@ But smart window can be higher if run `delete-other-window' when is is already
     (grep-mode :noselect t)
     (occur-mode :noselect t)
     "*scratch*"
+    "*evil-registers*"
     ;; shell and eshell buffers
     ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
     ("*Pp Macroexpand Output*" :noselect t)
@@ -464,8 +465,10 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
 ;;;###autoload
 (define-minor-mode smartwin-mode
   "Smartwin is a window for showing shell like buffers, temp buffers and etc."
+  :lighter    " sw"
   :init-value nil
-  :global t
+  :global     t
+  :group      'smartwin
   (if (boundp 'display-buffer-alist)
       (let ((pair '(smartwin-display-buffer-condition
                     smartwin-display-buffer-action)))
@@ -521,4 +524,5 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
             (if popwin-mode 'popwin:display-buffer nil)))))
 
 (provide 'smartwin)
+
 ;;; smartwin.el ends here

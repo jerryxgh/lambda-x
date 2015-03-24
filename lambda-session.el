@@ -74,42 +74,6 @@ This follows freedesktop standards, should work in X servers."
 
 (desktop-save-mode 1)
 
-;; Workgroup2 Use --------------------------------------------------------------
-;; Most commands start with prefix `wg-prefix-key'.
-;; You can change it before activating workgroups.
-;; By default prefix is: "C-c z"
-
-;; <prefix> <key>
-
-;; <prefix> c    - create workgroup
-;; <prefix> A    - rename workgroup
-;; <prefix> k    - kill workgroup
-;; <prefix> v    - switch to workgroup
-;; <prefix> C-s  - save session
-;; <prefix> C-f  - load session
-;;(lambda-package-ensure-install 'workgroups2)
-;;(require 'workgroups2)
-;;;;Change prefix key (before activating WG)
-;;(setq wg-prefix-key (kbd "C-c z"))
-;;
-;;;;Change workgroups session file
-;;(setq wg-default-session-file (expand-file-name
-;;                               "emacs-workgroups"
-;;                               lambda-savefile-dir))
-;;
-;;(setq wg-associate-blacklist '("*helm mini*" "*Messages*" "*helm action*"))
-;;
-;;;; put this one at the bottom of this file
-;;(workgroups-mode 1)
-;;(diminish 'workgroups-mode)
-
-;; psession Persistent save of elisp objects -----------------------------------
-(lambda-package-ensure-install 'psession)
-(require 'psession)
-(setq psession-elisp-objects-default-directory
-      (expand-file-name
-       "elisp-objects"
-       lambda-savefile-dir))
 ;;加快emacs的启动速度
 (server-start)
 

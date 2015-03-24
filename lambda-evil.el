@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-01-28 13:50:22 Jerry Xu>
+;; Time-stamp: <2015-03-23 13:29:55 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -14,7 +14,7 @@
 
 (setq evil-want-visual-char-semi-exclusive t
       ;;evil-want-C-i-jump nil
-      evil-want-fine-undo t
+      ;; evil-want-fine-undo t
       evil-auto-balance-windows nil
       evil-cross-lines t)
 ;; settings below restore key bindings in emacs in insert state
@@ -176,5 +176,17 @@
 (lambda-package-ensure-install 'evil-anzu)
 (require 'evil-anzu)
 
+;; evil-visual-mark-mode -------------------------------------------------------
+(lambda-package-ensure-install 'evil-visual-mark-mode)
+(evil-visual-mark-mode 1)
+
+;; evil-jumper jumper like vim -------------------------------------------------
+(lambda-package-ensure-install 'evil-jumper)
+(global-evil-jumper-mode 1)
+
+;; evil-indent-textobject ------------------------------------------------------
+(lambda-package-ensure-install 'evil-indent-textobject)
+
 (provide 'lambda-evil)
+
 ;;; lambda-evil.el ends here

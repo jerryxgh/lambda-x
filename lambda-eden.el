@@ -56,8 +56,22 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; to try
 ;; window-numbering evil-jumper Comment-dwim-2 evil-nerd-commenter
 
+(defun lambda-copy-file-name-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
 (require 'smartwin)
 (smartwin-mode 1)
+
+
+;;; es-mode
+(lambda-package-ensure-install 'es-mode)
 
 (provide 'lambda-eden)
 
