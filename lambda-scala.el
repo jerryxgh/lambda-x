@@ -8,16 +8,6 @@
 
 ;; scala-mode2 -----------------------------------------------------------------
 (lambda-package-ensure-install 'scala-mode2)
-(add-hook
- 'scala-mode-hook
- '(lambda ()
-    ;; sbt-find-definitions is a command that tries to find (with grep)
-    ;; the definition of the thing at point.
-    (local-set-key (kbd "M-.") 'sbt-find-definitions)
-
-    ;; use sbt-run-previous-command to re-compile your code after changes
-    (local-set-key (kbd "C-x '") 'sbt-run-previous-command)
-    ))
 
 ;; ensime ----------------------------------------------------------------------
 (lambda-package-ensure-install 'ensime)
@@ -26,9 +16,19 @@
 ;; if you're not using the standard scala mode.
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 (setq ensime-completion-style 'auto-complete)
+(when (featurep 'evil)
+  (evil-define-key 'normal ensime-mode-map (kbd "M-.") #'ensime-edit-definition)
+  (evil-define-key 'insert ensime-mode-map (kbd "M-.") #'ensime-edit-definition))
 
 ;; sbt-mode --------------------------------------------------------------------
 (lambda-package-ensure-install 'sbt-mode)
+
+(defadvice sbt:run-sbt (after kill-buffer-when-sbt-quit activate)
+  "Kill sbt buffer when quit sbt."
+  (let ((buffer ad-return-value))
+    (if (bufferp buffer)
+        (kill-buffer-when-shell-command-exit buffer))))
+
 (add-hook 'sbt-mode-hook
           '(lambda ()
              ;; compilation-skip-threshold tells the compilation minor-mode

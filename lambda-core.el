@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-03-24 18:24:28 Jerry Xu>
+;; Time-stamp: <2015-03-25 13:25:19 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -327,6 +327,7 @@ This follows freedesktop standards, should work in X servers."
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
 (setq projectile-enable-caching t
+      projectile-file-exists-remote-cache-expire nil
       projectile-completion-system 'helm
       ;; projectile-require-project-root nil
       projectile-cache-file (expand-file-name
@@ -573,9 +574,11 @@ the search is performed ."
 ;;(setq switch-window-shortcut-style 'qwerty)
 
 ;; shell configs ---------------------------------------------------------------
-(defun kill-buffer-when-shell-command-exit nil
-  "Kill the buffer on exit of interactive shell."
-  (let ((process (get-buffer-process (current-buffer))))
+(defun kill-buffer-when-shell-command-exit (&optional buffer)
+  "Kill the buffer on exit of interactive shell.
+if BUFFER is nil, use `current-buffer'."
+  (let* ((buf (or buffer (current-buffer)))
+         (process (get-buffer-process buf)))
     (if process
 	(set-process-sentinel
 	 process

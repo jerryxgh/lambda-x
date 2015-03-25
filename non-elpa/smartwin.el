@@ -57,6 +57,7 @@ But smart window can be higher if run `delete-other-window' when is is already
     (occur-mode :noselect t)
     "*scratch*"
     "*evil-registers*"
+    ("^\\*sbt\\*.*" :regexp t)
     ;; shell and eshell buffers
     ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
     ("*Pp Macroexpand Output*" :noselect t)
