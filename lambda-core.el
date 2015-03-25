@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-03-25 13:25:19 Jerry Xu>
+;; Time-stamp: <2015-03-25 18:11:02 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -877,7 +877,7 @@ if BUFFER is nil, use `current-buffer'."
                          text-mode makefile-gmake-mode
                          makefile-bsdmake-mo autoconf-mode
                          makefile-automake-mode snippet-mode
-                         cmake-mode matlab-mode)) ac-use-menu-map
+                         cmake-mode octave-mode)) ac-use-menu-map
                          t)
 
 (setq-default ac-sources (append '(ac-source-filename

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-03-10 18:05:41 Jerry Xu>
+;; Time-stamp: <2015-03-25 17:51:32 Jerry Xu>
 
 ;;; Commentary:
 
@@ -41,7 +41,7 @@
 (require 'lambda-python)
 (require 'lambda-js)
 (require 'lambda-json)
-(require 'lambda-matlab)
+(require 'lambda-octave)
 (require 'lambda-lua)
 (require 'lambda-scala)
 (require 'lambda-haskell)
