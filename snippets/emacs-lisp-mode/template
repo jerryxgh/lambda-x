@@ -8,9 +8,10 @@
 ;; Copyright `(format-time-string "%Y")` `user-full-name`
 ;;
 ;; Author: `user-full-name` `user-mail-address`
+;; Maintainer: `user-full-name` `user-mail-address`
 ;; Version: 0.0
 ;; Keywords: $2
-;; X-URL: ${3:not distributed yet}
+;; Homepage: ${3:not distributed yet}
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

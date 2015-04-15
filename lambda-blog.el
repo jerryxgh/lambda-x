@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org, confluence wiki
-;; Time-stamp: <2015-03-22 09:55:11 Jerry Xu>
+;; Time-stamp: <2015-04-04 14:47:55 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -25,44 +25,56 @@ rainbow-delimiters-mode temporarily when using htmlize."
 (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
         (ad-activate 'htmlize-buffer-1)
 
-(require 'org-publish)
+;; org-page --------------------------------------------------------------------
+(lambda-package-ensure-install 'org-page)
+(require 'org-page)
+(setq op/repository-directory "/home/xgh/repository/jerryxgh.github.io")
+(setq op/site-domain "http://jerryxgh.github.io")
+;; for commenting, you can choose either disqus or duoshuo
+(setq op/personal-disqus-shortname "jerryxgh")
+;; (setq op/personal-duoshuo-shortname "your_duoshuo_shortname")
+;; the configuration below are optional
+;; (setq op/personal-google-analytics-id "your_google_analytics_id")
+(setq op/theme 'simple)
 
-(setq org-publish-project-alist
-      '(
-        ;; path to org file
-        ("blog-org"
-         :base-directory "~/repository/jerryxgh.github.com/org/"
-         :base-extension "org"
-
-         ;; path to jekyll project
-         :publishing-directory "~/repository/jerryxgh.github.com/"
-         :recursive t
-         :publishing-function org-publish-org-to-html
-         :headline-levels 4
-         :html-extension "html"
-         :section-numbers nil
-         :auto-preamble t
-         :body-only t ; only export section between <body> </body>
-
-         ;; generate sitemap.org automagically
-         :auto-sitemap t
-         :sitemap-filename "sitemap.org"
-         :sitemap-title "Sitemap"
-
-         :author "jerryxgh"
-         :email "gh_xu@qq.com"
-         :style    ""
-         )
-
-        ("blog-static"
-         :base-directory "~/repository/jerryxgh.github.com/org/"
-         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-         :publishing-directory "~/repository/jerryxgh.github.com/"
-         :recursive t
-         :publishing-function org-publish-attachment
-         )
-
-        ("blog" :components ("blog-org" "blog-static"))))
+;;(require 'org-publish)
+;;
+;;(setq org-publish-project-alist
+;;      '(
+;;        ;; path to org file
+;;        ("blog-org"
+;;         :base-directory "~/repository/jerryxgh.github.com/org/"
+;;         :base-extension "org"
+;;
+;;         ;; path to jekyll project
+;;         :publishing-directory "~/repository/jerryxgh.github.com/"
+;;         :recursive t
+;;         :publishing-function org-publish-org-to-html
+;;         :headline-levels 4
+;;         :html-extension "html"
+;;         :section-numbers nil
+;;         :auto-preamble t
+;;         :body-only t ; only export section between <body> </body>
+;;
+;;         ;; generate sitemap.org automagically
+;;         :auto-sitemap t
+;;         :sitemap-filename "sitemap.org"
+;;         :sitemap-title "Sitemap"
+;;
+;;         :author "jerryxgh"
+;;         :email "gh_xu@qq.com"
+;;         :style    ""
+;;         )
+;;
+;;        ("blog-static"
+;;         :base-directory "~/repository/jerryxgh.github.com/org/"
+;;         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+;;         :publishing-directory "~/repository/jerryxgh.github.com/"
+;;         :recursive t
+;;         :publishing-function org-publish-attachment
+;;         )
+;;
+;;        ("blog" :components ("blog-org" "blog-static"))))
 
 (provide 'lambda-blog)
 

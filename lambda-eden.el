@@ -1,4 +1,4 @@
-;;; lambda-eden.el --- JavaScript
+;;; lambda-eden.el --- A testing place -*- lexical-binding: t -*-
 
 ;;; Commentary:
 
@@ -30,25 +30,30 @@
   (current-time-string (seconds-to-time time-seconds)))
 
 ;; ====================
-;; insert date and time
-(defvar current-date-time-format "%Y-%m-%d %T %z"
-  "Format of date to insert with `insert-current-date-time' func\
-See help of `format-time-string' for possible replacements")
-
+;; insert date or time
 (defvar current-time-format "%T"
   "Format of date to insert with `insert-current-time' func.
 Note the weekly scope of the command's precision.")
 
+(defun insert-current-date ()
+  "Insert current date in iso 8601 format into current buffer."
+  (interactive)
+  (insert (concat
+           (format-time-string "%Y-%m-%d"))))
+
 (defun insert-current-date-time ()
-  "insert the current date and time into current buffer.
-Uses `current-date-time-format' for the formatting the date/time."
-       (interactive)
-       (insert (format-time-string current-date-time-format (current-time) t)))
+  "Insert current date and time in iso 8601 format into current buffer."
+  (interactive)
+  (insert (concat
+           (format-time-string "%Y-%m-%dT%T")
+           (funcall (lambda (x)
+                      (concat (substring x 0 3) ":" (substring x 3 5)))
+                    (format-time-string "%z")))))
 
 (defun insert-current-time ()
-  "insert the current time (1-week scope) into the current buffer."
-       (interactive)
-       (insert (format-time-string current-time-format (current-time) t)))
+  "Insert the current time (1-week scope) into the current buffer."
+  (interactive)
+  (insert (format-time-string current-time-format (current-time) t)))
 
 ;; (global-set-key "\C-c\C-d" 'insert-current-date-time)
 ;; (global-set-key "\C-c\C-t" 'insert-current-time)
@@ -72,6 +77,14 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;;; es-mode
 (lambda-package-ensure-install 'es-mode)
+
+;; template engine
+(lambda-package-ensure-install 'mustache)
+(lambda-package-ensure-install 'f)
+
+;; knowledge
+;; locate-library
+;; list-load-path-shadows
 
 (provide 'lambda-eden)
 

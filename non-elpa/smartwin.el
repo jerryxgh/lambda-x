@@ -47,21 +47,20 @@ But smart window can be higher if run `delete-other-window' when is is already
   to this height.")
 
 (defcustom smartwin-buffers
-  '(;; all buffers that have no file
-    ;; t
-    ;; Emacs
-    ("*Miniedit Help*" :noselect t)
-    (completion-list-mode :noselect t)
-    (compilation-mode :noselect t)
-    (grep-mode :noselect t)
-    (occur-mode :noselect t)
+  '(;; Emacs
+    "*Miniedit Help*"
+    completion-list-mode
+    compilation-mode
+    grep-mode
+    occur-mode
     "*scratch*"
     "*evil-registers*"
     "*Inferior Octave*"
     ("^\\*sbt\\*.*" :regexp t)
+    "*ensime-db-backtrace-buffer*"
     ;; shell and eshell buffers
     ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
-    ("*Pp Macroexpand Output*" :noselect t)
+    "*Pp Macroexpand Output*"
     "*Shell Command Output*"
     ;; VC
     "*vc-diff*"
@@ -76,32 +75,21 @@ But smart window can be higher if run `delete-other-window' when is is already
     "*slime-apropos*"
     "*slime-macroexpansion*"
     "*slime-description*"
-    ("*slime-compilation*" :noselect t)
+    "*slime-compilation*"
     "*slime-xref*"
     sldb-mode
     slime-repl-mode
     slime-connection-list-mode)
-  "Configuration of buffers to be shown in smart window.
-Available keywords are following:
-
-  regexp: If the value is non-nil, PATTERN will be used as
-  regexpto matching buffer.
-
-  noselect: If the value is non-nil, smart window will not be
-  selected when it is shown, exception is smart window is already selected.
-
-Examples: With '(\"*Help*\" :noselect t), help buffer will be shown in smart
-window and will not be selected."
+  "Configuration of buffers to be shown in smart window."
   :type '(repeat
           (cons :tag "Config"
                 (choice :tag "Pattern"
                         (string :tag "Buffer Name")
                         (symbol :tag "Major Mode"))
                 (plist :tag "Keywords"
-                       :value (:regexp nil) ; BUG? need default value
+                       :value (:regexp nil)
                        :options
-                       ((:regexp (boolean :tag "On/Off"))
-                        (:noselect (boolean :tag "On/Off"))))))
+                       ((:regexp (boolean :tag "On/Off"))))))
   :get (lambda (symbol)
          (mapcar (lambda (element)
                    (if (consp element)

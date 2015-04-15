@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-03-25 18:11:02 Jerry Xu>
+;; Time-stamp: <2015-04-05 08:49:47 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -8,6 +8,7 @@
 
 ;; packages about settings =====================================================
 (require 'package)
+;;(require 'dash)
 
 ;; add more package sources
 (dolist (pkg-arch
@@ -25,7 +26,6 @@
 (setq package-enable-at-startup nil)
 ;; Load packages explictly
 (package-initialize)
-
 
 (defvar lambda-package-installed-packages nil
   "Pakcages installed through `lambda-package-ensure-install'.
@@ -47,9 +47,6 @@ The difference is that if PACKAGE is already installed(checked through
       (package-refresh-contents))
     (package-install package)))
 
-(lambda-package-ensure-install 'epl)
-(require 'epl)
-
 (defun lambda-package-list-packages ()
   "Browse packages installed through function `lambda-package-ensure-install'."
   (interactive)
@@ -59,8 +56,41 @@ The difference is that if PACKAGE is already installed(checked through
   "Browse packages auto installed due to the dependence."
   (interactive)
   (package-show-package-list
-   (set-difference package-activated-list
-		   lambda-package-installed-packages)))
+   (-filter #'(lambda (p)
+                (not (memq p lambda-package-installed-packages)))
+            package-activated-list)))
+
+(defun lambda-package-get-used-pkgs ()
+  "Get all packages manually installed including requirements and \
+requirements of requirements.
+Which means get all used packages, this function for getting unused packages."
+  (delete-dups (-flatten
+                (-map 'lambda-package-get-pkg-with-reqs
+                      lambda-package-installed-packages))))
+
+(defun lambda-package-get-pkg-with-reqs (package)
+  "Get PACKAGE and requirements of PACKAGE and requirements of requirements."
+  (if (and package
+           (not (assq package package--builtins)))
+      (cons package (-flatten
+                     (-map #'(lambda (req)
+                               (lambda-package-get-pkg-with-reqs (car req)))
+                           (let ((pkg-desc (assq package package-alist)))
+                             (if pkg-desc
+                                 (package-desc-reqs
+                                  (cdr pkg-desc)))))))))
+
+(defun lambda-package-list-unused-packages ()
+  "Browse packages not used."
+  (interactive)
+  (package-show-package-list
+   (let ((used-packages (lambda-package-get-used-pkgs)))
+     (-filter #'(lambda (p)
+                  (not (memq p used-packages)))
+              package-activated-list))))
+
+(lambda-package-ensure-install 'epl)
+(require 'epl)
 
 (defun lambda-package-update-packages ()
   "Update all packages installed by elpa."
@@ -530,6 +560,8 @@ the search is performed ."
 
 ;; flycheck - much better than flymake -----------------------------------------
 (lambda-package-ensure-install 'flycheck)
+(setq flycheck-emacs-lisp-initialize-packages t)
+;; (setq flycheck-emacs-lisp-package-user-dir package-user-dir)
 ;; enable on-the-fly syntax checking
 (if (fboundp 'global-flycheck-mode)
     (global-flycheck-mode 1)
@@ -540,6 +572,7 @@ the search is performed ."
 
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
+(require 'undo-tree)
 ;; autosave the undo-tree history
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -872,13 +905,13 @@ if BUFFER is nil, use `current-buffer'."
 					 lambda-savefile-dir)
       ac-modes
       (append ac-modes '(eshell-mode shell-mode graphviz-dot-mode
-                         conf-xdefaults-mode html-mode nxml-mode
-                         objc-mode sql-mode change-log-mode
-                         text-mode makefile-gmake-mode
-                         makefile-bsdmake-mo autoconf-mode
-                         makefile-automake-mode snippet-mode
-                         cmake-mode octave-mode)) ac-use-menu-map
-                         t)
+                                     conf-xdefaults-mode html-mode nxml-mode
+                                     objc-mode sql-mode change-log-mode
+                                     text-mode makefile-gmake-mode
+                                     makefile-bsdmake-mo autoconf-mode
+                                     makefile-automake-mode snippet-mode
+                                     cmake-mode octave-mode
+                                     conf-javaprop-mode)) ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename
 				   ac-source-yasnippet

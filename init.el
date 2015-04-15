@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-03-25 17:51:32 Jerry Xu>
+;; Time-stamp: <2015-04-05 12:17:10 Jerry Xu>
 
 ;;; Commentary:
 
@@ -27,6 +27,7 @@
 
 (add-to-list 'load-path lambda-x-direcotry)
 (add-to-list 'load-path (expand-file-name "non-elpa" lambda-x-direcotry))
+(add-to-list 'load-path "/home/xgh/repository/lambda-x/non-elpa/simplesite")
 
 ;; core settings, shared by all other modules
 (require 'lambda-core)
