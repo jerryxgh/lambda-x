@@ -1,0 +1,18 @@
+          <div id="content" class="content">
+            <div id="posts" class="posts-collapse">
+              <div class="category-all-page">
+                <div class="category-all-title">
+                  目前共计 {{{all-count}}} 个分类
+                </div>
+                <div class="category-all">
+                  <ul class="category-list">
+                    {{#categories}}
+                    <li class="category-list-item"><a class="category-list-link" href="{{{uri}}}">{{{name}}}</a><span class="category-list-count">{{{count}}}</span></li>
+                    {{/categories}}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          

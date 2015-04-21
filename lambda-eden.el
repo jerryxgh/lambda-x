@@ -82,6 +82,9 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'mustache)
 (lambda-package-ensure-install 'f)
 
+(lambda-package-ensure-install 'nginx-mode)
+(require 'nginx-mode)
+
 ;; knowledge
 ;; locate-library
 ;; list-load-path-shadows

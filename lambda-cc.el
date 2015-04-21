@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-03-25 11:15:32 Jerry Xu>
+;; Time-stamp: <2015-04-15 16:19:02 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -115,9 +115,9 @@ echo \"\" | g++ -v -x c++ -E -")
 
 ;; global ------- code navigating ----------------------------------------------
 (lambda-package-ensure-install 'ggtags)
-;; (if (featurep 'evil)
-;;     (define-key evil-normal-state-map
-;;       (kbd "M-.") 'ggtags-find-tag-dwim))
+(if (featurep 'evil)
+    (define-key evil-normal-state-map
+      (kbd "M-.") 'ggtags-find-tag-dwim))
 (add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)

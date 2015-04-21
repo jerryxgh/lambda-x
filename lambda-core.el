@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-04-05 08:49:47 Jerry Xu>
+;; Time-stamp: <2015-04-16 09:41:22 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -820,6 +820,7 @@ if BUFFER is nil, use `current-buffer'."
     (setq magit-git-executable git-executable-windows)
     (setenv "PATH"
 	    (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+(setq magit-last-seen-setup-instructions "1.4.0")
 ;; magit-ediff-restore
 
 ;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))

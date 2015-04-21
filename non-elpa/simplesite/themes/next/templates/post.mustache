@@ -1,0 +1,49 @@
+        <div id="content" class="content">
+          <div id="posts" class="posts-expand">
+            <div style="opacity: 1; display: block; transform: translateY(0px);" class="post post-type-normal">
+              <div class="post-header">
+                <h1 class="post-title">
+                  {{{title}}}
+                </h1>
+
+                <div class="post-meta">
+                  <span class="post-time">
+                    发表于 {{{date}}}
+                  </span>
+          
+                  <span class="post-category">
+                    &nbsp; | &nbsp; 分类于
+                    <a href="/categories/{{{category}}}">{{{category}}}</a>
+                  </span>
+          
+                  <span class="post-comments-count">
+                    &nbsp; | &nbsp;
+                    <a href="http://notes.iissnan.com/2015/interview/#comments">
+                      <span class="post-comments-count ds-thread-count" data-thread-key="2015/interview/">0条评论</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+    
+              <div class="post-body">
+                {{{post-content}}}
+              </div>
+    
+              <div class="post-footer">
+        
+                <div class="post-nav">
+                  <div class="post-nav-prev post-nav-item">
+                    {{#next-post}}
+                      <a href="{{{uri}}}">{{{title}}}</a>
+                    {{/next-post}}
+                  </div>
+                  <div class="post-nav-next post-nav-item">
+                    {{#prev-post}}
+                      <a href="{{{uri}}}">{{{title}}}</a>
+                    {{/prev-post}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
