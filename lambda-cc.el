@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-04-15 16:19:02 Jerry Xu>
+;; Time-stamp: <2015-04-22 10:01:49 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -36,11 +36,11 @@ echo \"\" | g++ -v -x c++ -E -")
                                   global-semantic-mru-bookmark-mode
                                   ))
 (semantic-mode 1)
-;(global-semantic-highlight-edits-mode 1)
-;(global-semantic-idle-local-symbol-highlight-mode 1)
+;;(global-semantic-highlight-edits-mode 1)
+;;(global-semantic-idle-local-symbol-highlight-mode 1)
 ;;(global-semantic-idle-breadcrumbs-mode 1)
 ;;(global-semantic-show-unmatched-syntax-mode 1)
-;(global-semantic-show-parser-state-mode 1)
+;;(global-semantic-show-parser-state-mode 1)
 (setq semanticdb-default-save-directory
       (expand-file-name "semanticdb" lambda-savefile-dir))
 (setq ede-project-placeholder-cache-file

@@ -41,7 +41,7 @@ DIST-DIR: directory to hold all generated files."
                                          src-dir
                                          dist-dir
                                          (ss-file-changed-p src-file)))
-                 (ss-get-all-src-files src-dir))))
+                 (ss--get-all-src-files src-dir))))
     ;; delete nil elements
     (setq file-tlist (-filter #'(lambda (e) e) file-tlist))
     ;; sort files by date in descendent order
@@ -58,13 +58,13 @@ DIST-DIR: directory to hold all generated files."
             (cdr file-tlist)))
     file-tlist))
 
-(defun ss-get-all-src-files (directory)
+(defun ss--get-all-src-files (directory)
   "Return all source files under DIRECTORY and it's subdirectory.
 
 TODO: make regexp configurable."
-  (ss-walk-directory directory "^.*\\.org$"))
+  (ss--walk-directory directory "^.*\\.org$"))
 
-(defun ss-walk-directory
+(defun ss--walk-directory
   (&optional directory match ignore-directories)
   "Walk through DIRECTORY tree.
 If DIRECTOR is nil, use `default-directory' as startpoint.
@@ -98,7 +98,7 @@ Argument IGNORE-DIRECTORIES can be list of file names to be ignored."
               file-list)))
     result))
 
-(defun ss-file-changed-p (file)
+(defun ss--file-changed-p (file)
   "Judge a FILE is changed or not by it's md5 value.
 
 TODO: not implemented."

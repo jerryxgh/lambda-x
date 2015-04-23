@@ -40,22 +40,25 @@
   (ht-set post-table "site-title" ss-site-title)
   (ht-set post-table "site-sub-title" ss-site-sub-title)
   (ht-set post-table "author" ss-author)
-  (ht-set post-table "content" (ss-render-post-content post-table))
-  (let ((mustache-partial-paths (list (ss-get-theme-template-dir)))
+  (ht-set post-table "content" (ss--render-post-content post-table))
+  (let ((mustache-partial-paths
+         (list (ss-get-theme-template-dir ss-theme ss-theme-directory)))
         (output-dir (ht-get post-table "output-dir")))
     (if (not (file-directory-p output-dir))
         (mkdir output-dir t))
     (f-write
      (mustache-render
-      (f-read (concat (ss-get-theme-template-dir) "layout.mustache"))
+      (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                      "layout.mustache"))
       post-table)
      'utf-8
      (concat output-dir "index.html"))))
 
-(defun ss-render-post-content (post-table)
+(defun ss--render-post-content (post-table)
   "Render content component of post based on POST-TABLE."
   (mustache-render
-   (f-read (concat (ss-get-theme-template-dir) "post.mustache"))
+   (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                   "post.mustache"))
    post-table))
 
 (provide 'ss-post)

@@ -43,8 +43,8 @@ DIST-DIR should be `ss-dist-directory',
 but to be simple, try to not use global variables.
 If SHOULD-GENERATE-CONTENT-P is t, generate content of ORG-FLLE, else, just get
 attributes of ORG-FILE, but not generate content of it."
-  (let ((output-dir (ss-get-output-dir org-file dist-dir src-dir))
-        (uri (ss-get-uri org-file src-dir))
+  (let ((output-dir (ss--compute-output-dir org-file dist-dir src-dir))
+        (uri (ss--compute-uri org-file src-dir))
         attr-table)
     (with-temp-buffer
       (setq buffer-file-coding-system 'utf-8)
@@ -53,18 +53,18 @@ attributes of ORG-FILE, but not generate content of it."
       ;; collect attributes
       (setq attr-table
             (ht ("file" org-file)
-                ("md5" (ss-md5-file org-file))
-                ("title" (or (ss-get-org-option "TITLE") "Untitled"))
-                ("author" (or (ss-get-org-option "AUTHOR")
+                ("md5" (ss--md5-file org-file))
+                ("title" (or (ss--get-org-option "TITLE") "Untitled"))
+                ("author" (or (ss--get-org-option "AUTHOR")
                               user-full-name "Unknown Author"))
-                ("description" (or (ss-get-org-option "DESCRIPTION")
+                ("description" (or (ss--get-org-option "DESCRIPTION")
                                    "No Description"))
-                ("keywords" (or (ss-get-org-option "TAGS") ""))
-                ("category" (or (ss-get-category org-file src-dir)
+                ("keywords" (or (ss--get-org-option "TAGS") ""))
+                ("category" (or (ss--get-category org-file src-dir)
                                 "default"))
                 ("uri" uri)
-                ("date" (or (ss-get-org-option "DATE")
-                            (ss-format-iso-8601-date
+                ("date" (or (ss--get-org-option "DATE")
+                            (ss--format-iso-8601-date
                              (nth 5 (file-attributes org-file)))))
                 ("email" user-mail-address)
                 ("output-dir" output-dir)))
@@ -80,7 +80,7 @@ attributes of ORG-FILE, but not generate content of it."
 
     attr-table))
 
-(defun ss-get-output-dir (org-file dist-dir src-dir)
+(defun ss--compute-output-dir (org-file dist-dir src-dir)
   "Get output directory of ORG-FILE, which ends with /.
 
 Result = DIST-DIR + \"/posts/\" + (ORG-FILE - SRC-DIR) - suffix + /."
@@ -89,13 +89,13 @@ Result = DIST-DIR + \"/posts/\" + (ORG-FILE - SRC-DIR) - suffix + /."
     (concat dist-dir "/posts/" (s-chop-prefix src-dir org-file)))
    "/"))
 
-(defun ss-get-uri (org-file src-dir)
+(defun ss--compute-uri (org-file src-dir)
   "Get uri of ORG-FILE.
 
 Result = \"/posts/\" + (ORG-FILE - SRC-DIR - suffix)."
   (concat "/posts/" (file-name-sans-extension (s-chop-prefix src-dir org-file))))
 
-(defun ss-get-category (org-file src-dir)
+(defun ss--get-category (org-file src-dir)
   "Get category of ORG-FILE.
 
 Result = first directory of (ORG-FILE - SRC-DIR), if nil, return filename."
@@ -104,7 +104,7 @@ Result = first directory of (ORG-FILE - SRC-DIR), if nil, return filename."
       (setq org-file (f-parent org-file)))
     (file-name-base org-file)))
 
-(defun ss-get-org-option (option)
+(defun ss--get-org-option (option)
   "Read option value of org file opened in current buffer.
 e.g:
 #+TITLE: this is title
@@ -115,19 +115,19 @@ will return \"this is title\" if OPTION is \"TITLE\""
       (if (re-search-forward match-regexp nil t)
           (match-string-no-properties 2 nil)))))
 
-(defun ss-format-iso-8601-date (date)
+(defun ss--format-iso-8601-date (date)
   "Format DATE to iso-8601 format."
   (concat
    (format-time-string "%Y-%m-%d" date)))
 
-(defun ss-format-iso-8601-time (time)
+(defun ss--format-iso-8601-time (time)
   "Format TIME to iso-8601 format."
   (concat
    (format-time-string "%Y-%m-%dT%T" time)
    (funcall (lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
             (format-time-string "%z" time))))
 
-(defun ss-md5-file (file)
+(defun ss--md5-file (file)
   "Return md5 digest of FILE."
   (with-temp-buffer
     (set-buffer-multibyte nil)

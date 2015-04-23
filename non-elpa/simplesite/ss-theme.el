@@ -26,35 +26,34 @@
 
 ;;; Code:
 
-(require 'ss-options)
+(require 'f)
+(require 'mustache)
 
-(defun ss-prepare-theme (dist-dir)
-  "Copy theme resources to DIST-DIR."
+(defun ss-prepare-theme (theme theme-dir dist-dir load-dir)
+  "Copy resources of THEME in THEME-DIR to DIST-DIR.
+
+If THEME not exist in THEME-DIR, use default theme `next' under LOAD-DIR."
   (let ((theme-resource-dist-dir (expand-file-name "resources/" dist-dir))
-        (theme-resource-dir (ss-get-theme-resource-dir)))
+        (theme-resource-dir (ss-get-theme-resource-dir theme theme-dir)))
     (unless (file-directory-p theme-resource-dir)
-      (message "Theme %s not found, use default theme `next' instead."
-               (symbol-name ss-theme))
-      (setq ss-theme-directory (concat ss-load-directory "themes/"))
-      (setq ss-theme 'simple)
-      (setq theme-resource-dir (ss-get-theme-resource-dir)))
+      (message "Theme %s not found, use default theme `next' instead." theme)
+      (setq theme-dir (concat load-dir"themes/"))
+      (setq theme-resource-dir (ss-get-theme-resource-dir theme theme-dir)))
     (if (file-directory-p theme-resource-dist-dir)
         (delete-directory theme-resource-dist-dir t))
     (copy-directory theme-resource-dir theme-resource-dist-dir t t t)))
 
-(defun ss-get-theme-resource-dir ()
-  "Return theme resource directory ending with /."
+(defun ss-get-theme-resource-dir (theme theme-dir)
+  "Return resource directory of THEME under THEME-DIR ending with /."
   (file-name-as-directory
    (expand-file-name
-    (format "%s/resources" (symbol-name ss-theme))
-    ss-theme-directory)))
+    (format "%s/resources" theme) theme-dir)))
 
-(defun ss-get-theme-template-dir ()
-  "Return theme template directory ending with /."
+(defun ss-get-theme-template-dir (theme theme-dir)
+  "Return theme template directory of THEME under THEME-DIR ending with /."
   (file-name-as-directory
    (expand-file-name
-    (format "%s/templates" (symbol-name ss-theme))
-    ss-theme-directory)))
+    (format "%s/templates" theme) theme-dir)))
 
 (provide 'ss-theme)
 

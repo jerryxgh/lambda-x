@@ -45,7 +45,7 @@
   "Generate site."
   (interactive)
   ;; check important variables
-  (ss-check-variables)
+  (ss--check-variables)
   ;; copy theme resource files
   ;;(ss-prepare-theme ss-dist-directory)
   (let ((file-tlist (ss-parse-all-src-files ss-source-directory
@@ -60,16 +60,16 @@
 
     (ss-generate-index file-tlist)
     (ss-generate-categories file-tlist)
+    (ss-generate-tags file-tlist)
     (mapc #'(lambda (attr-table)
               (message (ht-get attr-table "date")))
           file-tlist)))
 
-(defun ss-check-variables ()
+(defun ss--check-variables ()
   "Do some check before generate site."
   (unless (and ss-source-directory
                (file-directory-p ss-source-directory))
-    (error "Directory `%s' is not properly configured"
-           (symbol-name 'ss-source-directory)))
+    (error "Directory `%s' is not properly configured" ss-source-directory))
   (unless (and ss-dist-directory
                (file-directory-p ss-dist-directory))
     (setq ss-dist-directory
@@ -77,7 +77,7 @@
   (setq ss-source-directory (directory-file-name ss-source-directory))
   (setq ss-dist-directory (directory-file-name ss-dist-directory)))
 
-(defun ss-correct-links (post-content)
+(defun ss--correct-links (post-content)
   "Correct links in exported POST-CONTENT.
 
 TODO: not implemented."

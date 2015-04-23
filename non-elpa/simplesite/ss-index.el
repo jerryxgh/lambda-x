@@ -26,22 +26,21 @@
 
 ;;; Code:
 
-(require 'f)
-(require 'mustache)
-
 (require 'ss-theme)
 (require 'ss-options)
 
 (defun ss-generate-index (file-tlist)
   "Generate index page based on FILE-TLIST."
-  (let ((mustache-partial-paths (list (ss-get-theme-template-dir))))
+  (let ((mustache-partial-paths
+         (list (ss-get-theme-template-dir ss-theme ss-theme-directory))))
     (f-write
      (mustache-render
-      (f-read (concat (ss-get-theme-template-dir) "layout.mustache"))
+      (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                      "layout.mustache"))
       (ht ("page-title" ss-site-title)
           ("site-title" ss-site-title)
           ("site-sub-title" ss-site-sub-title)
-          ("content" (ss-render-index-content file-tlist))
+          ("content" (ss--render-index-content file-tlist))
           ("keywords" ss-site-main-keywords)
           ("description" ss-site-main-desc)
           ("author" ss-author)
@@ -49,12 +48,12 @@
      'utf-8
      (concat ss-dist-directory "/index.html"))))
 
-(defun ss-render-index-content (file-tlist)
+(defun ss--render-index-content (file-tlist)
   "Render index content based on FILE-TLIST."
   (mustache-render
-   (f-read (concat (ss-get-theme-template-dir) "index.mustache"))
+   (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                   "index.mustache"))
    (ht ("file-tlist" file-tlist))))
-
 
 (provide 'ss-index)
 

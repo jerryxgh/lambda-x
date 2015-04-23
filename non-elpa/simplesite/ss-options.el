@@ -89,9 +89,9 @@ By default, it points to the directory `themes' in simplesite installation
 directory."
   :group 'simplesite :type 'string)
 
-(defcustom ss-theme 'next
+(defcustom ss-theme "next"
   "Theme used for page generation."
-  :group 'simplesite :type 'symbol)
+  :group 'simplesite :type 'string)
 
 (defcustom ss-personal-github-link nil
   "Personal github link."
@@ -116,6 +116,22 @@ directory."
 (defcustom ss-confound-email t
   "This is used to determine whether email should be confounded or not."
   :group 'simplesite :type 'boolean)
+
+(defcustom ss-tag-cloud-min-font 12
+  "Minimal font size in pixel of tags in tag cloud."
+  :group 'simplesite :type 'int)
+
+(defcustom ss-tag-cloud-max-font 30
+  "Maximal font size in pixel of tags in tag cloud."
+  :group 'simplesite :type 'int)
+
+(defcustom ss-tag-cloud-start-color "#ccc"
+  "Start color of tags in tag cloud."
+  :group 'simplesite :type 'string)
+
+(defcustom ss-tag-cloud-end-color "#111"
+  "End color of tags in tag cloud."
+  :group 'simplesite :type 'string)
 
 (defcustom ss-html-creator-string
   (format "<a href=\"http://www.gnu.org/software/emacs/\">Emacs</a> %s\

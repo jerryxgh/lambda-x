@@ -27,9 +27,6 @@
 
 ;;; Code:
 
-(require 'f)
-(require 'mustache)
-
 (require 'ss-options)
 (require 'ss-theme)
 
@@ -37,68 +34,74 @@
   "Generate categories pages based on FILE-TLIST.
 
 FILE-TLIST: hash table of all source files"
-  (let ((cate-list (ss-parse-categories file-tlist)))
-    (ss-generate-categories-index cate-list)
+  (let ((cate-list (ss--parse-categories file-tlist)))
+    (ss--generate-categories-index cate-list)
     (mapc #'(lambda (e)
-              (ss-generate-category-page e))
+              (ss--generate-category-page e))
           cate-list)))
 
-(defun ss-generate-categories-index (cate-list)
+(defun ss--generate-categories-index (cate-list)
   "Generate categories index page baaed on CATE-LIST.
 
 CATE-LIST: hash table of <category, file>."
-  (let ((mustache-partial-paths (list (ss-get-theme-template-dir)))
+  (let ((mustache-partial-paths
+         (list (ss-get-theme-template-dir ss-theme ss-theme-directory)))
         (output-dir (concat ss-dist-directory "/categories")))
     (if (not (file-directory-p output-dir))
         (mkdir output-dir t))
     (f-write
      (mustache-render
-      (f-read (concat (ss-get-theme-template-dir) "layout.mustache"))
+      (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                      "layout.mustache"))
       (ht ("page-title" (concat "All categories - " ss-site-title))
           ("site-title" ss-site-title)
           ("site-sub-title" ss-site-sub-title)
-          ("content" (ss-render-categories-index-content cate-list))
+          ("content" (ss--render-categories-index-content cate-list))
           ("keywords" ss-site-main-keywords)
           ("description" ss-site-main-desc)
           ("author" ss-author)))
      'utf-8
      (concat output-dir "/index.html"))))
 
-(defun ss-generate-category-page (category-table)
+(defun ss--generate-category-page (category-table)
   "Generate one category page based CATEGORY-TABLE."
-  (let* ((mustache-partial-paths (list (ss-get-theme-template-dir)))
+  (let* ((mustache-partial-paths
+          (list (ss-get-theme-template-dir ss-theme ss-theme-directory)))
          (cate-name (ht-get category-table "name"))
          (output-dir (concat ss-dist-directory "/categories/" cate-name)))
     (if (not (file-directory-p output-dir))
         (mkdir output-dir t))
     (f-write
      (mustache-render
-      (f-read (concat (ss-get-theme-template-dir) "layout.mustache"))
+      (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                      "layout.mustache"))
       (ht ("page-title" (concat "Categories: "
                                 cate-name " - " ss-site-title))
           ("site-title" ss-site-title)
           ("site-sub-title" ss-site-sub-title)
-          ("content" (ss-render-category-page-content category-table))
+          ("content" (ss--render-category-page-content category-table))
           ("keywords" ss-site-main-keywords)
           ("description" ss-site-main-desc)
           ("author" ss-author)))
      'utf-8
      (concat output-dir "/index.html"))))
 
-(defun ss-render-category-page-content (category)
-  "Render category page content based on CATEGORY."
-  (mustache-render
-   (f-read (concat (ss-get-theme-template-dir) "category.mustache"))
-   category))
-
-(defun ss-render-categories-index-content (cate-list)
+(defun ss--render-categories-index-content (cate-list)
   "Render categories index content based on CATE-LIST."
   (mustache-render
-   (f-read (concat (ss-get-theme-template-dir) "categories-index.mustache"))
+   (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                   "categories-index.mustache"))
    (ht ("categories" cate-list)
        ("all-count" (length cate-list)))))
 
-(defun ss-parse-categories (file-tlist)
+(defun ss--render-category-page-content (category-table)
+  "Render category page content based on CATEGORY-TABLE."
+  (mustache-render
+   (f-read (concat (ss-get-theme-template-dir ss-theme ss-theme-directory)
+                   "category.mustache"))
+   category-table))
+
+(defun ss--parse-categories (file-tlist)
   "Parse categories based on FILE-TLIST."
   (let ((category-table (ht-create))
         categoriy-list)
