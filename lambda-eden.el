@@ -84,6 +84,9 @@ Note the weekly scope of the command's precision.")
 
 (lambda-package-ensure-install 'nginx-mode)
 (require 'nginx-mode)
+(add-to-list 'auto-mode-alist
+             '("modsecurity\.conf$" . nginx-mode)
+             '("modsecurity\.conf$" . nginx-mode))
 
 ;; knowledge
 ;; locate-library

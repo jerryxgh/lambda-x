@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-04-22 10:01:49 Jerry Xu>
+;; Time-stamp: <2015-05-04 13:57:08 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -7,7 +7,7 @@
 (require 'lambda-core)
 (require 'cc-mode)
 
-(setq c-default-style '((java-mode . "java")
+(setq c-default-style '((java-mode . "cc-mode")
                         (awk-mode . "awk")
                         (c-mode . "k&r")
                         (c++-mode . "stroustrup")

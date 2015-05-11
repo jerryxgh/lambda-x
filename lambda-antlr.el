@@ -1,11 +1,11 @@
-;;; ss-archive.el --- generate archive page -*- lexical-binding: t -*-
+;;; lambda-antlr.el --- antlr-mode
 
 ;; Copyright 2015 Jerry Xu
 ;;
 ;; Author: Jerry Xu gh_xu@qq.com
 ;; Maintainer: Jerry Xu gh_xu@qq.com
 ;; Version: 0.0
-;; Keywords: blog, static site, generator
+;; Keywords: antlr
 ;; Homepage: not distributed yet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,8 +26,8 @@
 
 ;;; Code:
 
-(provide 'ss-archive)
+(setq auto-mode-alist (cons '("\\.g4\\'" . antlr-mode) auto-mode-alist))
 
+(provide 'lambda-antlr)
 
-
-;;; ss-archive.el ends here
+;;; lambda-antlr.el ends here

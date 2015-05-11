@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-04-16 09:41:22 Jerry Xu>
+;; Time-stamp: <2015-05-07 14:11:02 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -36,7 +36,7 @@ This value is set automaticly, DONT set by hand.")
   "This is like `package-install', but skip PACKAGE if it has been installed.
 
 The difference is that if PACKAGE is already installed(checked through
- `package-installed-p'), it will not be  installed again."
+ `package-installed-p'), it will not be installed again."
   (add-to-list 'lambda-package-installed-packages package)
   (unless (or (member package package-activated-list)
 	      (package-installed-p package)
@@ -912,7 +912,7 @@ if BUFFER is nil, use `current-buffer'."
                                      makefile-bsdmake-mo autoconf-mode
                                      makefile-automake-mode snippet-mode
                                      cmake-mode octave-mode
-                                     conf-javaprop-mode)) ac-use-menu-map t)
+                                     conf-javaprop-mode nginx-mode)) ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename
 				   ac-source-yasnippet
