@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-05-07 14:11:02 Jerry Xu>
+;; Time-stamp: <2015-05-12 18:41:51 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -308,19 +308,18 @@ This follows freedesktop standards, should work in X servers."
 
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
-(require 'tramp)
-(setq tramp-auto-save-directory  temporary-file-directory
-      ido-enable-tramp-completion t
-      tramp-persistency-file-name (expand-file-name "tramp"
-						    lambda-savefile-dir))
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
-(when (> emacs-major-version 23)
-  (require 'tramp-sh)
-  (delete "LC_ALL=C" tramp-remote-process-environment)
-  (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
-  (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
+;;(require 'tramp)
+;;(setq tramp-auto-save-directory  temporary-file-directory)
+;(setq tramp-persistency-file-name (expand-file-name "tramp"
+;						    lambda-savefile-dir))
+;(if (eq system-type 'windows-nt)
+;    (setq tramp-default-method "plink")
+;  (setq tramp-default-method "ssh"))
+;(when (> emacs-major-version 23)
+;  (require 'tramp-sh)
+;  (delete "LC_ALL=C" tramp-remote-process-environment)
+;  (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.utf8" 'append)
+;  (add-to-list 'tramp-remote-process-environment "LC_ALL=zh_CN.utf8" 'append))
 
 ;;; imenu
 (set-default 'imenu-auto-rescan t)
@@ -442,21 +441,12 @@ the search is performed ."
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
-;; eshell ----------------------------------------------------------------------
-(require 'eshell)
-(setq eshell-directory-name (expand-file-name
-			     "eshell"
-			     lambda-savefile-dir))
-;; when input things in eshell, goto the end of the buffer automatically
-(setq eshell-scroll-to-bottom-on-input 'this)
-
 (require 'compile)
 (setq compilation-ask-about-save nil  ; Just save before compiling
-      compilation-always-kill t       ; Just kill old compile processes before
-					; starting the new one
-      compilation-scroll-output 'first-error ; Automatically scroll to first
-					; error
-      )
+      ;; just kill old compile processes before starting the new one
+      compilation-always-kill t
+      ;; automatically scroll to first error
+      compilation-scroll-output 'first-error)
 
 ;; let one line display as one line, even if it over the window
 ;; (setq-default truncate-lines t)
@@ -607,6 +597,19 @@ the search is performed ."
 ;;(setq switch-window-shortcut-style 'qwerty)
 
 ;; shell configs ---------------------------------------------------------------
+(require 'shell)
+(defun clear ()
+  "Clear `eshell' or submode of `comint-mode' buffer."
+  (interactive)
+  (cond ((eq major-mode 'eshell-mode)
+	 (let ((eshell-buffer-maximum-lines 0))
+	   (eshell-truncate-buffer)))
+	((derived-mode-p 'comint-mode)
+	 (let ((comint-buffer-maximum-size 0))
+	   (comint-truncate-buffer)))))
+(define-key shell-mode-map (kbd "C-j") 'comint-send-input)
+(define-key shell-mode-map (kbd "C-l") 'clear)
+
 (defun kill-buffer-when-shell-command-exit (&optional buffer)
   "Kill the buffer on exit of interactive shell.
 if BUFFER is nil, use `current-buffer'."
@@ -627,7 +630,21 @@ if BUFFER is nil, use `current-buffer'."
 ;; no duplicates in command history
 (setq comint-input-ignoredups t)
 
-(defun create-scratch-buffer nil
+;; eshell configs --------------------------------------------------------------
+(require 'eshell)
+(setq eshell-directory-name (expand-file-name
+			     "eshell"
+			     lambda-savefile-dir))
+;; when input things in eshell, goto the end of the buffer automatically
+(setq eshell-scroll-to-bottom-on-input 'this)
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (add-to-list 'ac-sources 'ac-source-pcomplete)
+            (turn-on-eldoc-mode)
+            (ac-emacs-lisp-mode-setup)
+            (define-key eshell-mode-map (kbd "C-l") 'clear)))
+
+(defun create-scratch-buffer ()
   "Create a scratch buffer with the scratch message."
   (interactive)
   (unless (get-buffer "*scratch*")
@@ -636,7 +653,7 @@ if BUFFER is nil, use `current-buffer'."
     (goto-char (point-max))
     (lisp-interaction-mode)))
 
-(defun clear-scratch-buffer nil
+(defun clear-scratch-buffer ()
   "Clear the scratch buffer and keep the scratch message."
   (interactive)
   (when (string-match "\*scratch\*.*" (buffer-name (current-buffer)))
@@ -776,6 +793,7 @@ if BUFFER is nil, use `current-buffer'."
 			   "^\\*Compile-Log\\*$"
 			   "^\\*Messages\\*$"
 			   "^\\*Help\\*$")
+      ;; ido-enable-tramp-completion t
       ido-save-directory-list-file
       (expand-file-name "ido.hist" lambda-savefile-dir)
       ;; ido-default-file-method 'selected-window
@@ -865,18 +883,6 @@ if BUFFER is nil, use `current-buffer'."
       scroll-preserve-screen-position t
       scroll-conservatively most-positive-fixnum)
 
-(defun clear ()
-  "Clear `eshell' or submode of `comint-mode' buffer."
-  (interactive)
-  (cond ((eq major-mode 'eshell-mode)
-	 (let ((eshell-buffer-maximum-lines 0))
-	   (eshell-truncate-buffer)))
-	((derived-mode-p 'comint-mode)
-	 (let ((comint-buffer-maximum-size 0))
-	   (comint-truncate-buffer)))))
-(define-key shell-mode-map (kbd "C-j") 'comint-send-input)
-(define-key shell-mode-map (kbd "C-l") 'clear)
-
 ;; YASnippet -------------------------------------------------------------------
 (lambda-package-ensure-install 'yasnippet)
 (require 'yasnippet)
@@ -918,61 +924,55 @@ if BUFFER is nil, use `current-buffer'."
 				   ac-source-yasnippet
 				   )
 				 ac-sources))
-;; (defun ac-pcomplete ()
-;;   "Use auto-complete in eshell."
-;;   ;; eshell uses `insert-and-inherit' to insert a \t if no completion
-;;   ;; can be found, but this must not happen as auto-complete source
-;;   (flet ((insert-and-inherit (&rest args)))
-;;     ;; this code is stolen from `pcomplete' in pcomplete.el
-;;     (let* (tramp-mode ;; do not automatically complete remote stuff
-;; 	   (pcomplete-stub)
-;; 	   (pcomplete-show-list t) ;; inhibit patterns like * being deleted
-;; 	   pcomplete-seen pcomplete-norm-func
-;; 	   pcomplete-args pcomplete-last pcomplete-index
-;; 	   (pcomplete-autolist pcomplete-autolist)
-;; 	   (pcomplete-suffix-list pcomplete-suffix-list)
-;; 	   (candidates (pcomplete-completions))
-;; 	   (beg (pcomplete-begin))
-;; 	   ;; note, buffer text and completion argument may be
-;; 	   ;; different because the buffer text may bet transformed
-;; 	   ;; before being completed (e.g. variables like $HOME may be
-;; 	   ;; expanded)
-;; 	   (buftext (buffer-substring beg (point)))
-;; 	   (arg (nth pcomplete-index pcomplete-args)))
-;;       ;; we auto-complete only if the stub is non-empty and matches
-;;       ;; the end of the buffer text
-;;       (when (and (not (zerop (length pcomplete-stub)))
-;; 		 (or (string= pcomplete-stub ; Emacs 23
-;; 			      (substring buftext
-;; 					 (max 0
-;; 					      (- (length buftext)
-;; 						 (length pcomplete-stub)))))
-;; 		     (string= pcomplete-stub ; Emacs 24
-;; 			      (substring arg
-;; 					 (max 0
-;; 					      (- (length arg)
-;; 						 (length pcomplete-stub)))))))
-;; 	;; collect all possible completions for the stub. Note that
-;; 	;; `candidates` may be a function, that's why we use
-;; 	;; `all-completions`
-;; 	(let* ((cnds (all-completions pcomplete-stub candidates))
-;; 	       (bnds (completion-boundaries pcomplete-stub
-;; 					    candidates
-;; 					    nil
-;; 					    ""))
-;; 	       (skip (- (length pcomplete-stub) (car bnds))))
-;; 	  ;; we replace the stub at the beginning of each candidate by
-;; 	  ;; the real buffer content
-;; 	  (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
-;; 		  cnds))))))
-;; (defvar ac-source-pcomplete
-;;   '((candidates . ac-pcomplete)))
-;; (add-hook 'eshell-mode-hook
-;; 	  (lambda ()
-;; 	    (add-to-list 'ac-sources 'ac-source-pcomplete)
-;; 	    (turn-on-eldoc-mode)
-;; 	    (ac-emacs-lisp-mode-setup)
-;; 	    (define-key eshell-mode-map (kbd "C-l") 'clear)))
+(defun ac-pcomplete ()
+  "Use auto-complete in eshell."
+  ;; eshell uses `insert-and-inherit' to insert a \t if no completion
+  ;; can be found, but this must not happen as auto-complete source
+  (flet ((insert-and-inherit (&rest args)))
+    ;; this code is stolen from `pcomplete' in pcomplete.el
+    (let* (tramp-mode ;; do not automatically complete remote stuff
+	   (pcomplete-stub)
+	   (pcomplete-show-list t) ;; inhibit patterns like * being deleted
+	   pcomplete-seen pcomplete-norm-func
+	   pcomplete-args pcomplete-last pcomplete-index
+	   (pcomplete-autolist pcomplete-autolist)
+	   (pcomplete-suffix-list pcomplete-suffix-list)
+	   (candidates (pcomplete-completions))
+	   (beg (pcomplete-begin))
+	   ;; note, buffer text and completion argument may be
+	   ;; different because the buffer text may bet transformed
+	   ;; before being completed (e.g. variables like $HOME may be
+	   ;; expanded)
+	   (buftext (buffer-substring beg (point)))
+	   (arg (nth pcomplete-index pcomplete-args)))
+      ;; we auto-complete only if the stub is non-empty and matches
+      ;; the end of the buffer text
+      (when (and (not (zerop (length pcomplete-stub)))
+		 (or (string= pcomplete-stub ; Emacs 23
+			      (substring buftext
+					 (max 0
+					      (- (length buftext)
+						 (length pcomplete-stub)))))
+		     (string= pcomplete-stub ; Emacs 24
+			      (substring arg
+					 (max 0
+					      (- (length arg)
+						 (length pcomplete-stub)))))))
+	;; collect all possible completions for the stub. Note that
+	;; `candidates` may be a function, that's why we use
+	;; `all-completions`
+	(let* ((cnds (all-completions pcomplete-stub candidates))
+	       (bnds (completion-boundaries pcomplete-stub
+					    candidates
+					    nil
+					    ""))
+	       (skip (- (length pcomplete-stub) (car bnds))))
+	  ;; we replace the stub at the beginning of each candidate by
+	  ;; the real buffer content
+	  (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
+		  cnds))))))
+(defvar ac-source-pcomplete
+  '((candidates . ac-pcomplete)))
 (define-key ac-mode-map (kbd "M-/") 'auto-complete)
 (define-key ac-completing-map (kbd "<tab>") 'ac-expand)
 (define-key ac-completing-map (kbd "<backtab>") 'ac-previous)
