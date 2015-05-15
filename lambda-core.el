@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-05-13 22:09:18 Jerry Xu>
+;; Time-stamp: <2015-05-15 16:46:22 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -167,6 +167,8 @@ Which means get all used packages, this function for getting unused packages."
   (set-face-attribute 'mode-line nil :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil)
 
+  (set-frame-font "Consolas-11")
+
   (if (eq system-type 'windows-nt)
       (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
     (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
@@ -194,7 +196,6 @@ This follows freedesktop standards, should work in X servers."
 (mouse-avoidance-mode 'animate)
 (show-paren-mode 1)
 ;; (setq show-paren-style 'mixed)
-(set-frame-font "Consolas-11")
 ;; (set-background-color "#CCE8CF")
 
 ;; align chinese font in org table, solution is from below:
@@ -813,6 +814,8 @@ if BUFFER is nil, use `current-buffer'."
 (flx-ido-mode 1)
 
 ;;; magit --- use git in emacs--------------------------------------------------
+(lambda-package-ensure-install 'magit)
+(require 'magit)
 (defun lambda-get-magit-dir ()
   "Get the directory magit installed."
   (let ((elpa-dir (expand-file-name "elpa" lambda-x-direcotry)))
@@ -828,8 +831,6 @@ if BUFFER is nil, use `current-buffer'."
 (eval-after-load 'info
   '(progn (info-initialize)
           (add-to-list 'Info-directory-list (lambda-get-magit-dir))))
-(require 'magit)
-(lambda-package-ensure-install 'magit)
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
   (when (and (eq system-type 'windows-nt)
              (file-exists-p git-executable-windows))
