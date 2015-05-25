@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-05-15 16:46:22 Jerry Xu>
+;; Time-stamp: <2015-05-25 09:39:05 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -175,7 +175,7 @@ Which means get all used packages, this function for getting unused packages."
 
   (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp")))
 
-(lambda-load-solarized-light-theme)
+(lambda-load-solarized-dark-theme)
 
 ;; Emacs in OSX already has fullscreen support
 ;; Emacs has a similar built-in command in 24.4
@@ -197,10 +197,6 @@ This follows freedesktop standards, should work in X servers."
 (show-paren-mode 1)
 ;; (setq show-paren-style 'mixed)
 ;; (set-background-color "#CCE8CF")
-
-;; align chinese font in org table, solution is from below:
-;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
-(setq scalable-fonts-allowed t)
 
 (setq-default indicate-buffer-boundaries '((top . left) (t . right))
               indicate-empty-lines t)
@@ -490,8 +486,8 @@ the search is performed ."
       resize-mini-windows t
       enable-recursive-minibuffers t
       gc-cons-threshold 20480000
-      confirm-kill-emacs 'y-or-n-p
-      )
+      source-directory "/home/xgh/sources/emacs-24.3"
+      confirm-kill-emacs 'y-or-n-p)
 (require 'sql)
 (setq sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8"))
 

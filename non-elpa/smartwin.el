@@ -124,7 +124,7 @@ But smart window can be higher if run `delete-other-window' when is is already
 
 (defun smartwin-smart-window-p (window)
   "To judge whether WINDOW is smart window or not."
-  (and window (window-parameter window 'smartwinp)))
+  (and window (windowp window) (window-parameter window 'smartwinp)))
 
 (defun smartwin-enlarge-window (window)
   "Try to enlarge smart WINDOW, but not too large."

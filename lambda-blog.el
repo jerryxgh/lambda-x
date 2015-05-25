@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org, confluence wiki
-;; Time-stamp: <2015-04-04 14:47:55 Jerry Xu>
+;; Time-stamp: <2015-05-20 13:32:56 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
@@ -8,10 +8,22 @@
 (require 'lambda-core)
 
 ;; org-mode
+;; align chinese font in org table, solution is from below:
+;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
+(setq scalable-fonts-allowed t)
+
 (setq org-use-speed-commands t)
+
+(setq org-agenda-files (list "/home/xgh/文档/gtd.org"))
 
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
+
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 
 ;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)

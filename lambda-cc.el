@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-05-04 13:57:08 Jerry Xu>
+;; Time-stamp: <2015-05-25 17:25:54 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -57,8 +57,17 @@ echo \"\" | g++ -v -x c++ -E -")
                        lambda-cc-system-include))))
 
 ;; auto-complete-clang --- auto complete backend for  c&c++ --------------------
-(lambda-package-ensure-install 'auto-complete-clang)
-(require 'auto-complete-clang)
+;;(lambda-package-ensure-install 'auto-complete-clang)
+;;(require 'auto-complete-clang)
+
+;; irony-mode ------------------------------------------------------------------
+(lambda-package-ensure-install 'irony)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
+(lambda-package-ensure-install 'flycheck-irony)
+(lambda-package-ensure-install 'irony-eldoc)
 
 ;; google-c-style --------------------------------------------------------------
 (lambda-package-ensure-install 'google-c-style)

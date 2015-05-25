@@ -18,8 +18,7 @@
 (require 'vlf-setup)
 ;; iedit -----------------------------------------------------------------------
 (lambda-package-ensure-install 'iedit)
-;; fold about things -----------------------------------------------------------
-(lambda-package-ensure-install 'fold-this)
+
 ;; ztree - compare directories -------------------------------------------------
 (lambda-package-ensure-install 'ztree)
 ;; (push (substitute-in-file-name "path-to-ztree-directory") load-path)

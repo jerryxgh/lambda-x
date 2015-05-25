@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-03-23 13:29:55 Jerry Xu>
+;; Time-stamp: <2015-05-20 17:59:05 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -98,7 +98,8 @@
   "b" 'ido-switch-buffer
   "e" 'helm-projectile
   "k" 'kill-this-buffer
-  "o" 'helm-occur)
+  "o" 'helm-occur
+  "f" 'find-file)
 (global-evil-leader-mode 1)
 
 ;; evil-surround ---------------------------------------------------------------
