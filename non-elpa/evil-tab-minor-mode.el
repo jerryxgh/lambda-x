@@ -62,7 +62,7 @@ not wanted, change it by using emulation-mode-map-alists"
 ;;;###autoload
 (defun evil-tab-minor-mode-on ()
   "Turn on evil-tab minor mode."
-  (unless (minibufferp)
+  (unless (or (minibufferp) buffer-read-only)
     (evil-tab-minor-mode 1)))
 
 ;;;###autoload

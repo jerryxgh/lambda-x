@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-05-25 17:25:54 Jerry Xu>
+;; Time-stamp: <2015-07-07 16:48:01 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -14,18 +14,6 @@
                         (other . "linux")))
 
 (define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
-
-(defvar lambda-cc-system-include
-  (split-string
-  "c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed
- c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include")
-  "System include directories for c&c++.  This is got by \
-echo \"\" | g++ -v -x c++ -E -")
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                   global-semantic-idle-scheduler-mode
@@ -47,24 +35,21 @@ echo \"\" | g++ -v -x c++ -E -")
       (expand-file-name "ede-projects.el" lambda-savefile-dir))
 ;(semanticdb-enable-gnu-global-databases 'c-mode)
 ;(semanticdb-enable-gnu-global-databases 'c++-mode)
-(add-hook 'semantic-init-hook
-          '(lambda ()
-             ;; C&C++
-             (if (eq system-type 'windows-nt)
-                 (mapc (lambda (dir)
-                         (semantic-add-system-include dir 'c-mode)
-                         (semantic-add-system-include dir 'c++-mode))
-                       lambda-cc-system-include))))
-
-;; auto-complete-clang --- auto complete backend for  c&c++ --------------------
-;;(lambda-package-ensure-install 'auto-complete-clang)
-;;(require 'auto-complete-clang)
 
 ;; irony-mode ------------------------------------------------------------------
 (lambda-package-ensure-install 'irony)
+(setq irony-server-install-prefix (expand-file-name "irony" lambda-savefile-dir)
+      irony-user-dir (expand-file-name "irony" lambda-savefile-dir))
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+
+(require 'ac-irony)
+(add-hook 'irony-mode-hook
+          #'(lambda ()
+              (irony-cdb-autosetup-compile-options)
+              (unless (memq 'ac-source-irony ac-sources)
+                (setq ac-sources (append '(ac-source-irony) ac-sources)))))
 
 (lambda-package-ensure-install 'flycheck-irony)
 (lambda-package-ensure-install 'irony-eldoc)
@@ -74,36 +59,17 @@ echo \"\" | g++ -v -x c++ -E -")
 (require 'google-c-style)
 
 (add-hook 'c-mode-common-hook
-          (lambda ()
-            ;;(setq ac-sources (append
-            ;;(list 'ac-source-gtags
-            ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
-            (setq ac-sources
-                  (append '(;;ac-source-gtags
-                            ;;ac-source-semantic
-                            ;;ac-source-yasnippet
-							)
-                          ac-sources))
-            ;;(setq flycheck-clang-include-path
-                           ;;(list (expand-file-name "~/local/include/")))
-			(add-to-list 'c-cleanup-list 'defun-close-semi)
-			;; (c-toggle-auto-newline 1)
-            (c-set-style "stroustrup")
-			(c-toggle-hungry-state 1)
-            ;;(google-set-c-style)
-            ))
-
-(add-hook 'c-mode-hook
-          (lambda ()
-            "Use clang to complete c."
-            (add-to-list 'ac-sources 'ac-source-clang t)))
-
-;; (setq ac-clang-flags
-;; 	  (mapcar (lambda (item) (concat "-I" item))
-;; 			  lambda-cc-system-include))
+          #'(lambda ()
+              ;;(setq ac-sources (append
+              ;;(list 'ac-source-gtags
+              ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
+              (add-to-list 'c-cleanup-list 'defun-close-semi)
+              ;; (c-set-style "stroustrup")
+              ;;(google-set-c-style)
+              ;; (c-toggle-auto-newline 1)
+              (c-toggle-hungry-state 1)))
 
 ;; ffap - find file at point ---------------------------------------------------
-
 (autoload 'ffap-href-enable "ffap-href" nil t)
 (eval-after-load "ffap" '(ffap-href-enable))
 
@@ -123,18 +89,49 @@ echo \"\" | g++ -v -x c++ -E -")
       gdb-many-windows t)
 
 ;; global ------- code navigating ----------------------------------------------
-(lambda-package-ensure-install 'ggtags)
-(if (featurep 'evil)
-    (define-key evil-normal-state-map
-      (kbd "M-.") 'ggtags-find-tag-dwim))
+;; (lambda-package-ensure-install 'ggtags)
+;; (if (featurep 'evil)
+;;     (define-key evil-normal-state-map
+;;       (kbd "M-.") 'ggtags-find-tag-dwim))
+;; (add-hook 'c-mode-common-hook
+;; 	  (lambda ()
+;; 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+;; 	      (ggtags-mode 1)
+;; 	      ;; do not echo help message when point is on a tag, it's annoying
+;; 	      (if (get 'ggtags-active-tag 'help-echo)
+;; 		  (put 'ggtags-active-tag 'help-echo nil))
+;; 	      (diminish 'ggtags-mode))))
+
+(lambda-package-ensure-install 'helm-gtags)
+;; Key 		Command
+;; Prefix h 	helm-gtags-display-browser
+;; Prefix C-] 	helm-gtags-find-tag-from-here
+;; Prefix C-t 	helm-gtags-pop-stack
+;; Prefix P 	helm-gtags-find-files
+;; Prefix f 	helm-gtags-parse-file
+;; Prefix g 	helm-gtags-find-pattern
+;; Prefix s 	helm-gtags-find-symbol
+;; Prefix r 	helm-gtags-find-rtag
+;; Prefix t 	helm-gtags-find-tag
+;; Prefix d 	helm-gtags-find-tag
+;; M-* 		helm-gtags-pop-stack
+;; M-. 		helm-gtags-find-tag
+;; C-x 4 . 	helm-gtags-find-tag-other-window
+(when (featurep 'evil)
+  (define-key evil-normal-state-map
+    (kbd "M-.") 'helm-gtags-dwim)
+  (define-key evil-normal-state-map
+    (kbd "C-t") 'helm-gtags-pop-stack))
 (add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-	      (ggtags-mode 1)
-	      ;; do not echo help message when point is on a tag, it's annoying
-	      (if (get 'ggtags-active-tag 'help-echo)
-		  (put 'ggtags-active-tag 'help-echo nil))
-	      (diminish 'ggtags-mode))))
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (helm-gtags-mode 1)
+              (diminish 'helm-gtags-mode))))
+;; customize
+(custom-set-variables
+ '(helm-gtags-path-style 'relative)
+ '(helm-gtags-ignore-case t)
+ '(helm-gtags-auto-update t))
 
 ;; cmake -----------------------------------------------------------------------
 (lambda-package-ensure-install 'cpputils-cmake)

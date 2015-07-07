@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-05-25 09:39:05 Jerry Xu>
+;; Time-stamp: <2015-07-07 16:23:40 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -468,7 +468,7 @@ the search is performed ."
       compilation-scroll-output 'first-error)
 
 ;; let one line display as one line, even if it over the window
-;; (setq-default truncate-lines t)
+(setq-default truncate-lines t)
 (setq-default indent-tabs-mode nil)
 ;; set text-mode as the default major mode, instead of fundamental-mode
 (setq-default major-mode 'text-mode)
@@ -560,9 +560,9 @@ the search is performed ."
 (setq flycheck-emacs-lisp-initialize-packages t)
 ;; (setq flycheck-emacs-lisp-package-user-dir package-user-dir)
 ;; enable on-the-fly syntax checking
-(if (fboundp 'global-flycheck-mode)
-    (global-flycheck-mode 1)
-  (add-hook 'prog-mode-hook 'flycheck-mode))
+;; (if (fboundp 'global-flycheck-mode)
+;;     (global-flycheck-mode 1)
+;;   (add-hook 'prog-mode-hook 'flycheck-mode))
 (lambda-package-ensure-install 'helm-flycheck)
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
@@ -882,7 +882,7 @@ if BUFFER is nil, use `current-buffer'."
 (lambda-package-ensure-install 'yasnippet)
 (require 'yasnippet)
 (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
-;; Delete dirs that don't exist in yas-snippet-dirs
+;; delete dirs that not exist in yas-snippet-dirs
 (dolist (dir yas-snippet-dirs)
   (if (stringp dir)
       (unless (file-directory-p dir)
@@ -891,6 +891,9 @@ if BUFFER is nil, use `current-buffer'."
 
 ;; menu only show modes according to the major-mode of the current buffer
 (setq yas-use-menu 'abbreviate)
+(setq yas-dont-activate #'(lambda ()
+                            (or (minibufferp)
+                                buffer-read-only)))
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
@@ -902,21 +905,23 @@ if BUFFER is nil, use `current-buffer'."
              (expand-file-name "ac-dict" lambda-x-direcotry))
 (add-to-list 'ac-dictionary-files
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
-(setq ac-auto-start 1
-      ac-comphist-file (expand-file-name "ac-comphist.dat"
+(setq ac-comphist-file (expand-file-name "ac-comphist.dat"
                                          lambda-savefile-dir)
+      ;; ac-auto-start 3
+      ac-ignore-case nil
       ac-modes
-      (append ac-modes '(eshell-mode shell-mode graphviz-dot-mode
-                                     conf-xdefaults-mode html-mode nxml-mode
-                                     objc-mode sql-mode change-log-mode
-                                     text-mode makefile-gmake-mode
-                                     makefile-bsdmake-mo autoconf-mode
-                                     makefile-automake-mode snippet-mode
-                                     cmake-mode octave-mode
-                                     conf-javaprop-mode nginx-mode)) ac-use-menu-map t)
+      (append ac-modes
+              '(eshell-mode shell-mode graphviz-dot-mode
+                            conf-xdefaults-mode html-mode nxml-mode objc-mode
+                            sql-mode change-log-mode text-mode
+                            makefile-gmake-mode makefile-bsdmake-mo
+                            autoconf-mode makefile-automake-mode snippet-mode
+                            cmake-mode octave-mode conf-javaprop-mode
+                            nginx-mode))
+      ac-use-menu-map t)
 
 (setq-default ac-sources (append '(ac-source-filename
-                                   ac-source-yasnippet
+                                   ;; ac-source-yasnippet
                                    )
                                  ac-sources))
 (defun ac-pcomplete ()

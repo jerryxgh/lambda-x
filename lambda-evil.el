@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-05-20 17:59:05 Jerry Xu>
+;; Time-stamp: <2015-06-02 18:33:29 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -13,10 +13,12 @@
 (diminish 'undo-tree-mode)
 
 (setq evil-want-visual-char-semi-exclusive t
-      ;;evil-want-C-i-jump nil
+      ;; evil-want-C-i-jump nil
       ;; evil-want-fine-undo t
       evil-auto-balance-windows nil
       evil-cross-lines t)
+;; let * and # search symbol instead of word at point
+(setq-default evil-symbol-word-search t)
 ;; settings below restore key bindings in emacs in insert state
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
@@ -25,6 +27,7 @@
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
 (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
+
 (defun lambda-hs-hide-level-1 ()
   "Just fold level 1 elements."
   (hs-hide-level 1))
@@ -131,40 +134,6 @@
 
 (lambda-package-ensure-install 'evil-commentary)
 (evil-commentary-default-setup)
-
-;; Here are the keys introduced by evil-org
-;; gh 	outline-up-heading
-;; gj 	org-forward-heading-same-level
-;; gk 	org-backward-heading-same-level
-;; gl 	outline-next-visible-heading
-;; t 	org-todo
-;; T 	org-insert-todo-heading nil
-;; H 	org-beginning-of-line
-;; L 	org-end-of-line
-;; o 	always-insert-item
-;; O 	org-insert-heading
-;; ’$’ 	org-end-of-line
-;; ’^’ 	org-beginning-of-line
-;; < 	org-metaleft
-;; > 	org-metaright
-;; <leader>a 	org-agenda
-;; <leader>t 	org-show-todo-tree
-;; <leader>c 	org-archive-subtree
-;; <leader>l 	evil-org-open-links
-;; <leader>o 	evil-org-recompute-clocks
-;; TAB 	org-cycle
-;; M-l 	org-metaright
-;; M-h 	org-metaleft
-;; M-k 	org-metaup
-;; M-j 	org-metadown
-;; M-L 	org-shiftmetaright
-;; M-H 	org-shiftmetaleft
-;; M-K 	org-shiftmetaup
-;; M-J 	org-shiftmetadown
-;; M-o 	org-insert-heading+org-metaright
-;; M-t 	org-insert-todo-heading nil+ org-metaright
-(lambda-package-ensure-install 'evil-org)
-(require 'evil-org)
 
 (lambda-package-ensure-install 'evil-numbers)
 (require 'evil-numbers)

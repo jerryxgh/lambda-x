@@ -87,6 +87,13 @@ Note the weekly scope of the command's precision.")
              '("modsecurity\.conf$" . nginx-mode)
              '("modsecurity\.conf$" . nginx-mode))
 
+;;; dired-subtree --------------------------------------------------------------
+(lambda-package-ensure-install 'dired-subtree)
+(define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
+(define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
+(define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
+(define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
+
 ;; knowledge
 ;; locate-library
 ;; list-load-path-shadows
