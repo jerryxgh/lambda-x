@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-07-12 14:28:15 Jerry Xu>
+;; Time-stamp: <2015-07-12 23:27:36 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -55,6 +55,14 @@
         (view-mode . emacs)
         (ack-mode . emacs)
         (image-mode . emacs)))
+
+;; when entering edebug, change to evil-emacs-state to use simple key bindings
+;; (require 'edebug)
+;; (add-hook 'edebug-mode-hook (lambda ()
+;;                               (if edebug-mode
+;;                                   (evil-emacs-state)
+;;                                 (evil-normal-state))))
+(add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
 
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
 (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)

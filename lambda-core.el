@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-12 21:50:51 Jerry Xu>
+;; Time-stamp: <2015-07-12 23:13:28 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -66,6 +66,7 @@ The difference is that if PACKAGE is already installed(checked through
     (package-install package)))
 
 (lambda-package-ensure-install 'dash)
+(require 'dash)
 
 (defun lambda-package-list-packages ()
   "Browse packages installed through function `lambda-package-ensure-install'."
@@ -83,7 +84,7 @@ The difference is that if PACKAGE is already installed(checked through
 (defun lambda-package-get-used-pkgs ()
   "Get all packages manually installed including requirements and \
 requirements of requirements.
-Which means get all used packages, this function for getting unused packages."
+Which means get all used packages, this is mainly for getting unused packages."
   (delete-dups (-flatten
                 (-map 'lambda-package-get-pkg-with-reqs
                       lambda-package-installed-packages))))
@@ -95,10 +96,11 @@ Which means get all used packages, this function for getting unused packages."
       (cons package (-flatten
                      (-map #'(lambda (req)
                                (lambda-package-get-pkg-with-reqs (car req)))
-                           (let ((pkg-desc (assq package package-alist)))
+                           (let ((pkg-desc
+                                  (or (if (package-desc-p package) package)
+                                      (cadr (assq package package-alist)))))
                              (if pkg-desc
-                                 (package-desc-reqs
-                                  (cdr pkg-desc)))))))))
+                                 (package-desc-reqs pkg-desc))))))))
 
 (defun lambda-package-list-unused-packages ()
   "Browse packages not used."
@@ -454,7 +456,7 @@ the search is performed ."
                        (projectile-complete-dir)
                      (projectile-project-root))))
         (ack (concat ack-command regexp) root))
-    (error "ack not available")))
+    (error "Ack not available")))
 
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
@@ -578,6 +580,7 @@ the search is performed ."
 ;;(setq ibuffer-never-show-predicates (list "^ ?\\*.*\\*$"))
 
 ;;; time-stamp
+(require 'time-stamp)
 (setq time-stamp-active t
       time-stamp-warn-inactive t
       time-stamp-format "%:y-%02m-%02d %02H:%02M:%02S %U")
@@ -599,6 +602,7 @@ the search is performed ."
 
 ;; flycheck - much better than flymake -----------------------------------------
 (lambda-package-ensure-install 'flycheck)
+(require 'flycheck)
 (setq flycheck-emacs-lisp-initialize-packages t)
 (setq flycheck-emacs-lisp-package-user-dir package-user-dir)
 ;; enable on-the-fly syntax checking
@@ -678,7 +682,6 @@ if BUFFER is nil, use `current-buffer'."
 (setq eshell-scroll-to-bottom-on-input 'this)
 (add-hook 'eshell-mode-hook
           #'(lambda ()
-              (add-to-list 'ac-sources 'ac-source-pcomplete)
               (eldoc-mode 1)
               (ac-emacs-lisp-mode-setup)
               (define-key eshell-mode-map (kbd "C-l") 'clear)))
@@ -716,6 +719,7 @@ if BUFFER is nil, use `current-buffer'."
 (lambda-package-ensure-install 'helm)
 
 (require 'helm)
+(require 'helm-config)
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
 ;; accidentially pressed "C-x C-c"
@@ -763,8 +767,6 @@ if BUFFER is nil, use `current-buffer'."
                                           '(picture-mode artist-mode))
       ;; limit the number of displayed canidates
       helm-candidate-number-limit 200
-      ;; show all candidates when set to 0
-      helm-M-x-requires-pattern 0
       helm-boring-file-regexp-list
       ;; do not show these files in helm buffer
       '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$"
@@ -784,6 +786,7 @@ if BUFFER is nil, use `current-buffer'."
 (diminish 'helm-mode)
 
 ;; to use with ido, customize helm-completing-read-handlers-alist
+(require 'helm-mode)
 (setq helm-completing-read-handlers-alist
       '((describe-function . ido)
         (describe-variable . ido)
@@ -966,55 +969,7 @@ if BUFFER is nil, use `current-buffer'."
                                    ;; ac-source-yasnippet
                                    )
                                  ac-sources))
-(defun ac-pcomplete ()
-  "Use auto-complete in eshell."
-  ;; eshell uses `insert-and-inherit' to insert a \t if no completion
-  ;; can be found, but this must not happen as auto-complete source
-  (cl-flet ((insert-and-inherit (&rest args)))
-    ;; this code is stolen from `pcomplete' in pcomplete.el
-    (let* (tramp-mode ;; do not automatically complete remote stuff
-           (pcomplete-stub)
-           (pcomplete-show-list t) ;; inhibit patterns like * being deleted
-           pcomplete-seen pcomplete-norm-func
-           pcomplete-args pcomplete-last pcomplete-index
-           (pcomplete-autolist pcomplete-autolist)
-           (pcomplete-suffix-list pcomplete-suffix-list)
-           (candidates (pcomplete-completions))
-           (beg (pcomplete-begin))
-           ;; note, buffer text and completion argument may be
-           ;; different because the buffer text may bet transformed
-           ;; before being completed (e.g. variables like $HOME may be
-           ;; expanded)
-           (buftext (buffer-substring beg (point)))
-           (arg (nth pcomplete-index pcomplete-args)))
-      ;; we auto-complete only if the stub is non-empty and matches
-      ;; the end of the buffer text
-      (when (and (not (zerop (length pcomplete-stub)))
-                 (or (string= pcomplete-stub ; Emacs 23
-                              (substring buftext
-                                         (max 0
-                                              (- (length buftext)
-                                                 (length pcomplete-stub)))))
-                     (string= pcomplete-stub ; Emacs 24
-                              (substring arg
-                                         (max 0
-                                              (- (length arg)
-                                                 (length pcomplete-stub)))))))
-        ;; collect all possible completions for the stub. Note that
-        ;; `candidates` may be a function, that's why we use
-        ;; `all-completions`
-        (let* ((cnds (all-completions pcomplete-stub candidates))
-               (bnds (completion-boundaries pcomplete-stub
-                                            candidates
-                                            nil
-                                            ""))
-               (skip (- (length pcomplete-stub) (car bnds))))
-          ;; we replace the stub at the beginning of each candidate by
-          ;; the real buffer content
-          (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
-                  cnds))))))
-(defvar ac-source-pcomplete
-  '((candidates . ac-pcomplete)))
+
 (define-key ac-mode-map (kbd "M-/") 'auto-complete)
 (define-key ac-completing-map (kbd "<tab>") 'ac-expand)
 (define-key ac-completing-map (kbd "<backtab>") 'ac-previous)
@@ -1041,6 +996,8 @@ if BUFFER is nil, use `current-buffer'."
       (keyboard-quit)))
 
 (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
+  "Use popup to prompt PROMPT and CHOICES.
+DISPLAY-FN: use this function to display."
   (when (featurep 'popup)
     (popup-menu*
      (mapcar
@@ -1075,8 +1032,6 @@ if BUFFER is nil, use `current-buffer'."
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'python-mode-hook 'rainbow-delimiters-mode))
 
-(provide 'lambda-core)
-
 (setq enable-local-eval t)
 (setq enable-local-variables :all)
 (setq enable-remote-dir-locals t)
@@ -1096,5 +1051,7 @@ if BUFFER is nil, use `current-buffer'."
 (lambda-package-ensure-install 'import-popwin)
 
 ;; convenience ends here =======================================================
+
+(provide 'lambda-core)
 
 ;;; lambda-core.el ends here

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-07-12 21:43:24 Jerry Xu>
+;; Time-stamp: <2015-07-12 23:17:38 Jerry Xu>
 
 ;;; Commentary:
 

@@ -141,7 +141,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'paradox)
 (lambda-package-ensure-install 'rfringe)
 (lambda-package-ensure-install 'toc-org)
-(lambda-package-ensure-install 'use-package)
 
 ;; knowledge
 ;; locate-library
