@@ -57,9 +57,6 @@ Note the weekly scope of the command's precision.")
 ;; (global-set-key "\C-c\C-d" 'insert-current-date-time)
 ;; (global-set-key "\C-c\C-t" 'insert-current-time)
 
-;; to try
-;; window-numbering evil-jumper Comment-dwim-2 evil-nerd-commenter
-
 (defun lambda-copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
@@ -75,7 +72,7 @@ Note the weekly scope of the command's precision.")
 
 
 ;;; es-mode
-(lambda-package-ensure-install 'es-mode)
+;; (lambda-package-ensure-install 'es-mode)
 
 ;; template engine
 (lambda-package-ensure-install 'mustache)
@@ -93,6 +90,58 @@ Note the weekly scope of the command's precision.")
 (define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
 (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
 (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
+
+;; to try
+;; window-numbering Comment-dwim-2 evil-nerd-commenter
+;; good
+(lambda-package-ensure-install 'window-numbering)
+;; tring
+(lambda-package-ensure-install 'ac-ispell)
+(lambda-package-ensure-install 'ace-link)
+(lambda-package-ensure-install 'adaptive-wrap)
+(lambda-package-ensure-install 'aggressive-indent)
+(lambda-package-ensure-install 'auto-highlight-symbol)
+(lambda-package-ensure-install 'bind-key)
+(lambda-package-ensure-install 'clean-aindent-mode)
+(lambda-package-ensure-install 'eval-sexp-fu)
+(lambda-package-ensure-install 'evil-args)
+(lambda-package-ensure-install 'evil-iedit-state)
+(lambda-package-ensure-install 'evil-nerd-commenter)
+(lambda-package-ensure-install 'expand-region)
+(lambda-package-ensure-install 'flycheck-pos-tip)
+(lambda-package-ensure-install 'git-messenger)
+(lambda-package-ensure-install 'git-timemachine)
+(lambda-package-ensure-install 'gitattributes-mode)
+(lambda-package-ensure-install 'gitconfig-mode)
+(lambda-package-ensure-install 'gitignore-mode)
+(lambda-package-ensure-install 'golden-ratio)
+(lambda-package-ensure-install 'guide-key-tip)
+(lambda-package-ensure-install 'helm-c-yasnippet)
+(lambda-package-ensure-install 'helm-descbinds)
+(lambda-package-ensure-install 'helm-gitignore)
+(lambda-package-ensure-install 'helm-mode-manager)
+(lambda-package-ensure-install 'helm-swoop)
+(lambda-package-ensure-install 'highlight)
+(lambda-package-ensure-install 'highlight-indentation)
+(lambda-package-ensure-install 'highlight-numbers)
+(lambda-package-ensure-install 'highlight-parentheses)
+(lambda-package-ensure-install 'hl-anything)
+(lambda-package-ensure-install 'hungry-delete)
+(lambda-package-ensure-install 'ibuffer-projectile)
+(lambda-package-ensure-install 'indent-guide)
+(lambda-package-ensure-install 'info+)
+(lambda-package-ensure-install 'linum-relative)
+(lambda-package-ensure-install 'move-text)
+(lambda-package-ensure-install 'multi-term)
+(lambda-package-ensure-install 'neotree)
+(lambda-package-ensure-install 'org-bullets)
+(lambda-package-ensure-install 'org-present)
+(lambda-package-ensure-install 'org-repo-todo)
+(lambda-package-ensure-install 'page-break-lines)
+(lambda-package-ensure-install 'paradox)
+(lambda-package-ensure-install 'rfringe)
+(lambda-package-ensure-install 'toc-org)
+(lambda-package-ensure-install 'use-package)
 
 ;; knowledge
 ;; locate-library

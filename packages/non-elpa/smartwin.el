@@ -130,10 +130,10 @@ But smart window can be higher if run `delete-other-window' when is is already
   "Try to enlarge smart WINDOW, but not too large."
   (let ((height-before (window-height window)))
     ;; set smart window start
-    (if (> (fit-window-to-buffer window
-                                 smartwin-max-window-height
-                                 smartwin-min-window-height)
-           0)
+    (fit-window-to-buffer window
+                          smartwin-max-window-height
+                          smartwin-min-window-height)
+    (if (> (window-height window) height-before)
         (set-window-start
          window
          (save-excursion

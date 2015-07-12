@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-06-02 18:33:29 Jerry Xu>
+;; Time-stamp: <2015-07-12 14:28:15 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -37,23 +37,24 @@
      (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
        (evil-close-folds))))
 
-(defun copy-to-end-of-line ()
+(defun lambda-copy-to-end-of-line ()
   "Copy to end of line, and bind this funciton to Y in normal mode."
   (interactive)
   (evil-yank (point) (point-at-eol)))
-(define-key evil-normal-state-map (kbd "Y") 'copy-to-end-of-line)
+(define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
 (define-key evil-normal-state-map (kbd "g f") 'lambda-ido-find-file-at-point)
 
-(loop for (mode . state) in '((calendar-mode . emacs)
-			      (help-mode . emacs)
-			      (Info-mode . emacs)
-			      (dired-mode . emacs)
-			      (Man-mode . emacs)
-			      (grep-mode . emacs)
-			      (view-mode . emacs)
-			      (ack-mode . emacs)
-			      (image-mode . emacs))
-      do (evil-set-initial-state mode state))
+(mapc #'(lambda (mode-state-pair)
+          (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
+      '((calendar-mode . emacs)
+        (help-mode . emacs)
+        (Info-mode . emacs)
+        (dired-mode . emacs)
+        (Man-mode . emacs)
+        (grep-mode . emacs)
+        (view-mode . emacs)
+        (ack-mode . emacs)
+        (image-mode . emacs)))
 
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
 (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)

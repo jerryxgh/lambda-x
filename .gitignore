@@ -2,7 +2,7 @@
 *.elc
 .tern-port
 .projectile
-elpa
+packages/elpa
 GPATH
 GRTAGS
 GTAGS

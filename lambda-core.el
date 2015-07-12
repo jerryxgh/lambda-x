@@ -1,14 +1,32 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-07 16:23:40 Jerry Xu>
+;; Time-stamp: <2015-07-12 21:50:51 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
 
 ;;; Code:
 
+(defconst current-user
+  (getenv
+   (if (equal system-type 'windows-nt) "USERNAME" "USER")))
+
+(defconst lambda-x-direcotry (file-name-directory
+                              (or load-file-name (buffer-file-name)))
+  "Root directory of lambda-x.")
+
+(defconst lambda-savefile-dir (expand-file-name "auto-save-list/"
+                                                user-emacs-directory)
+  "This folder stores all the automatically generated save/history-files.")
+
+;; (add-to-list 'load-path lambda-x-direcotry)
+(add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
+(add-to-list 'load-path "/home/xgh/repository/simplesite/")
+
+;; suppressing ad-handle-definition Warnings in Emacs
+(setq ad-redefinition-action 'accept)
+
 ;; packages about settings =====================================================
 (require 'package)
-;;(require 'dash)
 
 ;; add more package sources
 (dolist (pkg-arch
@@ -20,7 +38,7 @@
   (add-to-list 'package-archives pkg-arch nil))
 
 ;; place package files relative to configuration directory
-(setq package-user-dir (expand-file-name "elpa" lambda-x-direcotry))
+(setq package-user-dir (expand-file-name "packages/elpa" lambda-x-direcotry))
 
 ;; do not auto load packages
 (setq package-enable-at-startup nil)
@@ -46,6 +64,8 @@ The difference is that if PACKAGE is already installed(checked through
     (when (not package-archive-contents)
       (package-refresh-contents))
     (package-install package)))
+
+(lambda-package-ensure-install 'dash)
 
 (defun lambda-package-list-packages ()
   "Browse packages installed through function `lambda-package-ensure-install'."
@@ -112,8 +132,8 @@ Which means get all used packages, this function for getting unused packages."
 
 ;; toolbar is just a waste of valuable screen estate in a tty tool-bar-mode does
 ;; not properly auto-load, and is already disabled anyway
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
+(if (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
 (scroll-bar-mode -1)
 
 (menu-bar-mode -1)
@@ -255,6 +275,7 @@ This follows freedesktop standards, should work in X servers."
 
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
+(require 'smartparens)
 (setq sp-base-key-bindings 'sp)
 (setq sp-show-pair-from-inside t)
 ;; (setq sp-navigate-close-if-unbalanced t)
@@ -320,12 +341,13 @@ This follows freedesktop standards, should work in X servers."
 
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
-(add-to-list 'load-path (expand-file-name "non-elpa/tramp/lisp"
+(add-to-list 'load-path (expand-file-name "packages/non-elpa/tramp/lisp"
                                           lambda-x-direcotry))
 (add-to-list 'Info-default-directory-list
-             (expand-file-name "non-elpa/tramp/info"
+             (expand-file-name "packages/non-elpa/tramp/info"
                                lambda-x-direcotry))
 (require 'tramp)
+(require 'tramp-cache)
 (setq tramp-auto-save-directory  temporary-file-directory)
 (setq tramp-persistency-file-name (expand-file-name "tramp"
                                                     lambda-savefile-dir))
@@ -381,6 +403,26 @@ This follows freedesktop standards, should work in X servers."
 (setq bookmark-default-file (expand-file-name "bookmarks"
                                               lambda-savefile-dir))
 
+;; ack A better grep for programmers -------------------------------------------
+(lambda-package-ensure-install 'ack)
+(lambda-package-ensure-install 'wgrep-ack)
+(require 'ack)
+(require 'wgrep-ack)
+(setq ack-command (concat (file-name-nondirectory
+                           (or (executable-find "ag")
+                               (executable-find "ack")
+                               (executable-find "ack-grep")
+                               "ack")) " "))
+;; C-c C-e : Apply the changes to file buffers.
+;; C-c C-u : All changes are unmarked and ignored.
+;; C-c C-d : Mark as delete to current line (including newline).
+;; C-c C-r : Remove the changes in the region (these changes are not
+;;           applied to the files. Of course, the remaining
+;;           changes can still be applied to the files.)
+;; C-c C-p : Toggle read-only area.
+;; C-c C-k : Discard all changes and exit.
+;; C-x C-q : Exit wgrep mode.
+
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
@@ -427,20 +469,20 @@ the search is performed ."
 (defvar ediff-saved-window-configuration nil
   "Window configuration before ediff.")
 
-(add-hook 'ediff-before-setup-hook
-          (lambda ()
-            (setq ediff-saved-window-configuration
-                  (current-window-configuration))))
-(add-hook 'ediff-quit-hook
-          (lambda ()
-            (set-window-configuration
-             ediff-saved-window-configuration))
-          'append)
-(add-hook 'ediff-suspend-hook
-          (lambda ()
-            (set-window-configuration
-             ediff-saved-window-configuration))
-          'append)
+;;(add-hook 'ediff-before-setup-hook
+;;          #'(lambda ()
+;;              (setq ediff-saved-window-configuration
+;;                    (current-window-configuration))))
+;;(add-hook 'ediff-quit-hook
+;;          #'(lambda ()
+;;              (set-window-configuration
+;;               ediff-saved-window-configuration))
+;;          'append)
+;;(add-hook 'ediff-suspend-hook
+;;          #'(lambda ()
+;;              (set-window-configuration
+;;               ediff-saved-window-configuration))
+;;          'append)
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)
@@ -558,11 +600,11 @@ the search is performed ."
 ;; flycheck - much better than flymake -----------------------------------------
 (lambda-package-ensure-install 'flycheck)
 (setq flycheck-emacs-lisp-initialize-packages t)
-;; (setq flycheck-emacs-lisp-package-user-dir package-user-dir)
+(setq flycheck-emacs-lisp-package-user-dir package-user-dir)
 ;; enable on-the-fly syntax checking
-;; (if (fboundp 'global-flycheck-mode)
-;;     (global-flycheck-mode 1)
-;;   (add-hook 'prog-mode-hook 'flycheck-mode))
+(if (fboundp 'global-flycheck-mode)
+    (global-flycheck-mode 1)
+  (add-hook 'prog-mode-hook 'flycheck-mode))
 (lambda-package-ensure-install 'helm-flycheck)
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
@@ -609,10 +651,10 @@ if BUFFER is nil, use `current-buffer'."
     (if process
         (set-process-sentinel
          process
-         (lambda (process state)
-           (when (or (string-match "exited abnormally with code." state)
-                     (string-match "\\(finished\\|exited\\)" state))
-             (quit-window t (get-buffer-window (process-buffer process)))))))))
+         #'(lambda (process state)
+             (when (or (string-match "exited abnormally with code." state)
+                       (string-match "\\(finished\\|exited\\)" state))
+               (quit-window t (get-buffer-window (process-buffer process)))))))))
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
 (add-hook 'comint-mode-hook 'kill-buffer-when-shell-command-exit)
@@ -635,11 +677,11 @@ if BUFFER is nil, use `current-buffer'."
 ;; when input things in eshell, goto the end of the buffer automatically
 (setq eshell-scroll-to-bottom-on-input 'this)
 (add-hook 'eshell-mode-hook
-          (lambda ()
-            (add-to-list 'ac-sources 'ac-source-pcomplete)
-            (turn-on-eldoc-mode)
-            (ac-emacs-lisp-mode-setup)
-            (define-key eshell-mode-map (kbd "C-l") 'clear)))
+          #'(lambda ()
+              (add-to-list 'ac-sources 'ac-source-pcomplete)
+              (eldoc-mode 1)
+              (ac-emacs-lisp-mode-setup)
+              (define-key eshell-mode-map (kbd "C-l") 'clear)))
 
 (defun create-scratch-buffer ()
   "Create a scratch buffer with the scratch message."
@@ -759,8 +801,8 @@ if BUFFER is nil, use `current-buffer'."
 ;;(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 ;;(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
-(lambda-package-ensure-install 'helm-projectile)
-(require 'helm-projectile)
+;; (lambda-package-ensure-install 'helm-projectile)
+;; (require 'helm-projectile)
 ;; (helm-projectile-on)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -778,7 +820,7 @@ if BUFFER is nil, use `current-buffer'."
 ;; ffap - find file at point is not userful when ido-mode is on
 (lambda-package-ensure-install 'ido-ubiquitous)
 (lambda-package-ensure-install 'flx-ido)
-(require 'ido)
+;;(require 'ido)
 (require 'ido-ubiquitous)
 (require 'flx-ido)
 (setq ido-enable-flex-matching t
@@ -833,7 +875,7 @@ if BUFFER is nil, use `current-buffer'."
     (setq magit-git-executable git-executable-windows)
     (setenv "PATH"
             (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
-(setq magit-last-seen-setup-instructions "1.4.0")
+;; (setq magit-last-seen-setup-instructions "1.4.0")
 ;; magit-ediff-restore
 
 ;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
@@ -842,10 +884,10 @@ if BUFFER is nil, use `current-buffer'."
 (setq-default fill-column 80)
 (lambda-package-ensure-install 'fill-column-indicator)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'prog-mode-hook '(lambda ()
-                             (turn-on-auto-fill)
-                             ;;(turn-on-fci-mode)
-                             ))
+(add-hook 'prog-mode-hook #'(lambda ()
+                              (turn-on-auto-fill)
+                              ;;(turn-on-fci-mode)
+                              ))
 ;; mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
 (diminish 'auto-fill-function)
@@ -861,16 +903,16 @@ if BUFFER is nil, use `current-buffer'."
 (global-set-key (kbd "M-p") 'previous-error)
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (define-key lisp-interaction-mode-map (kbd "C-x k") 'clear-scratch-buffer)
-(global-set-key (kbd "C-x j") '(lambda () (interactive)
-                                 (ido-find-file-in-dir lambda-x-direcotry)))
-(global-set-key (kbd "C-x C-c") '(lambda () (interactive)
-                                   "Stop eclimd and "
-                                   (when (and  (functionp 'eclimd--running-p)
-                                               (eclimd--running-p))
-                                     (message "Stopping eclimd ...")
-                                     (stop-eclimd)
-                                     (message "Eclimd stopped."))
-                                   (save-buffers-kill-terminal)))
+(global-set-key (kbd "C-x j") #'(lambda () (interactive)
+                                  (ido-find-file-in-dir lambda-x-direcotry)))
+(global-set-key (kbd "C-x C-c") #'(lambda () (interactive)
+                                    "Stop eclimd and "
+                                    (when (and  (functionp 'eclimd--running-p)
+                                                (eclimd--running-p))
+                                      (message "Stopping eclimd ...")
+                                      (stop-eclimd)
+                                      (message "Eclimd stopped."))
+                                    (save-buffers-kill-terminal)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling
@@ -928,7 +970,7 @@ if BUFFER is nil, use `current-buffer'."
   "Use auto-complete in eshell."
   ;; eshell uses `insert-and-inherit' to insert a \t if no completion
   ;; can be found, but this must not happen as auto-complete source
-  (flet ((insert-and-inherit (&rest args)))
+  (cl-flet ((insert-and-inherit (&rest args)))
     ;; this code is stolen from `pcomplete' in pcomplete.el
     (let* (tramp-mode ;; do not automatically complete remote stuff
            (pcomplete-stub)
@@ -1002,11 +1044,11 @@ if BUFFER is nil, use `current-buffer'."
   (when (featurep 'popup)
     (popup-menu*
      (mapcar
-      (lambda (choice)
-        (popup-make-item
-         (or (and display-fn (funcall display-fn choice))
-             choice)
-         :value choice))
+      #'(lambda (choice)
+          (popup-make-item
+           (or (and display-fn (funcall display-fn choice))
+               choice)
+           :value choice))
       choices)
      :prompt prompt
      ;; start isearch mode immediately
@@ -1017,26 +1059,6 @@ if BUFFER is nil, use `current-buffer'."
 
 (yas-global-mode 1)
 (diminish 'yas-minor-mode)
-
-;; ack A better grep for programmers -------------------------------------------
-(lambda-package-ensure-install 'ack)
-(lambda-package-ensure-install 'wgrep-ack)
-(setq ack-command (concat (file-name-nondirectory
-                           (or (executable-find "ag")
-                               (executable-find "ack")
-                               (executable-find "ack-grep")
-                               "ack")) " "))
-(require 'ack)
-(require 'wgrep-ack)
-;; C-c C-e : Apply the changes to file buffers.
-;; C-c C-u : All changes are unmarked and ignored.
-;; C-c C-d : Mark as delete to current line (including newline).
-;; C-c C-r : Remove the changes in the region (these changes are not
-;;           applied to the files. Of course, the remaining
-;;           changes can still be applied to the files.)
-;; C-c C-p : Toggle read-only area.
-;; C-c C-k : Discard all changes and exit.
-;; C-x C-q : Exit wgrep mode.
 
 ;; unbound ---------------------------------------------------------------------
 (lambda-package-ensure-install 'unbound)

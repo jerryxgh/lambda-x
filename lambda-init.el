@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2015-05-12 22:19:33 Jerry Xu>
+;; Time-stamp: <2015-07-12 21:43:24 Jerry Xu>
 
 ;;; Commentary:
 
@@ -13,21 +13,8 @@
 
 ;;; Code:
 
-(defconst current-user
-  (getenv
-   (if (equal system-type 'windows-nt) "USERNAME" "USER")))
-
-(defconst lambda-x-direcotry (file-name-directory
-                              (or load-file-name (buffer-file-name)))
-  "Root directory of lambda-x.")
-
-(defconst lambda-savefile-dir (expand-file-name "auto-save-list/"
-                                                user-emacs-directory)
-  "This folder stores all the automatically generated save/history-files.")
-
-(add-to-list 'load-path lambda-x-direcotry)
-(add-to-list 'load-path (expand-file-name "non-elpa" lambda-x-direcotry))
-(add-to-list 'load-path "/home/xgh/repository/simplesite/")
+(add-to-list 'load-path
+             (file-name-directory (or load-file-name (buffer-file-name))))
 
 ;; core settings, shared by all other modules
 (require 'lambda-core)
@@ -47,8 +34,10 @@
 (require 'lambda-scala)
 (require 'lambda-haskell)
 (require 'lambda-eden)
-;;; this should be loaded at last, restore buffers, minibuffer history, last
-;;; place of cursor, etc.
+;; this should be loaded at last, restore buffers, minibuffer history, last
+;; place of cursor, etc.
 (require 'lambda-session)
 
-;;; init.el ends here
+(provide 'lambda-init)
+
+;;; lambda-init.el ends here

@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-07-07 16:48:01 Jerry Xu>
+;; Time-stamp: <2015-07-09 15:19:40 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -17,7 +17,7 @@
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                   global-semantic-idle-scheduler-mode
-                                  global-semantic-idle-summary-mode
+                                  ;;global-semantic-idle-summary-mode
                                   ;;global-semantic-decoration-mode
                                   ;;global-semantic-highlight-func-mode
                                   ;;global-semantic-stickyfunc-mode
@@ -52,7 +52,8 @@
                 (setq ac-sources (append '(ac-source-irony) ac-sources)))))
 
 (lambda-package-ensure-install 'flycheck-irony)
-(lambda-package-ensure-install 'irony-eldoc)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
 ;; google-c-style --------------------------------------------------------------
 (lambda-package-ensure-install 'google-c-style)
@@ -134,13 +135,8 @@
  '(helm-gtags-auto-update t))
 
 ;; cmake -----------------------------------------------------------------------
-(lambda-package-ensure-install 'cpputils-cmake)
-;;(require 'cpputils-cmake)
-;; (add-hook 'c-mode-common-hook
-;;           (lambda ()
-;;             (if (derived-mode-p 'c-mode 'c++-mode)
-;;                 ;; (cppcm-reload-all)
-;;               )))
+(lambda-package-ensure-install 'cmake-mode)
+(require 'cmake-mode)
 
 (provide 'lambda-cc)
 
