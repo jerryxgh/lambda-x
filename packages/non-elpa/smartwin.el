@@ -568,11 +568,17 @@ If FORCE is non nil, hide smart window forcely."
   "Show buffer that can be showed in smartwin.
 This function get input by ido."
   (interactive)
-  (let* ((chosen
-         (ido-completing-read "Smartwin:" (smartwin-make-buffer-list)))
-        (buffer (get-buffer chosen)))
+  (let* ((smartwin-buffers (smartwin-make-buffer-list))
+         (chosen (and smartwin-buffers
+                      (ido-completing-read "Smartwin:" smartwin-buffers)))
+         (buffer (and chosen
+                      (not (string-empty-p chosen))
+                      (get-buffer chosen))))
     (if (not buffer)
-        (message (format "Buffer %s not exist" chosen))
+        (if (not smartwin-buffers)
+            (message
+             "Then only one smartwin buffer has been shown, no other buffers")
+          (message (format "Buffer %s not exist" chosen)))
       (switch-to-buffer buffer))))
 
 (defun create-scratch-buffer ()
