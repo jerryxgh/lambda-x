@@ -5,7 +5,7 @@
 ;; Author: Guillaume Papin <guillaume.papin@epitech.eu>
 ;; Version: 0.1.0
 ;; URL: https://github.com/Sarcasm/ac-irony/
-;; Package-Requires: ((auto-complete "1.4") (irony-mode "0.1"))
+;; Package-Requires: ((auto-complete "1.4") (irony"0.1"))
 ;; Keywords: c, convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -41,8 +41,8 @@
 ;;; Code:
 
 (require 'irony-completion)
-
 (require 'auto-complete)
+(require 'subr-x)
 
 
 ;;
@@ -55,25 +55,42 @@
     (prefix     . ac-irony-prefix)
     (document   . ac-irony-document)
     (cache)
-    (summary    . "candidate from irony")
+    (summary    . "candidates from irony")
     (requires   . 0)
     (symbol     . "i")
     ))
 
+(defun ac-irony-complete ()
+  "Do complete use `ac-source-irony'."
+  (interactive)
+  (auto-complete '(ac-source-irony)))
+
+(defun ac-irony-complete-async ()
+  "Send complete msg async."
+  (interactive)
+  (irony-completion-candidates-async 'ac-irony-complete))
+
 (defun ac-irony-prefix ()
-  ;; do not return a valid prefix until we have the candidates
-  ;; (when (irony-completion-candidates-available-p)
-  ;;   (irony-completion-beginning-of-symbol))
-  (irony-completion-beginning-of-symbol))
+  "Prefix for ac-irony completing."
+
+  (let (cc-member-prefix)
+    (save-excursion
+      (setq cc-member-prefix (ac-prefix-cc-member)))
+
+    (if cc-member-prefix
+        (if (irony-completion-candidates-available-p)
+            (irony-completion-beginning-of-symbol)
+          (ac-irony-complete-async)
+          nil))))
 
 (defun ac-irony-candidates ()
+  "Get candidates from irony."
   (mapcar #'(lambda (candidate)
               (car candidate))
           (irony-completion-candidates)))
 
 (defun ac-irony-document (symbol)
-  "Looks up the documentation string for the given SYMBOL in the
-completion candidates list."
+  "Look up documentation for SYMBOL in the completion candidates list."
   (catch 'break
     (mapc #'(lambda (candidate)
               (if (string= symbol (car candidate))
@@ -88,4 +105,5 @@ completion candidates list."
           (irony-completion-candidates))))
 
 (provide 'ac-irony)
+
 ;;; ac-irony.el ends here

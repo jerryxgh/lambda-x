@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-12 23:13:28 Jerry Xu>
+;; Time-stamp: <2015-07-18 00:43:18 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -150,6 +150,8 @@ Which means get all used packages, this is mainly for getting unused packages."
       scroll-margin 0
       scroll-preserve-screen-position t
       scroll-conservatively most-positive-fixnum)
+
+;; (setq window-resize-pixelwise t)
 
 ;; mode line settings
 (line-number-mode t)
@@ -857,6 +859,10 @@ if BUFFER is nil, use `current-buffer'."
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
 (require 'magit)
+;; (magit-define-popup-action 'magit-ediff-popup ?S "Show staged"
+;;  'magit-ediff-show-staged)
+;; (magit-define-popup-action 'magit-ediff-popup ?U "Show unstaged"
+;;  'magit-ediff-show-unstaged)
 (defun lambda-get-magit-dir ()
   "Get the directory magit installed."
   (let ((elpa-dir (expand-file-name "elpa" lambda-x-direcotry)))

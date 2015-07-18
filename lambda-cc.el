@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-07-09 15:19:40 Jerry Xu>
+;; Time-stamp: <2015-07-14 21:17:37 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -29,15 +29,17 @@
 ;;(global-semantic-idle-breadcrumbs-mode 1)
 ;;(global-semantic-show-unmatched-syntax-mode 1)
 ;;(global-semantic-show-parser-state-mode 1)
+(require 'semantic/db-file)
 (setq semanticdb-default-save-directory
       (expand-file-name "semanticdb" lambda-savefile-dir))
-(setq ede-project-placeholder-cache-file
-      (expand-file-name "ede-projects.el" lambda-savefile-dir))
+;; (setq ede-project-placeholder-cache-file
+;;       (expand-file-name "ede-projects.el" lambda-savefile-dir))
 ;(semanticdb-enable-gnu-global-databases 'c-mode)
 ;(semanticdb-enable-gnu-global-databases 'c++-mode)
 
 ;; irony-mode ------------------------------------------------------------------
 (lambda-package-ensure-install 'irony)
+(require 'irony)
 (setq irony-server-install-prefix (expand-file-name "irony" lambda-savefile-dir)
       irony-user-dir (expand-file-name "irony" lambda-savefile-dir))
 (add-hook 'c++-mode-hook 'irony-mode)
