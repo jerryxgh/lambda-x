@@ -481,6 +481,9 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
               (ad-activate 'select-window)
               (ad-activate 'gdb)
               (add-hook 'kill-emacs-hook 'smartwin-hide)
+              (create-scratch-buffer)
+              (define-key lisp-interaction-mode-map (kbd "C-x k")
+                'clear-scratch-buffer)
 
               ;; detect appropriate minimal height of smart window
               (when (< smartwin-min-window-height 0)
@@ -514,6 +517,8 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
           (ad-deactivate 'mwheel-scroll)
           (ad-deactivate 'select-window)
           (ad-deactivate 'gdb)
+          (define-key lisp-interaction-mode-map (kbd "C-x k") nil)
+
           (smartwin-hide)
           ))
     (with-no-warnings
@@ -536,7 +541,7 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
                 (set-window-buffer window smartwin-previous-buffer))))))
 
 (defun smartwin-hide (&optional force)
-  "Hide smart window.
+  "Try hide smart window.
 If FORCE is non nil, hide smart window forcely."
   (interactive)
   (let ((window (smartwin-get-smart-win)))
@@ -546,6 +551,48 @@ If FORCE is non nil, hide smart window forcely."
           (if force
               (minimize-window window))
           (delete-window (smartwin-get-smart-win))))))
+
+(defun smartwin-make-buffer-list ()
+  "Return list of buffers should and not shown in smartwin."
+  (let ((visible-buffers (ido-get-buffers-in-frames 'current)))
+    (delq nil
+          (mapcar
+           (lambda (x)
+             (let ((name (buffer-name x)))
+               (if (and (smartwin-match-buffer x)
+                        (not (member name visible-buffers)))
+                   name)))
+           (buffer-list)))))
+
+(defun smartwin-show-buffer ()
+  "Show buffer that can be showed in smartwin.
+This function get input by ido."
+  (interactive)
+  (let* ((chosen
+         (ido-completing-read "Smartwin:" (smartwin-make-buffer-list)))
+        (buffer (get-buffer chosen)))
+    (if (not buffer)
+        (message (format "Buffer %s not exist" chosen))
+      (switch-to-buffer buffer))))
+
+(defun create-scratch-buffer ()
+  "Create a scratch buffer with the scratch message."
+  (interactive)
+  (unless (get-buffer "*scratch*")
+    (with-buffer "*scratch*"
+      (progn
+        (insert initial-scratch-message)
+        (goto-char (point-max))
+        (lisp-interaction-mode)))))
+
+(defun clear-scratch-buffer ()
+  "Clear the scratch buffer and keep the scratch message."
+  (interactive)
+  (when (eq (get-buffer "*scratch*") (current-buffer))
+    (delete-region (point-min) (point-max))
+    (insert initial-scratch-message)
+    (goto-char (point-max))))
+
 
 (provide 'smartwin)
 

@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-18 00:43:18 Jerry Xu>
+;; Time-stamp: <2015-07-18 11:36:34 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -688,23 +688,6 @@ if BUFFER is nil, use `current-buffer'."
               (ac-emacs-lisp-mode-setup)
               (define-key eshell-mode-map (kbd "C-l") 'clear)))
 
-(defun create-scratch-buffer ()
-  "Create a scratch buffer with the scratch message."
-  (interactive)
-  (unless (get-buffer "*scratch*")
-    (switch-to-buffer (get-buffer-create "*scratch*"))
-    (insert initial-scratch-message)
-    (goto-char (point-max))
-    (lisp-interaction-mode)))
-
-(defun clear-scratch-buffer ()
-  "Clear the scratch buffer and keep the scratch message."
-  (interactive)
-  (when (string-match "\*scratch\*.*" (buffer-name (current-buffer)))
-    (delete-region (point-min) (point-max))
-    (insert initial-scratch-message)
-    (goto-char (point-max))))
-
 ;; do not load custom file, all the configuration should be done by code
 ;; (load "lambda-custom")
 
@@ -911,7 +894,6 @@ if BUFFER is nil, use `current-buffer'."
 (global-set-key (kbd "M-n") 'next-error)
 (global-set-key (kbd "M-p") 'previous-error)
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
-(define-key lisp-interaction-mode-map (kbd "C-x k") 'clear-scratch-buffer)
 (global-set-key (kbd "C-x j") #'(lambda () (interactive)
                                   (ido-find-file-in-dir lambda-x-direcotry)))
 (global-set-key (kbd "C-x C-c") #'(lambda () (interactive)
