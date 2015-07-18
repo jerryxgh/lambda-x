@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-18 11:36:34 Jerry Xu>
+;; Time-stamp: <2015-07-18 14:14:30 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -831,8 +831,10 @@ if BUFFER is nil, use `current-buffer'."
         (ido-use-url-at-point 'guess))
     (ido-find-file)))
 
-;;(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
-(put 'dired-do-rename 'ido 'find-file)
+(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
+(put 'dired-do-copy   'ido nil) ; use ido there
+(put 'dired-do-rename 'ido nil) ; ^
+;; (put 'dired-do-rename 'ido 'find-file)
 (ido-mode t)
 (ido-everywhere t)
 (ido-ubiquitous-mode 1)
