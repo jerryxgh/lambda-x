@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-07-18 14:14:30 Jerry Xu>
+;; Time-stamp: <2015-08-25 16:33:59 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -637,6 +637,7 @@ the search is performed ."
 
 ;; shell configs ---------------------------------------------------------------
 (require 'shell)
+(require 'esh-mode)
 (defun clear ()
   "Clear `eshell' or submode of `comint-mode' buffer."
   (interactive)
@@ -660,7 +661,9 @@ if BUFFER is nil, use `current-buffer'."
          #'(lambda (process state)
              (when (or (string-match "exited abnormally with code." state)
                        (string-match "\\(finished\\|exited\\)" state))
-               (quit-window t (get-buffer-window (process-buffer process)))))))))
+               (quit-window t (get-buffer-window (process-buffer process)))
+               ;; (kill-buffer (process-buffer process))
+               ))))))
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
 (add-hook 'comint-mode-hook 'kill-buffer-when-shell-command-exit)
@@ -685,7 +688,7 @@ if BUFFER is nil, use `current-buffer'."
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (eldoc-mode 1)
-              (ac-emacs-lisp-mode-setup)
+              (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
               (define-key eshell-mode-map (kbd "C-l") 'clear)))
 
 ;; do not load custom file, all the configuration should be done by code
@@ -710,7 +713,6 @@ if BUFFER is nil, use `current-buffer'."
 ;; accidentially pressed "C-x C-c"
 (setq helm-command-prefix-key "C-c h")
 (require 'helm-config)
-(require 'helm-eshell)
 (require 'helm-files)
 (require 'helm-grep)
 
@@ -734,7 +736,7 @@ if BUFFER is nil, use `current-buffer'."
   'helm-grep-mode-jump-other-window-forward)
 (define-key helm-grep-mode-map (kbd "p")
   'helm-grep-mode-jump-other-window-backward)
-(setq helm-google-suggest-use-curl-p t
+(setq helm-net-prefer-curl t
       helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
       helm-quick-update t ; do not display invisible candidates
       ;; be idle for this many seconds, before updating in delayed sources.
@@ -848,21 +850,7 @@ if BUFFER is nil, use `current-buffer'."
 ;;  'magit-ediff-show-staged)
 ;; (magit-define-popup-action 'magit-ediff-popup ?U "Show unstaged"
 ;;  'magit-ediff-show-unstaged)
-(defun lambda-get-magit-dir ()
-  "Get the directory magit installed."
-  (let ((elpa-dir (expand-file-name "elpa" lambda-x-direcotry)))
-    (if (and (stringp elpa-dir) (file-directory-p elpa-dir))
-        (catch 'break
-          (dolist (file (directory-files elpa-dir))
-            (let ((subfile (expand-file-name file elpa-dir)))
-              (if (and (file-directory-p subfile)
-                       (string-prefix-p "magit-" file))
-                  (throw 'break subfile)))
-            ))
-      nil)))
-(eval-after-load 'info
-  '(progn (info-initialize)
-          (add-to-list 'Info-directory-list (lambda-get-magit-dir))))
+;; windows support
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
   (when (and (eq system-type 'windows-nt)
              (file-exists-p git-executable-windows))
@@ -898,14 +886,6 @@ if BUFFER is nil, use `current-buffer'."
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (global-set-key (kbd "C-x j") #'(lambda () (interactive)
                                   (ido-find-file-in-dir lambda-x-direcotry)))
-(global-set-key (kbd "C-x C-c") #'(lambda () (interactive)
-                                    "Stop eclimd and "
-                                    (when (and  (functionp 'eclimd--running-p)
-                                                (eclimd--running-p))
-                                      (message "Stopping eclimd ...")
-                                      (stop-eclimd)
-                                      (message "Eclimd stopped."))
-                                    (save-buffers-kill-terminal)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling

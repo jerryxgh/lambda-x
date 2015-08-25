@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-07-14 21:17:37 Jerry Xu>
+;; Time-stamp: <2015-08-24 17:37:55 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -120,6 +120,7 @@
 ;; M-* 		helm-gtags-pop-stack
 ;; M-. 		helm-gtags-find-tag
 ;; C-x 4 . 	helm-gtags-find-tag-other-window
+(setq helm-gtags-suggested-key-mapping t)
 (when (featurep 'evil)
   (define-key evil-normal-state-map
     (kbd "M-.") 'helm-gtags-dwim)

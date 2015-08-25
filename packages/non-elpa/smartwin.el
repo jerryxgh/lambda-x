@@ -385,7 +385,7 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
   (let ((window (ad-get-arg 0)))
     (if (smartwin-smart-window-p window)
         (progn (message "Smart window is unsplittable")
-               (setq ad-return-value nil))
+               (setq ad-return-value window))
       ad-do-it)))
 
 (defadvice window-splittable-p (around smartwin-window-splittable-p)

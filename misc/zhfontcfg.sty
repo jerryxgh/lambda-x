@@ -1,0 +1,63 @@
+% % xetex/xelatex 字体设定宏包
+
+\ProvidesPackage{zhfontcfg}
+\usepackage[CJKchecksingle, CJKnumber]{xeCJK}
+
+\usepackage{indentfirst} %首行缩进
+\setlength{\parindent}{2em}
+
+%将系统字体名映射为逻辑字体名称，主要是为了维护的方便
+% \newcommand\fontnamehei{Adobe Heiti Std}
+% \newcommand\fontnamesong{Adobe Song Std}
+% \newcommand\fontnamekai{Adobe Kaiti Std}
+\newcommand\fontnamehei{SimHei}
+\newcommand\fontnamesong{SimSun}
+\newcommand\fontnamekai{Kaiti}
+\newcommand\fontnamemono{Times New Roman}
+\newcommand\fontnameroman{Times New Roman}
+\newcommand\fontnamexingkai{STXingkai}
+
+%设置常用中文字号，方便调用
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
+\newcommand{\dayihao}{\fontsize{31.5pt}{\baselineskip}\selectfont}
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoyihao}{\fontsize{24pt}{\baselineskip}\selectfont}
+\newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
+\newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosanhao}{\fontsize{15pt}{\baselineskip}\selectfont}
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
+\newcommand{\liuhao}{\fontsize{7.5pt}{\baselineskip}\selectfont}
+
+%设置文档正文字体为宋体
+\setCJKmainfont[BoldFont=\fontnamesong]{\fontnamesong}
+\setCJKsansfont[BoldFont=\fontnamehei]{\fontnamehei}
+\setCJKmonofont{\fontnamemono}
+
+%楷体
+\setCJKfamilyfont{KAI}{\fontnamekai}
+\newcommand{\kai}[1]{{\CJKfamily{KAI}#1}}
+\newcommand{\kkai}{\CJKfamily{KAI}}
+
+%黑体
+\setCJKfamilyfont{HEI}{\fontnamehei}
+\newcommand{\hei}[1]{{\CJKfamily{HEI}#1}}
+\newcommand{\hhei}{\CJKfamily{HEI}}
+
+%宋体
+\setCJKfamilyfont{SONG}{\fontnamesong}
+\newcommand{\song}[1]{{\CJKfamily{SONG}#1}}
+\newcommand{\ssong}{\CJKfamily{SONG}}
+
+%行楷
+\setCJKfamilyfont{XINGKAI}{\fontnamexingkai}
+\newcommand{\xingkai}[1]{{\CJKfamily{XINGKAI}#1}}
+\newcommand{\xxingkai}{\CJKfamily{XINGKAI}}
+
+%英文
+\newfontfamily\ENF{\fontnameroman}
+\newcommand{\en}[1]{\,{\ENF#1}\,}

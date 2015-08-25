@@ -92,7 +92,7 @@ Note the weekly scope of the command's precision.")
 (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
 
 ;; to try
-;; window-numbering Comment-dwim-2 evil-nerd-commenter
+;; window-numbering Comment-dwim-2 evil-nerd-commenter chinese-fonts-  default-text-scale font-utils fontawesome
 ;; good
 (lambda-package-ensure-install 'window-numbering)
 (window-numbering-mode 1)
@@ -143,7 +143,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'page-break-lines)
 (lambda-package-ensure-install 'paradox)
 (lambda-package-ensure-install 'rfringe)
-(lambda-package-ensure-install 'toc-org)
 
 ;; knowledge
 ;; locate-library

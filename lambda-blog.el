@@ -1,28 +1,31 @@
 ;;; lambda-blog.el --- org, confluence wiki
-;; Time-stamp: <2015-05-20 13:32:56 Jerry Xu>
+;; Time-stamp: <2015-08-23 12:55:34 Jerry Xu>
 ;;; Commentary:
 ;; core settings
 
 ;;; Code:
 
 (require 'lambda-core)
+(require 'org)
 
 ;; org-mode
 ;; align chinese font in org table, solution is from below:
 ;; http://baohaojun.github.io/blog/2012/12/19/perfect-emacs-chinese-font.html
 (setq scalable-fonts-allowed t)
 
-(setq org-use-speed-commands t)
+(setq org-use-speed-commands t
+      org-directory "/home/xgh/文档/"
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t)
+(setq org-agenda-files (list "/home/xgh/文档/gtd.org"
+                             (concat org-directory "/capture.org")))
 
-(setq org-agenda-files (list "/home/xgh/文档/gtd.org"))
+(setq org-default-notes-file (concat org-directory "/capture.org"))
+(global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-src-fontify-natively t)
-(setq org-src-tab-acts-natively t)
-
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
 
 
 ;; htmlize --------------------------------------------------------------------
@@ -35,58 +38,40 @@ rainbow-delimiters-mode temporarily when using htmlize."
   (rainbow-delimiters-mode t))
 
 (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
-        (ad-activate 'htmlize-buffer-1)
+(ad-activate 'htmlize-buffer-1)
 
-;; org-page --------------------------------------------------------------------
-(lambda-package-ensure-install 'org-page)
-(require 'org-page)
-(setq op/repository-directory "/home/xgh/repository/jerryxgh.github.io")
-(setq op/site-domain "http://jerryxgh.github.io")
-;; for commenting, you can choose either disqus or duoshuo
-(setq op/personal-disqus-shortname "jerryxgh")
-;; (setq op/personal-duoshuo-shortname "your_duoshuo_shortname")
-;; the configuration below are optional
-;; (setq op/personal-google-analytics-id "your_google_analytics_id")
-(setq op/theme 'simple)
+;; export org to pdf
+;;git clone git://github.com/tsdye/org-article.git
+;;cd org-article
+;;emacs -batch --eval "(org-babel-tangle-file \"article-class.org\")"
+;;sudo cp org-article.cls /usr/share/texlive/texmf-dist/tex/latex/base/
+;;sudo mktexlsr
+;;kpsewhich org-article.cls
+(require 'ox-latex)
+(setq org-latex-listings t)
+(add-to-list 'org-latex-classes
+             '("org-article"
+               "\\documentclass{org-article}
+                 [NO-DEFAULT-PACKAGES]
+                 [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;;(require 'org-publish)
-;;
-;;(setq org-publish-project-alist
-;;      '(
-;;        ;; path to org file
-;;        ("blog-org"
-;;         :base-directory "~/repository/jerryxgh.github.com/org/"
-;;         :base-extension "org"
-;;
-;;         ;; path to jekyll project
-;;         :publishing-directory "~/repository/jerryxgh.github.com/"
-;;         :recursive t
-;;         :publishing-function org-publish-org-to-html
-;;         :headline-levels 4
-;;         :html-extension "html"
-;;         :section-numbers nil
-;;         :auto-preamble t
-;;         :body-only t ; only export section between <body> </body>
-;;
-;;         ;; generate sitemap.org automagically
-;;         :auto-sitemap t
-;;         :sitemap-filename "sitemap.org"
-;;         :sitemap-title "Sitemap"
-;;
-;;         :author "jerryxgh"
-;;         :email "gh_xu@qq.com"
-;;         :style    ""
-;;         )
-;;
-;;        ("blog-static"
-;;         :base-directory "~/repository/jerryxgh.github.com/org/"
-;;         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-;;         :publishing-directory "~/repository/jerryxgh.github.com/"
-;;         :recursive t
-;;         :publishing-function org-publish-attachment
-;;         )
-;;
-;;        ("blog" :components ("blog-org" "blog-static"))))
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode %b"
+        "xelatex -interaction nonstopmode %b"))
+
+
+(add-to-list 'load-path "/home/xgh/repository/simplesite/")
+(require 'simplesite)
+(require 'ss-options)
+(setq ss-source-directory
+      "/home/xgh/repository/jerryxgh.github.io/source"
+      ss-author "Jerry")
+
 
 (provide 'lambda-blog)
 
