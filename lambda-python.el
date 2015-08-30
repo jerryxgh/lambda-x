@@ -15,7 +15,7 @@
       jedi:tooltip-method t
       python-environment-directory (expand-file-name
                                     "python-environments"
-                                    lambda-savefile-dir))
+                                    lambda-auto-save-dir))
 
 
 (provide 'lambda-python)

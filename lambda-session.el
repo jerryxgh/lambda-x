@@ -15,7 +15,7 @@
       savehist-autosave-interval 60 ; save every minute
       savehist-file (expand-file-name ; keep the home clean
 		     "savehist"
-		     lambda-savefile-dir))
+		     lambda-auto-save-dir))
 (savehist-mode 1)
 
 ;; save recent files -----------------------------------------------------------
@@ -23,7 +23,7 @@
 (require 'recentf)
 (setq recentf-save-file (expand-file-name
 			 "recentf"
-			 lambda-savefile-dir)
+			 lambda-auto-save-dir)
       recentf-max-saved-items 500
       recentf-max-menu-items 15
       ;; disable recentf-cleanup on Emacs start, because it can cause
@@ -39,7 +39,7 @@
 ;; to keep home clean
 (setq save-place-file (expand-file-name
 		       "savedplace"
-		       lambda-savefile-dir))
+		       lambda-auto-save-dir))
 ;; activate it for all buffers
 (setq-default save-place t)
 
@@ -66,9 +66,9 @@ This follows freedesktop standards, should work in X servers."
 
 ;; Restore buffers automaticly -------------------------------------------------
 (require 'desktop)
-(setq desktop-path (list (expand-file-name lambda-savefile-dir))
+(setq desktop-path (list (expand-file-name lambda-auto-save-dir))
       history-length 250
-      desktop-dirname (expand-file-name lambda-savefile-dir)
+      desktop-dirname (expand-file-name lambda-auto-save-dir)
       desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
       desktop-base-file-name "emacs-desktop")
 
@@ -76,6 +76,28 @@ This follows freedesktop standards, should work in X servers."
 
 ;;加快emacs的启动速度
 (server-start)
+
+;; text zoom and window zoom ---------------------------------------------------
+(lambda-package-ensure-install 'elscreen)
+(require 'elscreen)
+(elscreen-start)
+
+;; (lambda-package-ensure-install 'elscreen-persist)
+;; (require 'elscreen-persist)
+;; (setq elscreen-persist-file (expand-file-name "elscreen"
+;;                                               lambda-auto-save-dir))
+;; (elscreen-persist-mode 1)
+
+;; (lambda-package-ensure-install 'elscreen-separate-buffer-list)
+;; (require 'elscreen-separate-buffer-list)
+;; (elscreen-separate-buffer-list-mode)
+
+;; (lambda-package-ensure-install 'zoom-window)
+;; (require 'zoom-window)
+;; (setq zoom-window-use-elscreen t)
+;; (zoom-window-setup)
+;; (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+
 
 (provide 'lambda-session)
 

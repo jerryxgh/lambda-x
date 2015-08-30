@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-08-24 17:37:55 Jerry Xu>
+;; Time-stamp: <2015-08-30 22:15:49 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -31,17 +31,17 @@
 ;;(global-semantic-show-parser-state-mode 1)
 (require 'semantic/db-file)
 (setq semanticdb-default-save-directory
-      (expand-file-name "semanticdb" lambda-savefile-dir))
+      (expand-file-name "semanticdb" lambda-auto-save-dir))
 ;; (setq ede-project-placeholder-cache-file
-;;       (expand-file-name "ede-projects.el" lambda-savefile-dir))
+;;       (expand-file-name "ede-projects.el" lambda-auto-save-dir))
 ;(semanticdb-enable-gnu-global-databases 'c-mode)
 ;(semanticdb-enable-gnu-global-databases 'c++-mode)
 
 ;; irony-mode ------------------------------------------------------------------
 (lambda-package-ensure-install 'irony)
 (require 'irony)
-(setq irony-server-install-prefix (expand-file-name "irony" lambda-savefile-dir)
-      irony-user-dir (expand-file-name "irony" lambda-savefile-dir))
+(setq irony-server-install-prefix (expand-file-name "irony" lambda-auto-save-dir)
+      irony-user-dir (expand-file-name "irony" lambda-auto-save-dir))
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)

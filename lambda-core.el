@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-08-25 16:33:59 Jerry Xu>
+;; Time-stamp: <2015-08-30 22:15:48 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -14,7 +14,7 @@
                               (or load-file-name (buffer-file-name)))
   "Root directory of lambda-x.")
 
-(defconst lambda-savefile-dir (expand-file-name "auto-save-list/"
+(defconst lambda-auto-save-dir (expand-file-name "auto-save-list/"
                                                 user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
@@ -257,7 +257,7 @@ This follows freedesktop standards, should work in X servers."
                                          try-complete-lisp-symbol))
 ;; abbrev-mode settings
 (setq abbrev-file-name (expand-file-name "abbrev_defs"
-                                         lambda-savefile-dir))
+                                         lambda-auto-save-dir))
 (setq-default abbrev-mode t)
 (diminish 'abbrev-mode)
 (if (file-exists-p abbrev-file-name)
@@ -354,7 +354,7 @@ This follows freedesktop standards, should work in X servers."
 (require 'tramp-cache)
 (setq tramp-auto-save-directory  temporary-file-directory)
 (setq tramp-persistency-file-name (expand-file-name "tramp"
-                                                    lambda-savefile-dir))
+                                                    lambda-auto-save-dir))
 (if (eq system-type 'windows-nt)
     (setq tramp-default-method "plink")
   (setq tramp-default-method "ssh"))
@@ -405,7 +405,7 @@ This follows freedesktop standards, should work in X servers."
 ;;; bookmark -------------------------------------------------------------------
 (require 'bookmark)
 (setq bookmark-default-file (expand-file-name "bookmarks"
-                                              lambda-savefile-dir))
+                                              lambda-auto-save-dir))
 
 ;; ack A better grep for programmers -------------------------------------------
 (lambda-package-ensure-install 'ack)
@@ -436,10 +436,10 @@ This follows freedesktop standards, should work in X servers."
       ;; projectile-require-project-root nil
       projectile-cache-file (expand-file-name
                              "projectile.cache"
-                             lambda-savefile-dir)
+                             lambda-auto-save-dir)
       projectile-known-projects-file (expand-file-name
                                       "projectile-bookmarks.eld"
-                                      lambda-savefile-dir))
+                                      lambda-auto-save-dir))
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode)
 (defun projectile-ack (regexp &optional arg)
@@ -682,7 +682,7 @@ if BUFFER is nil, use `current-buffer'."
 (require 'eshell)
 (setq eshell-directory-name (expand-file-name
                              "eshell"
-                             lambda-savefile-dir))
+                             lambda-auto-save-dir))
 ;; when input things in eshell, goto the end of the buffer automatically
 (setq eshell-scroll-to-bottom-on-input 'this)
 (add-hook 'eshell-mode-hook
@@ -698,7 +698,7 @@ if BUFFER is nil, use `current-buffer'."
 (lambda-package-ensure-install 'smex)
 (require 'smex)
 (setq smex-save-file (expand-file-name "smex-items"
-                                       lambda-savefile-dir))
+                                       lambda-auto-save-dir))
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -822,7 +822,7 @@ if BUFFER is nil, use `current-buffer'."
                            "^\\*Messages\\*$"
                            "^\\*Help\\*$")
       ido-save-directory-list-file
-      (expand-file-name "ido.hist" lambda-savefile-dir)
+      (expand-file-name "ido.hist" lambda-auto-save-dir)
       ;; ido-default-file-method 'selected-window
       ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
       )
@@ -921,7 +921,7 @@ if BUFFER is nil, use `current-buffer'."
 (add-to-list 'ac-dictionary-files
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
 (setq ac-comphist-file (expand-file-name "ac-comphist.dat"
-                                         lambda-savefile-dir)
+                                         lambda-auto-save-dir)
       ;; ac-auto-start 3
       ac-ignore-case nil
       ac-modes

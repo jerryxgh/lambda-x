@@ -28,7 +28,7 @@
 (require 'lambda-core)
 (require 'gnus-start)
 
-(setq gnus-init-file (expand-file-name "gnus.el" lambda-savefile-dir))
+(setq gnus-init-file (expand-file-name "gnus.el" lambda-auto-save-dir))
 
 (provide 'lambda-gnus)
 

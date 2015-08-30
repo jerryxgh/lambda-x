@@ -345,14 +345,12 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
     (if (not window)
         (setq window (selected-window)))
     (if (smartwin-smart-window-p window)
-        (if (< smartwin-min-window-height (window-height window))
-            (minimize-window window)
-          (progn
-            (setq smartwin-previous-buffer (window-buffer window))
-            ad-do-it))
+        (progn
+          (setq smartwin-previous-buffer (window-buffer window))
+          ad-do-it)
       (if (and (smartwin-find-smart-win) (eq 2 (length (window-list))))
           (progn
-            (message "Attempt to delete last oridnary window")
+            (message "Attempt to delete last normal(non smart window) window")
             (setq ad-return-value nil))
         ad-do-it))))
 
