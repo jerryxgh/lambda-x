@@ -80,23 +80,22 @@ This follows freedesktop standards, should work in X servers."
 ;; text zoom and window zoom ---------------------------------------------------
 (lambda-package-ensure-install 'elscreen)
 (require 'elscreen)
+(setq elscreen-display-tab nil)
 (elscreen-start)
 
-;; (lambda-package-ensure-install 'elscreen-persist)
-;; (require 'elscreen-persist)
-;; (setq elscreen-persist-file (expand-file-name "elscreen"
-;;                                               lambda-auto-save-dir))
-;; (elscreen-persist-mode 1)
+(lambda-package-ensure-install 'elscreen-persist)
+(require 'elscreen-persist)
+(setq elscreen-persist-file (expand-file-name "elscreen"
+                                              lambda-auto-save-dir))
+(elscreen-persist-mode 1)
 
-;; (lambda-package-ensure-install 'elscreen-separate-buffer-list)
-;; (require 'elscreen-separate-buffer-list)
-;; (elscreen-separate-buffer-list-mode)
-
-;; (lambda-package-ensure-install 'zoom-window)
-;; (require 'zoom-window)
-;; (setq zoom-window-use-elscreen t)
-;; (zoom-window-setup)
-;; (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+;; enlarge current window temporarily
+(lambda-package-ensure-install 'zoom-window)
+(require 'zoom-window)
+(setq zoom-window-use-elscreen t)
+(zoom-window-setup)
+(setq zoom-window-mode-line-color "black")
+(global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
 
 
 (provide 'lambda-session)

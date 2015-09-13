@@ -96,11 +96,19 @@ Note the weekly scope of the command's precision.")
 ;; default-text-scale font-utils fontawesome zap-to-char zlc
 ;; good
 (lambda-package-ensure-install 'window-numbering)
+
 (window-numbering-mode 1)
+
 (lambda-package-ensure-install 'git-messenger)
 (require 'git-messenger)
 (setq git-messenger:show-detail t)
-;; tring
+
+(lambda-package-ensure-install 'zoom-frm)
+
+;; A-x string-edit-at-point "C-c C-c" "C-c C-k"
+(lambda-package-ensure-install 'string-edit)
+
+;; trying
 (lambda-package-ensure-install 'ac-ispell)
 (lambda-package-ensure-install 'ace-link)
 (lambda-package-ensure-install 'adaptive-wrap)
@@ -137,14 +145,15 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'linum-relative)
 (lambda-package-ensure-install 'move-text)
 (lambda-package-ensure-install 'multi-term)
-;; (lambda-package-ensure-install 'neotree)
 (lambda-package-ensure-install 'org-bullets)
 (lambda-package-ensure-install 'org-present)
 (lambda-package-ensure-install 'org-repo-todo)
 (lambda-package-ensure-install 'page-break-lines)
 (lambda-package-ensure-install 'paradox)
 (lambda-package-ensure-install 'rfringe)
-(lambda-package-ensure-install 'zoom-frm)
+(lambda-package-ensure-install 'csv-mode)
+(lambda-package-ensure-install 'evil-textobj-anyblock)
+(lambda-package-ensure-install 'expand-line)
 
 ;; knowledge
 ;; locate-library
