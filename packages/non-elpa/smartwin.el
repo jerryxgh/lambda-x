@@ -184,7 +184,8 @@ If succeed, created window is returned, else return nil."
              (if window
                  (progn
                    (set-window-parameter window 'smartwinp t)
-                   (set-window-buffer window (get-buffer "*scratch*"))
+                   (set-window-buffer window (or (get-buffer "*scratch*")
+                                                 (create-scratch-buffer)))
                    (set-window-prev-buffers window nil))))
         window)))
 
@@ -396,7 +397,7 @@ split smart window."
       ad-do-it)))
 
 (defadvice switch-to-buffer (around smartwin-switch-to-buffer)
-  "When a bffer should be shown in smart window, chage window to smart window."
+  "When a bffer should be shown in smart window, change window to smart window."
   (let ((buffer-or-name (ad-get-arg 0)))
     (if (smartwin-match-buffer buffer-or-name)
         (let ((smart-win (smartwin-get-smart-win)))
@@ -562,8 +563,8 @@ If FORCE is non nil, hide smart window forcely."
                    name)))
            (buffer-list)))))
 
-(defun smartwin-show-buffer ()
-  "Show buffer that can be showed in smartwin.
+(defun smartwin-pop-buffer ()
+  "Pop buffer that can be showed in smartwin.
 This function get input by ido."
   (interactive)
   (let* ((smartwin-buffers (smartwin-make-buffer-list))
@@ -583,11 +584,12 @@ This function get input by ido."
   "Create a scratch buffer with the scratch message."
   (interactive)
   (unless (get-buffer "*scratch*")
-    (with-buffer "*scratch*"
+    (with-current-buffer (get-buffer-create "*scratch*")
       (progn
         (insert initial-scratch-message)
         (goto-char (point-max))
-        (lisp-interaction-mode)))))
+        (lisp-interaction-mode)
+        (current-buffer)))))
 
 (defun clear-scratch-buffer ()
   "Clear the scratch buffer and keep the scratch message."

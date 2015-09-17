@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-08-30 22:15:48 Jerry Xu>
+;; Time-stamp: <2015-09-17 18:29:57 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -279,10 +279,11 @@ This follows freedesktop standards, should work in X servers."
 
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
-(require 'smartparens)
+;; this config should before (require 'smartparens)
 (setq sp-base-key-bindings 'sp)
 (setq sp-show-pair-from-inside t)
 ;; (setq sp-navigate-close-if-unbalanced t)
+(require 'smartparens)
 (require 'smartparens-config)
 ;; (setq sp-autoskip-closing-pair 'always)
 (define-key smartparens-strict-mode-map
@@ -290,7 +291,6 @@ This follows freedesktop standards, should work in X servers."
 ;; use smartparens key bindings
 (smartparens-global-mode t)
 (smartparens-global-strict-mode t)
-;; TODO: maybe this is not good
 (show-smartparens-global-mode t)
 (diminish 'smartparens-mode)
 

@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-07-12 23:27:36 Jerry Xu>
+;; Time-stamp: <2015-09-17 17:41:50 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -20,13 +20,22 @@
 ;; let * and # search symbol instead of word at point
 (setq-default evil-symbol-word-search t)
 ;; settings below restore key bindings in emacs in insert state
+(define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
+(define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
+(define-key evil-insert-state-map (kbd "C-b") 'backward-char)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
 (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+(define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
 (define-key evil-insert-state-map (kbd "C-n") 'next-line)
 (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
 (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
+
+(define-key evil-motion-state-map (kbd "C-a") 'move-beginning-of-line)
+(define-key evil-motion-state-map (kbd "C-e") 'move-end-of-line)
+(define-key evil-motion-state-map (kbd "C-k") 'kill-line)
 
 (defun lambda-hs-hide-level-1 ()
   "Just fold level 1 elements."
@@ -165,6 +174,11 @@
 
 ;; evil-indent-textobject ------------------------------------------------------
 (lambda-package-ensure-install 'evil-indent-textobject)
+
+;; evil-smartparens ------------------------------------------------------
+(lambda-package-ensure-install 'evil-smartparens)
+(require 'evil-smartparens)
+(evil-smartparens-mode 1)
 
 (provide 'lambda-evil)
 
