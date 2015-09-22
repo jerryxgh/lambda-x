@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-09-17 17:41:50 Jerry Xu>
+;; Time-stamp: <2015-09-21 10:30:41 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -14,7 +14,7 @@
 
 (setq evil-want-visual-char-semi-exclusive t
       ;; evil-want-C-i-jump nil
-      ;; evil-want-fine-undo t
+      evil-want-C-w-delete t
       evil-auto-balance-windows nil
       evil-cross-lines t)
 ;; let * and # search symbol instead of word at point
@@ -30,7 +30,7 @@
 (define-key evil-insert-state-map (kbd "C-n") 'next-line)
 (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
-(define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
+;; (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
 
 (define-key evil-motion-state-map (kbd "C-a") 'move-beginning-of-line)

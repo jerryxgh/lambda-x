@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-09-17 18:29:57 Jerry Xu>
+;; Time-stamp: <2015-09-22 11:50:03 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -1005,22 +1005,6 @@ DISPLAY-FN: use this function to display."
 (setq enable-local-eval t)
 (setq enable-local-variables :all)
 (setq enable-remote-dir-locals t)
-
-;; convenience =================================================================
-(lambda-package-ensure-install 'popwin)
-(require 'popwin)
-(dolist (special-buffer
-         '((" *undo-tree*")
-           ("^\\*shell\\*.*$" :regexp t :stick t)
-           ("^\\*eshell\\*.*$" :regexp t :noselect t)
-           ("^\\*magit: .*\\*$" :regexp t)
-           ("*magit-commit*")
-           ))
-  (push special-buffer popwin:special-display-config))
-
-(lambda-package-ensure-install 'import-popwin)
-
-;; convenience ends here =======================================================
 
 (provide 'lambda-core)
 
