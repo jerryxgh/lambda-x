@@ -151,7 +151,8 @@ But smart window can be higher if run `delete-other-window' when is is already
                    (setq forward-line-num (+ forward-line-num 1)))
                  ))
              return)
-           t)))))
+           t)))
+    ))
 
 
 
@@ -563,7 +564,7 @@ If FORCE is non nil, hide smart window forcely."
                    name)))
            (buffer-list)))))
 
-(defun smartwin-pop-buffer ()
+(defun smartwin-switch-buffer ()
   "Pop buffer that can be showed in smartwin.
 This function get input by ido."
   (interactive)

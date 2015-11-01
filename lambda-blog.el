@@ -1,7 +1,7 @@
 ;;; lambda-blog.el --- org, confluence wiki
-;; Time-stamp: <2015-08-23 12:55:34 Jerry Xu>
+;; Time-stamp: <2015-10-28 16:35:23 Jerry Xu>
 ;;; Commentary:
-;; core settings
+;; blog about settings
 
 ;;; Code:
 

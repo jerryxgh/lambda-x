@@ -89,7 +89,6 @@ Normally it is indent function."
   (interactive)
   (let ((tab-command (evil-tab-get-TAB-command))
         (old-point (point)))
-    ;;(if (functionp tab-command)
     (if (commandp tab-command)
         (command-execute tab-command))
     (if (and (eq (point) old-point)

@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2015-04-04 15:33:56 Jerry Xu>
+;; Time-stamp: <2015-10-28 16:37:59 Jerry Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -28,8 +28,8 @@
       (delete
        '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . html-mode) auto-mode-alist))
 
-(setq web-mode-markup-indent-offset 2)
-(setq web-mode-css-indent-offset 2)
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
 (setq web-mode-code-indent-offset 4)
 ;; (setq web-mode-disable-autocompletion t)
 

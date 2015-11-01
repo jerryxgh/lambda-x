@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-09-22 14:34:23 Jerry Xu>
+;; Time-stamp: <2015-11-01 19:28:05 Jerry Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -151,7 +151,8 @@
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 (lambda-package-ensure-install 'evil-commentary)
-(evil-commentary-default-setup)
+(require 'evil-commentary)
+(evil-commentary-mode)
 
 (lambda-package-ensure-install 'evil-numbers)
 (require 'evil-numbers)

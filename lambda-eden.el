@@ -118,7 +118,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'clean-aindent-mode)
 (lambda-package-ensure-install 'eval-sexp-fu)
 (lambda-package-ensure-install 'evil-args)
-(lambda-package-ensure-install 'evil-iedit-state)
 (lambda-package-ensure-install 'evil-nerd-commenter)
 (lambda-package-ensure-install 'expand-region)
 (lambda-package-ensure-install 'flycheck-pos-tip)
@@ -144,8 +143,10 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'info+)
 (lambda-package-ensure-install 'linum-relative)
 (lambda-package-ensure-install 'move-text)
-(lambda-package-ensure-install 'multi-term)
+
 (lambda-package-ensure-install 'org-bullets)
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (lambda-package-ensure-install 'org-present)
 (lambda-package-ensure-install 'org-repo-todo)
 (lambda-package-ensure-install 'page-break-lines)
@@ -160,5 +161,11 @@ Note the weekly scope of the command's precision.")
 ;; list-load-path-shadows
 
 (provide 'lambda-eden)
+
+
+
+
+;;; config for gnus
+
 
 ;;; lambda-eden.el ends here

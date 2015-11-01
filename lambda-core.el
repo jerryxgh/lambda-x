@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-09-22 11:50:03 Jerry Xu>
+;; Time-stamp: <2015-11-01 20:35:51 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -15,7 +15,7 @@
   "Root directory of lambda-x.")
 
 (defconst lambda-auto-save-dir (expand-file-name "auto-save-list/"
-                                                user-emacs-directory)
+                                                 user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
 ;; (add-to-list 'load-path lambda-x-direcotry)
@@ -496,11 +496,23 @@ the search is performed ."
 (setq whitespace-line-column nil) ;; use fill-column instead of this
 (setq whitespace-style '(face tabs empty trailing lines-tail spaces newline
                               indentation))
-(setq whitespace-global-modes '(c-mode c++-mode java-mode emacs-lisp-mode
-                                       scheme-mode lisp-mode python-mode
-                                       lua-mode perl-mode haskell-mode
-                                       scala-mode))
-(global-whitespace-mode 1)
+;; (global-whitespace-mode 1)
+
+;;; put code below in .dir-locals.el file
+;; ((nil . ((tab-width . 4)
+;;          (whitespace-tab-width 4)
+;;          (sentence-end-double-space . t)
+;;          (eval . (progn
+;;                    (require 'whitespace)
+;;                    (global-whitespace-mode -1)
+;;                    (set 'fill-column 120)
+;;                    (set (make-local-variable 'whitespace-line-column) nil)
+;;                    (set 'whitespace-global-modes
+;;                         '(c-mode c++-mode java-mode emacs-lisp-mode scheme-mode
+;;                                  lisp-mode python-mode lua-mode perl-mode
+;;                                  haskell-mode scala-mode))
+;;                    (global-whitespace-mode 1)))
+;;          ))
 
 ;; saner regex syntax
 (require 're-builder)
@@ -649,6 +661,11 @@ the search is performed ."
            (comint-truncate-buffer)))))
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
 (define-key shell-mode-map (kbd "C-l") 'clear)
+
+(when (and (eq system-type 'gnu/linux)
+           (file-exists-p "/bin/zsh"))
+  (setq explicit-shell-file-name "/bin/zsh"))
+
 
 (defun kill-buffer-when-shell-command-exit (&optional buffer)
   "Kill the buffer on exit of interactive shell.

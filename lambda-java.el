@@ -18,9 +18,9 @@
 ;; configuring eclipse installation
 (when (eq system-type 'gnu/linux)
   (add-to-list 'eclim-eclipse-dirs
-               "/home/xgh/local/sts-bundle/sts-3.6.4.RELEASE/")
-  (setq eclim-executable "/home/xgh/local/sts-bundle/sts-3.6.4.RELEASE/eclim"
-        eclimd-executable "/home/xgh/local/sts-bundle/sts-3.6.4.RELEASE/eclimd"
+               "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/")
+  (setq eclim-executable "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/eclim"
+        eclimd-executable "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/eclimd"
         eclimd-default-workspace "~/workspace/"))
 
 ;; displaying compilation error messages in the echo area
@@ -30,7 +30,7 @@
 
 ;; configuring auto-complete-mode
 (require 'ac-emacs-eclim-source)
-(defun ac-prefix-eclim-java-dot ()
+(defun lambda-prefix-eclim-java-dot ()
   "Do eclim-complete in auto-complete when encounter dot.
 
 To be compatible with eclim--completion-action, call
@@ -38,13 +38,17 @@ To be compatible with eclim--completion-action, call
 `eclim--completion-start'."
   (let ((dot-p (ac-prefix-c-dot)))
     (when dot-p
+      ;; (setq eclim--completion-start dot-p)
       (eclim-completion-start)
       dot-p)))
 
+(defun lambda-emacs-eclim-action ()
+  (eclim--completion-action eclim--completion-start (point)))
+
 (ac-define-source eclim-java
   '((candidates . eclim--completion-candidates)
-    (action . eclim--completion-action)
-    (prefix . ac-prefix-eclim-java-dot)
+    (action . lambda-emacs-eclim-action)
+    (prefix . lambda-prefix-eclim-java-dot)
     (document . eclim--completion-documentation)
     (cache)
     (selection-face . ac-emacs-eclim-selection-face)
