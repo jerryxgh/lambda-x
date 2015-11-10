@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-11-01 20:35:51 Jerry Xu>
+;; Time-stamp: <2015-11-09 10:30:02 Jerry Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -490,6 +490,7 @@ the search is performed ."
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)
+(setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")
 
 ;; whitespace-mode config.
 (require 'whitespace)
@@ -663,8 +664,8 @@ the search is performed ."
 (define-key shell-mode-map (kbd "C-l") 'clear)
 
 (when (and (eq system-type 'gnu/linux)
-           (file-exists-p "/bin/zsh"))
-  (setq explicit-shell-file-name "/bin/zsh"))
+           (file-exists-p "/bin/bash"))
+  (setq explicit-shell-file-name "/bin/bash"))
 
 
 (defun kill-buffer-when-shell-command-exit (&optional buffer)

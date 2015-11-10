@@ -155,6 +155,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'csv-mode)
 (lambda-package-ensure-install 'evil-textobj-anyblock)
 (lambda-package-ensure-install 'expand-line)
+(lambda-package-ensure-install 'multi-term)
 
 ;; knowledge
 ;; locate-library

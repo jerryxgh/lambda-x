@@ -26,6 +26,9 @@
 
 ;;; Code:
 
+(require 'ido)
+(require 'subr-x)
+
 (defgroup smartwin nil
   "A smart window for temp buffers, shell like buffers and etc."
   :prefix "smartwin-"
@@ -451,11 +454,16 @@ BUFFER-OR-NAME is a buffer to display, ALIST is them same form as ALIST."
 
 ;;;###autoload
 (define-minor-mode smartwin-mode
-  "Smartwin is a window for showing shell like buffers, temp buffers and etc."
+  "Toggle smartwin minor mode.
+Smartwin is a window for showing shell like buffers, temp buffers and etc."
   :lighter    " sw"
   :init-value nil
   :global     t
-  :group      'smartwin
+  :group     'smartwin
+  ;; The minor mode bindings.
+  :keymap     (let ((map (make-sparse-keymap)))
+                (define-key map (kbd "C-c s") 'smartwin-switch-buffer)
+                map)
   (if (boundp 'display-buffer-alist)
       (let ((pair '(smartwin-display-buffer-condition
                     smartwin-display-buffer-action)))
@@ -576,8 +584,11 @@ This function get input by ido."
                       (get-buffer chosen))))
     (if (not buffer)
         (if (not smartwin-buffers)
-            (message
-             "Then only one smartwin buffer has been shown, no other buffers")
+            (progn
+              (message
+               "Then only one smartwin buffer has been shown, no other buffers")
+              (select-window (smartwin-get-smart-win))
+              )
           (message (format "Buffer %s not exist" chosen)))
       (switch-to-buffer buffer))))
 

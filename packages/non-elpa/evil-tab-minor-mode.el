@@ -42,7 +42,8 @@ not wanted, change it by using emulation-mode-map-alists"
   :version "1.0 beta"
 
   ;; Body
-  (let ((map (make-sparse-keymap))
+  (let (evil-tab-emulation-alist
+        (map (make-sparse-keymap))
         (tab-command (evil-tab-get-TAB-command))
         (is-yasnippet-on (and (featurep 'yasnippet)
                               (not (cond ((functionp yas-dont-activate)
