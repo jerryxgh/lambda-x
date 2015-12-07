@@ -7,6 +7,7 @@
 ;;; Code:
 
 (require 'lambda-core)
+(require 'lambda-evil)
 
 ;; savehist keeps track of some history ----------------------------------------
 ;; very useful
@@ -77,35 +78,36 @@ This follows freedesktop standards, should work in X servers."
 ;;加快emacs的启动速度
 (server-start)
 
-;; text zoom and window zoom ---------------------------------------------------
-;; elscreen is not useful for me, comment them out here
-;; (lambda-package-ensure-install 'elscreen)
-;; (require 'elscreen)
-;; ;; (setq elscreen-display-tab nil)
-;; (elscreen-start)
+;; elscreen manage tabs --------------------------------------------------------
+(lambda-package-ensure-install 'elscreen)
+(require 'elscreen)
+(setq elscreen-display-tab nil
+      elscreen-prefix-key (kbd "C-;"))
+(elscreen-start)
+(define-key evil-normal-state-map (kbd "g t") 'elscreen-next)
+(define-key evil-normal-state-map (kbd "g T") 'elscreen-previous)
 
-;; (lambda-package-ensure-install 'elscreen-separate-buffer-list)
-;; (elscreen-separate-buffer-list-mode)
+(lambda-package-ensure-install 'elscreen-persist)
+(require 'elscreen-persist)
+(setq elscreen-persist-file (expand-file-name "elscreen"
+                                              lambda-auto-save-dir))
+(elscreen-persist-mode 1)
 
-;; (lambda-package-ensure-install 'elscreen-persist)
-;; (require 'elscreen-persist)
-;; (setq elscreen-persist-file (expand-file-name "elscreen"
-;;                                               lambda-auto-save-dir))
-;; (elscreen-persist-mode 1)
-
+;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
 (lambda-package-ensure-install 'zoom-window)
 (require 'zoom-window)
-;; (setq zoom-window-use-elscreen t)
-(zoom-window-setup)
+(setq zoom-window-use-elscreen t)
 (setq zoom-window-mode-line-color "black")
+;; (setq zoom-window-mode-line-color "DarkGreen")
+(zoom-window-setup)
+
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
 
 (require 'smartwin)
 ;; hide smartwin windows to avoid be remembered by desktop
 (add-hook 'kill-emacs-hook #'(lambda ()
                                (smartwin-mode -1)))
-
 
 (provide 'lambda-session)
 

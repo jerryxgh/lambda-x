@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-11-01 19:28:05 Jerry Xu>
+;; Time-stamp: <2015-11-29 01:00:57 GuanghuiXu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -8,15 +8,15 @@
 
 ;; evil ------- A wonderful editor in Emacs ------------------------------------
 (lambda-package-ensure-install 'evil)
-(require 'evil)
-(evil-mode 1)
-(diminish 'undo-tree-mode)
+(setq-default evil-want-C-w-delete nil
+              evil-want-visual-char-semi-exclusive t
+              evil-want-C-w-in-emacs-state t
+              evil-auto-balance-windows nil
+              evil-cross-lines t)
 
-(setq evil-want-visual-char-semi-exclusive t
-      ;; evil-want-C-i-jump nil
-      ;; evil-want-C-w-delete t
-      evil-auto-balance-windows nil
-      evil-cross-lines t)
+(require 'evil)
+
+(evil-mode 1)
 ;; let * and # search symbol instead of word at point
 (setq-default evil-symbol-word-search t)
 ;; settings below restore key bindings in emacs in insert state
@@ -30,12 +30,11 @@
 (define-key evil-insert-state-map (kbd "C-n") 'next-line)
 (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
-(define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
+;; (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-insert-state-map (kbd "C-y") 'yank)
 
-(define-key evil-motion-state-map (kbd "C-a") 'move-beginning-of-line)
-(define-key evil-motion-state-map (kbd "C-e") 'move-end-of-line)
-(define-key evil-motion-state-map (kbd "C-k") 'kill-line)
+(define-key evil-normal-state-map (kbd "M-.") ())
+(define-key evil-normal-state-map (kbd "C-t") ())
 
 (defun lambda-hs-hide-level-1 ()
   "Just fold level 1 elements."
@@ -50,6 +49,7 @@
   "Copy to end of line, and bind this funciton to Y in normal mode."
   (interactive)
   (evil-yank (point) (point-at-eol)))
+;; (define-key evil-normal-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
 (define-key evil-normal-state-map (kbd "g f") 'lambda-ido-find-file-at-point)
 
@@ -74,7 +74,7 @@
 (add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
 
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
-(define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
+;; (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
 
 (define-key evil-window-map (kbd "w") 'ace-window)
 (define-key evil-window-map (kbd "C-w") 'ace-window)
@@ -82,14 +82,17 @@
 (require 'evil-tab-minor-mode)
 (global-evil-tab-mode t)
 
-;; expand-region ---------------------------------------------------------------
-(lambda-package-ensure-install 'expand-region)
-(require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
-(if (featurep 'evil-leader)
-    (progn
-      (setq expand-region-contract-fast-key "z")
-      (evil-leader/set-key "xx" 'er/expand-region)))
+;; evil-leader -----------------------------------------------------------------
+(lambda-package-ensure-install 'evil-leader)
+(require 'evil-leader)
+(evil-leader/set-leader "<SPC>")
+(evil-leader/set-key
+  "b" 'ido-switch-buffer
+  "e" 'helm-projectile
+  "k" 'kill-this-buffer
+  "o" 'helm-occur
+  "f" 'find-file)
+(global-evil-leader-mode 1)
 
 ;; evil-exchange ---------------------------------------------------------------
 ;; powerful tool to exchange text
@@ -111,17 +114,14 @@
 (require 'evil-visualstar)
 (global-evil-visualstar-mode t)
 
-;; evil-leader -----------------------------------------------------------------
-(lambda-package-ensure-install 'evil-leader)
-(require 'evil-leader)
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "b" 'ido-switch-buffer
-  "e" 'helm-projectile
-  "k" 'kill-this-buffer
-  "o" 'helm-occur
-  "f" 'find-file)
-(global-evil-leader-mode 1)
+;; expand-region ---------------------------------------------------------------
+(lambda-package-ensure-install 'expand-region)
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(if (featurep 'evil-leader)
+    (progn
+      (setq expand-region-contract-fast-key "z")
+      (evil-leader/set-key "x" 'er/expand-region)))
 
 ;; evil-surround ---------------------------------------------------------------
 ;; add surrounding
@@ -132,7 +132,6 @@
 
 ;; delete surrounding
 ;; ds<trigger>.
-
 (lambda-package-ensure-install 'evil-surround)
 (require 'evil-surround)
 (global-evil-surround-mode 1)
@@ -147,8 +146,11 @@
     "w" 'ace-jump-word-mode
     "l" 'ace-jump-line-mode))
 (lambda-package-ensure-install 'ace-window)
+(require 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(ace-window-display-mode t)
+
 
 (lambda-package-ensure-install 'evil-commentary)
 (require 'evil-commentary)

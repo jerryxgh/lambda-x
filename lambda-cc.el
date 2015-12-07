@@ -1,10 +1,11 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-08-30 22:15:49 Jerry Xu>
+;; Time-stamp: <2015-12-05 11:58:38 GuanghuiXu>
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'lambda-core)
+(require 'lambda-evil)
 (require 'cc-mode)
 
 (setq c-default-style '((java-mode . "cc-mode")
@@ -88,8 +89,6 @@
 (define-key gud-mode-map (kbd "<f6>") 'gud-next)
 (define-key gud-mode-map (kbd "<f7>") 'gud-up)
 (define-key gud-mode-map (kbd "<f8>") 'gud-go)
-(setq gdb-show-main t
-      gdb-many-windows t)
 
 ;; global ------- code navigating ----------------------------------------------
 ;; (lambda-package-ensure-install 'ggtags)
@@ -106,6 +105,7 @@
 ;; 	      (diminish 'ggtags-mode))))
 
 (lambda-package-ensure-install 'helm-gtags)
+(require 'helm-gtags)
 ;; Key 		Command
 ;; Prefix h 	helm-gtags-display-browser
 ;; Prefix C-] 	helm-gtags-find-tag-from-here
@@ -121,11 +121,7 @@
 ;; M-. 		helm-gtags-find-tag
 ;; C-x 4 . 	helm-gtags-find-tag-other-window
 (setq helm-gtags-suggested-key-mapping t)
-(when (featurep 'evil)
-  (define-key evil-normal-state-map
-    (kbd "M-.") 'helm-gtags-dwim)
-  (define-key evil-normal-state-map
-    (kbd "C-t") 'helm-gtags-pop-stack))
+
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
@@ -137,9 +133,20 @@
  '(helm-gtags-ignore-case t)
  '(helm-gtags-auto-update t))
 
+;; key bindings
+(eval-after-load "helm-gtags"
+  '(progn
+     ;; (define-key c-mode-base-map (kbd "M-.") 'helm-gtags-dwim)
+     ;; (define-key c-mode-base-map (kbd "C-t") 'helm-gtags-pop-stack)
+     (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+
 ;; cmake -----------------------------------------------------------------------
 (lambda-package-ensure-install 'cmake-mode)
 (require 'cmake-mode)
+(lambda-package-ensure-install 'cmake-font-lock)
+(autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+(add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
 
 (provide 'lambda-cc)
 

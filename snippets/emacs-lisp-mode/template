@@ -1,43 +1,40 @@
 # -*- mode: snippet -*-
-# name: template    
+# name: template
 # key: template
-# contributor: jerryxgh@gmail.com
+# contributor: gh_xu@qq.com
 # --
-;;; `(file-name-nondirectory (buffer-file-name))` --- $1
+;;; `(file-name-nondirectory (buffer-file-name))` --- $1 ${2:-*- lexical-binding: t -*-}
 
-;; Copyright `(format-time-string "%Y")` `user-full-name`
+;; Copyright (C) `(format-time-string "%Y")` `user-full-name`
 ;;
 ;; Author: `user-full-name` `user-mail-address`
 ;; Maintainer: `user-full-name` `user-mail-address`
-;; Version: 0.0
-;; Keywords: $2
-;; Homepage: ${3:not distributed yet}
+;; Created: `(format-time-string "%F")`
+;; Version: $3
+;; Keywords: $4
+;; Homepage: ${5:not distributed yet}
+;; Package-Version: $3
+;; Package-Requires: $6
+;;
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
 
-;; $4
+;; $7
 
 ;; Put this file into your load-path and the following into your ~/.emacs:
 ;;   (require '`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`)
 
+;;; Change Log:
+
+;; Version $(3) `(format-time-string "%F")` GuanghuiXu
+;;   - ${8:Initial release}
+
 ;;; Code:
 
-(provide '`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`)
-
 $0
+
+(provide '`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`)
 
 ;;; `(file-name-nondirectory (buffer-file-name))` ends here

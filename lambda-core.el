@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-11-09 10:30:02 Jerry Xu>
+;; Time-stamp: <2015-12-05 10:32:04 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -138,7 +138,7 @@ Which means get all used packages, this is mainly for getting unused packages."
     (tool-bar-mode -1))
 (scroll-bar-mode -1)
 
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
@@ -497,23 +497,12 @@ the search is performed ."
 (setq whitespace-line-column nil) ;; use fill-column instead of this
 (setq whitespace-style '(face tabs empty trailing lines-tail spaces newline
                               indentation))
-;; (global-whitespace-mode 1)
+(set 'whitespace-global-modes
+                        '(c-mode c++-mode java-mode emacs-lisp-mode scheme-mode
+                                 lisp-mode python-mode lua-mode perl-mode
+                                 haskell-mode scala-mode))
+(global-whitespace-mode 1)
 
-;;; put code below in .dir-locals.el file
-;; ((nil . ((tab-width . 4)
-;;          (whitespace-tab-width 4)
-;;          (sentence-end-double-space . t)
-;;          (eval . (progn
-;;                    (require 'whitespace)
-;;                    (global-whitespace-mode -1)
-;;                    (set 'fill-column 120)
-;;                    (set (make-local-variable 'whitespace-line-column) nil)
-;;                    (set 'whitespace-global-modes
-;;                         '(c-mode c++-mode java-mode emacs-lisp-mode scheme-mode
-;;                                  lisp-mode python-mode lua-mode perl-mode
-;;                                  haskell-mode scala-mode))
-;;                    (global-whitespace-mode 1)))
-;;          ))
 
 ;; saner regex syntax
 (require 're-builder)
@@ -538,14 +527,14 @@ the search is performed ."
 ;; editor settings end here ====================================================
 
 ;; miscellaneous basic settings ------------------------------------------------
-(setq user-full-name "Jerry Xu"
+(setq user-full-name "GuanghuiXu"
       user-mail-address "gh_xu@qq.com"
       custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
       make-backup-files nil
       resize-mini-windows t
       enable-recursive-minibuffers t
       gc-cons-threshold 20480000
-      source-directory "/home/xgh/sources/emacs-24.3"
+      source-directory "/home/xgh/sources/emacs-24.5"
       confirm-kill-emacs 'y-or-n-p)
 (require 'sql)
 (setq sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8"))
@@ -558,6 +547,7 @@ the search is performed ."
 ;; most of the time. But we still turn on it globally to make it a fallback when
 ;; auto-fill-mode was disabled by users.
 ;;(global-visual-line-mode t)
+
 (if (string< emacs-version "24.3.50")
     (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
@@ -637,6 +627,7 @@ the search is performed ."
 (setq undo-tree-auto-save-history t)
 
 (global-undo-tree-mode 1)
+(diminish 'undo-tree-mode)
 ;;(add-to-list 'warning-suppress-types '(undo discard-info))
 
 ;;(require 'temp-buffer-browse) ------------------------------------------------
@@ -712,6 +703,50 @@ if BUFFER is nil, use `current-buffer'."
 ;; do not load custom file, all the configuration should be done by code
 ;; (load "lambda-custom")
 
+;;; ido --- interactively do things---------------------------------------------
+;; ffap - find file at point is not userful when ido-mode is on
+(lambda-package-ensure-install 'ido-ubiquitous)
+(lambda-package-ensure-install 'flx-ido)
+(require 'ido)
+(require 'ido-ubiquitous)
+(require 'flx-ido)
+(setq ido-enable-flex-matching t
+      ido-auto-merge-work-directories-length -1
+      ido-ignore-buffers '("\\` "
+                           "^\\*Ibuffer\\*$"
+                           "^\\*helm.*\\*$"
+                           "^\\*Compile-Log\\*$"
+                           "^\\*Messages\\*$"
+                           "^\\*Help\\*$")
+      ido-save-directory-list-file
+      (expand-file-name "ido.hist" lambda-auto-save-dir)
+      ;; ido-cannot-complete-command 'ido-next-match
+      ;; ido-default-file-method 'selected-window
+      ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
+      )
+
+(add-hook 'ido-setup-hook
+          #'(lambda ()
+              (define-key ido-completion-map (kbd "<tab>") 'ido-next-match)
+              ))
+
+(defun lambda-ido-find-file-at-point ()
+  "Use ffap as wanted."
+  (interactive)
+  (let ((ido-use-filename-at-point 'guess)
+        (ido-use-url-at-point 'guess))
+    (ido-find-file)))
+
+(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
+(put 'dired-do-copy   'ido nil) ; use ido there
+(put 'dired-do-rename 'ido nil) ; ^
+;; (put 'dired-do-rename 'ido 'find-file)
+(ido-mode t)
+(ido-everywhere t)
+(ido-ubiquitous-mode 1)
+;;; smarter fuzzy matching for ido
+(flx-ido-mode 1)
+
 ;;; smex, remember recently and most frequently used commands ------------------
 (lambda-package-ensure-install 'smex)
 (require 'smex)
@@ -725,11 +760,10 @@ if BUFFER is nil, use `current-buffer'."
 (lambda-package-ensure-install 'helm)
 
 (require 'helm)
-(require 'helm-config)
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
 ;; accidentially pressed "C-x C-c"
-(setq helm-command-prefix-key "C-c h")
+(setq-default helm-command-prefix-key "C-c h")
 (require 'helm-config)
 (require 'helm-files)
 (require 'helm-grep)
@@ -787,21 +821,20 @@ if BUFFER is nil, use `current-buffer'."
 ;; save current position to mark ring when jumping to a different place
 (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
 
+;; (require 'helm-mode)
+;; to use with ido, customize helm-completing-read-handlers-alist
+(setq-default helm-completing-read-handlers-alist
+              '((describe-function . ido)
+                (describe-variable . ido)
+                (load-library . ido)
+                (debug-on-entry . ido)
+                (dired-do-copy . ido)
+                (find-function . ido)
+                (find-tag . ido)
+                (ffap-alternate-file . nil)
+                (tmm-menubar . nil)))
 (helm-mode 1)
 (diminish 'helm-mode)
-
-;; to use with ido, customize helm-completing-read-handlers-alist
-(require 'helm-mode)
-(setq helm-completing-read-handlers-alist
-      '((describe-function . ido)
-        (describe-variable . ido)
-        (load-library . ido)
-        (debug-on-entry . ido)
-        (dired-do-copy . ido)
-        (find-function . ido)
-        (find-tag . ido)
-        (ffap-alternate-file . nil)
-        (tmm-menubar . nil)))
 
 ;; helm-ls-git Yet another helm for listing the files in a git repo. -----------
 ;;(lambda-package-ensure-install 'helm-ls-git)
@@ -809,9 +842,9 @@ if BUFFER is nil, use `current-buffer'."
 ;;(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
 ;;(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
-;; (lambda-package-ensure-install 'helm-projectile)
-;; (require 'helm-projectile)
-;; (helm-projectile-on)
+(lambda-package-ensure-install 'helm-projectile)
+(require 'helm-projectile)
+(helm-projectile-on)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE: helm-descbinds                      ;;
@@ -823,43 +856,11 @@ if BUFFER is nil, use `current-buffer'."
 (helm-descbinds-mode 1)
 (lambda-package-ensure-install 'helm-ag)
 
+;;; ido-at-point --- use ido to do completion-at-point -------------------------
+(lambda-package-ensure-install 'ido-at-point)
+(require 'ido-at-point) ; unless installed from a package
+(ido-at-point-mode 1)
 
-;;; ido --- interactively do things---------------------------------------------
-;; ffap - find file at point is not userful when ido-mode is on
-(lambda-package-ensure-install 'ido-ubiquitous)
-(lambda-package-ensure-install 'flx-ido)
-;;(require 'ido)
-(require 'ido-ubiquitous)
-(require 'flx-ido)
-(setq ido-enable-flex-matching t
-      ido-auto-merge-work-directories-length -1
-      ido-ignore-buffers '("\\` "
-                           "^\\*Ibuffer\\*$"
-                           "^\\*helm.*\\*$"
-                           "^\\*Compile-Log\\*$"
-                           "^\\*Messages\\*$"
-                           "^\\*Help\\*$")
-      ido-save-directory-list-file
-      (expand-file-name "ido.hist" lambda-auto-save-dir)
-      ;; ido-default-file-method 'selected-window
-      ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
-      )
-(defun lambda-ido-find-file-at-point ()
-  "Use ffap as wanted."
-  (interactive)
-  (let ((ido-use-filename-at-point 'guess)
-        (ido-use-url-at-point 'guess))
-    (ido-find-file)))
-
-(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
-(put 'dired-do-copy   'ido nil) ; use ido there
-(put 'dired-do-rename 'ido nil) ; ^
-;; (put 'dired-do-rename 'ido 'find-file)
-(ido-mode t)
-(ido-everywhere t)
-(ido-ubiquitous-mode 1)
-;;; smarter fuzzy matching for ido
-(flx-ido-mode 1)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
@@ -883,10 +884,9 @@ if BUFFER is nil, use `current-buffer'."
 ;;; fill-column ----------------------------------------------------------------
 (setq-default fill-column 80)
 (lambda-package-ensure-install 'fill-column-indicator)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'prog-mode-hook #'(lambda ()
                               (turn-on-auto-fill)
-                              ;;(turn-on-fci-mode)
+                              ;; (turn-on-fci-mode)
                               ))
 ;; mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".

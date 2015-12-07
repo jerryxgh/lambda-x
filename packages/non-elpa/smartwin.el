@@ -1,26 +1,36 @@
 ;;; smartwin.el --- A smart window for temp buffers, shell buffers, etc. -*- lexical-binding:t -*-
 
-;; Copyright (C) 2015  Jerry Xu
+;; Copyright (C) 2015 GuanghuiXu
 
-;; Author: Jerry Xu
+;; Author: GuanghuiXu gh_xu@qq.com
+;; Maintainer: GuanghuiXu gh_xu@qq.com
+;; Created: 2015-4-28
 ;; Keywords: convenience
-;; Version: 20150124
-;; X-Original-Version: 0.1.alpha
+;; Version: 0.1
+;; Homepage: not distributed yes
+;; Package-Version: 0.1
+;; Package-Requires: ((emacs "24"))
+;;
+
+;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
 
 ;; Smartwin is a window for shell buffers, temp buffers and etc.
+
 ;; All temp buffers and shell like buffers share a window, besides that, when
 ;; point move to the smart window, it is enlarged automaticly, when leave the
 ;; window, it is shrinked automaticly.
-;;
+
 ;; To use smartwin, place this file to load path and add this to .emacs:
-;;
+
 ;; (require 'smartwin)
 ;; (smartwin-mode 1)
-;;
+
 ;; Then try run shell or or eshell, if you want to show more buffers in smart
 ;; window, please customize variable: smartwin-buffers.
+
+;;; Change Log:
 
 ;;; TODO:
 
@@ -37,9 +47,9 @@
   :group 'windows)
 
 (defvar smartwin-previous-buffer nil
-  "If smart window is hidden, this variable store previous buffer showd.")
+  "If smart window is hidden, this variable store previous buffer shown in it.")
 
-(defvar smartwin-max-window-height (- (/ (frame-height) 2) 2)
+(defvar smartwin-max-window-height (+ (/ (frame-height) 2) 2)
   "Maximum hight of smart window.
 But smart window can be higher if run `delete-other-window' when is is already
   to this height.")
@@ -56,6 +66,7 @@ But smart window can be higher if run `delete-other-window' when is is already
     occur-mode
     "*scratch*"
     "*evil-registers*"
+    "*ielm*"
     "*Inferior Octave*"
     ("^\\*sbt\\*.*" :regexp t)
     "*ensime-db-backtrace-buffer*"
@@ -132,10 +143,11 @@ But smart window can be higher if run `delete-other-window' when is is already
   (let ((height-before (window-height window))
         (window-start (window-start))
         (window-end (window-end)))
+    (if (not (string-prefix-p "*helm" (buffer-name)))
+        (fit-window-to-buffer window
+                              smartwin-max-window-height
+                              smartwin-min-window-height))
     ;; set smart window start
-    (fit-window-to-buffer window
-                          smartwin-max-window-height
-                          smartwin-min-window-height)
     (if (> (window-height window) height-before)
         (let ((forward-line-num (- height-before (window-height window)))
               left-to-forward)
@@ -154,10 +166,7 @@ But smart window can be higher if run `delete-other-window' when is is already
                    (setq forward-line-num (+ forward-line-num 1)))
                  ))
              return)
-           t)))
-    ))
-
-
+           t)))))
 
 (defun smartwin-find-smart-win ()
   "Find smart window among all live windows.
@@ -401,9 +410,10 @@ split smart window."
       ad-do-it)))
 
 (defadvice switch-to-buffer (around smartwin-switch-to-buffer)
-  "When a bffer should be shown in smart window, change window to smart window."
+  "When a bffer should be shown in smart window, show it in smart window."
   (let ((buffer-or-name (ad-get-arg 0)))
-    (if (smartwin-match-buffer buffer-or-name)
+    (if (and (smartwin-match-buffer buffer-or-name)
+             (not (get-buffer-window-list buffer-or-name)))  ; not visible
         (let ((smart-win (smartwin-get-smart-win)))
           (with-selected-window smart-win
             ad-do-it)
@@ -477,6 +487,7 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
               (ad-activate 'evil-window-move-far-right)
               (ad-activate 'evil-window-move-very-bottom)
               (ad-activate 'split-window)
+
               (ad-activate 'display-buffer-pop-up-window)
               (ad-activate 'window-splittable-p)
               (ad-activate 'get-largest-window)
@@ -503,7 +514,9 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
                 (setq smartwin-previous-buffer nil))
 
               (if smartwin-previous-buffer
-                  (smartwin-show)))
+                  (message (concat "[smartwin] " smartwin-previous-buffer))
+                (smartwin-show)
+                (smartwin-hide)))
 
           (remove-hook 'kill-emacs-hook 'smartwin-hide)
           (setq display-buffer-alist (delete pair display-buffer-alist))

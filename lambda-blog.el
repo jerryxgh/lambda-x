@@ -1,5 +1,5 @@
-;;; lambda-blog.el --- org, confluence wiki
-;; Time-stamp: <2015-10-28 16:35:23 Jerry Xu>
+;;; lambda-blog.el --- org
+;; Time-stamp: <2015-11-29 14:03:20 GuanghuiXu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -65,12 +65,11 @@ rainbow-delimiters-mode temporarily when using htmlize."
         "xelatex -interaction nonstopmode %b"))
 
 
-(add-to-list 'load-path "/home/xgh/repository/simplesite/")
+(add-to-list 'load-path "/home/xgh/repository/simplesite")
 (require 'simplesite)
-(require 'ss-options)
-(setq ss-source-directory
-      "/home/xgh/repository/jerryxgh.github.io/source"
-      ss-author "Jerry")
+(setq ss-source-directory "/home/xgh/repository/simplesite/test/source"
+      ss-output-directory "/home/xgh/repository/jerryxgh.github.io"
+      ss-author "GuanghuiXu")
 
 
 (provide 'lambda-blog)
