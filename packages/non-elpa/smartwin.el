@@ -434,10 +434,15 @@ split smart window."
   "When a bffer should be shown in smart window, show it in smart window."
   (let ((buffer-or-name (ad-get-arg 0)))
     (if (smartwin--match-buffer buffer-or-name)
-        (let ((smart-win (smartwin--get-or-create-smart-window)))
-          (with-selected-window smart-win
-            ad-do-it)
-          (select-window smart-win))
+        (let ((scratch-buffer (get-buffer "*scratch*"))
+              (cur-buffer (current-buffer)))
+          ;; not show smart window when start up
+          (if (not (and (eq cur-buffer scratch-buffer)
+                        (eq cur-buffer (get-buffer buffer-or-name))
+                        (not (buffer-modified-p (get-buffer "*scratch*")))))
+              (let ((smart-win (smartwin--get-or-create-smart-window)))
+                (with-selected-window smart-win ad-do-it)
+                (select-window smart-win))))
       (let ((window (selected-window)))
         (if (smartwin--smart-window-p window)
             (switch-to-buffer-other-window buffer-or-name)
@@ -577,11 +582,12 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
       (ad-deactivate 'get-mru-window)
       (ad-deactivate 'delete-window)
       (ad-deactivate 'delete-other-windows)
-      ;; (ad-deactivate 'balance-windows)
+      (ad-deactivate 'balance-windows)
       (ad-deactivate 'mwheel-scroll)
       (ad-deactivate 'select-window)
       (ad-deactivate 'kill-buffer)
       (ad-deactivate 'gdb)
+      (define-key lisp-interaction-mode-map (kbd "C-x k") nil)
 
       (smartwin-hide))))
 
@@ -616,7 +622,7 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
                    name)))
            (buffer-list)))))
 
- (defun smartwin--make-normal-buffer-list ()
+(defun smartwin--make-normal-buffer-list ()
   "Return list of normal buffers that not shown."
   (let ((visible-buffers (ido-get-buffers-in-frames 'current)))
     (delq nil
