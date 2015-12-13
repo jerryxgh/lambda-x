@@ -115,9 +115,7 @@ But smart window can be higher if run `delete-other-window' when is is already
 
 (defun smartwin--match-buffer (buffer-or-name)
   "Judge whether to use smartwin to show BUFFER-OR-NAME."
-  (let ((buffer (if (stringp buffer-or-name)
-                    (get-buffer buffer-or-name)
-                  buffer-or-name)))
+  (let ((buffer (get-buffer buffer-or-name)))
     (if buffer
         (let ((name (buffer-name buffer))
               (mode (buffer-local-value 'major-mode buffer)))
@@ -174,10 +172,13 @@ But smart window can be higher if run `delete-other-window' when is is already
 (defun smartwin--get-smart-window ()
   "Find smart window among all live windows.
 If found, return the window, else return nil."
-  (catch 'break
-    (dolist (window (window-list))
-      (if (smartwin--smart-window-p window)
-          (throw 'break window)))))
+  (let ((root-tree (car (window-tree (selected-frame)))))
+    (if (and (listp root-tree) (car root-tree))
+        (let ((bottom-window (car (last root-tree))))
+          (if (smartwin--smart-window-p bottom-window)
+              bottom-window
+            nil))
+      nil)))
 
 (defun smartwin--get-befitting-window ()
   "Try to get an existing befitting bottom window as smart window."
@@ -300,7 +301,7 @@ About ALL-FRAMES, DEDICATED and NOT-SELECTED, please see `get-mru-window'"
                         (minimize-window smart-win)))))))))
 
 (defadvice balance-windows (around smartwin-around-balance-windows)
-  "When `balance-windows', ignore smart window."
+  "When do `balance-windows', ignore smart window."
   (let* ((window (smartwin--get-smart-window))
          (in-smartwin (eq (selected-window) window)))
     (if window
@@ -465,29 +466,32 @@ split smart window."
       (if (window-dedicated-p smart-win)
           (set-window-dedicated-p smart-win nil)))))
 
-(defadvice kill-buffer
-    (after smartwin-after-kill-buffer)
+(defadvice kill-buffer (around smartwin-around-kill-buffer)
   "Try to insure smart buffer should not shown in normal window and vice versa."
   (let ((smart-win (smartwin--get-smart-window))
-        (window (selected-window)))
-    (if (eq smart-win window)
-        ;; auto hide smart window if "*scratch*" is the last smart buffer and
-        ;; not been modified
-        (progn
-          (let ((scratch-buffer (get-buffer "*scratch*"))
-                (buffer-list (smartwin--make-smart-buffer-list)))
-            (if (and (eq scratch-buffer (window-buffer smart-win))
-                     (not buffer-list)
-                     (not (buffer-modified-p scratch-buffer)))
-                (smartwin-hide))))
-      ;; to insure smart buffer not shown in normal window
-      (let ((buffer (window-buffer window)))
-        (if (smartwin--match-buffer buffer)
-            (let ((normal-buffer-list (smartwin--make-normal-buffer-list)))
-              (if normal-buffer-list
-                  (set-window-buffer window (car normal-buffer-list))
-                (set-window-buffer window (get-buffer "*scratch*")))
-              ))))))
+        (scratch-buffer (get-buffer "*scratch*"))
+        (window (selected-window))
+        (buffer-to-kill (or (and (ad-get-arg 0) (get-buffer (ad-get-arg 0)))
+                            (current-buffer))))
+    (if (eq buffer-to-kill scratch-buffer) ;; not kill scratch buffer, clear it
+        (clear-scratch-buffer buffer-to-kill)
+      ad-do-it ;; kill buffer
+      (if (eq smart-win window)
+          ;; auto hide smart window if "*scratch*" is the last smart buffer and
+          ;; not been modified
+          (progn
+            (let ((buffer-list (smartwin--make-smart-buffer-list)))
+              (if (and (eq scratch-buffer (window-buffer smart-win))
+                       (not buffer-list)
+                       (not (buffer-modified-p scratch-buffer)))
+                  (smartwin-hide))))
+        ;; to insure smart buffer not shown in normal window
+        (let ((buffer (window-buffer window)))
+          (if (smartwin--match-buffer buffer)
+              (let ((normal-buffer-list (smartwin--make-normal-buffer-list)))
+                (if normal-buffer-list
+                    (set-window-buffer window (car normal-buffer-list))
+                  (set-window-buffer window (get-buffer "*scratch*"))))))))))
 
 ;;; Minor Mode
 
@@ -537,15 +541,13 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
           (ad-activate 'get-mru-window)
           (ad-activate 'delete-window)
           (ad-activate 'delete-other-windows)
-          (ad-activate 'balance-windows)
+          ;; (ad-activate 'balance-windows)
           (ad-activate 'mwheel-scroll)
           (ad-activate 'select-window)
           (ad-activate 'kill-buffer)
           (ad-activate 'gdb)
           ;; (add-hook 'kill-emacs-hook 'smartwin-hide)
           (create-scratch-buffer)
-          (define-key lisp-interaction-mode-map (kbd "C-x k")
-            'clear-scratch-buffer)
 
           ;; detect appropriate minimal height of smart window
           (when (< smartwin-min-window-height 0)
@@ -557,8 +559,7 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
             (setq smartwin-previous-buffer nil))
 
           (if (buffer-live-p smartwin-previous-buffer)
-              (message (concat "[smartwin] "
-                               (buffer-name smartwin-previous-buffer)))))
+              (smartwin-show)))
 
       ;; (remove-hook 'kill-emacs-hook 'smartwin-hide)
       (setq display-buffer-alist (delete pair display-buffer-alist))
@@ -576,12 +577,11 @@ Smartwin is a window for showing shell like buffers, temp buffers and etc."
       (ad-deactivate 'get-mru-window)
       (ad-deactivate 'delete-window)
       (ad-deactivate 'delete-other-windows)
-      (ad-deactivate 'balance-windows)
+      ;; (ad-deactivate 'balance-windows)
       (ad-deactivate 'mwheel-scroll)
       (ad-deactivate 'select-window)
       (ad-deactivate 'kill-buffer)
       (ad-deactivate 'gdb)
-      (define-key lisp-interaction-mode-map (kbd "C-x k") nil)
 
       (smartwin-hide))))
 
@@ -659,13 +659,17 @@ This function get input by ido."
         (lisp-interaction-mode)
         (current-buffer)))))
 
-(defun clear-scratch-buffer ()
-  "Clear the scratch buffer and keep the scratch message."
+(defun clear-scratch-buffer (&optional buffer-or-name)
+  "Clear the scratch buffer and keep the scratch message.
+If BUFFER-OR-NAME is not nil, treat is as scratch buffer."
   (interactive)
-  (when (eq (get-buffer "*scratch*") (current-buffer))
-    (delete-region (point-min) (point-max))
-    (insert initial-scratch-message)
-    (goto-char (point-max))))
+  (let ((buffer (if (not buffer-or-name)
+                    (get-buffer "*scratch*")
+                  (get-buffer buffer-or-name))))
+    (when (eq buffer (current-buffer))
+      (delete-region (point-min) (point-max))
+      (insert initial-scratch-message)
+      (goto-char (point-max)))))
 
 
 (provide 'smartwin)
