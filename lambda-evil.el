@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-11-29 01:00:57 GuanghuiXu>
+;; Time-stamp: <2015-12-13 12:59:01 GuanghuiXu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -11,7 +11,7 @@
 (setq-default evil-want-C-w-delete nil
               evil-want-visual-char-semi-exclusive t
               evil-want-C-w-in-emacs-state t
-              evil-auto-balance-windows nil
+              evil-auto-balance-windows t
               evil-cross-lines t)
 
 (require 'evil)

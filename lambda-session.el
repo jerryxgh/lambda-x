@@ -93,6 +93,8 @@ This follows freedesktop standards, should work in X servers."
                                               lambda-auto-save-dir))
 (elscreen-persist-mode 1)
 
+(lambda-package-ensure-install 'elscreen-multi-term)
+
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
 (lambda-package-ensure-install 'zoom-window)

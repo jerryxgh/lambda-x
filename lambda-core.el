@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-12-05 10:32:04 GuanghuiXu>
+;; Time-stamp: <2015-12-13 12:34:23 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -658,7 +658,6 @@ the search is performed ."
            (file-exists-p "/bin/bash"))
   (setq explicit-shell-file-name "/bin/bash"))
 
-
 (defun kill-buffer-when-shell-command-exit (&optional buffer)
   "Kill the buffer on exit of interactive shell.
 if BUFFER is nil, use `current-buffer'."
@@ -670,14 +669,14 @@ if BUFFER is nil, use `current-buffer'."
          #'(lambda (process state)
              (when (or (string-match "exited abnormally with code." state)
                        (string-match "\\(finished\\|exited\\)" state))
-               (quit-window t (get-buffer-window (process-buffer process)))
-               ;; (kill-buffer (process-buffer process))
-               ))))))
+               (quit-window t (get-buffer-window (process-buffer process)))))))))
+
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
 (add-hook 'comint-mode-hook 'kill-buffer-when-shell-command-exit)
 ;; always insert at the bottom of shell like buffers
 (setq comint-scroll-to-bottom-on-input t)
+;; (setq shell-cd-regexp "")
 ;; no duplicates in command history
 (setq comint-input-ignoredups t)
 
