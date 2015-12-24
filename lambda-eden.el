@@ -67,9 +67,12 @@ Note the weekly scope of the command's precision.")
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
+
+(add-to-list 'load-path "/home/xgh/repository/smartwin")
 (require 'smartwin)
 (smartwin-mode 1)
-
+(define-key smartwin-mode-map (kbd "C-c s") 'smartwin-switch-buffer)
+(define-key smartwin-mode-map (kbd "C-l") 'smartwin-clear-shell)
 
 ;;; es-mode
 ;; (lambda-package-ensure-install 'es-mode)

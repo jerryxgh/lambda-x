@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-12-13 12:34:23 GuanghuiXu>
+;; Time-stamp: <2015-12-24 20:47:30 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -20,7 +20,6 @@
 
 ;; (add-to-list 'load-path lambda-x-direcotry)
 (add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
-(add-to-list 'load-path "/home/xgh/repository/simplesite/")
 
 ;; suppressing ad-handle-definition Warnings in Emacs
 (setq ad-redefinition-action 'accept)
@@ -134,9 +133,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; toolbar is just a waste of valuable screen estate in a tty tool-bar-mode does
 ;; not properly auto-load, and is already disabled anyway
-(if (fboundp 'tool-bar-mode)
-    (tool-bar-mode -1))
-(scroll-bar-mode -1)
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; (menu-bar-mode -1)
 
@@ -197,7 +195,8 @@ Which means get all used packages, this is mainly for getting unused packages."
       (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
     (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
 
-  (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp")))
+  (if (fboundp 'set-fontset-font)
+      (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))))
 
 (lambda-load-solarized-dark-theme)
 
@@ -642,38 +641,15 @@ the search is performed ."
 ;; shell configs ---------------------------------------------------------------
 (require 'shell)
 (require 'esh-mode)
-(defun clear ()
-  "Clear `eshell' or submode of `comint-mode' buffer."
-  (interactive)
-  (cond ((eq major-mode 'eshell-mode)
-         (let ((eshell-buffer-maximum-lines 0))
-           (eshell-truncate-buffer)))
-        ((derived-mode-p 'comint-mode)
-         (let ((comint-buffer-maximum-size 0))
-           (comint-truncate-buffer)))))
+
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
-(define-key shell-mode-map (kbd "C-l") 'clear)
 
 (when (and (eq system-type 'gnu/linux)
            (file-exists-p "/bin/bash"))
   (setq explicit-shell-file-name "/bin/bash"))
 
-(defun kill-buffer-when-shell-command-exit (&optional buffer)
-  "Kill the buffer on exit of interactive shell.
-if BUFFER is nil, use `current-buffer'."
-  (let* ((buf (or buffer (current-buffer)))
-         (process (get-buffer-process buf)))
-    (if process
-        (set-process-sentinel
-         process
-         #'(lambda (process state)
-             (when (or (string-match "exited abnormally with code." state)
-                       (string-match "\\(finished\\|exited\\)" state))
-               (quit-window t (get-buffer-window (process-buffer process)))))))))
-
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
-(add-hook 'comint-mode-hook 'kill-buffer-when-shell-command-exit)
 ;; always insert at the bottom of shell like buffers
 (setq comint-scroll-to-bottom-on-input t)
 ;; (setq shell-cd-regexp "")
@@ -696,8 +672,7 @@ if BUFFER is nil, use `current-buffer'."
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (eldoc-mode 1)
-              (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)
-              (define-key eshell-mode-map (kbd "C-l") 'clear)))
+              (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)))
 
 ;; do not load custom file, all the configuration should be done by code
 ;; (load "lambda-custom")
@@ -762,7 +737,9 @@ if BUFFER is nil, use `current-buffer'."
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
 ;; accidentially pressed "C-x C-c"
-(setq-default helm-command-prefix-key "C-c h")
+(setq-default helm-command-prefix-key "C-c h"
+              ;; use ido-at-point
+              helm-mode-handle-completion-in-region nil)
 (require 'helm-config)
 (require 'helm-files)
 (require 'helm-grep)
@@ -857,7 +834,6 @@ if BUFFER is nil, use `current-buffer'."
 
 ;;; ido-at-point --- use ido to do completion-at-point -------------------------
 (lambda-package-ensure-install 'ido-at-point)
-(require 'ido-at-point) ; unless installed from a package
 (ido-at-point-mode 1)
 
 
@@ -875,6 +851,10 @@ if BUFFER is nil, use `current-buffer'."
     (setq magit-git-executable git-executable-windows)
     (setenv "PATH"
             (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+
+;; show line color in magit-log
+(add-to-list 'magit-log-arguments "--color")
+
 ;; (setq magit-last-seen-setup-instructions "1.4.0")
 ;; magit-ediff-restore
 
@@ -929,6 +909,7 @@ if BUFFER is nil, use `current-buffer'."
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
+(lambda-package-ensure-install 'ac-dabbrev)
 (global-auto-complete-mode 1)
 (diminish 'auto-complete-mode)
 (require 'auto-complete-config)
@@ -937,25 +918,53 @@ if BUFFER is nil, use `current-buffer'."
              (expand-file-name "ac-dict" lambda-x-direcotry))
 (add-to-list 'ac-dictionary-files
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
+
+(set-default 'ac-sources
+             '(ac-source-imenu
+               ac-source-dabbrev
+               ac-source-filename
+               ac-source-dictionary
+               ac-source-words-in-buffer
+               ac-source-words-in-same-mode-buffers
+               ac-source-words-in-all-buffer))
+
+(setq-default ac-expand-on-auto-complete nil)
+;; (setq-default ac-auto-start nil)
+;; To get pop-ups with docs even if a word is uniquely completed
+(setq-default ac-dwim nil)
+(setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
+(add-to-list 'completion-styles 'initials t)
+;; Stop completion-at-point from popping up completion buffers so eagerly
+(require 'cc-vars)
+(setq completion-cycle-threshold 5
+      c-tab-always-indent nil
+      c-insert-tab-function 'indent-for-tab-command)
+
+;; Exclude very large buffers from dabbrev
+(require 'dabbrev)
+(setq dabbrev-friend-buffer-function #'(lambda (other-buffer)
+  (< (buffer-size other-buffer) (* 1 1024 1024))))
+
+
+(dolist (mode '(autoconf-mode change-log-mode clojure-mode
+                cmake-mode conf-javaprop-mode conf-xdefaults-mode
+                css-mode csv-mode eshell-mode espresso-mode
+                git-commit-mode graphviz-dot-mode haml-mode
+                haskell-mode html-mode inferior-emacs-lisp-mode
+                js3-mode less-css-mode lisp-mode log-edit-mode
+                makefile-automake-mode makefile-bsdmake-mo
+                makefile-gmake-mode markdown-mode nginx-mode
+                nxml-mode objc-mode octave-mode org-mode
+                sass-mode sh-mode shell-mode smarty-mode
+                snippet-mode sql-interactive-mode sql-mode
+                text-mode textile-mode tuareg-mode yaml-mode))
+  (add-to-list 'ac-modes mode))
+
 (setq ac-comphist-file (expand-file-name "ac-comphist.dat"
                                          lambda-auto-save-dir)
       ;; ac-auto-start 3
       ac-ignore-case nil
-      ac-modes
-      (append ac-modes
-              '(eshell-mode shell-mode graphviz-dot-mode
-                            conf-xdefaults-mode html-mode nxml-mode objc-mode
-                            sql-mode change-log-mode text-mode
-                            makefile-gmake-mode makefile-bsdmake-mo
-                            autoconf-mode makefile-automake-mode snippet-mode
-                            cmake-mode octave-mode conf-javaprop-mode
-                            nginx-mode))
       ac-use-menu-map t)
-
-(setq-default ac-sources (append '(ac-source-filename
-                                   ;; ac-source-yasnippet
-                                   )
-                                 ac-sources))
 
 (define-key ac-mode-map (kbd "M-/") 'auto-complete)
 (define-key ac-completing-map (kbd "<tab>") 'ac-expand)

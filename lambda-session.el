@@ -106,11 +106,6 @@ This follows freedesktop standards, should work in X servers."
 
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
 
-(require 'smartwin)
-;; hide smartwin windows to avoid be remembered by desktop
-(add-hook 'kill-emacs-hook #'(lambda ()
-                               (smartwin-mode -1)))
-
 (provide 'lambda-session)
 
 ;;; lambda-session.el ends here
