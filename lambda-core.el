@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-12-24 20:47:30 GuanghuiXu>
+;; Time-stamp: <2015-12-28 14:35:10 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -840,10 +840,8 @@ the search is performed ."
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
 (require 'magit)
-;; (magit-define-popup-action 'magit-ediff-popup ?S "Show staged"
-;;  'magit-ediff-show-staged)
-;; (magit-define-popup-action 'magit-ediff-popup ?U "Show unstaged"
-;;  'magit-ediff-show-unstaged)
+(require 'magit-ediff)
+(setq magit-ediff-dwim-show-on-hunks t)
 ;; windows support
 (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
   (when (and (eq system-type 'windows-nt)
