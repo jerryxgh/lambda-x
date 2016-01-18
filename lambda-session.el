@@ -21,18 +21,18 @@
 
 ;; save recent files -----------------------------------------------------------
 ;; very useful
-(require 'recentf)
-(setq recentf-save-file (expand-file-name
-			 "recentf"
-			 lambda-auto-save-dir)
-      recentf-max-saved-items 500
-      recentf-max-menu-items 15
-      ;; disable recentf-cleanup on Emacs start, because it can cause
-      ;; problems with remote files
-      recentf-auto-cleanup 'never)
-;; ignore magit's commit message files
-(add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-(recentf-mode 1)
+;; (require 'recentf)
+;; (setq recentf-save-file (expand-file-name
+;; 			 "recentf"
+;; 			 lambda-auto-save-dir)
+;;       recentf-max-saved-items 500
+;;       recentf-max-menu-items 15
+;;       ;; disable recentf-cleanup on Emacs start, because it can cause
+;;       ;; problems with remote files
+;;       recentf-auto-cleanup 'never)
+;; ;; ignore magit's commit message files
+;; (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
+;; (recentf-mode 1)
 
 ;; saveplace --- When you visit a file, point goes to the last place where
 ;; it was when you previously visited the same file.----------------------------
@@ -69,6 +69,7 @@ This follows freedesktop standards, should work in X servers."
 (require 'desktop)
 (setq desktop-path (list (expand-file-name lambda-auto-save-dir))
       history-length 250
+      desktop-restore-frames t
       desktop-dirname (expand-file-name lambda-auto-save-dir)
       desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
       desktop-base-file-name "emacs-desktop")
@@ -92,8 +93,6 @@ This follows freedesktop standards, should work in X servers."
 (setq elscreen-persist-file (expand-file-name "elscreen"
                                               lambda-auto-save-dir))
 (elscreen-persist-mode 1)
-
-(lambda-package-ensure-install 'elscreen-multi-term)
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily

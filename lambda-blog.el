@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2015-11-29 14:03:20 GuanghuiXu>
+;; Time-stamp: <2016-01-18 16:15:11 GuanghuiXu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -7,6 +7,7 @@
 
 (require 'lambda-core)
 (require 'org)
+(require 'org-id)
 
 ;; org-mode
 ;; align chinese font in org table, solution is from below:
@@ -16,6 +17,8 @@
 (setq org-use-speed-commands t
       org-directory "/home/xgh/文档/"
       org-src-fontify-natively t
+      org-id-locations-file (expand-file-name ".org-id-locations"
+                                              lambda-auto-save-dir)
       org-src-tab-acts-natively t)
 (setq org-agenda-files (list "/home/xgh/文档/gtd.org"
                              (concat org-directory "/capture.org")))
@@ -67,7 +70,7 @@ rainbow-delimiters-mode temporarily when using htmlize."
 
 (add-to-list 'load-path "/home/xgh/repository/simplesite")
 (require 'simplesite)
-(setq ss-source-directory "/home/xgh/repository/simplesite/test/source"
+(setq ss-source-directory "/home/xgh/repository/simplesite/test/_src_"
       ss-output-directory "/home/xgh/repository/jerryxgh.github.io"
       ss-author "GuanghuiXu")
 

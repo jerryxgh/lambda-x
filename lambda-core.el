@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2015-12-28 14:35:10 GuanghuiXu>
+;; Time-stamp: <2016-01-18 11:11:14 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -142,11 +142,10 @@ Which means get all used packages, this is mainly for getting unused packages."
 (setq inhibit-startup-screen t)
 
 ;; nice scrolling in both keyboard and mouse
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; donnot accelerate scrolling
       scroll-step 1
       scroll-margin 0
-      scroll-preserve-screen-position t
       scroll-conservatively most-positive-fixnum)
 
 ;; (setq window-resize-pixelwise t)
@@ -242,6 +241,9 @@ This follows freedesktop standards, should work in X servers."
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
+(electric-indent-mode 1)
+;; using smartparens instead
+;; (electric-pair-mode 1)
 
 ;; hippie expand is dabbrev expand on steroids
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -284,7 +286,7 @@ This follows freedesktop standards, should work in X servers."
 ;; (setq sp-navigate-close-if-unbalanced t)
 (require 'smartparens)
 (require 'smartparens-config)
-;; (setq sp-autoskip-closing-pair 'always)
+(setq sp-autoskip-closing-pair 'always)
 (define-key smartparens-strict-mode-map
   [remap c-electric-backspace] 'sp-backward-delete-char)
 ;; use smartparens key bindings
@@ -497,9 +499,9 @@ the search is performed ."
 (setq whitespace-style '(face tabs empty trailing lines-tail spaces newline
                               indentation))
 (set 'whitespace-global-modes
-                        '(c-mode c++-mode java-mode emacs-lisp-mode scheme-mode
-                                 lisp-mode python-mode lua-mode perl-mode
-                                 haskell-mode scala-mode))
+     '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
+                lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
+                web-mode ))
 (global-whitespace-mode 1)
 
 
@@ -924,7 +926,9 @@ the search is performed ."
                ac-source-dictionary
                ac-source-words-in-buffer
                ac-source-words-in-same-mode-buffers
-               ac-source-words-in-all-buffer))
+               ac-source-yasnippet
+               ;; ac-source-words-in-all-buffer
+               ))
 
 (setq-default ac-expand-on-auto-complete nil)
 ;; (setq-default ac-auto-start nil)
@@ -955,7 +959,7 @@ the search is performed ."
                 nxml-mode objc-mode octave-mode org-mode
                 sass-mode sh-mode shell-mode smarty-mode
                 snippet-mode sql-interactive-mode sql-mode
-                text-mode textile-mode tuareg-mode yaml-mode))
+                text-mode textile-mode tuareg-mode vbnet-mode yaml-mode))
   (add-to-list 'ac-modes mode))
 
 (setq ac-comphist-file (expand-file-name "ac-comphist.dat"

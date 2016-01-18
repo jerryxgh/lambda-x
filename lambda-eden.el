@@ -84,7 +84,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'nginx-mode)
 (require 'nginx-mode)
 (add-to-list 'auto-mode-alist
-             '("modsecurity\.conf$" . nginx-mode)
              '("modsecurity\.conf$" . nginx-mode))
 
 ;;; dired-subtree --------------------------------------------------------------
@@ -123,17 +122,21 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'evil-args)
 (lambda-package-ensure-install 'evil-nerd-commenter)
 (lambda-package-ensure-install 'expand-region)
-(lambda-package-ensure-install 'flycheck-pos-tip)
 (lambda-package-ensure-install 'git-timemachine)
 (lambda-package-ensure-install 'gitattributes-mode)
 (lambda-package-ensure-install 'gitconfig-mode)
 (lambda-package-ensure-install 'gitignore-mode)
 (lambda-package-ensure-install 'golden-ratio)
-(lambda-package-ensure-install 'guide-key-tip)
+(lambda-package-ensure-install 'guide-key)
+;; (require 'guide-key)
+;; (setq guide-key/guide-key-sequence t)
+;; (guide-key-mode 1) ; Enable guide-key-mode
+
 (lambda-package-ensure-install 'helm-c-yasnippet)
 (lambda-package-ensure-install 'helm-descbinds)
 (lambda-package-ensure-install 'helm-gitignore)
 (lambda-package-ensure-install 'helm-mode-manager)
+(lambda-package-ensure-install 'helm-orgcard)
 (lambda-package-ensure-install 'helm-swoop)
 (lambda-package-ensure-install 'highlight)
 (lambda-package-ensure-install 'highlight-indentation)
@@ -141,6 +144,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'highlight-parentheses)
 (lambda-package-ensure-install 'hl-anything)
 (lambda-package-ensure-install 'hungry-delete)
+(global-hungry-delete-mode 1)
 (lambda-package-ensure-install 'ibuffer-projectile)
 (lambda-package-ensure-install 'indent-guide)
 (lambda-package-ensure-install 'info+)
@@ -159,6 +163,12 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'evil-textobj-anyblock)
 (lambda-package-ensure-install 'expand-line)
 (lambda-package-ensure-install 'multi-term)
+
+
+;; web servers
+(lambda-package-ensure-install 'simple-httpd)
+;; (lambda-package-ensure-install 'elnode)
+;; (lambda-package-ensure-install 'web-server)
 
 ;; knowledge
 ;; locate-library

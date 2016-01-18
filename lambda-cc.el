@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2015-12-05 11:58:38 GuanghuiXu>
+;; Time-stamp: <2016-01-14 11:14:13 GuanghuiXu>
 ;;; Commentary:
 
 ;;; Code:
@@ -8,13 +8,20 @@
 (require 'lambda-evil)
 (require 'cc-mode)
 
-(setq c-default-style '((java-mode . "cc-mode")
-                        (awk-mode . "awk")
-                        (c-mode . "k&r")
-                        (c++-mode . "stroustrup")
-                        (other . "linux")))
-
 (define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
+(add-hook 'c-mode-common-hook
+          #'(lambda ()
+              ;;(setq ac-sources (append
+              ;;(list 'ac-source-gtags
+              ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
+              (add-to-list 'c-cleanup-list 'defun-close-semi)
+              (c-set-style "k&r")
+              (setq tab-width 8)
+              (setq indent-tabs-mode nil)
+              (setq c-basic-offset 4)
+              ;; equal to c-toggle-auto-newline + c-toggle-hungry-state
+              (c-toggle-auto-hungry-state 1)
+              (c-toggle-electric-state 1)))
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
                                   global-semantic-idle-scheduler-mode
@@ -60,18 +67,10 @@
 
 ;; google-c-style --------------------------------------------------------------
 (lambda-package-ensure-install 'google-c-style)
-(require 'google-c-style)
-
-(add-hook 'c-mode-common-hook
-          #'(lambda ()
-              ;;(setq ac-sources (append
-              ;;(list 'ac-source-gtags
-              ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
-              (add-to-list 'c-cleanup-list 'defun-close-semi)
-              ;; (c-set-style "stroustrup")
-              ;;(google-set-c-style)
-              ;; (c-toggle-auto-newline 1)
-              (c-toggle-hungry-state 1)))
+;; (require 'google-c-style)
+;; (add-hook 'c-mode-common-hook
+;;           #'(lambda ()
+;;               (google-set-c-style)))
 
 ;; ffap - find file at point ---------------------------------------------------
 (autoload 'ffap-href-enable "ffap-href" nil t)

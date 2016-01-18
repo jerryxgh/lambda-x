@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2015-12-24 18:39:21 GuanghuiXu>
+;; Time-stamp: <2016-01-14 11:28:02 GuanghuiXu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -80,7 +80,7 @@
 (define-key evil-window-map (kbd "C-w") 'ace-window)
 
 (require 'evil-tab-minor-mode)
-;; (global-evil-tab-mode t)
+(global-evil-tab-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)
@@ -180,8 +180,8 @@
 
 ;; evil-smartparens ------------------------------------------------------
 (lambda-package-ensure-install 'evil-smartparens)
-(require 'evil-smartparens)
-(evil-smartparens-mode 1)
+;; (require 'evil-smartparens)
+;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
 
 (provide 'lambda-evil)
 
