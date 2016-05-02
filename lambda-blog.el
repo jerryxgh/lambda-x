@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-01-18 16:15:11 GuanghuiXu>
+;; Time-stamp: <2016-05-01 23:28:59 GuanghuiXu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -67,13 +67,29 @@ rainbow-delimiters-mode temporarily when using htmlize."
       '("xelatex -interaction nonstopmode %b"
         "xelatex -interaction nonstopmode %b"))
 
+;; latex editing ---------------------------------------------------------------
+(lambda-package-ensure-install 'auctex)
+(lambda-package-ensure-install 'auto-complete-auctex)
+
 
 (add-to-list 'load-path "/home/xgh/repository/simplesite")
 (require 'simplesite)
-(setq ss-source-directory "/home/xgh/repository/simplesite/test/_src_"
-      ss-output-directory "/home/xgh/repository/jerryxgh.github.io"
-      ss-author "GuanghuiXu")
+(setq simplesite-author "Guanghui Xu"
+      simplesite-personal-avatar "/home/xgh/repository/jerryxgh.github.io/posts/Heckert_GNU_white.png"
+      simplesite-source-directory "/home/xgh/repository/jerryxgh.github.io/posts"
+      simplesite-output-directory "/home/xgh/repository/jerryxgh.github.io"
+      simplesite-personal-github-link "http://jerryxgh.github.io"
+      simplesite-site-domain "http://jerryxgh.github.io"
 
+      simplesite-personal-disqus-shortname "jerryxgh"
+      simplesite-personal-duoshuo-shortname nil
+      )
+;; (setq org-use-sub-superscripts "{}"
+;;       org-export-with-sub-superscripts "{}")
+
+;; graphviz-dot-mode - mode for editing dot files ------------------------------
+(lambda-package-ensure-install 'graphviz-dot-mode)
+(setq graphviz-dot-indent-width 4)
 
 (provide 'lambda-blog)
 

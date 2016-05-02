@@ -15,23 +15,23 @@
 (setq savehist-additional-variables '(search ring regexp-search-ring)
       savehist-autosave-interval 60 ; save every minute
       savehist-file (expand-file-name ; keep the home clean
-		     "savehist"
-		     lambda-auto-save-dir))
+                     "savehist"
+                     lambda-auto-save-dir))
 (savehist-mode 1)
 
 ;; save recent files -----------------------------------------------------------
 ;; very useful
-;; (require 'recentf)
-;; (setq recentf-save-file (expand-file-name
-;; 			 "recentf"
-;; 			 lambda-auto-save-dir)
-;;       recentf-max-saved-items 500
-;;       recentf-max-menu-items 15
-;;       ;; disable recentf-cleanup on Emacs start, because it can cause
-;;       ;; problems with remote files
-;;       recentf-auto-cleanup 'never)
-;; ;; ignore magit's commit message files
-;; (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
+(require 'recentf)
+(setq recentf-save-file (expand-file-name
+                      "recentf"
+                      lambda-auto-save-dir)
+      recentf-max-saved-items 500
+      recentf-max-menu-items 15
+      ;; disable recentf-cleanup on Emacs start, because it can cause
+      ;; problems with remote files
+      recentf-auto-cleanup 'never)
+;; ignore magit's commit message files
+(add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
 ;; (recentf-mode 1)
 
 ;; saveplace --- When you visit a file, point goes to the last place where
@@ -39,8 +39,8 @@
 (require 'saveplace)
 ;; to keep home clean
 (setq save-place-file (expand-file-name
-		       "savedplace"
-		       lambda-auto-save-dir))
+                       "savedplace"
+                       lambda-auto-save-dir))
 ;; activate it for all buffers
 (setq-default save-place t)
 
@@ -88,11 +88,11 @@ This follows freedesktop standards, should work in X servers."
 (define-key evil-normal-state-map (kbd "g t") 'elscreen-next)
 (define-key evil-normal-state-map (kbd "g T") 'elscreen-previous)
 
-(lambda-package-ensure-install 'elscreen-persist)
-(require 'elscreen-persist)
-(setq elscreen-persist-file (expand-file-name "elscreen"
-                                              lambda-auto-save-dir))
-(elscreen-persist-mode 1)
+;; (lambda-package-ensure-install 'elscreen-persist)
+;; (require 'elscreen-persist)
+;; (setq elscreen-persist-file (expand-file-name "elscreen"
+;;                                               lambda-auto-save-dir))
+;; (elscreen-persist-mode 1)
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily

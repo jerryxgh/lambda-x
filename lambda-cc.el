@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2016-01-14 11:14:13 GuanghuiXu>
+;; Time-stamp: <2016-02-01 14:24:17 GuanghuiXu>
 ;;; Commentary:
 
 ;;; Code:
@@ -20,7 +20,6 @@
               (setq indent-tabs-mode nil)
               (setq c-basic-offset 4)
               ;; equal to c-toggle-auto-newline + c-toggle-hungry-state
-              (c-toggle-auto-hungry-state 1)
               (c-toggle-electric-state 1)))
 
 (setq semantic-default-submodes '(global-semanticdb-minor-mode
@@ -31,7 +30,7 @@
                                   ;;global-semantic-stickyfunc-mode
                                   global-semantic-mru-bookmark-mode
                                   ))
-(semantic-mode 1)
+;;(semantic-mode 1)
 ;;(global-semantic-highlight-edits-mode 1)
 ;;(global-semantic-idle-local-symbol-highlight-mode 1)
 ;;(global-semantic-idle-breadcrumbs-mode 1)
@@ -95,30 +94,30 @@
 ;;     (define-key evil-normal-state-map
 ;;       (kbd "M-.") 'ggtags-find-tag-dwim))
 ;; (add-hook 'c-mode-common-hook
-;; 	  (lambda ()
-;; 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-;; 	      (ggtags-mode 1)
-;; 	      ;; do not echo help message when point is on a tag, it's annoying
-;; 	      (if (get 'ggtags-active-tag 'help-echo)
-;; 		  (put 'ggtags-active-tag 'help-echo nil))
-;; 	      (diminish 'ggtags-mode))))
+;;        (lambda ()
+;;          (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+;;            (ggtags-mode 1)
+;;            ;; do not echo help message when point is on a tag, it's annoying
+;;            (if (get 'ggtags-active-tag 'help-echo)
+;;                (put 'ggtags-active-tag 'help-echo nil))
+;;            (diminish 'ggtags-mode))))
 
 (lambda-package-ensure-install 'helm-gtags)
 (require 'helm-gtags)
-;; Key 		Command
-;; Prefix h 	helm-gtags-display-browser
-;; Prefix C-] 	helm-gtags-find-tag-from-here
-;; Prefix C-t 	helm-gtags-pop-stack
-;; Prefix P 	helm-gtags-find-files
-;; Prefix f 	helm-gtags-parse-file
-;; Prefix g 	helm-gtags-find-pattern
-;; Prefix s 	helm-gtags-find-symbol
-;; Prefix r 	helm-gtags-find-rtag
-;; Prefix t 	helm-gtags-find-tag
-;; Prefix d 	helm-gtags-find-tag
-;; M-* 		helm-gtags-pop-stack
-;; M-. 		helm-gtags-find-tag
-;; C-x 4 . 	helm-gtags-find-tag-other-window
+;; Key          Command
+;; Prefix h     helm-gtags-display-browser
+;; Prefix C-]   helm-gtags-find-tag-from-here
+;; Prefix C-t   helm-gtags-pop-stack
+;; Prefix P     helm-gtags-find-files
+;; Prefix f     helm-gtags-parse-file
+;; Prefix g     helm-gtags-find-pattern
+;; Prefix s     helm-gtags-find-symbol
+;; Prefix r     helm-gtags-find-rtag
+;; Prefix t     helm-gtags-find-tag
+;; Prefix d     helm-gtags-find-tag
+;; M-*          helm-gtags-pop-stack
+;; M-.          helm-gtags-find-tag
+;; C-x 4 .      helm-gtags-find-tag-other-window
 (setq helm-gtags-suggested-key-mapping t)
 
 (add-hook 'c-mode-common-hook

@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2016-01-14 11:28:02 GuanghuiXu>
+;; Time-stamp: <2016-04-27 14:23:57 GuanghuiXu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -170,10 +170,6 @@
 ;; evil-visual-mark-mode -------------------------------------------------------
 (lambda-package-ensure-install 'evil-visual-mark-mode)
 (evil-visual-mark-mode 1)
-
-;; evil-jumper jumper like vim -------------------------------------------------
-(lambda-package-ensure-install 'evil-jumper)
-(global-evil-jumper-mode 1)
 
 ;; evil-indent-textobject ------------------------------------------------------
 (lambda-package-ensure-install 'evil-indent-textobject)

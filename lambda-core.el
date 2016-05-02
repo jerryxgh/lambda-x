@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-01-18 11:11:14 GuanghuiXu>
+;; Time-stamp: <2016-05-02 21:39:15 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -216,7 +216,7 @@ This follows freedesktop standards, should work in X servers."
 (setq ring-bell-function 'ignore)
 
 (mouse-avoidance-mode 'animate)
-(show-paren-mode 1)
+;; (show-paren-mode 1)
 ;; (setq show-paren-style 'mixed)
 ;; (set-background-color "#CCE8CF")
 
@@ -396,7 +396,17 @@ This follows freedesktop standards, should work in X servers."
 (require 'dired-x)
 (cond ((eq system-type 'windows-nt)
        (setq dired-listing-switches "-AlX"))
-      (t (setq dired-listing-switches "-AlX  --group-directories-first")))
+      (t (setq dired-listing-switches "-AlX --group-directories-first")))
+
+;;; dired-subtree --------------------------------------------------------------
+(lambda-package-ensure-install 'dired-subtree)
+(unless (or (eq system-type 'windows-nt)
+            (string-match-p "--dired" dired-listing-switches))
+  (setq dired-listing-switches (concat dired-listing-switches " --dired")))
+(define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
+(define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
+(define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
+(define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
 
 ;; if there is a dired buffer displayed in the next window, use its
 ;; current subdir, instead of the current subdir of this dired buffer
@@ -496,8 +506,10 @@ the search is performed ."
 ;; whitespace-mode config.
 (require 'whitespace)
 (setq whitespace-line-column nil) ;; use fill-column instead of this
-(setq whitespace-style '(face tabs empty trailing lines-tail spaces newline
-                              indentation))
+(setq whitespace-style '(face  empty trailing lines-tail spaces newline
+                               indentation
+                               ;; tabs
+                               ))
 (set 'whitespace-global-modes
      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
@@ -612,9 +624,7 @@ the search is performed ."
 (setq flycheck-emacs-lisp-initialize-packages t)
 (setq flycheck-emacs-lisp-package-user-dir package-user-dir)
 ;; enable on-the-fly syntax checking
-(if (fboundp 'global-flycheck-mode)
-    (global-flycheck-mode 1)
-  (add-hook 'prog-mode-hook 'flycheck-mode))
+(add-hook 'after-init-hook #'global-flycheck-mode)
 (lambda-package-ensure-install 'helm-flycheck)
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
@@ -732,6 +742,10 @@ the search is performed ."
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
+;;; ido-at-point --- use ido to do completion-at-point -------------------------
+(lambda-package-ensure-install 'ido-at-point)
+(ido-at-point-mode 1)
+
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
 
@@ -807,8 +821,12 @@ the search is performed ."
                 (load-library . ido)
                 (debug-on-entry . ido)
                 (dired-do-copy . ido)
+                (dired-do-rename . ido)
+                (dired-create-directory . ido)
                 (find-function . ido)
                 (find-tag . ido)
+                (httpd-serve-directory . ido)
+                (helm-gtags-create-tags . ido)
                 (ffap-alternate-file . nil)
                 (tmm-menubar . nil)))
 (helm-mode 1)
@@ -833,11 +851,6 @@ the search is performed ."
 (require 'helm-descbinds)
 (helm-descbinds-mode 1)
 (lambda-package-ensure-install 'helm-ag)
-
-;;; ido-at-point --- use ido to do completion-at-point -------------------------
-(lambda-package-ensure-install 'ido-at-point)
-(ido-at-point-mode 1)
-
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
@@ -921,7 +934,7 @@ the search is performed ."
 
 (set-default 'ac-sources
              '(ac-source-imenu
-               ac-source-dabbrev
+               ;; ac-source-dabbrev
                ac-source-filename
                ac-source-dictionary
                ac-source-words-in-buffer
@@ -1019,7 +1032,7 @@ DISPLAY-FN: use this function to display."
 (lambda-package-ensure-install 'unbound)
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------
-(require 'unicad)
+;; (require 'unicad)
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)

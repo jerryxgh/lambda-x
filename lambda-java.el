@@ -18,9 +18,9 @@
 ;; configuring eclipse installation
 (when (eq system-type 'gnu/linux)
   (add-to-list 'eclim-eclipse-dirs
-               "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/")
-  (setq eclim-executable "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/eclim"
-        eclimd-executable "/home/xgh/local/sts-bundle/sts-3.7.1.RELEASE/eclimd"
+               "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/")
+  (setq eclim-executable "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/eclim"
+        eclimd-executable "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/eclimd"
         eclimd-default-workspace "~/workspace/"))
 
 ;; displaying compilation error messages in the echo area
