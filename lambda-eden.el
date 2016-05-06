@@ -8,7 +8,6 @@
 
 ;;; TODO
 ;; evil-nerd-commenter
-;; window-numbering
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
@@ -87,13 +86,9 @@ Note the weekly scope of the command's precision.")
              '("modsecurity\.conf$" . nginx-mode))
 
 ;; to try
-;; window-numbering Comment-dwim-2 evil-nerd-commenter chinese-fonts-?
+;; Comment-dwim-2 evil-nerd-commenter chinese-fonts-?
 ;; default-text-scale font-utils fontawesome zap-to-char zlc
 ;; good
-(lambda-package-ensure-install 'window-numbering)
-
-(window-numbering-mode 1)
-
 (lambda-package-ensure-install 'git-messenger)
 (require 'git-messenger)
 (setq git-messenger:show-detail t)
@@ -121,8 +116,8 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'gitignore-mode)
 (lambda-package-ensure-install 'golden-ratio)
 (lambda-package-ensure-install 'guide-key)
-;; (require 'guide-key)
-;; (setq guide-key/guide-key-sequence t)
+(require 'guide-key)
+(setq guide-key/guide-key-sequence t)
 ;; (guide-key-mode 1) ; Enable guide-key-mode
 
 (lambda-package-ensure-install 'helm-c-yasnippet)
@@ -157,6 +152,50 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'expand-line)
 (lambda-package-ensure-install 'multi-term)
 
+;; (lambda-package-ensure-install 'company)
+;; (lambda-package-ensure-install 'company-dict)
+;; (lambda-package-ensure-install 'company-web)
+;; (lambda-package-ensure-install 'company-tern)
+;; (lambda-package-ensure-install 'company-auctex)
+;; (lambda-package-ensure-install 'company-math)
+;; (require 'company)
+;; (require 'company-dabbrev-code)
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+;; (defvar company-mode/enable-yas t
+;;   "Enable yasnippet for all backends.")
+
+;; (defun company-mode/backend-with-yas (backend)
+;;   "Let yasnippt work with other company BACKEND."
+;;   (if (or (not company-mode/enable-yas)
+;;           (and (listp backend) (member 'company-yasnippet backend)))
+;;       backend
+;;     (append (if (consp backend) backend (list backend))
+;;             '(:with company-yasnippet))))
+
+;; (add-to-list 'company-backends 'company-cmake t)
+;; (add-to-list 'company-backends 'company-eclim t)
+
+;; (define-key company-mode-map (kbd "M-/") 'company-complete)
+;; (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+;; (define-key company-active-map (kbd "C-M-s") 'company-search-candidates)
+;; (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+
+;; (setq company-backends
+;;       (mapcar #'company-mode/backend-with-yas company-backends)
+
+;;       company-auto-complete t
+;;       company-dabbrev-code-everywhere t
+;;       company-minimum-prefix-length 2)
+
+
+;; (add-hook 'after-init-hook #'(lambda ()
+;;                                (global-company-mode 1)))
+
+;; (define-key ac-completing-map (kbd "<tab>") 'ac-expand)
+;; (define-key ac-completing-map (kbd "<backtab>") 'ac-previous)
+;; (define-key ac-completing-map (kbd "<return>") 'ac-complete)
 
 ;; web servers
 (lambda-package-ensure-install 'simple-httpd)
@@ -168,11 +207,5 @@ Note the weekly scope of the command's precision.")
 ;; list-load-path-shadows
 
 (provide 'lambda-eden)
-
-
-
-
-;;; config for gnus
-
 
 ;;; lambda-eden.el ends here

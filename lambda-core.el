@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-05-02 21:39:15 GuanghuiXu>
+;; Time-stamp: <2016-05-06 23:20:18 GuanghuiXu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -18,8 +18,40 @@
                                                  user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
+(defun lambda-add-to-load-path-recursively
+    (directory &optional exclude-directories-list)
+  "Add DIRECTORY to `load-path' recursively, those has `get-load-suffixes' file.
+If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
+ subdirectry will be excluded."
+  (unless (file-directory-p directory)
+    (setq directory (file-name-directory directory)))
+  (let (directory-stack (suffixes (get-load-suffixes)))
+    (if (file-exists-p directory)
+        (push directory directory-stack))
+    ;; use stack to traverse directory and subdirectory
+    (while directory-stack
+      (let* ((current-directory (pop directory-stack))
+             (file-list (directory-files current-directory t))
+             should-add-to-load-path)
+
+        (dolist (file file-list)
+          (let ((file-name (file-name-nondirectory file)))
+            (if (file-directory-p file)
+                ;; exclude . .. and exclude-directories-list
+                (if (and (not (equal file-name "."))
+                         (not (equal file-name ".."))
+                         (not (member file-name exclude-directories-list)))
+                    (push file directory-stack))
+              (if (and (not should-add-to-load-path)
+                       (member (file-name-extension file t) suffixes))
+                  (setq should-add-to-load-path t)))))
+        (if should-add-to-load-path
+            (add-to-list 'load-path current-directory))))))
+
 ;; (add-to-list 'load-path lambda-x-direcotry)
-(add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
+;; (add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
+(lambda-add-to-load-path-recursively (expand-file-name "packages/non-elpa"
+                                                       lambda-x-direcotry))
 
 ;; suppressing ad-handle-definition Warnings in Emacs
 (setq ad-redefinition-action 'accept)
@@ -27,17 +59,14 @@
 ;; packages about settings =====================================================
 (require 'package)
 
-;; add more package sources
-(dolist (pkg-arch
-         '(;;("marmalade" . "http://marmalade-repo.org/packages/")
-           ;;("org" . "http://orgmode.org/elpa/")
-           ;;("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
-           ("melpa" . "http://melpa.milkbox.net/packages/")
-           ))
-  (add-to-list 'package-archives pkg-arch nil))
-
 ;; place package files relative to configuration directory
 (setq package-user-dir (expand-file-name "packages/elpa" lambda-x-direcotry))
+
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 
 ;; do not auto load packages
 (setq package-enable-at-startup nil)
@@ -163,30 +192,9 @@ Which means get all used packages, this is mainly for getting unused packages."
                    (abbreviate-file-name (buffer-file-name)) "%b"))))
 
 ;; theme -----------------------------------------------------------------------
-(lambda-package-ensure-install 'solarized-theme)
-(require 'solarized)
-(if (eq system-type 'gnu/linux)
-    (setq x-underline-at-descent-line t))
-;; Make the fringe stand out from the background.
-(setq solarized-distinct-fringe-background t)
-;; Use more italics.
-(setq solarized-use-more-italic t)
-(defun lambda-load-solarized-light-theme ()
-  "Load solarized-light theme, plus that, set font and tweak mode-line style."
-  (interactive)
-  (lambda-load-theme 'solarized-light))
-
-(defun lambda-load-solarized-dark-theme ()
-  "Load solarized-dark theme, plus that, set font and tweak mode-line style."
-  (interactive)
-  (lambda-load-theme 'solarized-dark))
-
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
   (load-theme theme t)
-  ;; tweak mode line.
-  (set-face-attribute 'mode-line nil :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil)
 
   (set-frame-font "Consolas-11")
 
@@ -197,26 +205,34 @@ Which means get all used packages, this is mainly for getting unused packages."
   (if (fboundp 'set-fontset-font)
       (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))))
 
-(lambda-load-solarized-dark-theme)
+(lambda-package-ensure-install 'spacemacs-theme)
+(require 'spacemacs-common)
+(lambda-load-theme 'spacemacs-dark)
 
-;; Emacs in OSX already has fullscreen support
-;; Emacs has a similar built-in command in 24.4
-;; Copied from prelude.
-(defun lambda-ui-fullscreen ()
-  "Make Emacs window fullscreen.
+(lambda-package-ensure-install 'powerline)
+(lambda-package-ensure-install 'spaceline)
+(lambda-package-ensure-install 'window-numbering)
+(defun window-numbering-install-mode-line (&optional position)
+  "Do nothing, the display is handled by the spaceline(powerline).
+POSITION: inhibit warning.")
+(require 'window-numbering)
+(setq window-numbering-auto-assign-0-to-minibuffer nil)
+(window-numbering-mode 1)
 
-This follows freedesktop standards, should work in X servers."
-  (interactive)
-  (if (eq window-system 'x)
-      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-                             '(2 "_NET_WM_STATE_FULLSCREEN" 0))
-    (error "Only X server is supported")))
+(require 'spaceline-config)
+(setq spaceline-window-numbers-unicode t
+      spaceline-workspace-numbers-unicode t
+      powerline-default-separator nil
+      spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+(spaceline-helm-mode 1)
+(spaceline-info-mode 1)
+(spaceline-spacemacs-theme)
 
 ;; inhibit annoying warning sound
 (setq ring-bell-function 'ignore)
 
 (mouse-avoidance-mode 'animate)
-;; (show-paren-mode 1)
+;; (show-paren-mode -1)
 ;; (setq show-paren-style 'mixed)
 ;; (set-background-color "#CCE8CF")
 
@@ -346,11 +362,6 @@ This follows freedesktop standards, should work in X servers."
 
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
-(add-to-list 'load-path (expand-file-name "packages/non-elpa/tramp/lisp"
-                                          lambda-x-direcotry))
-(add-to-list 'Info-default-directory-list
-             (expand-file-name "packages/non-elpa/tramp/info"
-                               lambda-x-direcotry))
 (require 'tramp)
 (require 'tramp-cache)
 (setq tramp-auto-save-directory  temporary-file-directory)
@@ -475,6 +486,7 @@ the search is performed ."
 ;; position --------------------------------------------------------------------
 (lambda-package-ensure-install 'anzu)
 (require 'anzu)
+(setq anzu-cons-mode-line-p nil)
 (global-anzu-mode)
 (diminish 'anzu-mode)
 
@@ -540,7 +552,7 @@ the search is performed ."
 ;; editor settings end here ====================================================
 
 ;; miscellaneous basic settings ------------------------------------------------
-(setq user-full-name "GuanghuiXu"
+(setq user-full-name "Guanghui Xu"
       user-mail-address "gh_xu@qq.com"
       custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
       make-backup-files nil
@@ -549,8 +561,9 @@ the search is performed ."
       gc-cons-threshold 20480000
       source-directory "/home/xgh/sources/emacs-24.5"
       confirm-kill-emacs 'y-or-n-p)
-(require 'sql)
-(setq sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8"))
+
+;; (require 'sql)
+;; (setq sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8"))
 
 ;; Visual line mode is a new mode in Emacs 23. It provides support for editing
 ;; by visual lines. It turns on word-wrapping in the current buffer, and rebinds
@@ -565,7 +578,7 @@ the search is performed ."
     (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
 ;; enable to support navigate in camelCase words
-(global-subword-mode 1)
+;; (global-subword-mode 1)
 (auto-compression-mode t)
 (auto-image-file-mode t)
 
@@ -587,7 +600,7 @@ the search is performed ."
 (with-region-or-buffer indent-region)
 (with-region-or-buffer untabify)
 
-;; diff-hl
+;; diff-hl ---------------------------------------------------------------------
 (lambda-package-ensure-install 'diff-hl)
 (global-diff-hl-mode +1)
 (add-hook 'dired-mode-hook #'(lambda ()
@@ -748,7 +761,6 @@ the search is performed ."
 
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
-
 (require 'helm)
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
@@ -782,9 +794,6 @@ the search is performed ."
   'helm-grep-mode-jump-other-window-backward)
 (setq helm-net-prefer-curl t
       helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
-      helm-quick-update t ; do not display invisible candidates
-      ;; be idle for this many seconds, before updating in delayed sources.
-      helm-idle-delay 0.01
       ;; be idle for this many seconds, before updating candidate buffer
       helm-input-idle-delay 0.01
       ;; search for library in `require' and `declare-function' sexp.
@@ -818,6 +827,7 @@ the search is performed ."
 (setq-default helm-completing-read-handlers-alist
               '((describe-function . ido)
                 (describe-variable . ido)
+                (where-is . ido)
                 (load-library . ido)
                 (debug-on-entry . ido)
                 (dired-do-copy . ido)
@@ -916,9 +926,8 @@ the search is performed ."
 
 ;; menu only show modes according to the major-mode of the current buffer
 (setq yas-use-menu 'abbreviate)
-(setq yas-dont-activate #'(lambda ()
-                            (or (minibufferp)
-                                buffer-read-only)))
+(yas-global-mode 1)
+(diminish 'yas-minor-mode)
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
@@ -957,22 +966,52 @@ the search is performed ."
 
 ;; Exclude very large buffers from dabbrev
 (require 'dabbrev)
-(setq dabbrev-friend-buffer-function #'(lambda (other-buffer)
-  (< (buffer-size other-buffer) (* 1 1024 1024))))
+(setq dabbrev-friend-buffer-function
+      #'(lambda (other-buffer) (< (buffer-size other-buffer) (* 1 1024 1024))))
 
-
-(dolist (mode '(autoconf-mode change-log-mode clojure-mode
-                cmake-mode conf-javaprop-mode conf-xdefaults-mode
-                css-mode csv-mode eshell-mode espresso-mode
-                git-commit-mode graphviz-dot-mode haml-mode
-                haskell-mode html-mode inferior-emacs-lisp-mode
-                js3-mode less-css-mode lisp-mode log-edit-mode
-                makefile-automake-mode makefile-bsdmake-mo
-                makefile-gmake-mode markdown-mode nginx-mode
-                nxml-mode objc-mode octave-mode org-mode
-                sass-mode sh-mode shell-mode smarty-mode
-                snippet-mode sql-interactive-mode sql-mode
-                text-mode textile-mode tuareg-mode vbnet-mode yaml-mode))
+(dolist (mode '(
+                autoconf-mode
+                change-log-mode
+                clojure-mode
+                cmake-mode
+                conf-javaprop-mode
+                conf-xdefaults-mode
+                css-mode
+                csv-mode
+                eshell-mode
+                espresso-mode
+                git-commit-mode
+                graphviz-dot-mode
+                haml-mode
+                haskell-mode
+                html-mode
+                inferior-emacs-lisp-mode
+                js3-mode
+                less-css-mode
+                lisp-mode
+                log-edit-mode
+                makefile-automake-mode
+                makefile-bsdmake-mo
+                makefile-gmake-mode
+                markdown-mode
+                nginx-mode
+                nxml-mode
+                objc-mode
+                octave-mode
+                org-mode
+                sass-mode
+                sh-mode
+                shell-mode
+                smarty-mode
+                snippet-mode
+                sql-interactive-mode
+                sql-mode
+                text-mode
+                textile-mode
+                tuareg-mode
+                vbnet-mode
+                yaml-mode
+                ))
   (add-to-list 'ac-modes mode))
 
 (setq ac-comphist-file (expand-file-name "ac-comphist.dat"
@@ -1024,9 +1063,6 @@ DISPLAY-FN: use this function to display."
      )))
 
 (add-to-list 'yas-prompt-functions 'yas-popup-isearch-prompt)
-
-(yas-global-mode 1)
-(diminish 'yas-minor-mode)
 
 ;; unbound ---------------------------------------------------------------------
 (lambda-package-ensure-install 'unbound)

@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2016-04-27 14:23:57 GuanghuiXu>
+;; Time-stamp: <2016-05-05 22:57:14 GuanghuiXu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -87,7 +87,13 @@
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  "b" 'ido-switch-buffer
+  "a" 'helm-ag
+  "p" 'helm-projectile-ag
+  "b" #'(lambda ()
+          (interactive)
+          ;; skip persp-mode like filters, let it show more candidates
+          (let ((ido-make-buffer-list-hook nil))
+            (ido-switch-buffer)))
   "e" 'helm-projectile
   "k" 'kill-this-buffer
   "o" 'helm-occur
@@ -149,7 +155,7 @@
 (require 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-(ace-window-display-mode t)
+;; (ace-window-display-mode t)
 
 
 (lambda-package-ensure-install 'evil-commentary)

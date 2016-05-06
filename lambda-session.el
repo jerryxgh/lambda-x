@@ -80,13 +80,13 @@ This follows freedesktop standards, should work in X servers."
 (server-start)
 
 ;; elscreen manage tabs --------------------------------------------------------
-(lambda-package-ensure-install 'elscreen)
-(require 'elscreen)
-(setq elscreen-display-tab nil
-      elscreen-prefix-key (kbd "C-;"))
-(elscreen-start)
-(define-key evil-normal-state-map (kbd "g t") 'elscreen-next)
-(define-key evil-normal-state-map (kbd "g T") 'elscreen-previous)
+;; (lambda-package-ensure-install 'elscreen)
+;; (require 'elscreen)
+;; (setq elscreen-display-tab nil
+;;       elscreen-prefix-key (kbd "C-;"))
+;; (elscreen-start)
+;; (define-key evil-normal-state-map (kbd "g t") 'elscreen-next)
+;; (define-key evil-normal-state-map (kbd "g T") 'elscreen-previous)
 
 ;; (lambda-package-ensure-install 'elscreen-persist)
 ;; (require 'elscreen-persist)
@@ -94,11 +94,20 @@ This follows freedesktop standards, should work in X servers."
 ;;                                               lambda-auto-save-dir))
 ;; (elscreen-persist-mode 1)
 
+;; persp-mode - replace elscreen -----------------------------------------------
+(lambda-package-ensure-install 'persp-mode)
+(with-eval-after-load "persp-mode-autoloads"
+  (add-hook 'after-init-hook
+            #'(lambda ()
+                (setq persp-keymap-prefix (kbd "C-;"))
+                (persp-mode 1)
+                (diminish 'persp-mode))))
+
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
 (lambda-package-ensure-install 'zoom-window)
 (require 'zoom-window)
-(setq zoom-window-use-elscreen t)
+;; (setq zoom-window-use-elscreen t)
 (setq zoom-window-mode-line-color "black")
 ;; (setq zoom-window-mode-line-color "DarkGreen")
 (zoom-window-setup)
