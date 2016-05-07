@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2016-05-05 22:57:14 GuanghuiXu>
+;; Time-stamp: <2016-05-07 13:32:08 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -161,6 +161,7 @@
 (lambda-package-ensure-install 'evil-commentary)
 (require 'evil-commentary)
 (evil-commentary-mode)
+(diminish 'evil-commentary-mode)
 
 (lambda-package-ensure-install 'evil-numbers)
 (require 'evil-numbers)

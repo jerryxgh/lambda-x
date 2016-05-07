@@ -108,8 +108,8 @@ This follows freedesktop standards, should work in X servers."
 (lambda-package-ensure-install 'zoom-window)
 (require 'zoom-window)
 ;; (setq zoom-window-use-elscreen t)
-(setq zoom-window-mode-line-color "black")
-;; (setq zoom-window-mode-line-color "DarkGreen")
+;; (setq zoom-window-mode-line-color "black")
+(setq zoom-window-mode-line-color "DarkGreen")
 (zoom-window-setup)
 
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)

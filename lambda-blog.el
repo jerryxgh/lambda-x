@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-05-01 23:28:59 GuanghuiXu>
+;; Time-stamp: <2016-05-07 13:24:14 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -36,9 +36,9 @@
 (defadvice htmlize-buffer-1 (around ome-htmlize-buffer-1 disable)
   "Rainbow-delimiters-mode has some problems with htmlize, this advice disable\
 rainbow-delimiters-mode temporarily when using htmlize."
-  (rainbow-delimiters-mode -1)
+  (rainbow-delimiters-mode-disable)
   ad-do-it
-  (rainbow-delimiters-mode t))
+  (rainbow-delimiters-mode-enable))
 
 (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
 (ad-activate 'htmlize-buffer-1)

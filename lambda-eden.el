@@ -12,6 +12,7 @@
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
 (add-hook 'c-mode-common-hook #'hs-minor-mode)
+(diminish 'hs-minor-mode)
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
 (require 'vlf-setup)
@@ -70,6 +71,7 @@ Note the weekly scope of the command's precision.")
 (add-to-list 'load-path "/home/xgh/repository/smartwin")
 (require 'smartwin)
 (smartwin-mode 1)
+(diminish 'smartwin-mode)
 (define-key smartwin-mode-map (kbd "C-c s") 'smartwin-switch-buffer)
 (define-key smartwin-mode-map (kbd "C-l") 'smartwin-clear-shell)
 
@@ -133,6 +135,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'hl-anything)
 (lambda-package-ensure-install 'hungry-delete)
 (global-hungry-delete-mode 1)
+(diminish 'hungry-delete-mode)
 (lambda-package-ensure-install 'ibuffer-projectile)
 (lambda-package-ensure-install 'indent-guide)
 (lambda-package-ensure-install 'info+)

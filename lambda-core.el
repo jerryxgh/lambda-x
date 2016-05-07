@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-05-06 23:20:18 GuanghuiXu>
+;; Time-stamp: <2016-05-07 14:52:22 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -203,7 +203,13 @@ Which means get all used packages, this is mainly for getting unused packages."
     (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
 
   (if (fboundp 'set-fontset-font)
-      (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))))
+      (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp")))
+  ;; (if (fboundp 'set-fontset-font)
+  ;;     (set-fontset-font t 'unicode (font-spec :family "Microsoft Yahei"
+  ;;                                             :weight 'normal
+  ;;                                             :size 16
+  ;;                                             :registry "unocide-bmp")))
+  )
 
 (lambda-package-ensure-install 'spacemacs-theme)
 (require 'spacemacs-common)
@@ -214,16 +220,44 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'window-numbering)
 (defun window-numbering-install-mode-line (&optional position)
   "Do nothing, the display is handled by the spaceline(powerline).
-POSITION: inhibit warning.")
+POSITION: just inhibit warning.")
 (require 'window-numbering)
 (setq window-numbering-auto-assign-0-to-minibuffer nil)
 (window-numbering-mode 1)
 
 (require 'spaceline-config)
+;; see info: fonts
+;; (set-face-font 'mode-line "-MS -Microsoft Yahei UI-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
+;; (set-face-font 'mode-line-inactive "-MS -Consolas-bold-normal-normal-*-*-*-*-*-*-0-iso10646-1")
+;; (set-fontset-font "fontset-standard"
+;;                   'unicode
+;;                   (font-spec :family "Microsoft Yahei" :weight 'bold :size 10))
+;; (set-face-font 'mode-line "fontset-standard")
+(set-face-font 'mode-line "Microsoft Yahei-9:bold")
+(set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold")
+;; (set-face-font 'mode-line "Consolas-11:bold")
+;; (set-face-font 'mode-line-inactive "Consolas-11:bold")
+
 (setq spaceline-window-numbers-unicode t
       spaceline-workspace-numbers-unicode t
       powerline-default-separator nil
+      ;; powerline-height 24 ;; make active and inactive modeline equal height
       spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+;; fix the problem: ❻ is different from ➏
+(defun spaceline--unicode-number (str)
+  "Return a nice unicode representation of a single-digit number STR."
+  (cond
+   ((string= "1" str) "➊")
+   ((string= "2" str) "➋")
+   ((string= "3" str) "➌")
+   ((string= "4" str) "➍")
+   ((string= "5" str) "➎")
+   ((string= "6" str) "➏")
+   ((string= "7" str) "➐")
+   ((string= "8" str) "➑")
+   ((string= "9" str) "➒")
+   ((string= "0" str) "➓")))
+
 (spaceline-helm-mode 1)
 (spaceline-info-mode 1)
 (spaceline-spacemacs-theme)
@@ -257,6 +291,7 @@ POSITION: inhibit warning.")
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
+(diminish 'auto-revert-mode)
 (electric-indent-mode 1)
 ;; using smartparens instead
 ;; (electric-pair-mode 1)
@@ -495,21 +530,20 @@ the search is performed ."
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (defvar ediff-saved-window-configuration nil
   "Window configuration before ediff.")
-
-;;(add-hook 'ediff-before-setup-hook
-;;          #'(lambda ()
-;;              (setq ediff-saved-window-configuration
-;;                    (current-window-configuration))))
-;;(add-hook 'ediff-quit-hook
-;;          #'(lambda ()
-;;              (set-window-configuration
-;;               ediff-saved-window-configuration))
-;;          'append)
-;;(add-hook 'ediff-suspend-hook
-;;          #'(lambda ()
-;;              (set-window-configuration
-;;               ediff-saved-window-configuration))
-;;          'append)
+(add-hook 'ediff-before-setup-hook
+          #'(lambda ()
+              (setq ediff-saved-window-configuration
+                    (current-window-configuration))))
+(add-hook 'ediff-quit-hook
+          #'(lambda ()
+              (set-window-configuration
+               ediff-saved-window-configuration))
+          'append)
+(add-hook 'ediff-suspend-hook
+          #'(lambda ()
+              (set-window-configuration
+               ediff-saved-window-configuration))
+          'append)
 
 ;; clean up obsolete buffers automatically
 (require 'midnight)
@@ -527,6 +561,7 @@ the search is performed ."
                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
                 web-mode ))
 (global-whitespace-mode 1)
+(diminish 'global-whitespace-mode)
 
 
 ;; saner regex syntax
@@ -634,10 +669,13 @@ the search is performed ."
 ;; flycheck - much better than flymake -----------------------------------------
 (lambda-package-ensure-install 'flycheck)
 (require 'flycheck)
-(setq flycheck-emacs-lisp-initialize-packages t)
-(setq flycheck-emacs-lisp-package-user-dir package-user-dir)
+(setq flycheck-emacs-lisp-initialize-packages t
+      flycheck-emacs-lisp-package-user-dir package-user-dir
+      flycheck-mode-line nil  ; use spaceline to show flycheck status instead
+      )
 ;; enable on-the-fly syntax checking
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'after-init-hook #'(lambda ()
+                               (global-flycheck-mode)))
 (lambda-package-ensure-install 'helm-flycheck)
 (eval-after-load 'flycheck
   '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
@@ -1058,6 +1096,7 @@ DISPLAY-FN: use this function to display."
            :value choice))
       choices)
      :prompt prompt
+     :scroll-bar t
      ;; start isearch mode immediately
      ;;:isearch t
      )))
@@ -1072,12 +1111,7 @@ DISPLAY-FN: use this function to display."
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)
-;; global-rainbow-delimiters-mode will bring errors
-(if (> emacs-major-version 23)
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'c-mode-common-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'python-mode-hook 'rainbow-delimiters-mode))
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode-enable)
 
 (setq enable-local-eval t)
 (setq enable-local-variables :all)

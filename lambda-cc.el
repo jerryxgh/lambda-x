@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2016-02-01 14:24:17 GuanghuiXu>
+;; Time-stamp: <2016-05-07 13:49:58 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -52,6 +52,7 @@
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+(diminish 'irony-mode)
 
 (require 'ac-irony)
 (add-hook 'irony-mode-hook

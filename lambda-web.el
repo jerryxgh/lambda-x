@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2016-04-01 17:05:33 GuanghuiXu>
+;; Time-stamp: <2016-05-07 13:24:54 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -54,7 +54,10 @@ and set yas--extra-mode to use html snippets."
 
 ;; rainbow-mode ---------------------------------------------------------------
 (lambda-package-ensure-install 'rainbow-mode)
-(add-hook 'prog-mode-hook 'rainbow-mode)
+(add-hook 'prog-mode-hook #'(lambda ()
+                              (rainbow-mode 1)
+                              (diminish 'rainbow-mode)))
+
 
 ;; ac-html --------------------------------------------------------------------
 (lambda-package-ensure-install 'ac-html)

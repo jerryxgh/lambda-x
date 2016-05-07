@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2015-11-29 01:00:10 GuanghuiXu>
+;; Time-stamp: <2016-05-07 13:30:30 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -24,7 +24,9 @@
 ;; (define-key elisp-slime-nav-mode-map (kbd "M-,") ())
 ;; (define-key elisp-slime-nav-mode-map (kbd "C-t") 'pop-tag-mark)
 (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-  (add-hook hook 'turn-on-elisp-slime-nav-mode))
+  (add-hook hook #'(lambda ()
+                     (turn-on-elisp-slime-nav-mode)
+                     (diminish 'elisp-slime-nav-mode))))
 
 ;; morlock --- more font-lock keywords for elisp -------------------------------
 (lambda-package-ensure-install 'morlock)
