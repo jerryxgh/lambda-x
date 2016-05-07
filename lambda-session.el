@@ -23,8 +23,8 @@
 ;; very useful
 (require 'recentf)
 (setq recentf-save-file (expand-file-name
-                      "recentf"
-                      lambda-auto-save-dir)
+                         "recentf"
+                         lambda-auto-save-dir)
       recentf-max-saved-items 500
       recentf-max-menu-items 15
       ;; disable recentf-cleanup on Emacs start, because it can cause
@@ -96,10 +96,11 @@ This follows freedesktop standards, should work in X servers."
 
 ;; persp-mode - replace elscreen -----------------------------------------------
 (lambda-package-ensure-install 'persp-mode)
+(setq persp-keymap-prefix (kbd "C-;")
+      persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
 (with-eval-after-load "persp-mode-autoloads"
   (add-hook 'after-init-hook
             #'(lambda ()
-                (setq persp-keymap-prefix (kbd "C-;"))
                 (persp-mode 1)
                 (diminish 'persp-mode))))
 
@@ -108,6 +109,7 @@ This follows freedesktop standards, should work in X servers."
 (lambda-package-ensure-install 'zoom-window)
 (require 'zoom-window)
 ;; (setq zoom-window-use-elscreen t)
+(setq zoom-window-use-persp t)
 ;; (setq zoom-window-mode-line-color "black")
 (setq zoom-window-mode-line-color "DarkGreen")
 (zoom-window-setup)

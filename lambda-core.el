@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-05-07 14:52:22 Guanghui Xu>
+;; Time-stamp: <2016-05-07 17:57:51 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -308,8 +308,7 @@ POSITION: just inhibit warning.")
                                          try-complete-lisp-symbol-partially
                                          try-complete-lisp-symbol))
 ;; abbrev-mode settings
-(setq abbrev-file-name (expand-file-name "abbrev_defs"
-                                         lambda-auto-save-dir))
+(setq abbrev-file-name (expand-file-name "abbrev_defs" lambda-auto-save-dir))
 (setq-default abbrev-mode t)
 (diminish 'abbrev-mode)
 (if (file-exists-p abbrev-file-name)
