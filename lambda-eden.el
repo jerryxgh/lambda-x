@@ -16,13 +16,14 @@
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
 (require 'vlf-setup)
+(custom-set-variables '(vlf-application 'dont-ask))
 ;; iedit -----------------------------------------------------------------------
 (lambda-package-ensure-install 'iedit)
 
 ;; ztree - compare directories -------------------------------------------------
 (lambda-package-ensure-install 'ztree)
 ;; (push (substitute-in-file-name "path-to-ztree-directory") load-path)
-(require 'ztree-dir)
+;; (require 'ztree-dir)
 
 (defun view-time (time-seconds)
   "Convert TIME-SECONDS from the epoch (0:00 January 1, 1970 UTC) to time string."
@@ -72,8 +73,9 @@ Note the weekly scope of the command's precision.")
 (require 'smartwin)
 (smartwin-mode 1)
 (diminish 'smartwin-mode)
-(define-key smartwin-mode-map (kbd "C-c s") 'smartwin-switch-buffer)
-(define-key smartwin-mode-map (kbd "C-l") 'smartwin-clear-shell)
+(define-key smartwin-mode-map (kbd "C-c s") #'smartwin-switch-buffer)
+(define-key smartwin-mode-map (kbd "C-w o") #'smartwin-enlarge)
+(define-key smartwin-mode-map (kbd "C-l") #'smartwin-clear-shell)
 
 ;;; es-mode
 ;; (lambda-package-ensure-install 'es-mode)
@@ -83,7 +85,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'f)
 
 (lambda-package-ensure-install 'nginx-mode)
-(require 'nginx-mode)
+;; (require 'nginx-mode)
 (add-to-list 'auto-mode-alist
              '("modsecurity\.conf$" . nginx-mode))
 
@@ -92,7 +94,7 @@ Note the weekly scope of the command's precision.")
 ;; default-text-scale font-utils fontawesome zap-to-char zlc
 ;; good
 (lambda-package-ensure-install 'git-messenger)
-(require 'git-messenger)
+;; (require 'git-messenger)
 (setq git-messenger:show-detail t)
 
 (lambda-package-ensure-install 'zoom-frm)
@@ -117,10 +119,12 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'gitconfig-mode)
 (lambda-package-ensure-install 'gitignore-mode)
 (lambda-package-ensure-install 'golden-ratio)
-(lambda-package-ensure-install 'guide-key)
-(require 'guide-key)
-(setq guide-key/guide-key-sequence t)
+;; (lambda-package-ensure-install 'guide-key)
+;; (require 'guide-key)
+;; (setq guide-key/popup-window-position 'bottom
+;;       guide-key/guide-key-sequence t)
 ;; (guide-key-mode 1) ; Enable guide-key-mode
+;; (diminish 'guide-key-mode)
 
 (lambda-package-ensure-install 'helm-c-yasnippet)
 (lambda-package-ensure-install 'helm-descbinds)
@@ -143,8 +147,8 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'move-text)
 
 (lambda-package-ensure-install 'org-bullets)
-(require 'org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (require 'org-bullets)
+(add-hook 'org-mode-hook #'(lambda () (org-bullets-mode 1)))
 (lambda-package-ensure-install 'org-present)
 (lambda-package-ensure-install 'org-repo-todo)
 (lambda-package-ensure-install 'page-break-lines)

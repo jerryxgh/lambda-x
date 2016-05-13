@@ -97,23 +97,31 @@ This follows freedesktop standards, should work in X servers."
 ;; persp-mode - replace elscreen -----------------------------------------------
 (lambda-package-ensure-install 'persp-mode)
 (setq persp-keymap-prefix (kbd "C-;")
-      persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
+      persp-interactive-completion-system 'completing-read
+      persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)
+      )
+
 (with-eval-after-load "persp-mode-autoloads"
-  (add-hook 'after-init-hook
-            #'(lambda ()
-                (persp-mode 1)
-                (diminish 'persp-mode))))
+  (add-hook
+   'after-init-hook
+   #'(lambda ()
+       (add-hook
+        'persp-mode-hook
+        #'(lambda ()
+            (setq persp-interactive-completion-function #'ido-completing-read)))
+
+       (persp-mode 1)
+       (diminish 'persp-mode))))
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
 (lambda-package-ensure-install 'zoom-window)
-(require 'zoom-window)
+;; (require 'zoom-window)
 ;; (setq zoom-window-use-elscreen t)
-(setq zoom-window-use-persp t)
-;; (setq zoom-window-mode-line-color "black")
-(setq zoom-window-mode-line-color "DarkGreen")
+(setq zoom-window-use-persp t
+      ;; zoom-window-mode-line-color "black"
+      zoom-window-mode-line-color "DarkGreen")
 (zoom-window-setup)
-
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
 
 (provide 'lambda-session)

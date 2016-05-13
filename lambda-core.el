@@ -1,5 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-05-07 17:57:51 Guanghui Xu>
+;; Time-stamp: <2016-05-13 14:32:16 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -218,9 +218,11 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
 (lambda-package-ensure-install 'window-numbering)
+
 (defun window-numbering-install-mode-line (&optional position)
   "Do nothing, the display is handled by the spaceline(powerline).
 POSITION: just inhibit warning.")
+
 (require 'window-numbering)
 (setq window-numbering-auto-assign-0-to-minibuffer nil)
 (window-numbering-mode 1)
@@ -258,9 +260,12 @@ POSITION: just inhibit warning.")
    ((string= "9" str) "➒")
    ((string= "0" str) "➓")))
 
-(spaceline-helm-mode 1)
-(spaceline-info-mode 1)
+;; (spaceline-helm-mode 1)
+;; (spaceline-info-mode 1)
+;; (spaceline-spacemacs-theme '(buffer-encoding process))
+(require 'info+)
 (spaceline-spacemacs-theme)
+(redisplay)
 
 ;; inhibit annoying warning sound
 (setq ring-bell-function 'ignore)
@@ -684,8 +689,9 @@ the search is performed ."
 (require 'undo-tree)
 ;; autosave the undo-tree history
 (setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq undo-tree-auto-save-history t)
+      `((".*" . ,temporary-file-directory))
+      undo-tree-auto-save-history t
+      undo-tree-visualizer-timestamps t)
 
 (global-undo-tree-mode 1)
 (diminish 'undo-tree-mode)

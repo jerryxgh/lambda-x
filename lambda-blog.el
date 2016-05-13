@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-05-07 13:24:14 Guanghui Xu>
+;; Time-stamp: <2016-05-08 21:19:29 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -81,11 +81,10 @@ rainbow-delimiters-mode temporarily when using htmlize."
       simplesite-personal-github-link "http://jerryxgh.github.io"
       simplesite-site-domain "http://jerryxgh.github.io"
 
+      simplesite-log-level 'SIMPLESITE-LOG-DEBUG
+
       simplesite-personal-disqus-shortname "jerryxgh"
-      simplesite-personal-duoshuo-shortname nil
-      )
-;; (setq org-use-sub-superscripts "{}"
-;;       org-export-with-sub-superscripts "{}")
+      simplesite-personal-duoshuo-shortname nil)
 
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (lambda-package-ensure-install 'graphviz-dot-mode)
