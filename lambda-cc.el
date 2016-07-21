@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2016-05-13 13:58:57 Guanghui Xu>
+;; Time-stamp: <2016-05-20 11:06:05 xgh>
 ;;; Commentary:
 
 ;;; Code:
@@ -46,20 +46,21 @@
 
 ;; irony-mode ------------------------------------------------------------------
 (lambda-package-ensure-install 'irony)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
 (with-eval-after-load "irony"
   (setq irony-server-install-prefix (expand-file-name "irony" lambda-auto-save-dir)
         irony-user-dir (expand-file-name "irony" lambda-auto-save-dir))
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (diminish 'irony-mode)
 
   (require 'ac-irony)
   (add-hook 'irony-mode-hook
             #'(lambda ()
                 (irony-cdb-autosetup-compile-options)
                 (unless (memq 'ac-source-irony ac-sources)
-                  (setq ac-sources (append '(ac-source-irony) ac-sources)))))
+                  (setq ac-sources (append '(ac-source-irony) ac-sources)))
+                (diminish 'irony-mode)))
   )
 
 (lambda-package-ensure-install 'flycheck-irony)
@@ -83,7 +84,6 @@
 (eval-after-load "ffap" '(require 'ffap-gcc-path))
 
 ;; gdb configs -----------------------------------------------------------------
-(add-hook 'gdb-mode-hook 'kill-buffer-when-shell-command-exit)
 (with-eval-after-load "gud"
   (define-key gud-mode-map (kbd "<f5>") 'gud-step)
   (define-key gud-mode-map (kbd "<f6>") 'gud-next)
@@ -111,6 +111,11 @@
 ;;            (diminish 'ggtags-mode))))
 
 (lambda-package-ensure-install 'helm-gtags)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (helm-gtags-mode 1)
+              (diminish 'helm-gtags-mode))))
 (with-eval-after-load "helm-gtags"
   ;; Key          Command
   ;; Prefix h     helm-gtags-display-browser
@@ -128,11 +133,6 @@
   ;; C-x 4 .      helm-gtags-find-tag-other-window
   (setq helm-gtags-suggested-key-mapping t)
 
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                (helm-gtags-mode 1)
-                (diminish 'helm-gtags-mode))))
   ;; customize
   (custom-set-variables
    '(helm-gtags-path-style 'relative)

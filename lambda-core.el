@@ -1,5 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
-;; Time-stamp: <2016-05-13 14:32:16 Guanghui Xu>
+
+;; Time-stamp: <2016-07-19 13:54:31 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -212,7 +213,17 @@ Which means get all used packages, this is mainly for getting unused packages."
   )
 
 (lambda-package-ensure-install 'spacemacs-theme)
-(require 'spacemacs-common)
+;; (require 'spacemacs-common)
+;; custom faces for spacemacs theme
+(custom-set-faces
+ ;; for auto-complete
+ '(ac-gtags-candidate-face ((t (:inherit ac-candidate-face :foreground "deep sky blue"))))
+ '(ac-gtags-selection-face ((t (:inherit ac-selection-face :background "deep sky blue"))))
+ ;; for woman
+ '(woman-bold ((t (:inherit bold :foreground "#4f97d7"))))
+ '(woman-italic ((t (:inherit italic :foreground "#c56ec3" :underline nil))))
+ )
+
 (lambda-load-theme 'spacemacs-dark)
 
 (lambda-package-ensure-install 'powerline)
@@ -245,26 +256,26 @@ POSITION: just inhibit warning.")
       powerline-default-separator nil
       ;; powerline-height 24 ;; make active and inactive modeline equal height
       spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-;; fix the problem: ❻ is different from ➏
-(defun spaceline--unicode-number (str)
-  "Return a nice unicode representation of a single-digit number STR."
-  (cond
-   ((string= "1" str) "➊")
-   ((string= "2" str) "➋")
-   ((string= "3" str) "➌")
-   ((string= "4" str) "➍")
-   ((string= "5" str) "➎")
-   ((string= "6" str) "➏")
-   ((string= "7" str) "➐")
-   ((string= "8" str) "➑")
-   ((string= "9" str) "➒")
-   ((string= "0" str) "➓")))
+;; ;; fix the problem: ❻ is different from ➏
+;; (defun spaceline--unicode-number (str)
+;;   "Return a nice unicode representation of a single-digit number STR."
+;;   (cond
+;;    ((string= "1" str) "➊")
+;;    ((string= "2" str) "➋")
+;;    ((string= "3" str) "➌")
+;;    ((string= "4" str) "➍")
+;;    ((string= "5" str) "➎")
+;;    ((string= "6" str) "➏")
+;;    ((string= "7" str) "➐")
+;;    ((string= "8" str) "➑")
+;;    ((string= "9" str) "➒")
+;;    ((string= "0" str) "➓")))
 
-;; (spaceline-helm-mode 1)
-;; (spaceline-info-mode 1)
-;; (spaceline-spacemacs-theme '(buffer-encoding process))
 (require 'info+)
+(spaceline-helm-mode 1)
+(spaceline-info-mode 1)
 (spaceline-spacemacs-theme)
+;; (spaceline-spacemacs-theme '(buffer-encoding process))
 (redisplay)
 
 ;; inhibit annoying warning sound
@@ -280,6 +291,9 @@ POSITION: just inhibit warning.")
 
 ;; use minibuffer instead of dialog to ask questions
 (setq use-dialog-box nil)
+
+;; for woman
+(setq woman-fill-frame t)
 
 ;; Emacs UI about settings end here ===========================================
 
@@ -336,7 +350,7 @@ POSITION: just inhibit warning.")
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
 ;; this config should before (require 'smartparens)
-(setq sp-base-key-bindings 'sp)
+;; (setq sp-base-key-bindings 'sp)
 (setq sp-show-pair-from-inside t)
 ;; (setq sp-navigate-close-if-unbalanced t)
 (require 'smartparens)
@@ -591,14 +605,11 @@ the search is performed ."
 ;; editor settings end here ====================================================
 
 ;; miscellaneous basic settings ------------------------------------------------
-(setq user-full-name "Guanghui Xu"
-      user-mail-address "gh_xu@qq.com"
-      custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
+(setq custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
       make-backup-files nil
       resize-mini-windows t
       enable-recursive-minibuffers t
       gc-cons-threshold 20480000
-      source-directory "/home/xgh/sources/emacs-24.5"
       confirm-kill-emacs 'y-or-n-p)
 
 ;; (require 'sql)
@@ -691,7 +702,8 @@ the search is performed ."
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory))
       undo-tree-auto-save-history t
-      undo-tree-visualizer-timestamps t)
+      ;; undo-tree-visualizer-timestamps t
+      )
 
 (global-undo-tree-mode 1)
 (diminish 'undo-tree-mode)

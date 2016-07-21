@@ -65,20 +65,6 @@ This follows freedesktop standards, should work in X servers."
                              '(2 "_NET_WM_STATE_FULLSCREEN" 0))
     (error "Only X server is supported")))
 
-;; Restore buffers automaticly -------------------------------------------------
-(require 'desktop)
-(setq desktop-path (list (expand-file-name lambda-auto-save-dir))
-      history-length 250
-      desktop-restore-frames t
-      desktop-dirname (expand-file-name lambda-auto-save-dir)
-      desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
-      desktop-base-file-name "emacs-desktop")
-
-(desktop-save-mode 1)
-
-;;加快emacs的启动速度
-(server-start)
-
 ;; elscreen manage tabs --------------------------------------------------------
 ;; (lambda-package-ensure-install 'elscreen)
 ;; (require 'elscreen)
@@ -101,6 +87,14 @@ This follows freedesktop standards, should work in X servers."
       persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)
       )
 
+(defun persp-desktop-ignore-this-minor-mode (buffer)
+  "Installed as a minor-mode initializer for Desktop mode.
+BUFFER is the buffer to not initialize a Semantic minor mode in."
+  nil)
+
+(add-to-list 'desktop-minor-mode-handlers
+             '(persp-mode . persp-desktop-ignore-this-minor-mode))
+
 (with-eval-after-load "persp-mode-autoloads"
   (add-hook
    'after-init-hook
@@ -108,7 +102,10 @@ This follows freedesktop standards, should work in X servers."
        (add-hook
         'persp-mode-hook
         #'(lambda ()
-            (setq persp-interactive-completion-function #'ido-completing-read)))
+            (setq persp-interactive-completion-function #'ido-completing-read)
+            (when evil-mode
+              (define-key evil-normal-state-map (kbd "g t") 'persp-next)
+              (define-key evil-normal-state-map (kbd "g T") 'persp-prev))))
 
        (persp-mode 1)
        (diminish 'persp-mode))))
@@ -123,6 +120,21 @@ This follows freedesktop standards, should work in X servers."
       zoom-window-mode-line-color "DarkGreen")
 (zoom-window-setup)
 (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+
+;; Restore buffers automaticly -------------------------------------------------
+(require 'desktop)
+(setq desktop-path (list (expand-file-name lambda-auto-save-dir))
+      history-length 250
+      desktop-restore-frames t
+      desktop-dirname (expand-file-name lambda-auto-save-dir)
+      desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$")
+      desktop-base-file-name "emacs-desktop")
+
+(desktop-save-mode 1)
+
+;;加快emacs的启动速度
+(server-start)
+
 
 (provide 'lambda-session)
 

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2016-05-13 14:14:42 Guanghui Xu>
+;; Time-stamp: <2016-06-12 16:46:28 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -35,6 +35,8 @@
 (require 'lambda-haskell)
 (require 'lambda-vb)
 (require 'lambda-eden)
+
+(require 'lambda-individual "lambda-individual.el" t)
 
 ;; this should be loaded at last, restore buffers, minibuffer history, last
 ;; place of cursor, etc.

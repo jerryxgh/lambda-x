@@ -11,8 +11,9 @@
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
-(add-hook 'c-mode-common-hook #'hs-minor-mode)
-(diminish 'hs-minor-mode)
+(add-hook 'c-mode-common-hook #'(lambda ()
+                                  (hs-minor-mode)
+                                  (diminish 'hs-minor-mode)))
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
 (require 'vlf-setup)
@@ -67,15 +68,6 @@ Note the weekly scope of the command's precision.")
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
-
-
-(add-to-list 'load-path "/home/xgh/repository/smartwin")
-(require 'smartwin)
-(smartwin-mode 1)
-(diminish 'smartwin-mode)
-(define-key smartwin-mode-map (kbd "C-c s") #'smartwin-switch-buffer)
-(define-key smartwin-mode-map (kbd "C-w o") #'smartwin-enlarge)
-(define-key smartwin-mode-map (kbd "C-l") #'smartwin-clear-shell)
 
 ;;; es-mode
 ;; (lambda-package-ensure-install 'es-mode)
@@ -208,6 +200,10 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'simple-httpd)
 ;; (lambda-package-ensure-install 'elnode)
 ;; (lambda-package-ensure-install 'web-server)
+
+;; org and chinese
+;; cal-china-x chinese-fonts-setup org-chinese-utils org-latex-chinese pangu-spacing
+(lambda-package-ensure-install 'ox-latex-chinese)
 
 ;; knowledge
 ;; locate-library

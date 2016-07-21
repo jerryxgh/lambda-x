@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-05-08 21:19:29 Guanghui Xu>
+;; Time-stamp: <2016-05-19 15:17:05 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -15,15 +15,12 @@
 (setq scalable-fonts-allowed t)
 
 (setq org-use-speed-commands t
-      org-directory "/home/xgh/文档/"
       org-src-fontify-natively t
-      org-id-locations-file (expand-file-name ".org-id-locations"
-                                              lambda-auto-save-dir)
+      org-completion-use-ido t
+      org-id-locations-file
+      (expand-file-name ".org-id-locations" lambda-auto-save-dir)
       org-src-tab-acts-natively t)
-(setq org-agenda-files (list "/home/xgh/文档/gtd.org"
-                             (concat org-directory "/capture.org")))
 
-(setq org-default-notes-file (concat org-directory "/capture.org"))
 (global-set-key (kbd "C-c c") 'org-capture)
 
 (global-set-key (kbd "C-c l") 'org-store-link)
@@ -71,20 +68,6 @@ rainbow-delimiters-mode temporarily when using htmlize."
 (lambda-package-ensure-install 'auctex)
 (lambda-package-ensure-install 'auto-complete-auctex)
 
-
-(add-to-list 'load-path "/home/xgh/repository/simplesite")
-(require 'simplesite)
-(setq simplesite-author "Guanghui Xu"
-      simplesite-personal-avatar "/home/xgh/repository/jerryxgh.github.io/posts/Heckert_GNU_white.png"
-      simplesite-source-directory "/home/xgh/repository/jerryxgh.github.io/posts"
-      simplesite-output-directory "/home/xgh/repository/jerryxgh.github.io"
-      simplesite-personal-github-link "http://jerryxgh.github.io"
-      simplesite-site-domain "http://jerryxgh.github.io"
-
-      simplesite-log-level 'SIMPLESITE-LOG-DEBUG
-
-      simplesite-personal-disqus-shortname "jerryxgh"
-      simplesite-personal-duoshuo-shortname nil)
 
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (lambda-package-ensure-install 'graphviz-dot-mode)

@@ -24,7 +24,6 @@
 
 ;; sbt-mode --------------------------------------------------------------------
 (lambda-package-ensure-install 'sbt-mode)
-(setq sbt:program-name "/home/xgh/local/sbt/bin/sbt")
 
 (defadvice sbt:run-sbt (after kill-buffer-when-sbt-quit activate)
   "Kill sbt buffer when quit sbt."
