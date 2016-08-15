@@ -7,7 +7,7 @@
 (require 'lambda-core)
 
 ;; scala-mode2 -----------------------------------------------------------------
-(lambda-package-ensure-install 'scala-mode2)
+(lambda-package-ensure-install 'scala-mode)
 
 ;; ensime ----------------------------------------------------------------------
 (lambda-package-ensure-install 'ensime)

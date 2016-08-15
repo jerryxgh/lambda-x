@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2016-06-12 16:49:13 Guanghui Xu>
+;; Time-stamp: <2016-08-15 20:50:15 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -25,7 +25,8 @@
         eclimd-executable "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/eclimd"
         eclimd-default-workspace "~/workspace/"))
 
-(add-to-list 'load-path "/home/xgh/repository/smartwin")
+;; (add-to-list 'load-path "/home/xgh/repository/smartwin")
+(lambda-package-ensure-install #'smartwin)
 (require 'smartwin)
 (smartwin-mode 1)
 (diminish 'smartwin-mode)
@@ -33,19 +34,19 @@
 (define-key smartwin-mode-map (kbd "C-w o") #'smartwin-enlarge)
 (define-key smartwin-mode-map (kbd "C-l") #'smartwin-clear-shell)
 
-(add-to-list 'load-path "/home/xgh/repository/simplesite")
-(require 'simplesite)
-(setq simplesite-author "Guanghui Xu"
-      simplesite-personal-avatar "/home/xgh/repository/jerryxgh.github.io/posts/Heckert_GNU_white.png"
-      simplesite-source-directory "/home/xgh/repository/jerryxgh.github.io/posts"
-      simplesite-output-directory "/home/xgh/repository/jerryxgh.github.io"
-      simplesite-personal-github-link "http://jerryxgh.github.io"
-      simplesite-site-domain "http://jerryxgh.github.io"
+;; (add-to-list 'load-path "~/repository/simplesite")
+;; (require 'simplesite)
+;; (setq simplesite-author "Guanghui Xu"
+;;       simplesite-personal-avatar "/home/xgh/repository/jerryxgh.github.io/posts/Heckert_GNU_white.png"
+;;       simplesite-source-directory "/home/xgh/repository/jerryxgh.github.io/posts"
+;;       simplesite-output-directory "/home/xgh/repository/jerryxgh.github.io"
+;;       simplesite-personal-github-link "http://jerryxgh.github.io"
+;;       simplesite-site-domain "http://jerryxgh.github.io"
 
-      simplesite-log-level 'SIMPLESITE-LOG-DEBUG
+;;       simplesite-log-level 'SIMPLESITE-LOG-DEBUG
 
-      simplesite-personal-disqus-shortname "jerryxgh"
-      simplesite-personal-duoshuo-shortname nil)
+;;       simplesite-personal-disqus-shortname "jerryxgh"
+;;       simplesite-personal-duoshuo-shortname nil)
 
 (provide 'lambda-individual)
 

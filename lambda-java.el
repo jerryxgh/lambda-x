@@ -21,7 +21,7 @@
 (help-at-pt-set-timer)
 
 ;; configuring auto-complete-mode
-(require 'ac-emacs-eclim-source)
+(require 'ac-emacs-eclim)
 (defun lambda-prefix-eclim-java-dot ()
   "Do eclim-complete in auto-complete when encounter dot.
 

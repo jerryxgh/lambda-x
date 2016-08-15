@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2016-07-19 13:54:31 Guanghui Xu>
+;; Time-stamp: <2016-08-15 20:56:28 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -197,19 +197,12 @@ Which means get all used packages, this is mainly for getting unused packages."
   "Load THEME, plus that, set font and tweak mode-line style."
   (load-theme theme t)
 
-  (set-frame-font "Consolas-11")
-
   (if (eq system-type 'windows-nt)
-      (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
-    (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1))))
-
-  (if (fboundp 'set-fontset-font)
-      (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp")))
-  ;; (if (fboundp 'set-fontset-font)
-  ;;     (set-fontset-font t 'unicode (font-spec :family "Microsoft Yahei"
-  ;;                                             :weight 'normal
-  ;;                                             :size 16
-  ;;                                             :registry "unocide-bmp")))
+      (set-frame-font "Consolas-11")
+    ;; (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1)))
+    (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
+    (if (fboundp 'set-fontset-font)
+        (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))))
   )
 
 (lambda-package-ensure-install 'spacemacs-theme)
@@ -246,8 +239,11 @@ POSITION: just inhibit warning.")
 ;;                   'unicode
 ;;                   (font-spec :family "Microsoft Yahei" :weight 'bold :size 10))
 ;; (set-face-font 'mode-line "fontset-standard")
-(set-face-font 'mode-line "Microsoft Yahei-9:bold")
-(set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold")
+
+(cond ((eq system-type 'windows-nt)
+       (set-face-font 'mode-line "Microsoft Yahei-9:bold")
+       (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
+)
 ;; (set-face-font 'mode-line "Consolas-11:bold")
 ;; (set-face-font 'mode-line-inactive "Consolas-11:bold")
 
@@ -271,8 +267,8 @@ POSITION: just inhibit warning.")
 ;;    ((string= "9" str) "➒")
 ;;    ((string= "0" str) "➓")))
 
+(lambda-package-ensure-install 'info+)
 (require 'info+)
-(spaceline-helm-mode 1)
 (spaceline-info-mode 1)
 (spaceline-spacemacs-theme)
 ;; (spaceline-spacemacs-theme '(buffer-encoding process))
@@ -460,6 +456,8 @@ POSITION: just inhibit warning.")
 (require 'dired-x)
 (cond ((eq system-type 'windows-nt)
        (setq dired-listing-switches "-AlX"))
+      ((eq system-type 'darwin)
+       (setq dired-listing-switches "-al"))
       (t (setq dired-listing-switches "-AlX --group-directories-first")))
 
 ;;; dired-subtree --------------------------------------------------------------
@@ -817,15 +815,16 @@ the search is performed ."
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
 (require 'helm)
+(spaceline-helm-mode 1)
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
 ;; accidentially pressed "C-x C-c"
 (setq-default helm-command-prefix-key "C-c h"
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
-(require 'helm-config)
-(require 'helm-files)
-(require 'helm-grep)
+;(require 'helm-config)
+;(require 'helm-files)
+;(require 'helm-grep)
 
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
