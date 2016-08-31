@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2016-08-15 20:56:28 Guanghui Xu>
+;; Time-stamp: <2016-08-31 20:35:27 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -151,6 +151,13 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; packages about settings end here ============================================
 
+;; init PATH in mac, this should just after packages settings ==================
+(when (eq system-type 'darwin)
+  (lambda-package-ensure-install 'exec-path-from-shell)
+  (if (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize)))
+;; init PATH in mac ends here ==================================================
+
 ;; Emacs UI about settings =====================================================
 
 ;; enable y/n answers
@@ -166,7 +173,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; (menu-bar-mode -1)
+(menu-bar-mode -1)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
@@ -178,7 +185,7 @@ Which means get all used packages, this is mainly for getting unused packages."
       scroll-margin 0
       scroll-conservatively most-positive-fixnum)
 
-;; (setq window-resize-pixelwise t)
+(setq window-resize-pixelwise t)
 
 ;; mode line settings
 (line-number-mode t)
@@ -193,19 +200,33 @@ Which means get all used packages, this is mainly for getting unused packages."
                    (abbreviate-file-name (buffer-file-name)) "%b"))))
 
 ;; theme -----------------------------------------------------------------------
+;; (print (font-family-list))
+
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
   (load-theme theme t)
 
-  (if (eq system-type 'windows-nt)
-      (set-frame-font "Consolas-11")
-    ;; (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1)))
-    (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
-    (if (fboundp 'set-fontset-font)
-        (set-fontset-font t 'unicode '("Microsoft Yahei" .  "unicode-bmp"))))
-  )
+  (cond ((eq system-type 'windows-nt)
+         (set-frame-font "Consolas-11")
+         ;; (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1)))
+         (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
+         (if (fboundp 'set-fontset-font)
+             (set-fontset-font t 'unicode '("Microsoft Yahei" .
+                                            "unicode-bmp"))))
+        ((eq system-type 'gnu/linux)
+         (set-frame-font "Source Code Pro-13"))
+        ((eq system-type 'darwin)
+         (set-frame-font "menlo-13")
+         (set-fontset-font "fontset-default" 'han '("PingFang SC"))
+         (set-frame-font "Source Code Pro-13")
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3))))))
 
 (lambda-package-ensure-install 'spacemacs-theme)
+
+;; fullscreen when startup finished
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . fullboth)))))
+
 ;; (require 'spacemacs-common)
 ;; custom faces for spacemacs theme
 (custom-set-faces
@@ -218,6 +239,7 @@ Which means get all used packages, this is mainly for getting unused packages."
  )
 
 (lambda-load-theme 'spacemacs-dark)
+
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
@@ -243,7 +265,7 @@ POSITION: just inhibit warning.")
 (cond ((eq system-type 'windows-nt)
        (set-face-font 'mode-line "Microsoft Yahei-9:bold")
        (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
-)
+      )
 ;; (set-face-font 'mode-line "Consolas-11:bold")
 ;; (set-face-font 'mode-line-inactive "Consolas-11:bold")
 
@@ -462,9 +484,9 @@ POSITION: just inhibit warning.")
 
 ;;; dired-subtree --------------------------------------------------------------
 (lambda-package-ensure-install 'dired-subtree)
-(unless (or (eq system-type 'windows-nt)
-            (string-match-p "--dired" dired-listing-switches))
-  (setq dired-listing-switches (concat dired-listing-switches " --dired")))
+;; (unless (or (eq system-type 'windows-nt)
+;;             (string-match-p "--dired" dired-listing-switches))
+;;   (setq dired-listing-switches (concat dired-listing-switches " --dired")))
 (define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
 (define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
 (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
@@ -576,7 +598,7 @@ the search is performed ."
      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
                 web-mode ))
-(global-whitespace-mode 1)
+(global-whitespace-mode -1)
 (diminish 'global-whitespace-mode)
 
 
@@ -822,9 +844,9 @@ the search is performed ."
 (setq-default helm-command-prefix-key "C-c h"
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
-;(require 'helm-config)
-;(require 'helm-files)
-;(require 'helm-grep)
+;;(require 'helm-config)
+;;(require 'helm-files)
+;;(require 'helm-grep)
 
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
@@ -1123,7 +1145,7 @@ DISPLAY-FN: use this function to display."
 (lambda-package-ensure-install 'unbound)
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------
-;; (require 'unicad)
+(require 'unicad)
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)

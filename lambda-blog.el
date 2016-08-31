@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-05-19 15:17:05 Guanghui Xu>
+;; Time-stamp: <2016-08-16 16:30:29 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -27,6 +27,8 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 
+;; markdown -------------------------------------------------------------------
+(lambda-package-ensure-install 'markdown-mode)
 
 ;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)

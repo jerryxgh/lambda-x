@@ -48,9 +48,9 @@ To be compatible with eclim--completion-action, call
     (requires . 0)
     (symbol . "f")))
 
-(add-hook 'java-mode-hook
-          #'(lambda ()
-              (add-to-list 'ac-sources 'ac-source-eclim-java)))
+;; (add-hook 'java-mode-hook
+;;           #'(lambda ()
+;;               (add-to-list 'ac-sources 'ac-source-eclim-java)))
 
 ;; configuring mvn
 ;; move compile to the first

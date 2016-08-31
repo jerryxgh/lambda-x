@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2016-06-12 16:46:28 Guanghui Xu>
+;; Time-stamp: <2016-08-31 20:31:10 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -16,31 +16,50 @@
 (add-to-list 'load-path
              (file-name-directory (or load-file-name (buffer-file-name))))
 
-;; core settings, shared by all other modules
-(require 'lambda-core)
-;; loading modules
-(require 'lambda-evil)
-(require 'lambda-cc)
-(require 'lambda-blog)
-(require 'lambda-web)
-(require 'lambda-emacs-lisp)
-(require 'lambda-scheme)
-(require 'lambda-java)
-(require 'lambda-python)
-(require 'lambda-js)
-(require 'lambda-json)
-(require 'lambda-octave)
-(require 'lambda-lua)
-(require 'lambda-scala)
-(require 'lambda-haskell)
-(require 'lambda-vb)
-(require 'lambda-eden)
+(defvar lambda-libraries
+  '(
+    ;; core settings, shared by all other modules
+    lambda-core
+    ;; loading modules
+    lambda-evil
+    lambda-cc
+    lambda-blog
+    lambda-web
+    lambda-emacs-lisp
+    lambda-scheme
+    lambda-java
+    lambda-python
+    lambda-js
+    lambda-json
+    lambda-octave
+    lambda-lua
+    lambda-scala
+    lambda-haskell
+    lambda-vb
+    lambda-eden
+    lambda-individual
 
-(require 'lambda-individual "lambda-individual.el" t)
+    ;; this should be loaded at last, restore buffers, minibuffer history, last
+    ;; place of cursor, etc.
+    lambda-session
+    )
+  "Libraries to be loaded of lambda-x.")
 
-;; this should be loaded at last, restore buffers, minibuffer history, last
-;; place of cursor, etc.
-(require 'lambda-session)
+;; load libraries and show the progress
+(let* ((progress-reporter
+        (make-progress-reporter "[lambda-x]: loading..." 0 100))
+       (library-num (length lambda-libraries))
+       (step (/ 99 library-num))
+       (progress 0))
+
+  (dolist (library lambda-libraries)
+    (require library)
+    (setq progress (+ progress step))
+    (progress-reporter-update progress-reporter progress)
+    (redisplay))
+
+  (progress-reporter-done progress-reporter))
+
 
 (provide 'lambda-init)
 

@@ -55,16 +55,6 @@
          (set-frame-parameter nil 'fullscreen 'maximized))))
 (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
-(defun lambda--full-screen ()
-  "Make Emacs frame fullscreen.
-
-This follows freedesktop standards, should work in X servers."
-  (interactive)
-  (if (eq window-system 'x)
-      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-                             '(2 "_NET_WM_STATE_FULLSCREEN" 0))
-    (error "Only X server is supported")))
-
 ;; elscreen manage tabs --------------------------------------------------------
 ;; (lambda-package-ensure-install 'elscreen)
 ;; (require 'elscreen)

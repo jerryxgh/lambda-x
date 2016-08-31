@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2016-08-15 20:50:15 Guanghui Xu>
+;; Time-stamp: <2016-08-22 19:56:39 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -10,9 +10,10 @@
 (setq user-full-name "Guanghui Xu"
       user-mail-address "gh_xu@qq.com"
       source-directory "/home/xgh/sources/emacs-24.5"
-      org-directory "/home/xgh/文档/"
-      org-agenda-files (list "/home/xgh/文档/gtd.org"
-                             (concat org-directory "/capture.org"))
+      org-directory "/Users/xgh/repository/docs"
+      org-agenda-files (list(concat org-directory "/gtd.org")
+                            (concat org-directory "/capture.org"))
+
       org-default-notes-file (concat org-directory "/capture.org")
       sbt:program-name "/home/xgh/local/sbt/bin/sbt"
       )
