@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2016-05-07 13:32:08 Guanghui Xu>
+;; Time-stamp: <2016-10-14 11:17:05 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -55,15 +55,18 @@
 
 (mapc #'(lambda (mode-state-pair)
           (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
-      '((calendar-mode . emacs)
-        (help-mode . emacs)
+      '(
         (Info-mode . emacs)
-        (dired-mode . emacs)
         (Man-mode . emacs)
-        (grep-mode . emacs)
-        (view-mode . emacs)
         (ack-mode . emacs)
-        (image-mode . emacs)))
+        (calendar-mode . emacs)
+        (dired-mode . emacs)
+        (grep-mode . emacs)
+        (help-mode . emacs)
+        (image-mode . emacs)
+        (svn-status-mode . emacs)
+        (view-mode . emacs)
+        ))
 
 ;; when entering edebug, change to evil-emacs-state to use simple key bindings
 ;; (require 'edebug)
@@ -89,11 +92,12 @@
 (evil-leader/set-key
   "a" 'helm-ag
   "p" 'helm-projectile-ag
-  "b" #'(lambda ()
-          (interactive)
-          ;; skip persp-mode like filters, let it show more candidates
-          (let ((ido-make-buffer-list-hook nil))
-            (ido-switch-buffer)))
+  ;; "b" #'(lambda ()
+  ;;         (interactive)
+  ;;         ;; skip persp-mode like filters, let it show more candidates
+  ;;         (let ((ido-make-buffer-list-hook nil))
+  ;;           (ido-switch-buffer)))
+  "b" 'ido-switch-buffer
   "e" 'helm-projectile
   "k" 'kill-this-buffer
   "o" 'helm-occur

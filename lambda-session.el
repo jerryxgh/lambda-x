@@ -44,7 +44,12 @@
 ;; activate it for all buffers
 (setq-default save-place t)
 
-;; Maxmize frame(Full Screen) --------------------------------------------------
+;; Maxmize frame ---------------------------------------------------------------
+
+;; fullscreen when startup finished
+;; (custom-set-variables
+;;  '(initial-frame-alist (quote ((fullscreen . fullboth)))))
+
 (defun lambda-maxmize-frame ()
   "Make Emacs frame maxmized."
   (interactive)
@@ -52,7 +57,10 @@
               (fboundp 'w32-send-sys-command))
          (w32-send-sys-command 61488))
         ((eq system-type 'gnu/linux)
+         (set-frame-parameter nil 'fullscreen 'maximized))
+        (t
          (set-frame-parameter nil 'fullscreen 'maximized))))
+
 (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
 ;; elscreen manage tabs --------------------------------------------------------
@@ -73,7 +81,6 @@
 ;; persp-mode - replace elscreen -----------------------------------------------
 (lambda-package-ensure-install 'persp-mode)
 (setq persp-keymap-prefix (kbd "C-;")
-      persp-interactive-completion-system 'completing-read
       persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)
       )
 
@@ -82,8 +89,8 @@
 BUFFER is the buffer to not initialize a Semantic minor mode in."
   nil)
 
-(add-to-list 'desktop-minor-mode-handlers
-             '(persp-mode . persp-desktop-ignore-this-minor-mode))
+;; (add-to-list 'desktop-minor-mode-handlers
+;;              '(persp-mode . persp-desktop-ignore-this-minor-mode))
 
 (with-eval-after-load "persp-mode-autoloads"
   (add-hook
@@ -124,7 +131,6 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 
 ;;加快emacs的启动速度
 (server-start)
-
 
 (provide 'lambda-session)
 

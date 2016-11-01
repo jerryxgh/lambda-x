@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2016-08-31 20:35:27 Guanghui Xu>
+;; Time-stamp: <2016-11-01 11:34:11 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -173,7 +173,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-(menu-bar-mode -1)
+(unless (eq system-type 'darwin)
+  (menu-bar-mode -1))
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
@@ -185,6 +186,7 @@ Which means get all used packages, this is mainly for getting unused packages."
       scroll-margin 0
       scroll-conservatively most-positive-fixnum)
 
+;; resize windows in pixel
 (setq window-resize-pixelwise t)
 
 ;; mode line settings
@@ -218,14 +220,9 @@ Which means get all used packages, this is mainly for getting unused packages."
         ((eq system-type 'darwin)
          (set-frame-font "menlo-13")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (set-frame-font "Source Code Pro-13")
          (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3))))))
 
 (lambda-package-ensure-install 'spacemacs-theme)
-
-;; fullscreen when startup finished
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . fullboth)))))
 
 ;; (require 'spacemacs-common)
 ;; custom faces for spacemacs theme
@@ -368,7 +365,7 @@ POSITION: just inhibit warning.")
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
 ;; this config should before (require 'smartparens)
-;; (setq sp-base-key-bindings 'sp)
+(setq sp-base-key-bindings 'sp)
 (setq sp-show-pair-from-inside t)
 ;; (setq sp-navigate-close-if-unbalanced t)
 (require 'smartparens)
@@ -479,7 +476,11 @@ POSITION: just inhibit warning.")
 (cond ((eq system-type 'windows-nt)
        (setq dired-listing-switches "-AlX"))
       ((eq system-type 'darwin)
-       (setq dired-listing-switches "-al"))
+       (if (executable-find "gls")
+           (progn
+             (setq insert-directory-program (executable-find "gls"))
+             (setq dired-listing-switches "-AlX --group-directories-first"))
+         (setq dired-listing-switches "-Al")))
       (t (setq dired-listing-switches "-AlX --group-directories-first")))
 
 ;;; dired-subtree --------------------------------------------------------------
@@ -487,7 +488,12 @@ POSITION: just inhibit warning.")
 ;; (unless (or (eq system-type 'windows-nt)
 ;;             (string-match-p "--dired" dired-listing-switches))
 ;;   (setq dired-listing-switches (concat dired-listing-switches " --dired")))
-(define-key dired-mode-map (kbd "i") 'dired-subtree-insert)
+(define-key dired-mode-map (kbd "i") #'(lambda ()
+                                         (interactive)
+                                         (require 'dired-subtree)
+                                         (if (dired-subtree--is-expanded-p)
+                                             (message "already expanded")
+                                           (dired-subtree-insert))))
 (define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
 (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
 (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
@@ -591,14 +597,14 @@ the search is performed ."
 (require 'whitespace)
 (setq whitespace-line-column nil) ;; use fill-column instead of this
 (setq whitespace-style '(face  empty trailing lines-tail spaces newline
-                               indentation
-                               ;; tabs
+                               indentation space-after-tab space-before-tab
+                               ;; big-indent
                                ))
-(set 'whitespace-global-modes
-     '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
-                lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
-                web-mode ))
-(global-whitespace-mode -1)
+;; (set 'whitespace-global-modes
+;;      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
+;;                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
+;;                 web-mode ))
+(global-whitespace-mode 1)
 (diminish 'global-whitespace-mode)
 
 

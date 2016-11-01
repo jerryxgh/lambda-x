@@ -209,6 +209,12 @@ Note the weekly scope of the command's precision.")
 ;; locate-library
 ;; list-load-path-shadows
 
+;;; svn - psvn =================================================================
+(lambda-package-ensure-install 'psvn)
+(setq svn-status-hide-unmodified t)
+(lambda-package-ensure-install 'magit-svn)
+(add-hook 'magit-mode-hook 'magit-svn-mode)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

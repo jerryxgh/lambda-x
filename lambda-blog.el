@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-08-16 16:30:29 Guanghui Xu>
+;; Time-stamp: <2016-10-27 10:45:23 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -29,6 +29,8 @@
 
 ;; markdown -------------------------------------------------------------------
 (lambda-package-ensure-install 'markdown-mode)
+(lambda-package-ensure-install 'markdown-preview-mode)
+(lambda-package-ensure-install 'markdownfmt)
 
 ;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)
@@ -74,6 +76,12 @@ rainbow-delimiters-mode temporarily when using htmlize."
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (lambda-package-ensure-install 'graphviz-dot-mode)
 (setq graphviz-dot-indent-width 4)
+
+
+;; confluence-mode - supporting for confluence ---------------------------------
+(require 'confluence)
+(setq confluence-url "http://intranet/confluence/rpc/xmlrpc")
+(require 'ox-confluence)
 
 (provide 'lambda-blog)
 

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2016-08-31 20:31:10 Guanghui Xu>
+;; Time-stamp: <2016-11-01 11:11:11 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -22,12 +22,14 @@
     lambda-core
     ;; loading modules
     lambda-evil
+    lambda-mac
     lambda-cc
     lambda-blog
     lambda-web
     lambda-emacs-lisp
     lambda-scheme
     lambda-java
+    lambda-groovy
     lambda-python
     lambda-js
     lambda-json
