@@ -80,7 +80,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
        (add-hook
         'persp-mode-hook
         #'(lambda ()
-            ;; (setq persp-interactive-completion-function #'ido-completing-read)
+            (setq persp-interactive-completion-function #'ido-completing-read)
             (when evil-mode
               (define-key evil-normal-state-map (kbd "g t") 'persp-next)
               (define-key evil-normal-state-map (kbd "g T") 'persp-prev))))
