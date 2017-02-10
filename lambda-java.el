@@ -48,9 +48,11 @@ To be compatible with eclim--completion-action, call
     (requires . 0)
     (symbol . "f")))
 
-;; (add-hook 'java-mode-hook
-;;           #'(lambda ()
-;;               (add-to-list 'ac-sources 'ac-source-eclim-java)))
+;; do not use eclim in mac
+(unless (eq system-type 'darwin)
+  (add-hook 'java-mode-hook
+            #'(lambda ()
+                (add-to-list 'ac-sources 'ac-source-eclim-java))))
 
 ;; configuring mvn
 ;; move compile to the first
@@ -77,6 +79,7 @@ your project root path."))))
 
 ;; java-snippets A set of java-mode snippets for YASnippet. --------------------
 (lambda-package-ensure-install 'java-snippets)
+
 
 (provide 'lambda-java)
 

@@ -1,11 +1,29 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2016-11-01 11:34:11 Guanghui Xu>
+;; Time-stamp: <2017-01-18 16:35:16 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
 
 ;;; Code:
+
+;; Maxmize frame ---------------------------------------------------------------
+;; fullscreen when startup finished
+;; (custom-set-variables
+;;  '(initial-frame-alist (quote ((fullscreen . fullboth)))))
+
+(defun lambda-maxmize-frame ()
+  "Make Emacs frame maxmized."
+  (interactive)
+  (cond ((and (eq system-type 'windows-nt)
+              (fboundp 'w32-send-sys-command))
+         (w32-send-sys-command 61488))
+        ((eq system-type 'gnu/linux)
+         (set-frame-parameter nil 'fullscreen 'maximized))
+        (t
+         (set-frame-parameter nil 'fullscreen 'maximized))))
+
+(add-hook 'after-init-hook 'lambda-maxmize-frame)
 
 (defconst current-user
   (getenv
@@ -220,7 +238,8 @@ Which means get all used packages, this is mainly for getting unused packages."
         ((eq system-type 'darwin)
          (set-frame-font "menlo-13")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3))))))
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3)))
+         )))
 
 (lambda-package-ensure-install 'spacemacs-theme)
 
@@ -228,7 +247,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; custom faces for spacemacs theme
 (custom-set-faces
  ;; for auto-complete
- '(ac-gtags-candidate-face ((t (:inherit ac-candidate-face :foreground "deep sky blue"))))
+ '(ac-gtags-candidate-face ((t (:inherit ac-candidate-face :bforeground "deep sky blue"))))
  '(ac-gtags-selection-face ((t (:inherit ac-selection-face :background "deep sky blue"))))
  ;; for woman
  '(woman-bold ((t (:inherit bold :foreground "#4f97d7"))))
@@ -365,7 +384,7 @@ POSITION: just inhibit warning.")
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
 ;; this config should before (require 'smartparens)
-(setq sp-base-key-bindings 'sp)
+(setq sp-base-key-bindings 'paredit)
 (setq sp-show-pair-from-inside t)
 ;; (setq sp-navigate-close-if-unbalanced t)
 (require 'smartparens)
@@ -604,7 +623,8 @@ the search is performed ."
 ;;      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
 ;;                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
 ;;                 web-mode ))
-(global-whitespace-mode 1)
+;; (global-whitespace-mode 1)
+;; (add-hook 'hack-local-variables-hook 'whitespace-mode)
 (diminish 'global-whitespace-mode)
 
 
@@ -750,7 +770,9 @@ the search is performed ."
 
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
 
-(when (and (eq system-type 'gnu/linux)
+(when (and (or
+            (eq system-type 'gnu/linux)
+            (eq system-type 'darwin))
            (file-exists-p "/bin/bash"))
   (setq explicit-shell-file-name "/bin/bash"))
 
@@ -781,7 +803,7 @@ the search is performed ."
               (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)))
 
 ;; do not load custom file, all the configuration should be done by code
-;; (load "lambda-custom")
+(load "lambda-custom")
 
 ;;; ido --- interactively do things---------------------------------------------
 ;; ffap - find file at point is not userful when ido-mode is on
@@ -1024,15 +1046,22 @@ the search is performed ."
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
 
 (set-default 'ac-sources
-             '(ac-source-imenu
+             '(
                ;; ac-source-dabbrev
+               ;; ac-source-words-in-buffer
+               ;; ac-source-words-in-all-buffer
                ac-source-filename
                ac-source-dictionary
-               ac-source-words-in-buffer
-               ac-source-words-in-same-mode-buffers
-               ac-source-yasnippet
-               ;; ac-source-words-in-all-buffer
+               ;; ac-source-imenu
+               ;; ac-source-yasnippet
+               ;; ac-source-words-in-same-mode-buffers
                ))
+(add-hook 'prog-mode-hook
+          #'(lambda ()
+              (setq ac-sources
+                    (append '(ac-source-imenu
+                              ac-source-yasnippet
+                              ac-source-words-in-same-mode-buffers) ac-sources))))
 
 (setq-default ac-expand-on-auto-complete nil)
 ;; (setq-default ac-auto-start nil)

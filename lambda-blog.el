@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-10-27 10:45:23 Guanghui Xu>
+;; Time-stamp: <2016-12-05 13:31:08 Guanghui Xu>
 ;;; Commentary:
 ;; blog about settings
 
@@ -77,10 +77,7 @@ rainbow-delimiters-mode temporarily when using htmlize."
 (lambda-package-ensure-install 'graphviz-dot-mode)
 (setq graphviz-dot-indent-width 4)
 
-
-;; confluence-mode - supporting for confluence ---------------------------------
-(require 'confluence)
-(setq confluence-url "http://intranet/confluence/rpc/xmlrpc")
+;; ox-confluence installed manually --------------------------------------------
 (require 'ox-confluence)
 
 (provide 'lambda-blog)

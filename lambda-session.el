@@ -44,25 +44,6 @@
 ;; activate it for all buffers
 (setq-default save-place t)
 
-;; Maxmize frame ---------------------------------------------------------------
-
-;; fullscreen when startup finished
-;; (custom-set-variables
-;;  '(initial-frame-alist (quote ((fullscreen . fullboth)))))
-
-(defun lambda-maxmize-frame ()
-  "Make Emacs frame maxmized."
-  (interactive)
-  (cond ((and (eq system-type 'windows-nt)
-              (fboundp 'w32-send-sys-command))
-         (w32-send-sys-command 61488))
-        ((eq system-type 'gnu/linux)
-         (set-frame-parameter nil 'fullscreen 'maximized))
-        (t
-         (set-frame-parameter nil 'fullscreen 'maximized))))
-
-(add-hook 'after-init-hook 'lambda-maxmize-frame)
-
 ;; elscreen manage tabs --------------------------------------------------------
 ;; (lambda-package-ensure-install 'elscreen)
 ;; (require 'elscreen)
@@ -99,7 +80,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
        (add-hook
         'persp-mode-hook
         #'(lambda ()
-            (setq persp-interactive-completion-function #'ido-completing-read)
+            ;; (setq persp-interactive-completion-function #'ido-completing-read)
             (when evil-mode
               (define-key evil-normal-state-map (kbd "g t") 'persp-next)
               (define-key evil-normal-state-map (kbd "g T") 'persp-prev))))

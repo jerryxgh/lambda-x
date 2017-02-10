@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2016-05-07 13:24:54 Guanghui Xu>
+;; Time-stamp: <2017-01-04 16:36:52 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -22,6 +22,8 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ftl?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
+;; for velocity template engine script
+(add-to-list 'auto-mode-alist '("\\.vm?\\'" . web-mode))
 
 ;; Use web-mode instead of html-mode.
 (setq auto-mode-alist
@@ -39,10 +41,15 @@ and set yas--extra-mode to use html snippets."
                             (auto-fill-mode -1)
                             (fci-mode -1)
                             (make-local-variable 'yas-extra-modes)
-                            (add-to-list 'yas-extra-modes 'html-mode)))
+                            (add-to-list 'yas-extra-modes 'html-mode)
+                            (setq ac-sources
+                                  (append '(ac-source-imenu
+                                            ac-source-yasnippet
+                                            ac-source-words-in-same-mode-buffers) ac-sources))))
 
 ;; Work with auto-complete
 (setq ac-modes (append ac-modes '(web-mode)))
+
 
 ;; Work with yasnippet
 

@@ -215,6 +215,16 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'magit-svn)
 (add-hook 'magit-mode-hook 'magit-svn-mode)
 
+;;; rfc  =======================================================================
+(lambda-package-ensure-install 'irfc)
+(setq irfc-directory "/Users/xgh/repository/docs/rfc")
+(setq irfc-assoc-mode t)
+(add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\'" . irfc-mode))
+
+;; yasnippet ===================================================================
+;; (lambda-package-ensure-install 'auto-yasnippet)
+;; (lambda-package-ensure-install 'language-detection)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
