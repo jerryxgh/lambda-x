@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2016-10-14 11:17:05 Guanghui Xu>
+;; Time-stamp: <2017-06-27 23:47:36 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -15,6 +15,10 @@
               evil-cross-lines t)
 
 (require 'evil)
+
+;; treat underscore as part of the word
+(with-eval-after-load 'evil
+  (defalias #'forward-evil-word #'forward-evil-symbol))
 
 (evil-mode 1)
 ;; let * and # search symbol instead of word at point
@@ -35,6 +39,15 @@
 
 (define-key evil-normal-state-map (kbd "M-.") ())
 (define-key evil-normal-state-map (kbd "C-t") ())
+
+;; Prevent the visual selection overriding my system clipboard?
+
+;; On some operating systems, there is only one clipboard for both copied and
+;; selected texts. This has the consequence that visual selection – which should
+;; normally be saved to the PRIMARY clipboard – overrides the SYSTEM clipboard,
+;; where normally goes the copied text. This can be corrected by adding the
+;; following code to the dotspacemacs/user-config of your .spacemacs:
+(fset 'evil-visual-update-x-selection 'ignore)
 
 (defun lambda-hs-hide-level-1 ()
   "Just fold level 1 elements."
@@ -185,10 +198,11 @@
 ;; evil-indent-textobject ------------------------------------------------------
 (lambda-package-ensure-install 'evil-indent-textobject)
 
-;; evil-smartparens ------------------------------------------------------
+;; evil-smartparens ------------------------------------------------------------
 (lambda-package-ensure-install 'evil-smartparens)
 ;; (require 'evil-smartparens)
 ;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+
 
 (provide 'lambda-evil)
 

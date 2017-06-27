@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2017-01-18 16:35:16 Guanghui Xu>
+;; Time-stamp: <2017-04-18 20:44:25 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -171,6 +171,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; init PATH in mac, this should just after packages settings ==================
 (when (eq system-type 'darwin)
+  ;; open file in Find will reuse current frame instead creating a new one
+  (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
@@ -209,6 +211,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; mode line settings
 (line-number-mode t)
+(setq line-number-display-limit-width 1000000000)
 (column-number-mode t)
 (size-indication-mode t)
 
@@ -341,6 +344,12 @@ POSITION: just inhibit warning.")
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+;; seperate system clipboard and emacs kill-ring
+;; (setq select-enable-primary t)
+;; (setq select-enable-clipboard t)
+;; (setq select-active-regions nil)
+
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
@@ -615,15 +624,13 @@ the search is performed ."
 ;; whitespace-mode config.
 (require 'whitespace)
 (setq whitespace-line-column nil) ;; use fill-column instead of this
-(setq whitespace-style '(face  empty trailing lines-tail spaces newline
+(setq whitespace-style '(face empty trailing lines-tail spaces newline
                                indentation space-after-tab space-before-tab
                                ;; big-indent
                                ))
-;; (set 'whitespace-global-modes
-;;      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode java-mode
-;;                 lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode
-;;                 web-mode ))
-;; (global-whitespace-mode 1)
+(set 'whitespace-global-modes
+     '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode))
+(global-whitespace-mode 1)
 ;; (add-hook 'hack-local-variables-hook 'whitespace-mode)
 (diminish 'global-whitespace-mode)
 

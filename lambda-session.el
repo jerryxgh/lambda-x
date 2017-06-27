@@ -74,6 +74,8 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 ;;              '(persp-mode . persp-desktop-ignore-this-minor-mode))
 
 (with-eval-after-load "persp-mode-autoloads"
+  (setq persp-autokill-buffer-on-remove 'kill-weak
+        persp-kill-foreign-buffer-action 'kill)
   (add-hook
    'after-init-hook
    #'(lambda ()
@@ -111,7 +113,8 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 (desktop-save-mode 1)
 
 ;;加快emacs的启动速度
-(server-start)
+(if (eq system-type 'gnu/linux)
+    (server-start))
 
 (provide 'lambda-session)
 

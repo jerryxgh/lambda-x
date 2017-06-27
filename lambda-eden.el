@@ -87,7 +87,7 @@ Note the weekly scope of the command's precision.")
 ;; good
 (lambda-package-ensure-install 'git-messenger)
 ;; (require 'git-messenger)
-(setq git-messenger:show-detail t)
+;; (setq git-messenger:show-detail t)
 
 (lambda-package-ensure-install 'zoom-frm)
 
@@ -224,6 +224,14 @@ Note the weekly scope of the command's precision.")
 ;; yasnippet ===================================================================
 ;; (lambda-package-ensure-install 'auto-yasnippet)
 ;; (lambda-package-ensure-install 'language-detection)
+
+;; fasd ========================================================================
+(require 'fasd-shell)
+(add-hook 'shell-mode-hook 'fasd-shell-mode)
+
+;; whitespace-clean-mode =======================================================
+(lambda-package-ensure-install 'whitespace-cleanup-mode)
+(global-whitespace-cleanup-mode 1)
 
 (provide 'lambda-eden)
 

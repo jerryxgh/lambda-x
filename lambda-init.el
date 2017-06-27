@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2016-11-01 11:11:11 Guanghui Xu>
+;; Time-stamp: <2017-06-28 00:03:50 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -40,7 +40,8 @@
     lambda-vb
     lambda-eden
     lambda-individual
-
+    lambda-csharp
+    lambda-evil-im
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.
     lambda-session
