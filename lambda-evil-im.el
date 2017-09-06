@@ -23,21 +23,21 @@
 
 ;;; Change Log:
 
-;; Version $(3) 2017-02-16 GuanghuiXu
-;;   - Initial release
-
 ;;; Code:
 
 ;; switch to english input method when switching to normal mode
 ;; and switch back when entering insert/replace modes
 ;; need external script support, currently mac-only
-;; (defvar default-im " com.apple.keylayout.Dvorak " " Default ascii-only input method " )
-
 (defvar lambda-evil-im-select-command "~/local/bin/im-select"
   "The im-select command, from https://github.com/ybian/smartim.")
 
 (defvar lambda-evil-im-default-im "com.apple.keylayout.ABC"
   "Default ascii-only input method.")
+
+(defun lambda-shell-command-to-string (command)
+  "Remove ending line break of `shell-command-to-string' output.
+COMMAND is the commnd to be run."
+  (replace-regexp-in-string "\r?\n$" "" (shell-command-to-string (mapconcat 'identity command " "))))
 
 (defvar lambda-evil-im-prev-im (substring (shell-command-to-string lambda-evil-im-select-command) 0 -1)
   "IM using when starting Emacs and exiting insert mode.")
@@ -52,21 +52,20 @@
 (defun lambda-evil-im-remember ()
   "Remember input method used in insert mode to switch back in other modes."
   (interactive )
-  (cond ((eq system-type 'darwin)
-         (setq lambda-evil-im-prev-im
-               (substring (shell-command-to-string lambda-evil-im-select-command) 0 -1 )))))
+  (if (eq system-type 'darwin)
+      (setq lambda-evil-im-prev-im
+            (substring (shell-command-to-string lambda-evil-im-select-command) 0 -1))))
 
 (defun lambda-evil-im-use-prev ()
   "Use previous input method."
   (interactive )
-  (cond ((eq system-type 'darwin)
-         (if lambda-evil-im-prev-im
-             (call-process-shell-command (concat lambda-evil-im-prev-im " "
-                                                 lambda-evil-im-prev-im))
-           (call-process-shell-command (concat lambda-evil-im-prev-im
-                                               lambda-evil-im-default-im))))))
+  (if (eq system-type 'darwin)
+      (if lambda-evil-im-prev-im
+          (call-process-shell-command (concat lambda-evil-im-select-command " " lambda-evil-im-prev-im))
+        (call-process-shell-command (concat lambda-evil-im-select-command
+                                            lambda-evil-im-default-im)))))
 
-(add-hook 'evil-normal-state-entry-hook 'lambda-evil-im-use-default )
+(add-hook 'evil-normal-state-entry-hook 'lambda-evil-im-use-default)
 (add-hook 'evil-insert-state-entry-hook 'lambda-evil-im-use-prev )
 (add-hook 'evil-insert-state-exit-hook 'lambda-evil-im-remember)
 (add-hook 'evil-replace-state-entry-hook 'lambda-evil-im-use-prev )

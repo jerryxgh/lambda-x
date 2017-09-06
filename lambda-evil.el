@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2017-06-27 23:47:36 Guanghui Xu>
+;; Time-stamp: <2017-09-06 19:39:36 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -96,7 +96,7 @@
 (define-key evil-window-map (kbd "C-w") 'ace-window)
 
 (require 'evil-tab-minor-mode)
-(global-evil-tab-mode t)
+;; (global-evil-tab-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)

@@ -6,26 +6,16 @@
 
 (require 'lambda-core)
 
-;; js3-mode --------------------------------------------------------------------
-(lambda-package-ensure-install 'js3-mode)
-(require 'js3-mode)
-(add-hook 'js3-mode-hook (lambda ()
-						   "Set default values of the variables."
-						   (tern-mode 1)
-						   (setq js3-auto-indent-p t
-								 js3-curly-indent-offset 0
-								 js3-enter-indents-newline t
-								 js3-expr-indent-offset 2
-								 js3-indent-on-enter-key t
-								 js3-lazy-commas t
-								 js3-lazy-dots t
-								 js3-lazy-operators t
-								 js3-paren-indent-offset 2
-								 js3-square-indent-offset 4)))
+;; js2-mode --------------------------------------------------------------------
+(lambda-package-ensure-install 'js2-mode)
+(require 'js2-mode)
 
-(add-to-list 'auto-mode-alist '("\\.avpr" . js3-mode))
-(add-to-list 'auto-mode-alist '("\\.avsc" . js3-mode))
-(add-to-list 'ac-modes 'js3-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+;; rjsx-mode--------------------------------------------------------------------
+(lambda-package-ensure-install 'rjsx-mode)
+(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
 ;; tern: a stand-alone code-analysis engine for JavaScript ---------------------
 ;; Here we use tern and auto-complete to complete JavaScript
