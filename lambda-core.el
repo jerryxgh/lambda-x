@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2017-04-18 20:44:25 Guanghui Xu>
+;; Time-stamp: <2017-11-03 01:09:13 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -814,10 +814,10 @@ the search is performed ."
 
 ;;; ido --- interactively do things---------------------------------------------
 ;; ffap - find file at point is not userful when ido-mode is on
-(lambda-package-ensure-install 'ido-ubiquitous)
+(lambda-package-ensure-install 'ido-completing-read+)
 (lambda-package-ensure-install 'flx-ido)
 (require 'ido)
-(require 'ido-ubiquitous)
+(require 'ido-completing-read+)
 (require 'flx-ido)
 (setq ido-enable-flex-matching t
       ido-auto-merge-work-directories-length -1
