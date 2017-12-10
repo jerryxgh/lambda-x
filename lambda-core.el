@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2017-12-10 21:14:36 Guanghui Xu>
+;; Time-stamp: <2017-12-10 21:48:51 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -235,8 +235,13 @@ Which means get all used packages, this is mainly for getting unused packages."
          (if (fboundp 'set-fontset-font)
              (set-fontset-font t 'unicode '("Microsoft Yahei" .
                                             "unicode-bmp"))))
-        ;; ((eq system-type 'gnu/linux)
-        ;;  (set-frame-font "Source Code Pro-13"))
+        ((eq system-type 'gnu/linux)
+         (set-frame-font "Source Code Pro-11")
+         (if (fboundp 'set-fontset-font)
+             (set-fontset-font t 'unicode '("Noto Sans CJK SC" .
+                                            "unicode-bmp")))
+
+         (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
         ((eq system-type 'darwin)
          (set-frame-font "menlo-13")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
