@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2017-06-29 17:21:29 Guanghui Xu>
+;; Time-stamp: <2017-12-10 19:21:17 xgh>
 
 ;;; Commentary:
 
@@ -33,10 +33,10 @@
     lambda-python
     lambda-js
     lambda-json
-    lambda-octave
+    ;; lambda-octave
     lambda-lua
-    lambda-scala
-    lambda-haskell
+    ;; lambda-scala
+    ;; lambda-haskell
     lambda-vb
     lambda-eden
     lambda-individual

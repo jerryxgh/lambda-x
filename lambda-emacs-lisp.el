@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2016-05-07 13:30:30 Guanghui Xu>
+;; Time-stamp: <2017-12-10 20:16:21 xgh>
 ;;; Commentary:
 
 ;;; Code:
@@ -12,11 +12,6 @@
               (eldoc-mode 1)
               (diminish 'eldoc-mode)
               (setq-default flycheck-emacs-lisp-load-path load-path)))
-
-(lambda-package-ensure-install 'flycheck-package)
-(eval-after-load 'flycheck '(flycheck-package-setup))
-;; (eval-after-load 'flycheck
-;;   '(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 ;; elisp-slime-nav --- Make M-. and M-, work in elisp like they do in slime-----
 (lambda-package-ensure-install 'elisp-slime-nav)

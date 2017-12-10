@@ -1,5 +1,5 @@
 ;;; lambda-blog.el --- org
-;; Time-stamp: <2016-12-05 13:31:08 Guanghui Xu>
+;; Time-stamp: <2017-12-10 20:09:47 xgh>
 ;;; Commentary:
 ;; blog about settings
 
@@ -67,11 +67,6 @@ rainbow-delimiters-mode temporarily when using htmlize."
 (setq org-latex-pdf-process
       '("xelatex -interaction nonstopmode %b"
         "xelatex -interaction nonstopmode %b"))
-
-;; latex editing ---------------------------------------------------------------
-(lambda-package-ensure-install 'auctex)
-(lambda-package-ensure-install 'auto-complete-auctex)
-
 
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (lambda-package-ensure-install 'graphviz-dot-mode)
