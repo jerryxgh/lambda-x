@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2016-08-22 19:56:39 Guanghui Xu>
+;; Time-stamp: <2017-12-10 21:11:48 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -15,19 +15,8 @@
                             (concat org-directory "/capture.org"))
 
       org-default-notes-file (concat org-directory "/capture.org")
-      sbt:program-name "/home/xgh/local/sbt/bin/sbt"
       )
 
-;; configuring eclipse installation
-(when (eq system-type 'gnu/linux)
-  (add-to-list 'eclim-eclipse-dirs
-               "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/")
-  (setq eclim-executable "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/eclim"
-        eclimd-executable "/home/xgh/local/sts-bundle/sts-3.7.3.RELEASE/eclimd"
-        eclimd-default-workspace "~/workspace/"))
-
-;; (add-to-list 'load-path "/home/xgh/repository/smartwin")
-(lambda-package-ensure-install #'smartwin)
 (require 'smartwin)
 (smartwin-mode 1)
 (diminish 'smartwin-mode)

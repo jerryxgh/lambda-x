@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2017-12-10 20:16:21 xgh>
+;; Time-stamp: <2017-12-10 20:53:00 xgh>
 ;;; Commentary:
 
 ;;; Code:
@@ -15,7 +15,6 @@
 
 ;; elisp-slime-nav --- Make M-. and M-, work in elisp like they do in slime-----
 (lambda-package-ensure-install 'elisp-slime-nav)
-(require 'elisp-slime-nav) ;; optional if installed via package.el
 ;; (define-key elisp-slime-nav-mode-map (kbd "M-,") ())
 ;; (define-key elisp-slime-nav-mode-map (kbd "C-t") 'pop-tag-mark)
 (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))

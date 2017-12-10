@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2017-12-10 20:05:04 xgh>
+;; Time-stamp: <2017-12-10 21:14:36 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -67,8 +67,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
         (if should-add-to-load-path
             (add-to-list 'load-path current-directory))))))
 
-;; (add-to-list 'load-path lambda-x-direcotry)
-;; (add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
 (lambda-add-to-load-path-recursively (expand-file-name "packages/non-elpa"
                                                        lambda-x-direcotry))
 
@@ -237,8 +235,8 @@ Which means get all used packages, this is mainly for getting unused packages."
          (if (fboundp 'set-fontset-font)
              (set-fontset-font t 'unicode '("Microsoft Yahei" .
                                             "unicode-bmp"))))
-        ((eq system-type 'gnu/linux)
-         (set-frame-font "Source Code Pro-13"))
+        ;; ((eq system-type 'gnu/linux)
+        ;;  (set-frame-font "Source Code Pro-13"))
         ((eq system-type 'darwin)
          (set-frame-font "menlo-13")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))

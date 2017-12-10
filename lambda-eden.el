@@ -201,10 +201,6 @@ Note the weekly scope of the command's precision.")
 ;; (lambda-package-ensure-install 'elnode)
 ;; (lambda-package-ensure-install 'web-server)
 
-;; org and chinese
-;; cal-china-x chinese-fonts-setup org-chinese-utils org-latex-chinese pangu-spacing
-(lambda-package-ensure-install 'ox-latex-chinese)
-
 ;; knowledge
 ;; locate-library
 ;; list-load-path-shadows
