@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2017-12-10 21:11:48 Guanghui Xu>
+;; Time-stamp: <2017-12-10 22:10:55 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -37,6 +37,15 @@
 
 ;;       simplesite-personal-disqus-shortname "jerryxgh"
 ;;       simplesite-personal-duoshuo-shortname nil)
+
+;; set font for myself
+
+(when (eq system-type 'gnu/linux)
+  (set-frame-font "Consolas-11.5")
+  (if (fboundp 'set-fontset-font)
+      (set-fontset-font t 'unicode '("Microsoft Yahei" .
+                                     "unicode-bmp")))
+  (setq face-font-rescale-alist (list (cons "Microsoft Yahei" 1.1))))
 
 (provide 'lambda-individual)
 
