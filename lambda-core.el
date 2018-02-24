@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2017-11-03 01:09:13 Guanghui Xu>
+;; Time-stamp: <2018-02-23 22:31:24 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -1026,6 +1026,7 @@ the search is performed ."
 
 ;; YASnippet -------------------------------------------------------------------
 (lambda-package-ensure-install 'yasnippet)
+(lambda-package-ensure-install 'yasnippet-snippets)
 (require 'yasnippet)
 (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
 ;; delete dirs that not exist in yas-snippet-dirs
