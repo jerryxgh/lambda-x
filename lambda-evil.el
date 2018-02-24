@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2017-09-06 19:39:36 Guanghui Xu>
+;; Time-stamp: <2017-12-10 19:13:20 xgh>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -92,9 +92,6 @@
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
 ;; (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
 
-(define-key evil-window-map (kbd "w") 'ace-window)
-(define-key evil-window-map (kbd "C-w") 'ace-window)
-
 (require 'evil-tab-minor-mode)
 ;; (global-evil-tab-mode t)
 
@@ -169,9 +166,11 @@
     "w" 'ace-jump-word-mode
     "l" 'ace-jump-line-mode))
 (lambda-package-ensure-install 'ace-window)
-(require 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(define-key evil-window-map (kbd "w") 'ace-window)
+(define-key evil-window-map (kbd "C-w") 'ace-window)
+
 ;; (ace-window-display-mode t)
 
 

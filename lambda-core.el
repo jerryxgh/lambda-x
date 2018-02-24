@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-02-23 22:31:24 Guanghui Xu>
+;; Time-stamp: <2018-02-24 16:44:23 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -67,8 +67,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
         (if should-add-to-load-path
             (add-to-list 'load-path current-directory))))))
 
-;; (add-to-list 'load-path lambda-x-direcotry)
-;; (add-to-list 'load-path (expand-file-name "packages/non-elpa" lambda-x-direcotry))
 (lambda-add-to-load-path-recursively (expand-file-name "packages/non-elpa"
                                                        lambda-x-direcotry))
 
@@ -105,8 +103,9 @@ The difference is that if PACKAGE is already installed(checked through
   (add-to-list 'lambda-package-installed-packages package)
   (unless (or (member package package-activated-list)
               (package-installed-p package)
-              (featurep package)
-              (functionp package))
+              ;;(featurep package)
+              ;;(functionp package)
+              )
     (message "Installing %s" (symbol-name package))
     (when (not package-archive-contents)
       (package-refresh-contents))
@@ -237,7 +236,12 @@ Which means get all used packages, this is mainly for getting unused packages."
              (set-fontset-font t 'unicode '("Microsoft Yahei" .
                                             "unicode-bmp"))))
         ((eq system-type 'gnu/linux)
-         (set-frame-font "Source Code Pro-13"))
+         (set-frame-font "Source Code Pro-11")
+         (if (fboundp 'set-fontset-font)
+             (set-fontset-font t 'unicode '("Noto Sans CJK SC" .
+                                            "unicode-bmp")))
+
+         (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
         ((eq system-type 'darwin)
          (set-frame-font "menlo-13")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
@@ -871,69 +875,18 @@ the search is performed ."
 
 ;; helm ------------------------------------------------------------------------
 (lambda-package-ensure-install 'helm)
-(require 'helm)
-(spaceline-helm-mode 1)
 ;; must set before helm-config,  otherwise helm use default
 ;; prefix "C-x c", which is inconvenient because you can
 ;; accidentially pressed "C-x C-c"
 (setq-default helm-command-prefix-key "C-c h"
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
-;;(require 'helm-config)
-;;(require 'helm-files)
-;;(require 'helm-grep)
+(require 'helm-config)
 
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-
-;; rebihnd tab to do persistent action
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-;; make TAB works in terminal
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-;; list actions using C-z
-(define-key helm-map (kbd "C-z")  'helm-select-action)
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-(require 'helm-eshell)
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-
-(define-key helm-grep-mode-map (kbd "<return>")
-  'helm-grep-mode-jump-other-window)
-(define-key helm-grep-mode-map (kbd "n")
-  'helm-grep-mode-jump-other-window-forward)
-(define-key helm-grep-mode-map (kbd "p")
-  'helm-grep-mode-jump-other-window-backward)
-(setq helm-net-prefer-curl t
-      helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
-      ;; be idle for this many seconds, before updating candidate buffer
-      helm-input-idle-delay 0.01
-      ;; search for library in `require' and `declare-function' sexp.
-      helm-ff-search-library-in-sexp t
-
-      ;; open helm buffer in another window
-      helm-split-window-default-side 'other
-      ;; open helm buffer inside current window, not occupy whole other window
-      helm-split-window-in-side-p t
-      helm-buffers-favorite-modes (append helm-buffers-favorite-modes
-                                          '(picture-mode artist-mode))
-      ;; limit the number of displayed canidates
-      helm-candidate-number-limit 200
-      helm-boring-file-regexp-list
-      ;; do not show these files in helm buffer
-      '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$"
-        "\\.i$")
-      helm-ff-file-name-history-use-recentf t
-      helm-move-to-line-cycle-in-source t ; move to end or beginning of source
-      ;; when reaching top or bottom of source.
-      ido-use-virtual-buffers t      ; Needed in helm-buffers-list
-      ;; fuzzy matching buffer names when non-nil useful in helm-mini that lists
-      ;; buffers
-      helm-buffers-fuzzy-matching t)
-
-;; save current position to mark ring when jumping to a different place
-(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-
-;; (require 'helm-mode)
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq-default helm-completing-read-handlers-alist
               '((describe-function . ido)
@@ -950,14 +903,6 @@ the search is performed ."
                 (helm-gtags-create-tags . ido)
                 (ffap-alternate-file . nil)
                 (tmm-menubar . nil)))
-(helm-mode 1)
-(diminish 'helm-mode)
-
-;; helm-ls-git Yet another helm for listing the files in a git repo. -----------
-;;(lambda-package-ensure-install 'helm-ls-git)
-;;(require 'helm-ls-git)
-;;(global-set-key (kbd "C-<f6>") 'helm-ls-git-ls)
-;;(global-set-key (kbd "C-x C-d") 'helm-browse-project)
 
 (lambda-package-ensure-install 'helm-projectile)
 (require 'helm-projectile)

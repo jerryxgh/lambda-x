@@ -7,70 +7,6 @@
 (require 'lambda-core)
 (require 'lambda-cc)
 
-;; eclim plugin: using eclipse feature in emacs --------------------------------
-(lambda-package-ensure-install 'emacs-eclim)
-(require 'eclim)
-(require 'eclimd)
-
-;; start eclimd server in background
-(setq eclimd-wait-for-process nil)
-
-;; displaying compilation error messages in the echo area
-(setq help-at-pt-display-when-idle t
-      help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-
-;; configuring auto-complete-mode
-(require 'ac-emacs-eclim)
-(defun lambda-prefix-eclim-java-dot ()
-  "Do eclim-complete in auto-complete when encounter dot.
-
-To be compatible with eclim--completion-action, call
-`eclim-completion-start' to set variable
-`eclim--completion-start'."
-  (let ((dot-p (ac-prefix-c-dot)))
-    (when dot-p
-      ;; (setq eclim--completion-start dot-p)
-      (eclim-completion-start)
-      dot-p)))
-
-(defun lambda-emacs-eclim-action ()
-  (eclim--completion-action eclim--completion-start (point)))
-
-(ac-define-source eclim-java
-  '((candidates . eclim--completion-candidates)
-    (action . lambda-emacs-eclim-action)
-    (prefix . lambda-prefix-eclim-java-dot)
-    (document . eclim--completion-documentation)
-    (cache)
-    (selection-face . ac-emacs-eclim-selection-face)
-    (candidate-face . ac-emacs-eclim-candidate-face)
-    (requires . 0)
-    (symbol . "f")))
-
-;; do not use eclim in mac
-(unless (eq system-type 'darwin)
-  (add-hook 'java-mode-hook
-            #'(lambda ()
-                (add-to-list 'ac-sources 'ac-source-eclim-java))))
-
-;; configuring mvn
-;; move compile to the first
-(setq eclim-maven-lifecycle-phases (delete "compile"
-                                           eclim-maven-lifecycle-phases))
-(add-to-list 'eclim-maven-lifecycle-phases "compile")
-
-(defun mvn (phase)
-  "Run mvn using PHASE."
-  (interactive (list (eclim--maven-lifecycle-phase-read)))
-  (let ((pom-path (concat (projectile-project-root) "pom.xml")))
-    (if (equal phase "")
-        (setq phase (car eclim-maven-lifecycle-phases)))
-    (if (file-exists-p pom-path)
-        (compile (concat "mvn -f " pom-path " " phase))
-      (message "Please go to mvn project and insure that \".projectile\" is in \
-your project root path."))))
-
 ;; to recognize mvn compile errors
 (setq compilation-error-regexp-alist
       (delete
@@ -79,7 +15,6 @@ your project root path."))))
 
 ;; java-snippets A set of java-mode snippets for YASnippet. --------------------
 (lambda-package-ensure-install 'java-snippets)
-
 
 (provide 'lambda-java)
 
