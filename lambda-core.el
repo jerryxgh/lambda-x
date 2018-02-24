@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-02-24 16:44:23 Guanghui Xu>
+;; Time-stamp: <2018-02-24 22:15:05 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -249,9 +249,8 @@ Which means get all used packages, this is mainly for getting unused packages."
          )))
 
 (lambda-package-ensure-install 'spacemacs-theme)
-
-;; (require 'spacemacs-common)
 ;; custom faces for spacemacs theme
+
 (custom-set-faces
  ;; for auto-complete
  '(ac-gtags-candidate-face ((t (:inherit ac-candidate-face :bforeground "deep sky blue"))))
@@ -260,18 +259,21 @@ Which means get all used packages, this is mainly for getting unused packages."
  '(woman-bold ((t (:inherit bold :foreground "#4f97d7"))))
  '(woman-italic ((t (:inherit italic :foreground "#c56ec3" :underline nil))))
  )
-
 (lambda-load-theme 'spacemacs-dark)
+
+;; (lambda-package-ensure-install 'zenburn-theme)
+;; (lambda-load-theme 'zenburn)
 
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
-(lambda-package-ensure-install 'window-numbering)
 
+;;; window-numbering -----------------------------------------------------------
 (defun window-numbering-install-mode-line (&optional position)
   "Do nothing, the display is handled by the spaceline(powerline).
 POSITION: just inhibit warning.")
 
+(lambda-package-ensure-install 'window-numbering)
 (require 'window-numbering)
 (setq window-numbering-auto-assign-0-to-minibuffer nil)
 (window-numbering-mode 1)
@@ -315,8 +317,8 @@ POSITION: just inhibit warning.")
 (lambda-package-ensure-install 'info+)
 (require 'info+)
 (spaceline-info-mode 1)
-(spaceline-spacemacs-theme)
-;; (spaceline-spacemacs-theme '(buffer-encoding process))
+;; (spaceline-spacemacs-theme)
+(spaceline-spacemacs-theme '(buffer-encoding process))
 (redisplay)
 
 ;; inhibit annoying warning sound
