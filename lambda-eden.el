@@ -229,6 +229,11 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'whitespace-cleanup-mode)
 (global-whitespace-cleanup-mode 1)
 
+;; graphql-mode=================================================================
+;; (lambda-package-ensure-install 'graphql-mode)
+(require 'graphql-mode)
+(setq graphql-indent-level 4)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

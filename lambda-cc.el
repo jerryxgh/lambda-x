@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2016-05-20 11:06:05 xgh>
+;; Time-stamp: <2018-02-25 15:48:26 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -15,6 +15,11 @@
                 ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
                 (add-to-list 'c-cleanup-list 'defun-close-semi)
                 (c-set-style "k&r")
+                ;; https://stackoverflow.com/questions/13825188/suppress-c-namespace-indentation-in-emacs
+                (defconst my-cc-style
+                  '("k&r"
+                    (c-offsets-alist . ((innamespace . [0])))))
+                (c-add-style "my-cc-style" my-cc-style)
                 (setq tab-width 8)
                 (setq indent-tabs-mode nil)
                 (setq c-basic-offset 4)
