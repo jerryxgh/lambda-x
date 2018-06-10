@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-04-22 13:43:21 Guanghui Xu>
+;; Time-stamp: <2018-06-10 23:33:18 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -243,7 +243,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 
          (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
         ((eq system-type 'darwin)
-         (set-frame-font "menlo-13")
+         (set-frame-font "menlo-15")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
          (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3)))
          )))
