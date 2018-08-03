@@ -14,6 +14,13 @@
 (add-hook 'c-mode-common-hook #'(lambda ()
                                   (hs-minor-mode)
                                   (diminish 'hs-minor-mode)))
+
+;; sql-indent
+(lambda-package-ensure-install 'sql-indent)
+(require 'sql-indent)
+(add-hook 'sql-mode-hook
+          (sqlind-minor-mode 1))
+
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
 (require 'vlf-setup)
