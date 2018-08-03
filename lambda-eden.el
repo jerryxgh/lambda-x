@@ -96,7 +96,7 @@ Note the weekly scope of the command's precision.")
 ;; (require 'git-messenger)
 ;; (setq git-messenger:show-detail t)
 
-(lambda-package-ensure-install 'zoom-frm)
+;;(lambda-package-ensure-install 'zoom-frm)
 
 ;; A-x string-edit-at-point "C-c C-c" "C-c C-k"
 (lambda-package-ensure-install 'string-edit)
@@ -141,7 +141,7 @@ Note the weekly scope of the command's precision.")
 (diminish 'hungry-delete-mode)
 (lambda-package-ensure-install 'ibuffer-projectile)
 (lambda-package-ensure-install 'indent-guide)
-(lambda-package-ensure-install 'info+)
+;;(lambda-package-ensure-install 'info+)
 (lambda-package-ensure-install 'linum-relative)
 (lambda-package-ensure-install 'move-text)
 
@@ -152,7 +152,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'org-repo-todo)
 (lambda-package-ensure-install 'page-break-lines)
 (lambda-package-ensure-install 'paradox)
-(lambda-package-ensure-install 'rfringe)
+;;(lambda-package-ensure-install 'rfringe)
 (lambda-package-ensure-install 'csv-mode)
 (lambda-package-ensure-install 'evil-textobj-anyblock)
 (lambda-package-ensure-install 'expand-line)
@@ -219,10 +219,10 @@ Note the weekly scope of the command's precision.")
 (add-hook 'magit-mode-hook 'magit-svn-mode)
 
 ;;; rfc  =======================================================================
-(lambda-package-ensure-install 'irfc)
-(setq irfc-directory "/Users/xgh/repository/docs/rfc")
-(setq irfc-assoc-mode t)
-(add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\'" . irfc-mode))
+;; (lambda-package-ensure-install 'irfc)
+;; (setq irfc-directory "/Users/xgh/repository/docs/rfc")
+;; (setq irfc-assoc-mode t)
+;; (add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\'" . irfc-mode))
 
 ;; yasnippet ===================================================================
 ;; (lambda-package-ensure-install 'auto-yasnippet)

@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-02-24 22:40:17 Guanghui Xu>
+;; Time-stamp: <2018-06-10 23:37:06 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -314,9 +314,9 @@ POSITION: just inhibit warning.")
 ;;    ((string= "9" str) "➒")
 ;;    ((string= "0" str) "➓")))
 
-(lambda-package-ensure-install 'info+)
-(require 'info+)
-(spaceline-info-mode 1)
+;;(lambda-package-ensure-install 'info+)
+;;(require 'info+)
+;; (spaceline-info-mode 1)
 ;; (spaceline-spacemacs-theme)
 (spaceline-spacemacs-theme '(buffer-encoding process))
 (redisplay)
@@ -993,7 +993,7 @@ the search is performed ."
 
 ;; auto-complete ---------------------------------------------------------------
 (lambda-package-ensure-install 'auto-complete)
-(lambda-package-ensure-install 'ac-dabbrev)
+;;(lambda-package-ensure-install 'ac-dabbrev)
 (global-auto-complete-mode 1)
 (diminish 'auto-complete-mode)
 (require 'auto-complete-config)
@@ -1135,7 +1135,7 @@ DISPLAY-FN: use this function to display."
 (add-to-list 'yas-prompt-functions 'yas-popup-isearch-prompt)
 
 ;; unbound ---------------------------------------------------------------------
-(lambda-package-ensure-install 'unbound)
+;;(lambda-package-ensure-install 'unbound)
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------
 (require 'unicad)
