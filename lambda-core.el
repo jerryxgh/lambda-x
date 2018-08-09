@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-06-10 23:37:06 Guanghui Xu>
+;; Time-stamp: <2018-08-10 00:16:23 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -201,9 +201,11 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; nice scrolling in both keyboard and mouse
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; donnot accelerate scrolling
-      scroll-step 1
+      ;; scroll-step 1
+      ;; scroll-margin 0
+      scroll-preserve-screen-position t
       scroll-margin 0
-      scroll-conservatively most-positive-fixnum)
+      scroll-conservatively 101)
 
 ;; resize windows in pixel
 (setq window-resize-pixelwise t)
@@ -631,14 +633,14 @@ the search is performed ."
 (require 'whitespace)
 (setq whitespace-line-column nil) ;; use fill-column instead of this
 (setq whitespace-style '(face empty trailing lines-tail spaces newline
-                               indentation space-after-tab space-before-tab
-                               ;; big-indent
-                               ))
+                              indentation space-after-tab space-before-tab
+                              ;; big-indent
+                              ))
 (set 'whitespace-global-modes
      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode))
-(global-whitespace-mode 1)
+;; (global-whitespace-mode 1)
 ;; (add-hook 'hack-local-variables-hook 'whitespace-mode)
-(diminish 'global-whitespace-mode)
+;; (diminish 'global-whitespace-mode)
 
 
 ;; saner regex syntax
