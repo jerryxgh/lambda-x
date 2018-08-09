@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-10 00:16:23 Guanghui Xu>
+;; Time-stamp: <2018-08-10 00:22:29 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -630,16 +630,15 @@ the search is performed ."
 (setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")
 
 ;; whitespace-mode config.
-(require 'whitespace)
-(setq whitespace-line-column nil) ;; use fill-column instead of this
-(setq whitespace-style '(face empty trailing lines-tail spaces newline
-                              indentation space-after-tab space-before-tab
-                              ;; big-indent
-                              ))
-(set 'whitespace-global-modes
-     '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode))
-;; (global-whitespace-mode 1)
-;; (add-hook 'hack-local-variables-hook 'whitespace-mode)
+;; (require 'whitespace)
+;; (setq whitespace-line-column nil) ;; use fill-column instead of this
+;; (setq whitespace-style '(face empty trailing lines-tail spaces newline
+;;                               indentation space-after-tab space-before-tab
+;;                               ;; big-indent
+;;                               ))
+;; (set 'whitespace-global-modes
+;;      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode))
+;; (global-whitespace-mode 0)
 ;; (diminish 'global-whitespace-mode)
 
 
