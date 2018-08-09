@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-10 00:22:29 Guanghui Xu>
+;; Time-stamp: <2018-08-10 01:00:52 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -1006,13 +1006,13 @@ the search is performed ."
 
 (set-default 'ac-sources
              '(
-               ;; ac-source-dabbrev
-               ;; ac-source-words-in-buffer
+               ac-source-dabbrev
+               ac-source-words-in-buffer
                ;; ac-source-words-in-all-buffer
                ac-source-filename
                ac-source-dictionary
-               ;; ac-source-imenu
-               ;; ac-source-yasnippet
+               ac-source-imenu
+               ac-source-yasnippet
                ;; ac-source-words-in-same-mode-buffers
                ))
 (add-hook 'prog-mode-hook
@@ -1057,6 +1057,7 @@ the search is performed ."
                 html-mode
                 inferior-emacs-lisp-mode
                 js3-mode
+                json-mode
                 less-css-mode
                 lisp-mode
                 log-edit-mode

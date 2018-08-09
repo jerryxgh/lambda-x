@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2017-01-04 16:36:52 Guanghui Xu>
+;; Time-stamp: <2018-08-10 00:41:57 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -64,17 +64,6 @@ and set yas--extra-mode to use html snippets."
 (add-hook 'prog-mode-hook #'(lambda ()
                               (rainbow-mode 1)
                               (diminish 'rainbow-mode)))
-
-
-;; ac-html --------------------------------------------------------------------
-(lambda-package-ensure-install 'ac-html)
-(require 'ac-html)
-(add-to-list 'web-mode-ac-sources-alist
-             '("html" . (
-                         ;; attribute-value better to be first
-                         ac-source-html-attribute-value
-                         ac-source-html-tag
-                         ac-source-html-attribute)))
 
 
 (provide 'lambda-web)

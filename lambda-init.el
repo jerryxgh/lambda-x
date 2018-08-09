@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2018-08-10 00:33:00 xgh>
+;; Time-stamp: <2018-08-10 01:02:07 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -15,6 +15,12 @@
 
 (add-to-list 'load-path
              (file-name-directory (or load-file-name (buffer-file-name))))
+
+;; maximize frame
+(unless (frame-parameter nil 'fullscreen)
+      (toggle-frame-maximized))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(redisplay)
 
 (defvar lambda-libraries
   '(
