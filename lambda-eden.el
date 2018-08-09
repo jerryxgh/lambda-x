@@ -18,8 +18,12 @@
 ;; sql-indent
 (lambda-package-ensure-install 'sql-indent)
 (require 'sql-indent)
-(add-hook 'sql-mode-hook
-          (sqlind-minor-mode 1))
+(add-hook 'sql-mode-hook 'sqlind-minor-mode)
+
+;; sqlup-mode
+(lambda-package-ensure-install 'sqlup-mode)
+(require 'sqlup-mode)
+(add-hook 'sql-mode-hook 'sqlup-mode)
 
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
