@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2018-08-10 17:59:08 Guanghui Xu>
+;; Time-stamp: <2018-08-10 18:04:45 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -82,6 +82,8 @@
         (image-mode . emacs)
         (svn-status-mode . emacs)
         (view-mode . emacs)
+        (xref . emacs)
+        (special-mode . emacs)
         ))
 
 ;; when entering edebug, change to evil-emacs-state to use simple key bindings
