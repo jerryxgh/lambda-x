@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2018-08-10 01:24:30 Guanghui Xu>
+;; Time-stamp: <2018-08-10 17:22:25 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -114,6 +114,19 @@
   "f" 'find-file)
 (global-evil-leader-mode 1)
 
+(lambda-package-ensure-install 'evil-nerd-commenter)
+;; (evil-leader/set-key
+;;   "ci" 'evilnc-comment-or-uncomment-lines
+;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+;;   "cc" 'evilnc-copy-and-comment-lines
+;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
+;;   "cr" 'comment-or-uncomment-region
+;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
+;;   "."  'evilnc-copy-and-comment-operator
+;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
+;; )
+
 ;; evil-exchange ---------------------------------------------------------------
 ;; powerful tool to exchange text
 ;; gx (evil-exchange)
@@ -194,9 +207,6 @@
 (lambda-package-ensure-install 'evil-visual-mark-mode)
 (evil-visual-mark-mode 1)
 
-;; evil-indent-textobject ------------------------------------------------------
-(lambda-package-ensure-install 'evil-indent-textobject)
-
 ;; evil-smartparens ------------------------------------------------------------
 (lambda-package-ensure-install 'evil-smartparens)
 ;; (require 'evil-smartparens)
@@ -245,6 +255,27 @@ START-REGEXP and END-REGEXP are the boundaries of the text object."
 (evil-define-text-object evil-inner-buffer (count &optional beg end type)
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
+
+;; evil-args -------------------------------------------------------------------
+(lambda-package-ensure-install 'evil-args)
+(require 'evil-args)
+
+;; bind evil-args text objects
+(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+
+;; bind evil-forward/backward-args
+(define-key evil-normal-state-map "L" 'evil-forward-arg)
+(define-key evil-normal-state-map "H" 'evil-backward-arg)
+(define-key evil-motion-state-map "L" 'evil-forward-arg)
+(define-key evil-motion-state-map "H" 'evil-backward-arg)
+
+;; bind evil-jump-out-args
+(define-key evil-normal-state-map "K" 'evil-jump-out-args)
+
+;; evil-indent-textobject ------------------------------------------------------
+(lambda-package-ensure-install 'evil-indent-textobject)
+(require 'evil-indent-textobject)
 
 
 (provide 'lambda-evil)

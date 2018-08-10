@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-10 01:00:52 Guanghui Xu>
+;; Time-stamp: <2018-08-10 17:41:14 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -1149,6 +1149,11 @@ DISPLAY-FN: use this function to display."
 (setq enable-local-eval t)
 (setq enable-local-variables :all)
 (setq enable-remote-dir-locals t)
+
+;; hungry-delete ---------------------------------------------------------------
+(lambda-package-ensure-install 'hungry-delete)
+(global-hungry-delete-mode 1)
+(diminish 'hungry-delete-mode)
 
 (provide 'lambda-core)
 

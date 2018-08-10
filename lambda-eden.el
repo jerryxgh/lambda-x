@@ -7,7 +7,6 @@
 (require 'lambda-core)
 
 ;;; TODO
-;; evil-nerd-commenter
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
@@ -114,8 +113,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'bind-key)
 (lambda-package-ensure-install 'clean-aindent-mode)
 (lambda-package-ensure-install 'eval-sexp-fu)
-(lambda-package-ensure-install 'evil-args)
-(lambda-package-ensure-install 'evil-nerd-commenter)
 (lambda-package-ensure-install 'expand-region)
 (lambda-package-ensure-install 'git-timemachine)
 (lambda-package-ensure-install 'gitattributes-mode)
@@ -140,9 +137,6 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'highlight-numbers)
 (lambda-package-ensure-install 'highlight-parentheses)
 (lambda-package-ensure-install 'hl-anything)
-(lambda-package-ensure-install 'hungry-delete)
-(global-hungry-delete-mode 1)
-(diminish 'hungry-delete-mode)
 (lambda-package-ensure-install 'ibuffer-projectile)
 (lambda-package-ensure-install 'indent-guide)
 ;;(lambda-package-ensure-install 'info+)
