@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-10 17:41:14 Guanghui Xu>
+;; Time-stamp: <2018-08-10 17:55:13 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -171,6 +171,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; init PATH in mac, this should just after packages settings ==================
 (when (eq system-type 'darwin)
   ;; open file in Find will reuse current frame instead creating a new one
+
+  (menu-bar-mode -1)
   (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
@@ -191,9 +193,6 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; not properly auto-load, and is already disabled anyway
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
-(unless (eq system-type 'darwin)
-  (menu-bar-mode -1))
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)

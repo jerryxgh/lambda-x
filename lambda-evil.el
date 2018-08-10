@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2018-08-10 17:22:25 Guanghui Xu>
+;; Time-stamp: <2018-08-10 17:59:08 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -39,6 +39,9 @@
 
 (define-key evil-normal-state-map (kbd "M-.") ())
 (define-key evil-normal-state-map (kbd "C-t") ())
+(when (eq system-type 'darwin)
+  (define-key evil-insert-state-map (kbd "C-v") 'yank))
+
 
 ;; Prevent the visual selection overriding my system clipboard?
 
