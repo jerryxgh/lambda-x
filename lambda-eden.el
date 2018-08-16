@@ -239,6 +239,8 @@ Note the weekly scope of the command's precision.")
 (require 'graphql-mode)
 (setq graphql-indent-level 4)
 
+(lambda-package-ensure-install 'yaml-mode)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

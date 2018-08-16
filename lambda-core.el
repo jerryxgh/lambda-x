@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-10 17:55:13 Guanghui Xu>
+;; Time-stamp: <2018-08-17 00:01:12 胡丹丹>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -995,7 +995,7 @@ the search is performed ."
 (lambda-package-ensure-install 'auto-complete)
 ;;(lambda-package-ensure-install 'ac-dabbrev)
 (global-auto-complete-mode 1)
-(diminish 'auto-complete-mode)
+;; (diminish 'auto-complete-mode)
 (require 'auto-complete-config)
 (ac-config-default)
 (add-to-list 'ac-dictionary-directories
@@ -1005,7 +1005,7 @@ the search is performed ."
 
 (set-default 'ac-sources
              '(
-               ac-source-dabbrev
+               ;; ac-source-dabbrev
                ac-source-words-in-buffer
                ;; ac-source-words-in-all-buffer
                ac-source-filename
@@ -1014,17 +1014,11 @@ the search is performed ."
                ac-source-yasnippet
                ;; ac-source-words-in-same-mode-buffers
                ))
-(add-hook 'prog-mode-hook
-          #'(lambda ()
-              (setq ac-sources
-                    (append '(ac-source-imenu
-                              ac-source-yasnippet
-                              ac-source-words-in-same-mode-buffers) ac-sources))))
 
-(setq-default ac-expand-on-auto-complete nil)
+;; (setq-default ac-expand-on-auto-complete nil)
 ;; (setq-default ac-auto-start nil)
 ;; To get pop-ups with docs even if a word is uniquely completed
-(setq-default ac-dwim nil)
+;; (setq-default ac-dwim nil)
 (setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
 (add-to-list 'completion-styles 'initials t)
 ;; Stop completion-at-point from popping up completion buffers so eagerly
