@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-17 22:43:07 Guanghui Xu>
+;; Time-stamp: <2018-08-19 22:40:19 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -729,7 +729,9 @@ the search is performed ."
 ;;; easypg
 (require 'epa)
 (require 'epa-file)
+(epa-file-enable)
 (setq epa-file-encrypt-to nil
+      epa-file-select-keys 'silent
       epa-file-cache-passphrase-for-symmetric-encryption t
       epa-file-inhibit-auto-save t)
 (setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
@@ -1009,6 +1011,18 @@ the search is performed ."
 (lambda-package-ensure-install 'hungry-delete)
 (global-hungry-delete-mode 1)
 (diminish 'hungry-delete-mode)
+
+(defun lambda-put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
 
 (provide 'lambda-core)
 
