@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2017-12-10 22:10:55 Guanghui Xu>
+;; Time-stamp: <2018-08-19 17:40:05 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -9,8 +9,8 @@
 
 (setq user-full-name "Guanghui Xu"
       user-mail-address "gh_xu@qq.com"
-      source-directory "/home/xgh/sources/emacs-24.5"
-      org-directory "/Users/xgh/repository/docs"
+      ;; source-directory "/home/xgh/sources/emacs-24.5"
+      org-directory "/Users/hudandan/Documents/gtd"
       org-agenda-files (list(concat org-directory "/gtd.org")
                             (concat org-directory "/capture.org"))
 
