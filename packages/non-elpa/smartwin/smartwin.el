@@ -461,7 +461,7 @@ According to `major-mode' that yasnippet is not enabled and the
          (let ((eshell-buffer-maximum-lines 0))
            (eshell-truncate-buffer)))
         ((derived-mode-p 'comint-mode)
-         (let ((comint-buffer-maximum-size 0))
+         (let ((comint-buffer-maximum-size 1))
            (comint-truncate-buffer)))
         (t (command-execute (smartwin--get-C-l-command)))))
 
