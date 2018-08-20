@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-19 22:40:19 Guanghui Xu>
+;; Time-stamp: <2018-08-20 11:40:52 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -770,7 +770,7 @@ the search is performed ."
 (diminish 'undo-tree-mode)
 ;;(add-to-list 'warning-suppress-types '(undo discard-info))
 
-;;(require 'temp-buffer-browse) ------------------------------------------------
+;;temp-buffer-browse -----------------------------------------------------------
 (lambda-package-ensure-install 'temp-buffer-browse)
 (require 'temp-buffer-browse)
 (temp-buffer-browse-mode 1)
