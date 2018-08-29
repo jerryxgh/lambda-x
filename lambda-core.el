@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-29 15:44:03 Guanghui Xu>
+;; Time-stamp: <2018-08-29 18:29:53 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -895,6 +895,7 @@ the search is performed ."
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
+;; (setq magit-completing-read-function 'magit-ido-completing-read)
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq-default helm-completing-read-handlers-alist
               '((describe-function . ido)
