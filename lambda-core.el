@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-20 11:40:52 Guanghui Xu>
+;; Time-stamp: <2018-08-29 15:44:03 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -822,9 +822,6 @@ the search is performed ."
 
 ;;; ido --- interactively do things---------------------------------------------
 ;; ffap - find file at point is not userful when ido-mode is on
-(lambda-package-ensure-install 'ido-completing-read+)
-(require 'ido-completing-read+)
-
 (lambda-package-ensure-install 'flx-ido)
 (require 'flx-ido)
 
@@ -861,11 +858,14 @@ the search is performed ."
 (put 'dired-do-copy   'ido nil) ; use ido there
 (put 'dired-do-rename 'ido nil) ; ^
 ;; (put 'dired-do-rename 'ido 'find-file)
-(ido-mode t)
-(ido-everywhere t)
-(ido-ubiquitous-mode 1)
+(ido-mode 1)
+(ido-everywhere 1)
 ;;; smarter fuzzy matching for ido
 (flx-ido-mode 1)
+
+(lambda-package-ensure-install 'ido-completing-read+)
+(require 'ido-completing-read+)
+(ido-ubiquitous-mode 1)
 
 ;;; smex, remember recently and most frequently used commands ------------------
 (lambda-package-ensure-install 'smex)
@@ -889,6 +889,7 @@ the search is performed ."
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
 (require 'helm-config)
+(helm-mode 1)
 
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
 (add-hook 'eshell-mode-hook
