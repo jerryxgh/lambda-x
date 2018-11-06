@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-11-06 19:16:19 Guanghui Xu>
+;; Time-stamp: <2018-11-06 21:09:35 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -221,6 +221,10 @@ Which means get all used packages, this is mainly for getting unused packages."
       '("[" invocation-name " lambda-x] - "
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name)) "%b"))))
+
+
+(when (and(eq system-type 'darwin) (= emacs-major-version 26))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 ;; theme -----------------------------------------------------------------------
 ;; (print (font-family-list))

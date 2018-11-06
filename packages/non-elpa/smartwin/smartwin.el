@@ -82,7 +82,10 @@ But smart window can be higher if run `delete-other-window' when is is already
     "*scratch*"
     ;; shell and eshell buffers
     ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
+    "*terminal*"
+    "*ansi-term*"
     compilation-mode
+    term-mode
     )
   "Configuration of buffers to be shown in smart window."
   :type '(repeat
