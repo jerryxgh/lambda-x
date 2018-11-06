@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-08-29 18:29:53 Guanghui Xu>
+;; Time-stamp: <2018-11-06 19:16:19 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -576,6 +576,9 @@ POSITION: just inhibit warning.")
       projectile-known-projects-file (expand-file-name
                                       "projectile-bookmarks.eld"
                                       lambda-auto-save-dir))
+
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
 (projectile-global-mode t)
 ;;(diminish 'projectile-mode)
 (defun projectile-ack (regexp &optional arg)

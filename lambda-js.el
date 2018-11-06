@@ -17,6 +17,14 @@
 (lambda-package-ensure-install 'rjsx-mode)
 (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
+;; add-node-modules-path--------------------------------------------------------
+;; suport eslint use project local eslint
+(lambda-package-ensure-install 'add-node-modules-path)
+(eval-after-load 'rjsx-mode
+  '(add-hook 'rjsx-mode-hook (lambda ()
+                               (add-node-modules-path)
+                               (tern-mode t))))
+
 ;; tern: a stand-alone code-analysis engine for JavaScript ---------------------
 ;; Here we use tern and auto-complete to complete JavaScript
 (lambda-package-ensure-install 'tern)
