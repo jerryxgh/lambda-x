@@ -76,6 +76,7 @@
                 haskell-mode
                 html-mode
                 inferior-emacs-lisp-mode
+                js2-mode
                 js3-mode
                 json-mode
                 less-css-mode
@@ -90,6 +91,7 @@
                 objc-mode
                 octave-mode
                 org-mode
+                rjsx-mode
                 sass-mode
                 sh-mode
                 shell-mode
