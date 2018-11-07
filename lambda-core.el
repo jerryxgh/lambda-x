@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2018-11-06 21:09:35 Guanghui Xu>
+;; Time-stamp: <2018-11-07 17:39:52 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -716,12 +716,6 @@ the search is performed ."
 (with-region-or-buffer indent-region)
 (with-region-or-buffer untabify)
 
-;; diff-hl ---------------------------------------------------------------------
-(lambda-package-ensure-install 'diff-hl)
-(global-diff-hl-mode +1)
-(add-hook 'dired-mode-hook #'(lambda ()
-                               (diff-hl-dired-mode 1)))
-
 ;;; ibuffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 ;;(setq ibuffer-never-show-predicates (list "^ ?\\*.*\\*$"))
@@ -1001,6 +995,14 @@ the search is performed ."
 (setq yas-use-menu 'abbreviate)
 (yas-global-mode 1)
 (diminish 'yas-minor-mode)
+
+;; diff-hl ---------------------------------------------------------------------
+(lambda-package-ensure-install 'diff-hl)
+(global-diff-hl-mode +1)
+(add-hook 'dired-mode-hook #'(lambda ()
+                               (diff-hl-dired-mode 1)))
+
+(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
 ;; unbound ---------------------------------------------------------------------
 ;;(lambda-package-ensure-install 'unbound)
