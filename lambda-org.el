@@ -1,7 +1,7 @@
-;;; lambda-blog.el --- org
-;; Time-stamp: <2017-12-10 20:09:47 xgh>
+;;; lambda-org --- org
+;; Time-stamp: <2019-04-27 14:02:36 Guanghui Xu>
 ;;; Commentary:
-;; blog about settings
+;; org about settings
 
 ;;; Code:
 
@@ -22,6 +22,12 @@
       org-src-tab-acts-natively t)
 
 (global-set-key (kbd "C-c c") 'org-capture)
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline "" "Tasks")
+                               "* TODO %i%?")
+                              ("T" "Tickler" entry
+                               (file+headline "" "Tickler")
+                               "* %i%? \n %U")))
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -31,6 +37,13 @@
 (lambda-package-ensure-install 'markdown-mode)
 (lambda-package-ensure-install 'markdown-preview-mode)
 (lambda-package-ensure-install 'markdownfmt)
+(add-hook 'markdown-mode-hook
+          #'(lambda()
+              (setq ac-sources
+                    (append '(ac-source-imenu
+                              ac-source-yasnippet
+                              ac-source-words-in-same-mode-buffers)
+                            ac-sources))))
 
 ;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)
@@ -75,6 +88,6 @@ rainbow-delimiters-mode temporarily when using htmlize."
 ;; ox-confluence installed manually --------------------------------------------
 (require 'ox-confluence)
 
-(provide 'lambda-blog)
+(provide 'lambda-org)
 
-;;; lambda-blog.el ends here
+;;; lambda-org ends here

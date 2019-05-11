@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2018-08-17 22:48:28 Guanghui Xu>
+;; Time-stamp: <2019-04-27 13:44:55 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -31,7 +31,7 @@
     lambda-auto-complete
     lambda-mac
     lambda-cc
-    lambda-blog
+    lambda-org
     lambda-web
     lambda-emacs-lisp
     lambda-scheme

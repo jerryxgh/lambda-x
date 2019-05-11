@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2018-08-19 17:40:05 Guanghui Xu>
+;; Time-stamp: <2019-05-11 10:57:24 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -11,10 +11,16 @@
       user-mail-address "gh_xu@qq.com"
       ;; source-directory "/home/xgh/sources/emacs-24.5"
       org-directory "/Users/hudandan/Documents/gtd"
-      org-agenda-files (list(concat org-directory "/gtd.org")
-                            (concat org-directory "/capture.org"))
+      org-agenda-files (list
+                        ;; (concat org-directory "/inbox.org")
+                        (concat org-directory "/gtd.org")
+                        ;; (concat org-directory "/someday.org")
+                        ;; (concat org-directory "/tickler.org")
+                        (concat org-directory "/capture.org"))
 
       org-default-notes-file (concat org-directory "/capture.org")
+
+      ;; org-refile-targets '(("/Users/hudandan/Documents/gtd/gtd.org" :maxlevel . 3))
       )
 
 (require 'smartwin)
