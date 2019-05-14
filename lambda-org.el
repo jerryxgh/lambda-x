@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2019-04-27 14:02:36 Guanghui Xu>
+;; Time-stamp: <2019-05-11 11:50:18 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -22,12 +22,16 @@
       org-src-tab-acts-natively t)
 
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "" "Tasks")
-                               "* TODO %i%?")
-                              ("T" "Tickler" entry
-                               (file+headline "" "Tickler")
-                               "* %i%? \n %U")))
+;; (setq org-capture-templates '(("t" "Todo [inbox]" entry
+;;                                (file+headline "" "Tasks")
+;;                                "* TODO %i%?")
+;;                               ("T" "Tickler" entry
+;;                                (file+headline "" "Tickler")
+;;                                "* %i%? \n %U")))
+;;  This is achieved by adding special markers ‘!’ (for a timestamp) or
+;; ‘@’ (for a note with timestamp) in parentheses after each keyword
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@/!)")))
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
