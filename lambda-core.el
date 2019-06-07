@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2019-05-14 23:34:40 Guanghui Xu>
+;; Time-stamp: <2019-06-07 23:19:41 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -786,11 +786,11 @@ the search is performed ."
 
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
 
-;; (when (and (or
-;;             (eq system-type 'gnu/linux)
-;;             (eq system-type 'darwin))
-;;            (file-exists-p "/bin/bash"))
-;;   (setq explicit-shell-file-name "/bin/bash"))
+(when (and (or
+            (eq system-type 'gnu/linux)
+            (eq system-type 'darwin))
+           (file-exists-p "/bin/bash"))
+  (setq explicit-shell-file-name "/bin/bash"))
 
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
