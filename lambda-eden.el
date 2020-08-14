@@ -131,7 +131,7 @@ Note the weekly scope of the command's precision.")
 (lambda-package-ensure-install 'helm-gitignore)
 (lambda-package-ensure-install 'helm-mode-manager)
 (lambda-package-ensure-install 'helm-orgcard)
-(lambda-package-ensure-install 'helm-swoop)
+;;(lambda-package-ensure-install 'helm-swoop)
 (lambda-package-ensure-install 'highlight)
 (lambda-package-ensure-install 'highlight-indentation)
 (lambda-package-ensure-install 'highlight-numbers)
@@ -211,8 +211,6 @@ Note the weekly scope of the command's precision.")
 ;; list-load-path-shadows
 
 ;;; svn - psvn =================================================================
-(lambda-package-ensure-install 'psvn)
-(setq svn-status-hide-unmodified t)
 (lambda-package-ensure-install 'magit-svn)
 (add-hook 'magit-mode-hook 'magit-svn-mode)
 

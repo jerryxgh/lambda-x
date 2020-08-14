@@ -737,12 +737,6 @@ the search is performed ."
       epa-file-inhibit-auto-save t)
 (setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
 
-;;; cal-china-x ----------------------------------------------------------------
-(require 'cal-china-x)
-(setq calendar-mark-holidays-flag t)
-(setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
-(setq calendar-holidays cal-china-x-important-holidays)
-
 ;; flycheck - much better than flymake -----------------------------------------
 (lambda-package-ensure-install 'flycheck)
 (require 'flycheck)
@@ -860,7 +854,7 @@ the search is performed ."
 (put 'dired-do-rename 'ido nil) ; ^
 ;; (put 'dired-do-rename 'ido 'find-file)
 (ido-mode 1)
-(ido-everywhere 1)
+;;(ido-everywhere 1)
 ;;; smarter fuzzy matching for ido
 (flx-ido-mode 1)
 
@@ -940,9 +934,6 @@ the search is performed ."
     (setq magit-git-executable git-executable-windows)
     (setenv "PATH"
             (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
-
-;; show line color in magit-log
-(add-to-list 'magit-log-arguments "--color")
 
 ;; (setq magit-last-seen-setup-instructions "1.4.0")
 ;; magit-ediff-restore
