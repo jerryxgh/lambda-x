@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2019-06-07 23:19:41 Guanghui Xu>
+;; Time-stamp: <2020-08-22 12:34:59 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -854,7 +854,7 @@ the search is performed ."
 (put 'dired-do-rename 'ido nil) ; ^
 ;; (put 'dired-do-rename 'ido 'find-file)
 (ido-mode 1)
-;;(ido-everywhere 1)
+(ido-everywhere 1)
 ;;; smarter fuzzy matching for ido
 (flx-ido-mode 1)
 
@@ -884,7 +884,7 @@ the search is performed ."
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
 (require 'helm-config)
-(helm-mode 1)
+;; (helm-mode 1)
 
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
 (add-hook 'eshell-mode-hook
