@@ -56,10 +56,7 @@ Note the weekly scope of the command's precision.")
   "Insert current date and time in iso 8601 format into current buffer."
   (interactive)
   (insert (concat
-           (format-time-string "%Y-%m-%dT%T")
-           (funcall (lambda (x)
-                      (concat (substring x 0 3) ":" (substring x 3 5)))
-                    (format-time-string "%z")))))
+           (format-time-string "%Y-%m-%d %T"))))
 
 (defun insert-current-time ()
   "Insert the current time (1-week scope) into the current buffer."
