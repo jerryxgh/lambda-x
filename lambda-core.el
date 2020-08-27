@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2020-08-22 12:37:58 Guanghui Xu>
+;; Time-stamp: <2020-08-27 11:56:38 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -822,6 +822,7 @@ the search is performed ."
 
 (require 'ido)
 (setq ido-enable-flex-matching t
+      ido-use-faces nil
       ido-auto-merge-work-directories-length -1
       ido-use-virtual-buffers t
       ido-ignore-buffers '("\\` "
