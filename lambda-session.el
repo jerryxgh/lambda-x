@@ -113,7 +113,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 (desktop-save-mode 1)
 
 ;;加快emacs的启动速度
-(if (eq system-type 'gnu/linux)
+(if (or (eq system-type 'darwin) (eq system-type 'gnu/linux))
     (server-start))
 
 (provide 'lambda-session)
