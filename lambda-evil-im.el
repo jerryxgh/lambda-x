@@ -28,7 +28,7 @@
 ;; switch to english input method when switching to normal mode
 ;; and switch back when entering insert/replace modes
 ;; need external script support, currently mac-only
-(defvar lambda-evil-im-select-command "~/local/bin/im-select"
+(defvar lambda-evil-im-select-command "~/local/bin/issw"
   "The im-select command, from https://github.com/ybian/smartim.")
 
 (defvar lambda-evil-im-default-im "com.apple.keylayout.ABC"

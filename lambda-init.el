@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2019-04-27 13:44:55 Guanghui Xu>
+;; Time-stamp: <2020-09-14 20:56:23 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -49,7 +49,7 @@
     ;; lambda-octave
     ;; lambda-scala
     ;; lambda-haskell
-    ;; lambda-evil-im
+    lambda-evil-im
 
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.
