@@ -16,7 +16,7 @@
 
 ;;; Commentary:
 
-;;
+;; 编译这个工具，用来进行输入法切换https://github.com/vovkasm/input-source-switcher。
 
 ;; Put this file into your load-path and the following into your ~/.emacs:
 ;;   (require 'lambda-evil-im)
