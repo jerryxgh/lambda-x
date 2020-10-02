@@ -65,6 +65,21 @@ COMMAND is the commnd to be run."
         (call-process-shell-command (concat lambda-evil-im-select-command
                                             lambda-evil-im-default-im)))))
 
+;; when eamcs frame get focus again
+(if (or (> emacs-major-version 24)
+        (and (= emacs-major-version 24)
+             (>= emacs-minor-version 4)))
+
+    (add-function :after after-focus-change-function
+                  '(lambda ()
+                     (if (frame-focus-state)
+                         (progn
+                           (if (eq 'normal evil-state)
+                               (lambda-evil-im-use-default))
+                           (if (eq 'insert evil-state)
+                               (lambda-evil-im-use-prev)))))))
+
+
 (add-hook 'evil-normal-state-entry-hook 'lambda-evil-im-use-default)
 (add-hook 'evil-insert-state-entry-hook 'lambda-evil-im-use-prev )
 (add-hook 'evil-insert-state-exit-hook 'lambda-evil-im-remember)

@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2018-08-10 18:04:45 Guanghui Xu>
+;; Time-stamp: <2020-10-02 11:28:56 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -98,7 +98,7 @@
 ;; (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
 
 (require 'evil-tab-minor-mode)
-;; (global-evil-tab-mode t)
+(global-evil-tab-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)
