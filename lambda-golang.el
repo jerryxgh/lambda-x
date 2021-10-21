@@ -41,11 +41,18 @@
 
 ;;; syntax chech for golang
 (require 'lsp-ui)
+;; https://github.com/golang/tools/tree/master/gopls
 (require 'lsp-mode)
-
-(lsp-ui-sideline-mode t)
+(setq lsp-completion-provider :none
+      lsp-ui-doc-enable nil
+      lsp-ui-imenu-enable nil
+      lsp-ui-peek-enable nil
+      lsp-ui-sideline-enable t
+      lsp-ui-sideline-show-hover t
+      )
 
 (add-hook 'go-mode-hook #'lsp-deferred)
+
 (defun lsp-go-install-save-hooks ()
   "Set up before-save hooks to format buffer and add/delete imports.
 Make sure you don't have other gofmt/goimports hooks enabled."
