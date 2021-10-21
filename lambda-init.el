@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2021-10-21 16:21:13 Guanghui Xu>
+;; Time-stamp: <2021-10-21 16:54:07 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -45,7 +45,7 @@
     lambda-eden
     lambda-individual
     lambda-csharp
-    lambda-go
+    lambda-golang
 
     ;; lambda-octave
     ;; lambda-scala

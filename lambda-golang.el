@@ -1,4 +1,4 @@
-;;; lambda-go.el --- for go programming -*- lexical-binding: t -*-
+;;; lambda-golang.el --- for go programming -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2021 Guanghui Xu
 ;;
@@ -6,7 +6,7 @@
 ;; Maintainer: Guanghui Xu gh_xu@qq.com
 ;; Created: 2021-10-21
 ;; Version: 0.1
-;; Keywords: go
+;; Keywords: go,golang
 ;; Homepage: not distributed yet
 ;; Package-Version: 0.1
 ;; Package-Requires: go-mode
@@ -37,8 +37,9 @@
 (lambda-package-ensure-install 'lsp-mode)
 
 (require 'go-mode)
-(require 'lsp-mode)
 
+;;; syntax chech for golang
+(require 'lsp-mode)
 (add-hook 'go-mode-hook #'lsp-deferred)
 (defun lsp-go-install-save-hooks ()
   "Set up before-save hooks to format buffer and add/delete imports.
@@ -47,6 +48,15 @@ Make sure you don't have other gofmt/goimports hooks enabled."
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-(provide 'lambda-go)
+;;; auto complete for golang
+;; https://github.com/mdempsky/gocode
+(require 'go-autocomplete)
+(ac-config-default)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
+
+(provide 'lambda-golang)
 
 ;;; lambda-go.el ends here
