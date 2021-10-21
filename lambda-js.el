@@ -41,6 +41,10 @@
 (lambda-package-ensure-install 'nodejs-repl)
 (require 'nodejs-repl)
 
+;; yarn-mode
+(lambda-package-ensure-install 'yarn-mode)
+(require 'yarn-mode)
+
 (provide 'lambda-js)
 
 ;;; lambda-js.el ends here
