@@ -52,6 +52,8 @@
       )
 
 (add-hook 'go-mode-hook #'lsp-deferred)
+(add-hook 'go-mode-hook #'(lambda ()
+                            (setq tab-width 4)))
 
 (defun lsp-go-install-save-hooks ()
   "Set up before-save hooks to format buffer and add/delete imports.
