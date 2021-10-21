@@ -35,11 +35,16 @@
 ;; https://github.com/dominikh/go-mode.el
 (lambda-package-ensure-install 'go-mode)
 (lambda-package-ensure-install 'lsp-mode)
+(lambda-package-ensure-install 'lsp-ui)
 
 (require 'go-mode)
 
 ;;; syntax chech for golang
+(require 'lsp-ui)
 (require 'lsp-mode)
+
+(lsp-ui-sideline-mode t)
+
 (add-hook 'go-mode-hook #'lsp-deferred)
 (defun lsp-go-install-save-hooks ()
   "Set up before-save hooks to format buffer and add/delete imports.

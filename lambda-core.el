@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2020-08-27 11:56:38 Guanghui Xu>
+;; Time-stamp: <2021-10-21 17:27:02 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -547,26 +547,6 @@ POSITION: just inhibit warning.")
 (setq bookmark-default-file (expand-file-name "bookmarks"
                                               lambda-auto-save-dir))
 
-;; ack A better grep for programmers -------------------------------------------
-(lambda-package-ensure-install 'ack)
-(lambda-package-ensure-install 'wgrep-ack)
-(require 'ack)
-(require 'wgrep-ack)
-(setq ack-command (concat (file-name-nondirectory
-                           (or (executable-find "ag")
-                               (executable-find "ack")
-                               (executable-find "ack-grep")
-                               "ack")) " "))
-;; C-c C-e : Apply the changes to file buffers.
-;; C-c C-u : All changes are unmarked and ignored.
-;; C-c C-d : Mark as delete to current line (including newline).
-;; C-c C-r : Remove the changes in the region (these changes are not
-;;           applied to the files. Of course, the remaining
-;;           changes can still be applied to the files.)
-;; C-c C-p : Toggle read-only area.
-;; C-c C-k : Discard all changes and exit.
-;; C-x C-q : Exit wgrep mode.
-
 ;; projectile is a project management mode -------------------------------------
 (lambda-package-ensure-install 'projectile)
 (require 'projectile)
@@ -583,25 +563,8 @@ POSITION: just inhibit warning.")
 
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
-(projectile-global-mode t)
+(projectile-mode t)
 ;;(diminish 'projectile-mode)
-(defun projectile-ack (regexp &optional arg)
-  "Run an ack search with REGEXP in the project.
-
-With a prefix argument ARG prompts you for a directory on which
-the search is performed ."
-  (interactive
-   (list (read-from-minibuffer
-          (projectile-prepend-project-name "Ack search for: ")
-          ;;(projectile-symbol-at-point)
-          )
-         current-prefix-arg))
-  (if (require 'ack nil 'noerror)
-      (let* ((root (if arg
-                       (projectile-complete-dir)
-                     (projectile-project-root))))
-        (ack (concat ack-command regexp) root))
-    (error "Ack not available")))
 
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
