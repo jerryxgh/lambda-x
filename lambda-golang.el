@@ -65,7 +65,6 @@ Make sure you don't have other gofmt/goimports hooks enabled."
 ;;; auto complete for golang
 ;; https://github.com/mdempsky/gocode
 (require 'go-autocomplete)
-(ac-config-default)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)

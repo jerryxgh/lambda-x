@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-10-29 20:42:49 Guanghui Xu>
+;; Time-stamp: <2021-10-29 22:36:20 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -722,6 +722,7 @@ POSITION: just inhibit warning.")
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory))
       undo-tree-auto-save-history t
+      undo-tree-enable-undo-in-region nil
       ;; undo-tree-visualizer-timestamps t
       )
 
