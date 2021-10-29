@@ -1,6 +1,7 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-10-21 17:27:02 Guanghui Xu>
+<<<<<<< Updated upstream
+;; Time-stamp: <2021-10-29 20:42:17 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -88,6 +89,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; do not auto load packages
 (setq package-enable-at-startup nil)
 ;; Load packages explictly
+(setq warning-suppress-log-types '((package reinitialization)))
 (package-initialize)
 
 (defvar lambda-package-installed-packages nil
@@ -953,9 +955,13 @@ POSITION: just inhibit warning.")
 
 ;; diff-hl ---------------------------------------------------------------------
 (lambda-package-ensure-install 'diff-hl)
-(global-diff-hl-mode +1)
-(add-hook 'dired-mode-hook #'(lambda ()
-                               (diff-hl-dired-mode 1)))
+(require 'diff-hl)
+(require 'diff-hl-dired)
+(require 'diff-hl-flydiff)
+
+(global-diff-hl-mode 1)
+(diff-hl-flydiff-mode 1)
+(add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
 
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
