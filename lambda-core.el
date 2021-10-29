@@ -1,7 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-<<<<<<< Updated upstream
-;; Time-stamp: <2021-10-29 20:42:17 Guanghui Xu>
+;; Time-stamp: <2021-10-29 20:42:49 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
