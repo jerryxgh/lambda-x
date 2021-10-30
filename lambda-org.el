@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2019-05-11 11:50:18 Guanghui Xu>
+;; Time-stamp: <2021-10-31 01:13:15 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -41,13 +41,13 @@
 (lambda-package-ensure-install 'markdown-mode)
 (lambda-package-ensure-install 'markdown-preview-mode)
 (lambda-package-ensure-install 'markdownfmt)
-(add-hook 'markdown-mode-hook
-          #'(lambda()
-              (setq ac-sources
-                    (append '(ac-source-imenu
-                              ac-source-yasnippet
-                              ac-source-words-in-same-mode-buffers)
-                            ac-sources))))
+;; (add-hook 'markdown-mode-hook
+;;           #'(lambda()
+;;               (setq ac-sources
+;;                     (append '(ac-source-imenu
+;;                               ac-source-yasnippet
+;;                               ac-source-words-in-same-mode-buffers)
+;;                             ac-sources))))
 
 ;; htmlize --------------------------------------------------------------------
 (lambda-package-ensure-install 'htmlize)

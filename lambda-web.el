@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2019-05-26 16:46:24 Guanghui Xu>
+;; Time-stamp: <2021-10-31 01:13:48 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -43,17 +43,15 @@ and set yas--extra-mode to use html snippets."
                             (fci-mode -1)
                             (make-local-variable 'yas-extra-modes)
                             (add-to-list 'yas-extra-modes 'html-mode)
-                            (setq ac-sources
-                                  (append '(ac-source-imenu
-                                            ac-source-yasnippet
-                                            ac-source-words-in-same-mode-buffers) ac-sources))))
+                            ;; (setq ac-sources
+                            ;;       (append '(ac-source-imenu
+                            ;;                 ac-source-yasnippet
+                            ;;                 ac-source-words-in-same-mode-buffers)
+                            ;;               ac-sources))
+                            ))
 
 ;; Work with auto-complete
-(setq ac-modes (append ac-modes '(web-mode)))
-
-
-;; Work with yasnippet
-
+;; (setq ac-modes (append ac-modes '(web-mode)))
 
 ;; less-css-mode --------------------------------------------------------------
 (lambda-package-ensure-install 'less-css-mode)

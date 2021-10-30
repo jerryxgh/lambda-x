@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-10-29 22:36:20 Guanghui Xu>
+;; Time-stamp: <2021-10-31 01:05:38 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -12,22 +12,23 @@
 ;; (custom-set-variables
 ;;  '(initial-frame-alist (quote ((fullscreen . fullboth)))))
 
-(defun lambda-maxmize-frame ()
-  "Make Emacs frame maxmized."
-  (interactive)
-  (cond ((and (eq system-type 'windows-nt)
-              (fboundp 'w32-send-sys-command))
-         (w32-send-sys-command 61488))
-        ((eq system-type 'gnu/linux)
-         (set-frame-parameter nil 'fullscreen 'maximized))
-        (t
-         (set-frame-parameter nil 'fullscreen 'maximized))))
+;; (defun lambda-maxmize-frame ()
+;;   "Make Emacs frame maxmized."
+;;   (interactive)
+;;   (cond ((and (eq system-type 'windows-nt)
+;;               (fboundp 'w32-send-sys-command))
+;;          (w32-send-sys-command 61488))
+;;         ((eq system-type 'gnu/linux)
+;;          (set-frame-parameter nil 'fullscreen 'maximized))
+;;         (t
+;;          (set-frame-parameter nil 'fullscreen 'maximized))))
 
-(add-hook 'after-init-hook 'lambda-maxmize-frame)
+;; (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
 (defconst current-user
   (getenv
-   (if (equal system-type 'windows-nt) "USERNAME" "USER")))
+   (if (equal system-type 'windows-nt) "USERNAME" "USER"))
+  "Current user name.")
 
 (defconst lambda-x-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
@@ -71,7 +72,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
                                                        lambda-x-direcotry))
 
 ;; suppressing ad-handle-definition Warnings in Emacs
-(setq ad-redefinition-action 'accept)
+;; (setq ad-redefinition-action 'accept)
 
 ;; packages about settings =====================================================
 (require 'package)
@@ -88,8 +89,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; do not auto load packages
 (setq package-enable-at-startup nil)
 ;; Load packages explictly
-(setq warning-suppress-log-types '((package reinitialization)))
 (package-initialize)
+(setq warning-suppress-log-types '((package reinitialization)))
 
 (defvar lambda-package-installed-packages nil
   "Pakcages installed through `lambda-package-ensure-install'.
@@ -103,10 +104,7 @@ The difference is that if PACKAGE is already installed(checked through
  `package-installed-p'), it will not be installed again."
   (add-to-list 'lambda-package-installed-packages package)
   (unless (or (member package package-activated-list)
-              (package-installed-p package)
-              ;;(featurep package)
-              ;;(functionp package)
-              )
+              (package-installed-p package))
     (message "Installing %s" (symbol-name package))
     (when (not package-archive-contents)
       (package-refresh-contents))
@@ -157,15 +155,6 @@ Which means get all used packages, this is mainly for getting unused packages."
      (-filter #'(lambda (p)
                   (not (memq p used-packages)))
               package-activated-list))))
-
-(lambda-package-ensure-install 'epl)
-(require 'epl)
-
-(defun lambda-package-update-packages ()
-  "Update all packages installed by elpa."
-  (interactive)
-  (epl-upgrade)
-  (message "Update finished. Restart Emacs to complete the process."))
 
 ;; packages about settings end here ============================================
 
@@ -228,8 +217,6 @@ Which means get all used packages, this is mainly for getting unused packages."
   (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 ;; theme -----------------------------------------------------------------------
-;; (print (font-family-list))
-
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
   (load-theme theme t)
@@ -257,18 +244,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'spacemacs-theme)
 ;; custom faces for spacemacs theme
 
-(custom-set-faces
- ;; for auto-complete
- '(ac-gtags-candidate-face ((t (:inherit ac-candidate-face :bforeground "deep sky blue"))))
- '(ac-gtags-selection-face ((t (:inherit ac-selection-face :background "deep sky blue"))))
- ;; for woman
- '(woman-bold ((t (:inherit bold :foreground "#4f97d7"))))
- '(woman-italic ((t (:inherit italic :foreground "#c56ec3" :underline nil))))
- )
 (lambda-load-theme 'spacemacs-dark)
-
-;; (lambda-package-ensure-install 'zenburn-theme)
-;; (lambda-load-theme 'zenburn)
 
 
 (lambda-package-ensure-install 'powerline)
@@ -285,45 +261,16 @@ POSITION: just inhibit warning.")
 (window-numbering-mode 1)
 
 (require 'spaceline-config)
-;; see info: fonts
-;; (set-face-font 'mode-line "-MS -Microsoft Yahei UI-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
-;; (set-face-font 'mode-line-inactive "-MS -Consolas-bold-normal-normal-*-*-*-*-*-*-0-iso10646-1")
-;; (set-fontset-font "fontset-standard"
-;;                   'unicode
-;;                   (font-spec :family "Microsoft Yahei" :weight 'bold :size 10))
-;; (set-face-font 'mode-line "fontset-standard")
 
 (cond ((eq system-type 'windows-nt)
        (set-face-font 'mode-line "Microsoft Yahei-9:bold")
        (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
       )
-;; (set-face-font 'mode-line "Consolas-11:bold")
-;; (set-face-font 'mode-line-inactive "Consolas-11:bold")
 
 (setq spaceline-window-numbers-unicode t
       spaceline-workspace-numbers-unicode t
       powerline-default-separator nil
-      ;; powerline-height 24 ;; make active and inactive modeline equal height
       spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-;; ;; fix the problem: ❻ is different from ➏
-;; (defun spaceline--unicode-number (str)
-;;   "Return a nice unicode representation of a single-digit number STR."
-;;   (cond
-;;    ((string= "1" str) "➊")
-;;    ((string= "2" str) "➋")
-;;    ((string= "3" str) "➌")
-;;    ((string= "4" str) "➍")
-;;    ((string= "5" str) "➎")
-;;    ((string= "6" str) "➏")
-;;    ((string= "7" str) "➐")
-;;    ((string= "8" str) "➑")
-;;    ((string= "9" str) "➒")
-;;    ((string= "0" str) "➓")))
-
-;;(lambda-package-ensure-install 'info+)
-;;(require 'info+)
-;; (spaceline-info-mode 1)
-;; (spaceline-spacemacs-theme)
 (spaceline-spacemacs-theme '(buffer-encoding process))
 (redisplay)
 
@@ -388,20 +335,6 @@ POSITION: just inhibit warning.")
 (if (file-exists-p abbrev-file-name)
     (quietly-read-abbrev-file))
 
-;;; wirte a plugin to highlight TODO FIXME BUG KLUDGE on right fringe
-(lambda-package-ensure-install 'fic-mode)
-(defun annotate-todo ()
-  "Put fringe marker on TODO: lines in the curent buffer."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "TODO:" nil t)
-      (let ((overlay (make-overlay (- (point) 5) (point))))
-        (overlay-put overlay 'before-string
-                     (propertize (format "A")
-                                 'display
-                                 '(right-fringe horizontal-bar)))))))
-
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
 ;; this config should before (require 'smartparens)
@@ -462,12 +395,6 @@ POSITION: just inhibit warning.")
 (add-hook 'prog-mode-hook 'hl-line-mode)
 (add-hook 'text-mode-hook 'hl-line-mode)
 
-;; volatile-highlights ---------------------------------------------------------
-(lambda-package-ensure-install 'volatile-highlights)
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-(diminish 'volatile-highlights-mode)
-
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
 (require 'tramp)
@@ -525,12 +452,12 @@ POSITION: just inhibit warning.")
 
 ;;; dired-subtree --------------------------------------------------------------
 (lambda-package-ensure-install 'dired-subtree)
+(require 'dired-subtree)
 ;; (unless (or (eq system-type 'windows-nt)
 ;;             (string-match-p "--dired" dired-listing-switches))
 ;;   (setq dired-listing-switches (concat dired-listing-switches " --dired")))
 (define-key dired-mode-map (kbd "i") #'(lambda ()
                                          (interactive)
-                                         (require 'dired-subtree)
                                          (if (dired-subtree--is-expanded-p)
                                              (message "already expanded")
                                            (dired-subtree-insert))))
@@ -599,19 +526,6 @@ POSITION: just inhibit warning.")
 (require 'midnight)
 (setq midnight-period 7200) ;; (eq (* 2 60 60) "2 hours")
 
-;; whitespace-mode config.
-;; (require 'whitespace)
-;; (setq whitespace-line-column nil) ;; use fill-column instead of this
-;; (setq whitespace-style '(face empty trailing lines-tail spaces newline
-;;                               indentation space-after-tab space-before-tab
-;;                               ;; big-indent
-;;                               ))
-;; (set 'whitespace-global-modes
-;;      '(c++-mode c-mode conf-unix-mode emacs-lisp-mode haskell-mode lisp-mode lua-mode perl-mode python-mode scala-mode scheme-mode))
-;; (global-whitespace-mode 0)
-;; (diminish 'global-whitespace-mode)
-
-
 ;; saner regex syntax
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -642,23 +556,11 @@ POSITION: just inhibit warning.")
       gc-cons-threshold 20480000
       confirm-kill-emacs 'y-or-n-p)
 
-;; (require 'sql)
-;; (setq sql-mysql-options '("-C" "-t" "-f" "-n" "--default-character-set=utf8"))
-
-;; Visual line mode is a new mode in Emacs 23. It provides support for editing
-;; by visual lines. It turns on word-wrapping in the current buffer, and rebinds
-;; C-a, C-e, and C-k to commands that operate by visual lines instead of logical
-;; lines.  As you know, we have turn-on-auto-fill for text-mode and prog-mode
-;; and all derived modes, which may make it useless to turn on visual-line-mode
-;; most of the time. But we still turn on it globally to make it a fallback when
-;; auto-fill-mode was disabled by users.
-;;(global-visual-line-mode t)
 
 (if (string< emacs-version "24.3.50")
     (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
 ;; enable to support navigate in camelCase words
-;; (global-subword-mode 1)
 (auto-compression-mode t)
 (auto-image-file-mode t)
 
@@ -722,22 +624,18 @@ POSITION: just inhibit warning.")
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory))
       undo-tree-auto-save-history t
+      ;; https://github.com/syl20bnr/spacemacs/issues/9903
       undo-tree-enable-undo-in-region nil
       ;; undo-tree-visualizer-timestamps t
       )
 
 (global-undo-tree-mode 1)
 (diminish 'undo-tree-mode)
-;;(add-to-list 'warning-suppress-types '(undo discard-info))
 
 ;;temp-buffer-browse -----------------------------------------------------------
 (lambda-package-ensure-install 'temp-buffer-browse)
 (require 'temp-buffer-browse)
 (temp-buffer-browse-mode 1)
-
-;; switch-window ---------------------------------------------------------------
-;;(lambda-package-ensure-install 'switch-window)
-;;(setq switch-window-shortcut-style 'qwerty)
 
 ;; shell configs ---------------------------------------------------------------
 (require 'shell)
@@ -807,13 +705,6 @@ POSITION: just inhibit warning.")
           #'(lambda ()
               (define-key ido-completion-map (kbd "<tab>") 'ido-next-match)
               ))
-
-(defun lambda-ido-find-file-at-point ()
-  "Use ffap as wanted."
-  (interactive)
-  (let ((ido-use-filename-at-point 'guess)
-        (ido-use-url-at-point 'guess))
-    (ido-find-file)))
 
 (setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
 (put 'dired-do-copy   'ido nil) ; use ido there
@@ -887,6 +778,7 @@ POSITION: just inhibit warning.")
 (require 'helm-descbinds)
 (helm-descbinds-mode 1)
 (lambda-package-ensure-install 'helm-ag)
+(lambda-package-ensure-install 'ag)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
@@ -911,7 +803,6 @@ POSITION: just inhibit warning.")
 (lambda-package-ensure-install 'fill-column-indicator)
 (add-hook 'prog-mode-hook #'(lambda ()
                               (turn-on-auto-fill)
-                              ;; (turn-on-fci-mode)
                               ))
 ;; mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
@@ -965,9 +856,6 @@ POSITION: just inhibit warning.")
 
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
-;; unbound ---------------------------------------------------------------------
-;;(lambda-package-ensure-install 'unbound)
-
 ;; unicad --- say goodbye to Garbled -------------------------------------------
 (require 'unicad)
 
@@ -983,18 +871,6 @@ POSITION: just inhibit warning.")
 (lambda-package-ensure-install 'hungry-delete)
 (global-hungry-delete-mode 1)
 (diminish 'hungry-delete-mode)
-
-(defun lambda-put-file-name-on-clipboard ()
-  "Put the current file name on the clipboard"
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (with-temp-buffer
-        (insert filename)
-        (clipboard-kill-region (point-min) (point-max)))
-      (message filename))))
 
 (provide 'lambda-core)
 

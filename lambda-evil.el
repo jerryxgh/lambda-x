@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2020-10-02 11:28:56 Guanghui Xu>
+;; Time-stamp: <2021-10-31 01:20:03 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -15,6 +15,8 @@
               evil-cross-lines t)
 
 (require 'evil)
+
+(evil-set-undo-system 'undo-tree)
 
 ;; treat underscore as part of the word
 (with-eval-after-load 'evil

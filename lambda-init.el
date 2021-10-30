@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2021-10-21 16:54:07 Guanghui Xu>
+;; Time-stamp: <2021-10-31 01:14:04 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -19,7 +19,7 @@
 ;; maximize frame
 (unless (frame-parameter nil 'fullscreen)
       (toggle-frame-maximized))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (redisplay)
 
 (defvar lambda-libraries
@@ -28,7 +28,8 @@
     lambda-core
     ;; loading modules
     lambda-evil
-    lambda-auto-complete
+    ;; lambda-auto-complete
+    lambda-company
     lambda-mac
     lambda-cc
     lambda-org
@@ -48,7 +49,6 @@
     lambda-golang
 
     ;; lambda-octave
-    ;; lambda-scala
     ;; lambda-haskell
     lambda-evil-im
 

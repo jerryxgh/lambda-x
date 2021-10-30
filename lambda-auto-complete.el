@@ -39,8 +39,7 @@
 (add-to-list 'ac-dictionary-files
              (expand-file-name "ac-dict/auto-complete.dict" lambda-x-direcotry))
 
-(ac-config-default)
-(setq-default ac-sources (append '(ac-source-filename ac-source-dictionary) ac-sources))
+;; (ac-config-default)
 
 ;; (setq-default ac-expand-on-auto-complete nil)
 ;; (setq-default ac-auto-start nil)
@@ -157,6 +156,11 @@ DISPLAY-FN: use this function to display."
      )))
 
 (add-to-list 'yas-prompt-functions 'yas-popup-isearch-prompt)
+
+;; ac-capf https://github.com/emacsorphanage/ac-capf
+(lambda-package-ensure-install 'ac-capf)
+(require 'ac-capf)
+(setq-default ac-sources (append '(ac-source-filename ac-source-dictionary ac-source-capf) ac-sources))
 
 (provide 'lambda-auto-complete)
 

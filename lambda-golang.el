@@ -41,7 +41,7 @@
 
 ;;; syntax chech for golang
 (require 'lsp-ui)
-;; https://github.com/golang/tools/tree/master/gopls
+;; https://emacs-lsp.github.io/lsp-mode/page/performance/
 (require 'lsp-mode)
 (setq lsp-completion-provider :none
       lsp-ui-doc-enable nil
@@ -61,10 +61,6 @@ Make sure you don't have other gofmt/goimports hooks enabled."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-
-;;; auto complete for golang
-;; https://github.com/mdempsky/gocode
-(require 'go-autocomplete)
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize)

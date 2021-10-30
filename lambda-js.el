@@ -28,14 +28,14 @@
 ;; tern: a stand-alone code-analysis engine for JavaScript ---------------------
 ;; Here we use tern and auto-complete to complete JavaScript
 (lambda-package-ensure-install 'tern)
-(lambda-package-ensure-install 'tern-auto-complete)
 (setq tern-command (cons (executable-find "tern") '()))
 
-(eval-after-load 'tern
-  '(progn
-	 (require 'tern-auto-complete)
-	 (tern-ac-setup)
-	 (diminish 'tern-mode)))
+;; (lambda-package-ensure-install 'tern-auto-complete)
+;; (eval-after-load 'tern
+;;   '(progn
+;; 	 (require 'tern-auto-complete)
+;; 	 (tern-ac-setup)
+;; 	 (diminish 'tern-mode)))
 
 ;; nodejs-repl -----------------------------------------------------------------
 (lambda-package-ensure-install 'nodejs-repl)
