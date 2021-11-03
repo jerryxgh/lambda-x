@@ -60,6 +60,7 @@
 ;; (elscreen-persist-mode 1)
 
 ;; persp-mode - replace elscreen -----------------------------------------------
+;; TODO: compare to perspective-el
 (lambda-package-ensure-install 'persp-mode)
 (setq persp-keymap-prefix (kbd "C-;")
       persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)

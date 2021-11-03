@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-10-31 01:05:38 Guanghui Xu>
+;; Time-stamp: <2021-11-03 21:39:41 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -250,15 +250,15 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
 
-;;; window-numbering -----------------------------------------------------------
-(defun window-numbering-install-mode-line (&optional position)
-  "Do nothing, the display is handled by the spaceline(powerline).
-POSITION: just inhibit warning.")
+;;; winum -----------------------------------------------------------------------
+;; (defun window-numbering-install-mode-line (&optional position)
+;;   "Do nothing, the display is handled by the spaceline(powerline).
+;; POSITION: just inhibit warning.")
 
-(lambda-package-ensure-install 'window-numbering)
-(require 'window-numbering)
-(setq window-numbering-auto-assign-0-to-minibuffer nil)
-(window-numbering-mode 1)
+(lambda-package-ensure-install 'winum)
+(require 'winum)
+(winum-mode)
+
 
 (require 'spaceline-config)
 
