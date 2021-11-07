@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2019-05-11 10:57:24 Guanghui Xu>
+;; Time-stamp: <2021-11-07 19:56:45 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -27,7 +27,6 @@
 (smartwin-mode 1)
 (diminish 'smartwin-mode)
 (define-key smartwin-mode-map (kbd "C-c s") #'smartwin-switch-buffer)
-(define-key smartwin-mode-map (kbd "C-w o") #'smartwin-enlarge)
 (define-key smartwin-mode-map (kbd "C-l") #'smartwin-clear-shell)
 
 ;; (add-to-list 'load-path "~/repository/simplesite")

@@ -46,6 +46,7 @@
       backend
     (append (if (consp backend) backend (list backend))
             '(:with company-yasnippet))))
+(add-to-list 'company-backends 'company-dabbrev t)
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 

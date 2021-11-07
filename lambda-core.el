@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-03 21:39:41 Guanghui Xu>
+;; Time-stamp: <2021-11-07 23:12:09 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -257,8 +257,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 (lambda-package-ensure-install 'winum)
 (require 'winum)
+(winum-set-keymap-prefix (kbd "C-w"))
 (winum-mode)
-
 
 (require 'spaceline-config)
 
@@ -270,8 +270,12 @@ Which means get all used packages, this is mainly for getting unused packages."
 (setq spaceline-window-numbers-unicode t
       spaceline-workspace-numbers-unicode t
       powerline-default-separator nil
+      ;; different color for different evil state in modeline
       spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-(spaceline-spacemacs-theme '(buffer-encoding process))
+;; (spaceline-spacemacs-theme '(buffer-encoding process))
+(spaceline-spacemacs-theme)
+(spaceline-helm-mode)
+(spaceline-info-mode)
 (redisplay)
 
 ;; inhibit annoying warning sound
@@ -451,19 +455,19 @@ Which means get all used packages, this is mainly for getting unused packages."
       (t (setq dired-listing-switches "-AlX --group-directories-first")))
 
 ;;; dired-subtree --------------------------------------------------------------
-(lambda-package-ensure-install 'dired-subtree)
-(require 'dired-subtree)
+;; (lambda-package-ensure-install 'dired-subtree)
+;; (require 'dired-subtree)
 ;; (unless (or (eq system-type 'windows-nt)
 ;;             (string-match-p "--dired" dired-listing-switches))
 ;;   (setq dired-listing-switches (concat dired-listing-switches " --dired")))
-(define-key dired-mode-map (kbd "i") #'(lambda ()
-                                         (interactive)
-                                         (if (dired-subtree--is-expanded-p)
-                                             (message "already expanded")
-                                           (dired-subtree-insert))))
-(define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
-(define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
-(define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
+;; (define-key dired-mode-map (kbd "i") #'(lambda ()
+;;                                          (interactive)
+;;                                          (if (dired-subtree--is-expanded-p)
+;;                                              (message "already expanded")
+;;                                            (dired-subtree-insert))))
+;; (define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
+;; (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
+;; (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
 
 ;; if there is a dired buffer displayed in the next window, use its
 ;; current subdir, instead of the current subdir of this dired buffer
@@ -570,6 +574,9 @@ Which means get all used packages, this is mainly for getting unused packages."
           #'(lambda ()
               (outline-minor-mode t)))
 (diminish 'outline-minor-mode)
+
+;; enable hs-minor-mode for programming, hide or show code
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 (defmacro with-region-or-buffer (func)
   "When called with no active region, call FUNC on current buffer."
@@ -779,6 +786,16 @@ Which means get all used packages, this is mainly for getting unused packages."
 (helm-descbinds-mode 1)
 (lambda-package-ensure-install 'helm-ag)
 (lambda-package-ensure-install 'ag)
+(require ag)
+(setq
+ ;; If your version of ag is recent enough, you can add highlighting by
+ ;; adding the following to your Emacs configuration:
+ ag-highlight-search t
+ ;; By default, ag.el will open results in a different window in the frame,
+ ;; so the results buffer is still visible. You can override this so the
+ ;; results buffer is hidden and the selected result is shown in its place:
+ ag-reuse-window t
+)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
@@ -802,8 +819,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (setq-default fill-column 80)
 (lambda-package-ensure-install 'fill-column-indicator)
 (add-hook 'prog-mode-hook #'(lambda ()
-                              (turn-on-auto-fill)
-                              ))
+                              (turn-off-auto-fill)))
 ;; mode names typically end in "-mode", but for historical reasons
 ;; auto-fill-mode is named by "auto-fill-function".
 (diminish 'auto-fill-function)

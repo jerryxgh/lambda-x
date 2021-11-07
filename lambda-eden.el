@@ -10,10 +10,6 @@
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
-(add-hook 'c-mode-common-hook #'(lambda ()
-                                  (hs-minor-mode)
-                                  (diminish 'hs-minor-mode)))
-
 ;; sql-indent
 (lambda-package-ensure-install 'sql-indent)
 (require 'sql-indent)

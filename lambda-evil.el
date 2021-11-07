@@ -1,5 +1,5 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2021-10-31 01:20:03 Guanghui Xu>
+;; Time-stamp: <2021-11-07 20:35:26 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -71,12 +71,13 @@
 (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
 (define-key evil-normal-state-map (kbd "g f") 'lambda-ido-find-file-at-point)
 
+(delete 'ag-mode evil-motion-state-modes)
+
 (mapc #'(lambda (mode-state-pair)
           (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
       '(
         (Info-mode . emacs)
         (Man-mode . emacs)
-        (ack-mode . emacs)
         (calendar-mode . emacs)
         (dired-mode . emacs)
         (grep-mode . emacs)
@@ -86,6 +87,7 @@
         (view-mode . emacs)
         (xref . emacs)
         (special-mode . emacs)
+        (ag-mode . emacs)
         ))
 
 ;; when entering edebug, change to evil-emacs-state to use simple key bindings
@@ -94,13 +96,13 @@
 ;;                               (if edebug-mode
 ;;                                   (evil-emacs-state)
 ;;                                 (evil-normal-state))))
-(add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
+;; (add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
 
 ;;(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
 ;; (define-key evil-emacs-state-map (kbd "C-w") 'evil-window-map)
 
-(require 'evil-tab-minor-mode)
-(global-evil-tab-mode t)
+;; (require 'evil-tab-minor-mode)
+;; (global-evil-tab-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)
@@ -262,23 +264,6 @@ START-REGEXP and END-REGEXP are the boundaries of the text object."
 (evil-define-text-object evil-inner-buffer (count &optional beg end type)
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
-
-;; evil-args -------------------------------------------------------------------
-(lambda-package-ensure-install 'evil-args)
-(require 'evil-args)
-
-;; bind evil-args text objects
-(define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-(define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
-
-;; bind evil-forward/backward-args
-(define-key evil-normal-state-map "L" 'evil-forward-arg)
-(define-key evil-normal-state-map "H" 'evil-backward-arg)
-(define-key evil-motion-state-map "L" 'evil-forward-arg)
-(define-key evil-motion-state-map "H" 'evil-backward-arg)
-
-;; bind evil-jump-out-args
-(define-key evil-normal-state-map "K" 'evil-jump-out-args)
 
 ;; evil-indent-textobject ------------------------------------------------------
 (lambda-package-ensure-install 'evil-indent-textobject)

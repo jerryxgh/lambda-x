@@ -61,7 +61,8 @@
           treemacs-no-png-images                   nil
           treemacs-no-delete-other-windows         t
           treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-persist-file                    (expand-file-name "treemacs-persist" lambda-auto-save-dir)
+          treemacs-last-error-persist-file         (expand-file-name "treemacs-persist-at-last-error" lambda-auto-save-dir)
           treemacs-position                        'left
           treemacs-read-string-input               'from-child-frame
           treemacs-recenter-distance               0.1
@@ -91,6 +92,17 @@
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
     ;; (treemacs-resize-icons 18)
+
+    ;; beautify treemacs mode line
+    (setq treemacs-user-mode-line-format
+          (progn
+            (spaceline-install
+              "treemacs" '(((persp-name workspace-number "➓")
+                            :fallback evil-state :face highlight-face :priority 100)
+                           (anzu :priority 95)
+                           (major-mode :priority 79))
+              nil)
+            '("%e" (:eval (spaceline-ml-treemacs)))))
 
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
@@ -133,8 +145,6 @@
   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
-
-
 
 (use-package treemacs-all-the-icons
   :after (treemacs)

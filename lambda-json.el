@@ -12,8 +12,6 @@
 (lambda-package-ensure-install 'json-mode)
 
 (require 'json-mode)
-(add-hook 'json-mode-hook #'(lambda ()
-                              (hs-minor-mode 1)))
 
 (provide 'lambda-json)
 

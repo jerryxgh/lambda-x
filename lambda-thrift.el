@@ -31,6 +31,8 @@
 (require 'lambda-core)
 
 (lambda-package-ensure-install 'thrift)
+(require 'thrift)
+(setq thrift-indent-level 4)
 
 (provide 'lambda-thrift)
 
