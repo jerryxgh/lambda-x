@@ -1,0 +1,21 @@
+### added by xgh
+export PATH="/Users/hudandan/local/bin:$PATH"
+
+## for ls color
+export CLICOLOR=1
+export lscolors=exfxcxdxbxexexabagacad
+
+## jenv
+eval "$(jenv init -)"
+
+## maven
+export PATH="/Users/hudandan/local/apache-maven-3.6.0/bin:$PATH"
+
+## homebrew
+export PATH="/usr/local/sbin:$PATH"
+
+## for go
+export GOPATH=$HOME/repository/go_repository
+export PATH="$HOME/repository/go_repository/bin:$PATH"
+
+### added by xgh ends here
