@@ -6,3 +6,4 @@ packages/elpa
 GPATH
 GRTAGS
 GTAGS
+lambda-custom.el
