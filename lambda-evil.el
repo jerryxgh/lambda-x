@@ -1,5 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
-;; Time-stamp: <2021-11-07 20:35:26 Guanghui Xu>
+
+;; Time-stamp: <2021-11-07 23:25:37 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -193,9 +194,6 @@
 (define-key evil-window-map (kbd "w") 'ace-window)
 (define-key evil-window-map (kbd "C-w") 'ace-window)
 
-;; (ace-window-display-mode t)
-
-
 (lambda-package-ensure-install 'evil-commentary)
 (require 'evil-commentary)
 (evil-commentary-mode)
@@ -209,17 +207,13 @@
 (define-key evil-visual-state-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
 
 ;; anzu for evil ---------------------------------------------------------------
+;; support for * or # search command
 (lambda-package-ensure-install 'evil-anzu)
 (require 'evil-anzu)
 
 ;; evil-visual-mark-mode -------------------------------------------------------
 (lambda-package-ensure-install 'evil-visual-mark-mode)
 (evil-visual-mark-mode 1)
-
-;; evil-smartparens ------------------------------------------------------------
-(lambda-package-ensure-install 'evil-smartparens)
-;; (require 'evil-smartparens)
-;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
 
 ;; define text objects
 (defmacro spacemacs|define-text-object (key name start end)
@@ -268,7 +262,6 @@ START-REGEXP and END-REGEXP are the boundaries of the text object."
 ;; evil-indent-textobject ------------------------------------------------------
 (lambda-package-ensure-install 'evil-indent-textobject)
 (require 'evil-indent-textobject)
-
 
 (provide 'lambda-evil)
 

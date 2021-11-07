@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-07 23:12:09 Guanghui Xu>
+;; Time-stamp: <2021-11-07 23:23:43 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -341,15 +341,9 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
-;; this config should before (require 'smartparens)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-show-pair-from-inside t)
-;; (setq sp-navigate-close-if-unbalanced t)
 (require 'smartparens)
 (require 'smartparens-config)
 (setq sp-autoskip-closing-pair 'always)
-(define-key smartparens-strict-mode-map
-  [remap c-electric-backspace] 'sp-backward-delete-char)
 ;; use smartparens key bindings
 (smartparens-global-mode t)
 (smartparens-global-strict-mode t)
@@ -378,12 +372,10 @@ Which means get all used packages, this is mainly for getting unused packages."
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "(" nil :bind "C-("))
 
-(dolist (mode '(c-mode c++-mode java-mode sh-mode css-mode))
-  (sp-local-pair mode
-                 "{"
-                 nil
-                 :post-handlers
-                 '((ome-create-newline-and-enter-sexp "RET"))))
+(with-eval-after-load 'smartparens
+  (sp-with-modes
+      '(c-mode c++-mode java-mode sh-mode css-mode go-mode)
+    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))))
 
 ;; uniquify --- easy to distinguish same name buffers
 (require 'uniquify)
@@ -503,7 +495,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'anzu)
 (require 'anzu)
 (setq anzu-cons-mode-line-p nil)
-(global-anzu-mode)
+(global-anzu-mode 1)
 (diminish 'anzu-mode)
 
 ;; ediff - don't start another frame

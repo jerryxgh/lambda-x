@@ -43,8 +43,7 @@
 (require 'lsp-ui)
 ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
 (require 'lsp-mode)
-(setq lsp-completion-provider :none
-      lsp-ui-doc-enable nil
+(setq lsp-ui-doc-enable nil
       lsp-ui-imenu-enable nil
       lsp-ui-peek-enable nil
       lsp-ui-sideline-enable t
@@ -68,4 +67,4 @@ Make sure you don't have other gofmt/goimports hooks enabled."
 
 (provide 'lambda-golang)
 
-;;; lambda-go.el ends here
+;;; lambda-golang.el ends here
