@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-07 23:23:43 Guanghui Xu>
+;; Time-stamp: <2021-11-07 23:37:53 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -675,7 +675,7 @@ Which means get all used packages, this is mainly for getting unused packages."
               (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)))
 
 ;; do not load custom file, all the configuration should be done by code
-(load "lambda-custom")
+(load "lambda-custom" t)
 
 ;;; ido --- interactively do things---------------------------------------------
 ;; ffap - find file at point is not userful when ido-mode is on
@@ -778,7 +778,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (helm-descbinds-mode 1)
 (lambda-package-ensure-install 'helm-ag)
 (lambda-package-ensure-install 'ag)
-(require ag)
+(require 'ag)
 (setq
  ;; If your version of ag is recent enough, you can add highlighting by
  ;; adding the following to your Emacs configuration:
