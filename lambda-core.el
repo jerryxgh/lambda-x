@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-07 23:37:53 Guanghui Xu>
+;; Time-stamp: <2021-11-10 10:27:05 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -236,14 +236,13 @@ Which means get all used packages, this is mainly for getting unused packages."
 
          (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
         ((eq system-type 'darwin)
-         (set-frame-font "menlo-13")
+         (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.3)))
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.1)))
          )))
 
 (lambda-package-ensure-install 'spacemacs-theme)
 ;; custom faces for spacemacs theme
-
 (lambda-load-theme 'spacemacs-dark)
 
 

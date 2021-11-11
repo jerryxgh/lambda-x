@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2021-11-07 23:34:45 Guanghui Xu>
+;; Time-stamp: <2021-11-11 16:02:10 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -210,10 +210,6 @@
 ;; support for * or # search command
 (lambda-package-ensure-install 'evil-anzu)
 (require 'evil-anzu)
-
-;; evil-visual-mark-mode -------------------------------------------------------
-(lambda-package-ensure-install 'evil-visual-mark-mode)
-(evil-visual-mark-mode 1)
 
 ;; define text objects
 (defmacro spacemacs|define-text-object (key name start end)
