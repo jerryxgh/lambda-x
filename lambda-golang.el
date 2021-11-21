@@ -65,6 +65,11 @@ Make sure you don't have other gofmt/goimports hooks enabled."
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH"))
 
+
+;; integrate with treemacs
+(lambda-package-ensure-install 'lsp-treemacs)
+(lsp-treemacs-sync-mode 1)
+
 (provide 'lambda-golang)
 
 ;;; lambda-golang.el ends here

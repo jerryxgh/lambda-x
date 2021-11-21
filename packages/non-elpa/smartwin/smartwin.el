@@ -88,7 +88,7 @@
 (defvar smartwin--defadvice-done nil
   "Whether defined smartwin defadvice.")
 
-(defvar smartwin-max-window-height (/ (frame-height) 3)
+(defvar smartwin-max-window-height 20
   "Maximum hight of smart window.
 But smart window can be higher if run `delete-other-window' when is is already
   to this height.")
