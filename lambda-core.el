@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-10 10:27:05 Guanghui Xu>
+;; Time-stamp: <2021-11-21 21:58:21 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -701,15 +701,13 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 (add-hook 'ido-setup-hook
           #'(lambda ()
-              (define-key ido-completion-map (kbd "<tab>") 'ido-next-match)
-              ))
+              (define-key ido-completion-map (kbd "<tab>") 'ido-next-match)))
 
 (setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
 (put 'dired-do-copy   'ido nil) ; use ido there
 (put 'dired-do-rename 'ido nil) ; ^
 ;; (put 'dired-do-rename 'ido 'find-file)
 (ido-mode 1)
-(ido-everywhere 1)
 ;;; smarter fuzzy matching for ido
 (flx-ido-mode 1)
 
@@ -739,13 +737,15 @@ Which means get all used packages, this is mainly for getting unused packages."
               ;; use ido-at-point
               helm-mode-handle-completion-in-region nil)
 (require 'helm-config)
-;; (helm-mode 1)
+(helm-mode 1)
 
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-;; (setq magit-completing-read-function 'magit-ido-completing-read)
+(eval-after-load 'magit #'(lambda ()
+                            (setq magit-completing-read-function 'magit-ido-completing-read)))
+
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq-default helm-completing-read-handlers-alist
               '((describe-function . ido)
@@ -878,6 +878,9 @@ Which means get all used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'hungry-delete)
 (global-hungry-delete-mode 1)
 (diminish 'hungry-delete-mode)
+
+;; M-? do not prompt, just use current word
+(setq xref-prompt-for-identifier nil)
 
 (provide 'lambda-core)
 

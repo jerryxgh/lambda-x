@@ -34,6 +34,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
 (define-key company-mode-map (kbd "M-/") 'company-complete)
+(define-key company-active-map (kbd "<tab>") 'company-complete)
 
 ;; Add yasnippet support for all company backends
 ;; https://github.com/syl20bnr/spacemacs/pull/179
@@ -50,6 +51,9 @@
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
+(require 'company-same-mode-buffers)
+(company-same-mode-buffers-initialize)
+(push 'company-same-mode-buffers company-backends)
 
 (provide 'lambda-company)
 

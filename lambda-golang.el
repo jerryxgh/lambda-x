@@ -54,6 +54,12 @@
 (add-hook 'go-mode-hook #'(lambda ()
                             (setq tab-width 4)))
 
+(add-hook 'lsp-mode-hook
+          #'(lambda ()
+              (when (and (featurep 'evil) (featurep 'evil-leader))
+                (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
+                (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
+
 (defun lsp-go-install-save-hooks ()
   "Set up before-save hooks to format buffer and add/delete imports.
 Make sure you don't have other gofmt/goimports hooks enabled."
@@ -69,6 +75,12 @@ Make sure you don't have other gofmt/goimports hooks enabled."
 ;; integrate with treemacs
 (lambda-package-ensure-install 'lsp-treemacs)
 (lsp-treemacs-sync-mode 1)
+
+;; integrate with helm
+(lambda-package-ensure-install 'helm-lsp)
+(define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
+;; xref complete by helm
+(lambda-package-ensure-install 'helm-xref)
 
 (provide 'lambda-golang)
 

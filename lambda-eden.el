@@ -229,6 +229,9 @@ Note the weekly scope of the command's precision.")
 
 (lambda-package-ensure-install 'yaml-mode)
 
+;; show free key bindings
+(lambda-package-ensure-install 'free-keys)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
