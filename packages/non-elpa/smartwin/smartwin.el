@@ -151,8 +151,7 @@ If ENFORCE-MAX-P is not nil, try to maximize WINDOW."
   (with-selected-window window
     (let ((height-before (window-height window))
             (window-start (window-start))
-            (window-end (window-end))
-            max-delta)
+            (window-end (window-end)))
       (when (or enforce-max-p (< (window-height window) smartwin-max-window-height))
         (let ((max-delta (if enforce-max-p (window-max-delta window)
                            (- smartwin-max-window-height height-before)))
