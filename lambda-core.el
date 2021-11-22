@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-21 21:58:21 Guanghui Xu>
+;; Time-stamp: <2021-11-22 20:15:43 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -242,9 +242,7 @@ Which means get all used packages, this is mainly for getting unused packages."
          )))
 
 (lambda-package-ensure-install 'spacemacs-theme)
-;; custom faces for spacemacs theme
 (lambda-load-theme 'spacemacs-dark)
-
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
@@ -758,6 +756,8 @@ Which means get all used packages, this is mainly for getting unused packages."
                 (dired-create-directory . ido)
                 (find-function . ido)
                 (find-tag . ido)
+                (find-file . ido)
+                (switch-to-buffer . ido)
                 (httpd-serve-directory . ido)
                 (helm-gtags-create-tags . ido)
                 (ffap-alternate-file . nil)
