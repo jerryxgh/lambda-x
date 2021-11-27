@@ -239,12 +239,8 @@ Which means get all used packages, this is mainly for getting unused packages."
          (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
          )))
 
-;; (lambda-package-ensure-install 'spacemacs-theme)
-;; (lambda-load-theme 'spacemacs-dark)
-
-(lambda-package-ensure-install 'jetbrains-darcula-theme)
-(lambda-load-theme 'jetbrains-darcula)
-
+(lambda-package-ensure-install 'spacemacs-theme)
+(lambda-load-theme 'spacemacs-dark)
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
