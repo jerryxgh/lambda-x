@@ -1,7 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-22 20:15:43 Guanghui Xu>
-
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
 
@@ -238,11 +236,15 @@ Which means get all used packages, this is mainly for getting unused packages."
         ((eq system-type 'darwin)
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.1)))
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
          )))
 
-(lambda-package-ensure-install 'spacemacs-theme)
-(lambda-load-theme 'spacemacs-dark)
+;; (lambda-package-ensure-install 'spacemacs-theme)
+;; (lambda-load-theme 'spacemacs-dark)
+
+(lambda-package-ensure-install 'jetbrains-darcula-theme)
+(lambda-load-theme 'jetbrains-darcula)
+
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)

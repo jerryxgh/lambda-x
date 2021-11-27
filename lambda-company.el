@@ -31,8 +31,8 @@
 (require 'lambda-core)
 
 (lambda-package-ensure-install 'company)
-(add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
 (define-key company-mode-map (kbd "M-/") 'company-complete)
 (define-key company-active-map (kbd "<tab>") 'company-complete)
 

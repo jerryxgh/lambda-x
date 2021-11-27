@@ -218,7 +218,7 @@ Note the weekly scope of the command's precision.")
 (require 'fasd-shell)
 (add-hook 'shell-mode-hook 'fasd-shell-mode)
 
-;; whitespace-clean-mode =======================================================
+;; whitespace-cleanup-mode =====================================================
 (lambda-package-ensure-install 'whitespace-cleanup-mode)
 (global-whitespace-cleanup-mode 1)
 
