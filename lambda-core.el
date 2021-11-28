@@ -679,6 +679,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 (require 'ido)
 (setq ido-enable-flex-matching t
+      ido-use-url-at-point t
       ido-use-faces nil
       ido-auto-merge-work-directories-length -1
       ido-use-virtual-buffers t
@@ -824,6 +825,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (global-set-key (kbd "M-p") 'previous-error)
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (global-set-key (kbd "C-x j") #'(lambda () (interactive)
+                                  (ido-mode 1)
                                   (ido-find-file-in-dir lambda-x-direcotry)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
