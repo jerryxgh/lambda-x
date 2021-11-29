@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2021-11-11 16:02:10 Guanghui Xu>
+;; Time-stamp: <2021-11-26 11:59:43 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -70,7 +70,7 @@
   (evil-yank (point) (point-at-eol)))
 ;; (define-key evil-normal-state-map (kbd "C-w") 'evil-window-map)
 (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
-(define-key evil-normal-state-map (kbd "g f") 'lambda-ido-find-file-at-point)
+(define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
 
 (delete 'ag-mode evil-motion-state-modes)
 

@@ -1,6 +1,6 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-22 20:15:43 Guanghui Xu>
+;; Time-stamp: <2021-11-29 16:47:51 Guanghui Xu>
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -736,13 +736,15 @@ Which means get all used packages, this is mainly for getting unused packages."
               helm-mode-handle-completion-in-region nil)
 (require 'helm-config)
 (helm-mode 1)
+;; always split window for helm
+(setq helm-split-window-inside-p t)
 
 (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
 (add-hook 'eshell-mode-hook
           #'(lambda ()
               (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-(eval-after-load 'magit #'(lambda ()
-                            (setq magit-completing-read-function 'magit-ido-completing-read)))
+;; (eval-after-load 'magit #'(lambda ()
+;;                             (setq magit-completing-read-function 'magit-ido-completing-read)))
 
 ;; to use with ido, customize helm-completing-read-handlers-alist
 (setq-default helm-completing-read-handlers-alist
@@ -757,6 +759,7 @@ Which means get all used packages, this is mainly for getting unused packages."
                 (find-function . ido)
                 (find-tag . ido)
                 (find-file . ido)
+                (find-file-other-window . ido)
                 (switch-to-buffer . ido)
                 (httpd-serve-directory . ido)
                 (helm-gtags-create-tags . ido)
