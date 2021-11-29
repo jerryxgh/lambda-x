@@ -30,6 +30,7 @@
 
 (require 'lambda-core)
 (require 'lambda-cc)
+(require 'lambda-treemacs)
 
 
 ;; https://github.com/dominikh/go-mode.el

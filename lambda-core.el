@@ -1,7 +1,5 @@
 ;; lambda-core.el --- core settings, shared by all other modules
 
-;; Time-stamp: <2021-11-29 16:47:51 Guanghui Xu>
-
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
 
@@ -238,7 +236,7 @@ Which means get all used packages, this is mainly for getting unused packages."
         ((eq system-type 'darwin)
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.1)))
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
          )))
 
 (lambda-package-ensure-install 'spacemacs-theme)
@@ -681,6 +679,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 (require 'ido)
 (setq ido-enable-flex-matching t
+      ido-use-url-at-point t
       ido-use-faces nil
       ido-auto-merge-work-directories-length -1
       ido-use-virtual-buffers t
@@ -829,6 +828,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (global-set-key (kbd "M-p") 'previous-error)
 (define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (global-set-key (kbd "C-x j") #'(lambda () (interactive)
+                                  (ido-mode 1)
                                   (ido-find-file-in-dir lambda-x-direcotry)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
