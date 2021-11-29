@@ -45,7 +45,6 @@ COMMAND is the commnd to be run."
 (defun lambda-evil-im-use-default ()
   "Switch to default input method."
   (interactive )
-  (message "switch-to-default")
   (cond ((eq system-type 'darwin )
          (call-process-shell-command (concat lambda-evil-im-select-command " "
                                              lambda-evil-im-default-im)))))
