@@ -69,10 +69,6 @@
 (setq company-backends (mapcar #'company-mode/backend-with-same-mode company-backends))
 (push 'company-same-mode-buffers company-backends)
 
-
-(lambda-package-ensure-install 'company-fuzzy)
-;; (global-company-fuzzy-mode 1)
-
 (lambda-package-ensure-install 'company-wordfreq)
 
 (provide 'lambda-company)

@@ -574,7 +574,7 @@ Which means get all used packages, this is mainly for getting unused packages."
         (list (point-min) (point-max))))))
 
 (with-region-or-buffer indent-region)
-(with-region-or-buffer untabify)
+;; (with-region-or-buffer untabify)
 
 ;;; ibuffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -884,6 +884,20 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 ;; M-? do not prompt, just use current word
 (setq xref-prompt-for-identifier nil)
+
+;; for comment-indent
+(setq comment-fill-column 360)
+(defun lambda-comment-indent (&rest args)
+  "Apply CMD with ARGS to region lines if region is active.
+Just call (apply CMD ARGS) otherwise."
+  (interactive)
+  (if (use-region-p)
+      (cl-letf (((symbol-function 'execute-kbd-macro)
+                 `(lambda (&rest _ignore)
+                    (interactive)
+                    (comment-indent ,@args))))
+        (apply-macro-to-region-lines (region-beginning) (region-end) 'ignore))
+    (comment-indent args)))
 
 (provide 'lambda-core)
 
