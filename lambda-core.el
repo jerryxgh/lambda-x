@@ -948,13 +948,16 @@ Just call (apply CMD ARGS) otherwise."
     (comment-indent args)))
 (global-set-key (kbd "M-;") 'lambda-comment-indent)
 
-(defun lambda-temp-buffer ()
+(defun lambda-tmp-buffer ()
   "Create temporary buffer."
   (interactive)
   (let ((buf-name (concat (make-temp-name "scratch-") "." (read-string "File Format: " nil nil "json" nil))))
     (switch-to-buffer buf-name)
     (let ((buffer-file-name buf-name))
       (set-auto-mode))))
+
+(lambda-package-ensure-install 'gxref)
+(add-to-list 'xref-backend-functions 'gxref-xref-backend)
 
 (provide 'lambda-core)
 

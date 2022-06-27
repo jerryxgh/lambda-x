@@ -32,7 +32,7 @@
       recentf-auto-cleanup 'never)
 ;; ignore magit's commit message files
 (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-;; (recentf-mode 1)
+(recentf-mode 1)
 
 ;; saveplace --- When you visit a file, point goes to the last place where
 ;; it was when you previously visited the same file.----------------------------
