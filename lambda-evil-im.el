@@ -44,22 +44,22 @@ COMMAND is the commnd to be run."
 
 (defun lambda-evil-im-use-default ()
   "Switch to default input method."
-  (interactive )
-  (cond ((eq system-type 'darwin )
+  (interactive)
+  (cond ((and evil-im-minor-mode (eq system-type 'darwin ))
          (call-process-shell-command (concat lambda-evil-im-select-command " "
                                              lambda-evil-im-default-im)))))
 
 (defun lambda-evil-im-remember ()
   "Remember input method used in insert mode to switch back in other modes."
-  (interactive )
-  (if (eq system-type 'darwin)
+  (interactive)
+  (if (and evil-im-minor-mode (eq system-type 'darwin))
       (setq lambda-evil-im-prev-im
             (substring (shell-command-to-string lambda-evil-im-select-command) 0 -1))))
 
 (defun lambda-evil-im-use-prev ()
   "Use previous input method."
   (interactive )
-  (if (eq system-type 'darwin)
+  (if (and evil-im-minor-mode (eq system-type 'darwin))
       (if lambda-evil-im-prev-im
           (call-process-shell-command (concat lambda-evil-im-select-command " " lambda-evil-im-prev-im))
         (call-process-shell-command (concat lambda-evil-im-select-command
@@ -72,7 +72,7 @@ COMMAND is the commnd to be run."
 
     (add-function :after after-focus-change-function
                   '(lambda ()
-                     (if (frame-focus-state)
+                     (if (and evil-im-minor-mode (frame-focus-state))
                          (progn
                            (if (eq 'normal evil-state)
                                (lambda-evil-im-use-default))
@@ -90,6 +90,36 @@ COMMAND is the commnd to be run."
 (add-hook 'evil-replace-state-entry-hook 'lambda-evil-im-use-prev )
 (add-hook 'evil-replace-state-exit-hook 'lambda-evil-im-remember )
 (add-hook 'evil-emacs-state-entry-hook 'lambda-evil-im-use-default)
+
+
+;;;###autoload
+(define-minor-mode evil-im-minor-mode
+  "Evil auto switch imput method mode."
+
+  ;; The initial value
+  :init-value nil
+  ;; The indicator for the mode line
+  :lighter ""
+  :group 'evil-im
+  :global nil
+  :version "1.0 beta"
+
+  ;; Body
+  )
+
+;;;###autoload
+(defun evil-im-minor-mode-on ()
+  "Turn on evil-im minor mode."
+  (unless (or (minibufferp) buffer-read-only)
+    (evil-im-minor-mode 1)))
+
+;;;###autoload
+(define-globalized-minor-mode
+  global-evil-im-mode
+  evil-im-minor-mode
+  evil-im-minor-mode-on
+  :group 'evil-im
+  :require 'evil-im-minor-mode)
 
 (provide 'lambda-evil-im)
 

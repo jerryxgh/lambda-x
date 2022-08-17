@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-04-07 11:29:02 Guanghui Xu>
+;; Time-stamp: <2022-08-08 16:38:29 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -255,8 +255,8 @@ START-REGEXP and END-REGEXP are the boundaries of the text object."
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
 
-(lambda-package-ensure-install 'evil-smartparens)
-(add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+;; (lambda-package-ensure-install 'evil-smartparens)
+;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
 
 (provide 'lambda-evil)
 
