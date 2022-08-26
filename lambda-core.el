@@ -477,6 +477,11 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; dired - reuse current buffer by pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
 
+;; How to sort directories first in dired: https://emacs.stackexchange.com/questions/29096/how-to-sort-directories-first-in-dired
+(require 'ls-lisp)
+(setq ls-lisp-dirs-first t
+      ls-lisp-use-insert-directory-program nil)
+
 ;;; dired-x
 (require 'dired-x)
 (cond ((eq system-type 'windows-nt)
