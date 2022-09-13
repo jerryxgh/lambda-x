@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2021-10-31 01:13:15 Guanghui Xu>
+;; Time-stamp: <2022-08-31 18:11:44 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -20,6 +20,14 @@
       org-id-locations-file
       (expand-file-name ".org-id-locations" lambda-auto-save-dir)
       org-src-tab-acts-natively t)
+
+;; It is possible to use hard spaces to achieve the indentation instead, if the
+;; bare ASCII file should have the indented look also outside Emacs149. With
+;; Org’s support, you have to indent all lines to line up with the outline
+;; headers. You would use these settings:
+(setq org-adapt-indentation t
+      org-hide-leading-stars t
+      org-odd-levels-only t)
 
 (global-set-key (kbd "C-c c") 'org-capture)
 ;; (setq org-capture-templates '(("t" "Todo [inbox]" entry

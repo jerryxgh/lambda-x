@@ -47,8 +47,8 @@
 (setq lsp-ui-doc-enable nil
       lsp-ui-imenu-enable nil
       lsp-ui-peek-enable nil
-      lsp-ui-sideline-enable t
-      lsp-ui-sideline-show-hover t
+      lsp-ui-sideline-enable nil
+      lsp-ui-sideline-show-hover nil
       )
 
 (add-hook 'go-mode-hook #'lsp-deferred)
