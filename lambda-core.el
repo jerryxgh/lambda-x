@@ -237,10 +237,20 @@ Which means get all used packages, this is mainly for getting unused packages."
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
          (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
-         )))
+         ))
+  (setq-default default-text-properties '(line-spacing 0.00 line-height 1.36)))
 
-(lambda-package-ensure-install 'spacemacs-theme)
-(lambda-load-theme 'spacemacs-dark)
+;; (lambda-package-ensure-install 'spacemacs-theme)
+;; (lambda-load-theme 'spacemacs-dark)
+
+(lambda-package-ensure-install 'zenburn-theme)
+;; use variable-pitch fonts for some headings and titles
+(setq zenburn-use-variable-pitch t)
+;; scale headings in org-mode
+(setq zenburn-scale-org-headlines t)
+;; scale headings in outline-mode
+(setq zenburn-scale-outline-headlines t)
+(lambda-load-theme 'zenburn)
 
 (lambda-package-ensure-install 'powerline)
 (lambda-package-ensure-install 'spaceline)
@@ -690,11 +700,11 @@ Which means get all used packages, this is mainly for getting unused packages."
 
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
 
-(when (and (or
-            (eq system-type 'gnu/linux)
-            (eq system-type 'darwin))
-           (file-exists-p "/bin/bash"))
-  (setq explicit-shell-file-name "/bin/bash"))
+;; (when (and (or
+;;             (eq system-type 'gnu/linux)
+;;             (eq system-type 'darwin))
+;;            (file-exists-p "/bin/bash"))
+;;   (setq explicit-shell-file-name "/bin/bash"))
 
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
@@ -703,6 +713,10 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; (setq shell-cd-regexp "")
 ;; no duplicates in command history
 (setq comint-input-ignoredups t)
+(defun lambda-comint-init ()
+  "Prevent shell commands from being echoed."
+  (setq comint-process-echoes t))
+(add-hook 'comint-mode-hook 'lambda-comint-init)
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook

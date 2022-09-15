@@ -395,7 +395,7 @@ This function get input by ido."
          (let ((eshell-buffer-maximum-lines 0))
            (eshell-truncate-buffer)))
         ((derived-mode-p 'comint-mode)
-         (let ((comint-buffer-maximum-size 1))
+         (let ((comint-buffer-maximum-size 0))
            (comint-truncate-buffer)))
         (t (command-execute (smartwin--get-C-l-command)))))
 
