@@ -61,7 +61,8 @@
   '(;; Emacs
     "*scratch*"
     ;; shell and eshell buffers
-    ("^\\*e?shell\\*\\(<.*>\\)?$" :regexp t)
+    ("^\\*.*?shell\\*\\(<.*>\\)?$" :regexp t)
+    ("^\\*shell.*\\*\\(<.*>\\)?$" :regexp t)
     "*terminal*"
     "*ansi-term*"
     compilation-mode

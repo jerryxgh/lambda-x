@@ -400,7 +400,7 @@ Which means get all used packages, this is mainly for getting unused packages."
  ;; ("C-c \"" . wrap-with-double-quotes)
  ;; ("C-c _"  . wrap-with-underscores)
  ;; ("C-c `"  . wrap-with-back-quotes)
-)
+ )
 (diminish 'smartparens-mode)
 
 ;; pair management
@@ -543,7 +543,7 @@ Which means get all used packages, this is mainly for getting unused packages."
                                       "projectile-bookmarks.eld"
                                       lambda-auto-save-dir))
 
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
 (projectile-mode t)
 ;;(diminish 'projectile-mode)
@@ -855,7 +855,7 @@ Which means get all used packages, this is mainly for getting unused packages."
  ;; so the results buffer is still visible. You can override this so the
  ;; results buffer is hidden and the selected result is shown in its place:
  ag-reuse-window t
-)
+ )
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (lambda-package-ensure-install 'magit)
