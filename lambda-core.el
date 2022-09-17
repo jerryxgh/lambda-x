@@ -931,6 +931,7 @@ Which means get all used packages, this is mainly for getting unused packages."
 (diff-hl-flydiff-mode 1)
 (add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
 
+(add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
 ;; unicad --- say goodbye to Garbled -------------------------------------------

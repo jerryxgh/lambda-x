@@ -105,7 +105,7 @@
             '("%e" (:eval (spaceline-ml-treemacs)))))
 
     (treemacs-follow-mode t)
-    (treemacs-tag-follow-mode t)
+    ;; (treemacs-tag-follow-mode t)
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode 'always)
 

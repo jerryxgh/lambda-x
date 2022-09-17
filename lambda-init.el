@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2022-08-15 22:21:09 Guanghui Xu>
+;; Time-stamp: <2022-09-16 20:40:34 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -38,7 +38,6 @@
     lambda-scheme
     lambda-java
     lambda-groovy
-    lambda-python
     lambda-js
     lambda-json
     lambda-lua
