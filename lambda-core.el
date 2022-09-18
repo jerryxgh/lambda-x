@@ -28,10 +28,6 @@
    (if (equal system-type 'windows-nt) "USERNAME" "USER"))
   "Current user name.")
 
-(defconst lambda-x-direcotry (file-name-directory
-                              (or load-file-name (buffer-file-name)))
-  "Root directory of lambda-x.")
-
 (defconst lambda-auto-save-dir (expand-file-name "auto-save-list/"
                                                  user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
@@ -71,90 +67,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 ;; suppressing ad-handle-definition Warnings in Emacs
 ;; (setq ad-redefinition-action 'accept)
-
-;; packages about settings =====================================================
-(require 'package)
-
-;; place package files relative to configuration directory
-(setq package-user-dir (expand-file-name "packages/elpa" lambda-x-direcotry))
-
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-
-;; do not auto load packages
-(setq package-enable-at-startup nil)
-;; Load packages explictly
-(package-initialize)
-(setq warning-suppress-log-types '((package reinitialization)))
-
-(defvar lambda-package-installed-packages nil
-  "Pakcages installed through `lambda-package-ensure-install'.
-
-This value is set automaticly, DONT set by hand.")
-
-(defun lambda-package-ensure-install (package)
-  "This is like `package-install', but skip PACKAGE if it has been installed.
-
-The difference is that if PACKAGE is already installed(checked through
- `package-installed-p'), it will not be installed again."
-  (add-to-list 'lambda-package-installed-packages package)
-  (unless (or (member package package-activated-list)
-              (package-installed-p package))
-    (message "Installing %s" (symbol-name package))
-    (when (not package-archive-contents)
-      (package-refresh-contents))
-    (package-install package)))
-
-(lambda-package-ensure-install 'dash)
-(require 'dash)
-
-(defun lambda-package-list-packages ()
-  "Browse packages installed through function `lambda-package-ensure-install'."
-  (interactive)
-  (package-show-package-list lambda-package-installed-packages))
-
-(defun lambda-package-list-auto-packages ()
-  "Browse packages auto installed due to the dependence."
-  (interactive)
-  (package-show-package-list
-   (-filter #'(lambda (p)
-                (not (memq p lambda-package-installed-packages)))
-            package-activated-list)))
-
-(defun lambda-package-get-used-pkgs ()
-  "Get all packages manually installed including requirements and \
-requirements of requirements.
-Which means get all used packages, this is mainly for getting unused packages."
-  (delete-dups (-flatten
-                (-map 'lambda-package-get-pkg-with-reqs
-                      lambda-package-installed-packages))))
-
-(defun lambda-package-get-pkg-with-reqs (package)
-  "Get PACKAGE and requirements of PACKAGE and requirements of requirements."
-  (if (and package
-           (not (assq package package--builtins)))
-      (cons package (-flatten
-                     (-map #'(lambda (req)
-                               (lambda-package-get-pkg-with-reqs (car req)))
-                           (let ((pkg-desc
-                                  (or (if (package-desc-p package) package)
-                                      (cadr (assq package package-alist)))))
-                             (if pkg-desc
-                                 (package-desc-reqs pkg-desc))))))))
-
-(defun lambda-package-list-unused-packages ()
-  "Browse packages not used."
-  (interactive)
-  (package-show-package-list
-   (let ((used-packages (lambda-package-get-used-pkgs)))
-     (-filter #'(lambda (p)
-                  (not (memq p used-packages)))
-              package-activated-list))))
-
-;; packages about settings end here ============================================
 
 ;; init PATH in mac, this should just after packages settings ==================
 (when (eq system-type 'darwin)
@@ -217,6 +129,8 @@ Which means get all used packages, this is mainly for getting unused packages."
 ;; theme -----------------------------------------------------------------------
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
+  (setq-default default-text-properties '(line-spacing 0.00 line-height 1.36))
+
   (load-theme theme t)
 
   (cond ((eq system-type 'windows-nt)
@@ -237,8 +151,7 @@ Which means get all used packages, this is mainly for getting unused packages."
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
          (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
-         ))
-  (setq-default default-text-properties '(line-spacing 0.00 line-height 1.36)))
+         )))
 
 ;; (lambda-package-ensure-install 'spacemacs-theme)
 ;; (lambda-load-theme 'spacemacs-dark)

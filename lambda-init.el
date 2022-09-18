@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2022-09-16 20:40:34 Guanghui Xu>
+;; Time-stamp: <2022-09-18 22:49:17 胡丹丹>
 
 ;;; Commentary:
 
@@ -24,13 +24,14 @@
 
 (defvar lambda-libraries
   '(
+    lambda-package
+    lambda-mac
     ;; core settings, shared by all other modules
     lambda-core
-    ;; loading modules
     lambda-evil
+    lambda-corfu
     ;; lambda-auto-complete
-    lambda-company
-    lambda-mac
+    ;; lambda-company
     lambda-cc
     lambda-org
     lambda-web
