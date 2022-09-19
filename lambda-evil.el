@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-09-19 21:00:44 Guanghui Xu>
+;; Time-stamp: <2022-09-19 22:21:03 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -15,14 +15,12 @@
 (use-package evil
   :ensure t
   :init
-  ;; (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  ;; (setq evil-want-keybinding nil)
-  :config
   (setq-default evil-want-C-w-delete nil
                 evil-want-visual-char-semi-exclusive t
                 evil-want-C-w-in-emacs-state t
                 evil-auto-balance-windows t
-                evil-cross-lines t)
+                evil-cross-lines t) :config
+
   ;; let * and # search symbol instead of word at point
   (setq-default evil-symbol-word-search t)
 
@@ -104,9 +102,9 @@
   (hs-hide-level 1))
 (define-key evil-normal-state-map (kbd "zM")
   #'(lambda ()
-     (interactive)
-     (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
-       (evil-close-folds))))
+      (interactive)
+      (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
+        (evil-close-folds))))
 
 (defun lambda-copy-to-end-of-line ()
   "Copy to end of line, and bind this funciton to Y in normal mode."
@@ -133,18 +131,18 @@
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
- "a" 'helm-ag
- "p" 'helm-projectile-ag
- ;; "b" #'(lambda ()
- ;;         (interactive)
- ;;         ;; skip persp-mode like filters, let it show more candidates
- ;;         (let ((ido-make-buffer-list-hook nil))
- ;;           (ido-switch-buffer)))
- "b" 'ido-switch-buffer
- "e" 'helm-projectile
- "k" 'kill-this-buffer
- "o" 'helm-occur
- "f" 'find-file)
+  "a" 'helm-ag
+  "p" 'helm-projectile-ag
+  ;; "b" #'(lambda ()
+  ;;         (interactive)
+  ;;         ;; skip persp-mode like filters, let it show more candidates
+  ;;         (let ((ido-make-buffer-list-hook nil))
+  ;;           (ido-switch-buffer)))
+  "b" 'ido-switch-buffer
+  "e" 'helm-projectile
+  "k" 'kill-this-buffer
+  "o" 'helm-occur
+  "f" 'find-file)
 (global-evil-leader-mode 1)
 
 (lambda-package-ensure-install 'evil-nerd-commenter)
@@ -208,9 +206,9 @@
 
 (when (and (featurep 'evil) (featurep 'evil-leader))
   (evil-leader/set-key
-   "c" 'ace-jump-char-mode
-   "w" 'ace-jump-word-mode
-   "l" 'ace-jump-line-mode))
+    "c" 'ace-jump-char-mode
+    "w" 'ace-jump-word-mode
+    "l" 'ace-jump-line-mode))
 (lambda-package-ensure-install 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
