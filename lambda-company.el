@@ -104,6 +104,8 @@ If all failed, try to complete the common part with `company-complete-common'"
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
+  (push '(company-capf :with company-yasnippet) company-backends)
+
   ;; (push 'company-elisp company-backends)
   ;; (push 'company-dabbrev company-backends)
 
