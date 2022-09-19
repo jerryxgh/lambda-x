@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2022-08-31 18:11:44 Guanghui Xu>
+;; Time-stamp: <2022-09-19 20:59:51 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -96,9 +96,6 @@ rainbow-delimiters-mode temporarily when using htmlize."
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (lambda-package-ensure-install 'graphviz-dot-mode)
 (setq graphviz-dot-indent-width 4)
-
-;; ox-confluence installed manually --------------------------------------------
-(require 'ox-confluence)
 
 (provide 'lambda-org)
 

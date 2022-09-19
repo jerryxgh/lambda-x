@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2022-09-18 22:49:17 胡丹丹>
+;; Time-stamp: <2022-09-19 22:17:01 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -29,9 +29,10 @@
     ;; core settings, shared by all other modules
     lambda-core
     lambda-evil
-    lambda-corfu
+    ;; lambda-corfu
     ;; lambda-auto-complete
-    ;; lambda-company
+    lambda-company
+
     lambda-cc
     lambda-org
     lambda-web
@@ -45,14 +46,14 @@
     lambda-vb
     lambda-eden
     lambda-individual
-    lambda-csharp
     lambda-golang
     lambda-thrift
     lambda-treemacs
 
+    ;; lambda-csharp
     ;; lambda-octave
     ;; lambda-haskell
-    lambda-evil-im
+    ;; lambda-evil-im
 
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.
@@ -74,7 +75,6 @@
     (redisplay))
 
   (progress-reporter-done progress-reporter))
-
 
 (provide 'lambda-init)
 

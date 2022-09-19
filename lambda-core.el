@@ -23,6 +23,8 @@
 
 ;; (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
+(require 'lambda-package)
+
 (defconst current-user
   (getenv
    (if (equal system-type 'windows-nt) "USERNAME" "USER"))
@@ -72,6 +74,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (when (eq system-type 'darwin)
   ;; open file in Find will reuse current frame instead creating a new one
 
+  ;; close menu bar
   (menu-bar-mode -1)
   (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)

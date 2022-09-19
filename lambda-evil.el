@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-08-30 22:37:41 Guanghui Xu>
+;; Time-stamp: <2022-09-19 21:00:44 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -8,58 +8,102 @@
 ;;; Code:
 
 ;; evil ------- A wonderful editor in Emacs ------------------------------------
-(lambda-package-ensure-install 'evil)
-(setq-default evil-want-C-w-delete nil
-              evil-want-visual-char-semi-exclusive t
-              evil-want-C-w-in-emacs-state t
-              evil-auto-balance-windows t
-              evil-cross-lines t)
 
-(require 'evil)
+(require 'lambda-core)
 
-(evil-set-undo-system 'undo-tree)
+;; (lambda-package-ensure-install 'evil)
+(use-package evil
+  :ensure t
+  :init
+  ;; (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  ;; (setq evil-want-keybinding nil)
+  :config
+  (setq-default evil-want-C-w-delete nil
+                evil-want-visual-char-semi-exclusive t
+                evil-want-C-w-in-emacs-state t
+                evil-auto-balance-windows t
+                evil-cross-lines t)
+  ;; let * and # search symbol instead of word at point
+  (setq-default evil-symbol-word-search t)
 
-;; treat underscore as part of the word
-(with-eval-after-load 'evil
-  (defalias #'forward-evil-word #'forward-evil-symbol))
+  (evil-set-undo-system 'undo-tree)
+  ;; treat underscore as part of the word
+  (defalias #'forward-evil-word #'forward-evil-symbol)
 
-(evil-mode 1)
-;; let * and # search symbol instead of word at point
-(setq-default evil-symbol-word-search t)
-;; settings below restore key bindings in emacs in insert state
-(define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
-(define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
-(define-key evil-insert-state-map (kbd "C-b") 'backward-char)
-(define-key evil-insert-state-map (kbd "C-d") 'delete-char)
-(define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
-(define-key evil-insert-state-map (kbd "C-f") 'forward-char)
-(define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-(define-key evil-insert-state-map (kbd "C-n") 'next-line)
-(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-(define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
-;; (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
-(define-key evil-insert-state-map (kbd "C-y") 'yank)
+  ;; settings below restore key bindings in emacs in insert state
+  (define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
+  (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+  (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
+  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+  (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+  (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
+  (define-key evil-insert-state-map (kbd "C-y") 'yank)
+  (define-key evil-normal-state-map (kbd "M-.") ())
+  (define-key evil-normal-state-map (kbd "C-t") ())
 
-(define-key evil-normal-state-map (kbd "M-.") ())
-(define-key evil-normal-state-map (kbd "C-t") ())
-(when (eq system-type 'darwin)
-  (define-key evil-insert-state-map (kbd "C-v") 'yank))
+  (when (eq system-type 'darwin)
+    (define-key evil-insert-state-map (kbd "C-v") 'yank))
 
 
-;; Prevent the visual selection overriding my system clipboard?
+  (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
+  (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
 
-;; On some operating systems, there is only one clipboard for both copied and
-;; selected texts. This has the consequence that visual selection – which should
-;; normally be saved to the PRIMARY clipboard – overrides the SYSTEM clipboard,
-;; where normally goes the copied text. This can be corrected by adding the
-;; following code to the dotspacemacs/user-config of your .spacemacs:
-(fset 'evil-visual-update-x-selection 'ignore)
+  (delete 'ag-mode evil-motion-state-modes)
+
+  (mapc #'(lambda (mode-state-pair)
+            (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
+        '(
+          (Info-mode . emacs)
+          (Man-mode . emacs)
+          (calendar-mode . emacs)
+          (dired-mode . emacs)
+          (grep-mode . emacs)
+          (help-mode . emacs)
+          (image-mode . emacs)
+          (svn-status-mode . emacs)
+          (view-mode . emacs)
+          (xref . emacs)
+          (special-mode . emacs)
+          (ag-mode . emacs)
+          ))
+
+  ;; Prevent the visual selection overriding my system clipboard?
+  ;; On some operating systems, there is only one clipboard for both copied and
+  ;; selected texts. This has the consequence that visual selection – which should
+  ;; normally be saved to the PRIMARY clipboard – overrides the SYSTEM clipboard,
+  ;; where normally goes the copied text. This can be corrected by adding the
+  ;; following code to the dotspacemacs/user-config of your .spacemacs:
+  (fset 'evil-visual-update-x-selection 'ignore)
+
+  (add-hook 'evil-local-mode-hook
+            (lambda ()
+              ;; Note:
+              ;; Check if `company-emulation-alist' is in
+              ;; `emulation-mode-map-alists', if true, call
+              ;; `company-ensure-emulation-alist' to ensure
+              ;; `company-emulation-alist' is the first item of
+              ;; `emulation-mode-map-alists', thus has a higher
+              ;; priority than keymaps of evil-mode.
+              ;; We raise the priority of company-mode keymaps
+              ;; unconditionally even when completion is not
+              ;; activated. This should not cause problems,
+              ;; because when completion is activated, the value of
+              ;; `company-emulation-alist' is ((t . company-my-keymap)),
+              ;; when completion is not activated, the value is ((t . nil)).
+              (when (memq 'company-emulation-alist emulation-mode-map-alists)
+                (company-ensure-emulation-alist))))
+
+  (evil-mode 1))
 
 (defun lambda-hs-hide-level-1 ()
   "Just fold level 1 elements."
   (hs-hide-level 1))
 (define-key evil-normal-state-map (kbd "zM")
-  '(lambda ()
+  #'(lambda ()
      (interactive)
      (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
        (evil-close-folds))))
@@ -69,27 +113,6 @@
   (interactive)
   (evil-yank (point) (point-at-eol)))
 ;; (define-key evil-normal-state-map (kbd "C-w") 'evil-window-map)
-(define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
-(define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
-
-(delete 'ag-mode evil-motion-state-modes)
-
-(mapc #'(lambda (mode-state-pair)
-          (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
-      '(
-        (Info-mode . emacs)
-        (Man-mode . emacs)
-        (calendar-mode . emacs)
-        (dired-mode . emacs)
-        (grep-mode . emacs)
-        (help-mode . emacs)
-        (image-mode . emacs)
-        (svn-status-mode . emacs)
-        (view-mode . emacs)
-        (xref . emacs)
-        (special-mode . emacs)
-        (ag-mode . emacs)
-        ))
 
 ;; when entering edebug, change to evil-emacs-state to use simple key bindings
 ;; (require 'edebug)
@@ -110,18 +133,18 @@
 (require 'evil-leader)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  "a" 'helm-ag
-  "p" 'helm-projectile-ag
-  ;; "b" #'(lambda ()
-  ;;         (interactive)
-  ;;         ;; skip persp-mode like filters, let it show more candidates
-  ;;         (let ((ido-make-buffer-list-hook nil))
-  ;;           (ido-switch-buffer)))
-  "b" 'ido-switch-buffer
-  "e" 'helm-projectile
-  "k" 'kill-this-buffer
-  "o" 'helm-occur
-  "f" 'find-file)
+ "a" 'helm-ag
+ "p" 'helm-projectile-ag
+ ;; "b" #'(lambda ()
+ ;;         (interactive)
+ ;;         ;; skip persp-mode like filters, let it show more candidates
+ ;;         (let ((ido-make-buffer-list-hook nil))
+ ;;           (ido-switch-buffer)))
+ "b" 'ido-switch-buffer
+ "e" 'helm-projectile
+ "k" 'kill-this-buffer
+ "o" 'helm-occur
+ "f" 'find-file)
 (global-evil-leader-mode 1)
 
 (lambda-package-ensure-install 'evil-nerd-commenter)
@@ -185,9 +208,9 @@
 
 (when (and (featurep 'evil) (featurep 'evil-leader))
   (evil-leader/set-key
-    "c" 'ace-jump-char-mode
-    "w" 'ace-jump-word-mode
-    "l" 'ace-jump-line-mode))
+   "c" 'ace-jump-char-mode
+   "w" 'ace-jump-word-mode
+   "l" 'ace-jump-line-mode))
 (lambda-package-ensure-install 'ace-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
