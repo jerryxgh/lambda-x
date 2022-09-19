@@ -30,27 +30,6 @@
 
 (require 'lambda-core)
 
-;; Add yasnippet support for all company backends
-;; https://github.com/syl20bnr/spacemacs/pull/179
-(defvar company-mode/enable-yas t
-  "Enable yasnippet for all backends.")
-
-(defun company-mode/backend-with-yas (backend)
-  "Add yasnippet for BACKEND."
-  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-      backend
-    (append (if (consp backend) backend (list backend))
-            '(:with company-yasnippet))
-    ))
-
-(defun company-mode/backend-with-same-mode (backend)
-  "Add company-same-mode-buffers for BACKEND."
-  (if (and (listp backend) (member 'company-same-mode-buffers backend))
-      backend
-    (append (if (consp backend) backend (list backend))
-            '(:with company-same-mode-buffers))
-    ))
-
 (use-package company
   :ensure t
   :diminish company-mode
@@ -104,19 +83,7 @@ If all failed, try to complete the common part with `company-complete-common'"
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  (push '(company-capf :with company-yasnippet) company-backends)
-
-  ;; (push 'company-elisp company-backends)
-  ;; (push 'company-dabbrev company-backends)
-
-  ;; (require 'company-same-mode-buffers)
-  ;; (company-same-mode-buffers-initialize)
-
-  ;; (setq company-backends (mapcar #'company-mode/backend-with-same-mode company-backends))
-  ;; (push 'company-same-mode-buffers company-backends)
-
-  ;; (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-  ;; (push 'company-yasnippet company-backends)
+  (push '(company-capf :with company-yasnippet company-dabbrev-code) company-backends)
   )
 
 (provide 'lambda-company)
