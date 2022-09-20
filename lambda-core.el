@@ -132,7 +132,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; theme -----------------------------------------------------------------------
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
-  (setq-default default-text-properties '(line-spacing 0.00 line-height 1.36))
+  ;; make font in the vertical middle of line
+  (setq-default default-text-properties '(line-spacing 3 line-height 18))
 
   (load-theme theme t)
 
