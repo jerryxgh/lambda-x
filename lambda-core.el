@@ -75,7 +75,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; open file in Find will reuse current frame instead creating a new one
 
   ;; close menu bar
-  (menu-bar-mode -1)
+  ;; (menu-bar-mode -1)
   (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
@@ -159,50 +159,67 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; (lambda-package-ensure-install 'spacemacs-theme)
 ;; (lambda-load-theme 'spacemacs-dark)
 
-(lambda-package-ensure-install 'zenburn-theme)
-;; use variable-pitch fonts for some headings and titles
-(setq zenburn-use-variable-pitch t)
-;; scale headings in org-mode
-(setq zenburn-scale-org-headlines t)
-;; scale headings in outline-mode
-(setq zenburn-scale-outline-headlines t)
-(lambda-load-theme 'zenburn)
+(use-package zenburn-theme
+  :ensure
+  :config
+  ;; use variable-pitch fonts for some headings and titles
+  (setq zenburn-use-variable-pitch t)
+  ;; scale headings in org-mode
+  (setq zenburn-scale-org-headlines t)
+  ;; scale headings in outline-mode
+  (setq zenburn-scale-outline-headlines t)
+  (lambda-load-theme 'zenburn)
+  )
 
-(lambda-package-ensure-install 'powerline)
-(lambda-package-ensure-install 'spaceline)
 
-;;; winum -----------------------------------------------------------------------
-;; (defun window-numbering-install-mode-line (&optional position)
-;;   "Do nothing, the display is handled by the spaceline(powerline).
-;; POSITION: just inhibit warning.")
+;;; mode line theme -------------------------------------------------------------
+;; (lambda-package-ensure-install 'powerline)
+(use-package powerline
+  :ensure
+  :init
+  ;; (setq-default powerline-height 23)
+  :custom
+  (powerline-height 23)
+  )
 
-(lambda-package-ensure-install 'winum)
-(require 'winum)
-(winum-set-keymap-prefix (kbd "C-w"))
-(winum-mode)
+;; (lambda-package-ensure-install 'spaceline)
+(use-package spaceline
+  :ensure
+  :config
+  ;; winum
+  ;; (defun window-numbering-install-mode-line (&optional position)
+  ;;   "Do nothing, the display is handled by the spaceline(powerline).
+  ;; POSITION: just inhibit warning.")
 
-(require 'spaceline-config)
+  (lambda-package-ensure-install 'winum)
+  (require 'winum)
+  (winum-set-keymap-prefix (kbd "C-w"))
+  (winum-mode)
 
-(cond ((eq system-type 'windows-nt)
-       (set-face-font 'mode-line "Microsoft Yahei-9:bold")
-       (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
-      )
+  (require 'spaceline-config)
 
-(setq spaceline-window-numbers-unicode t
-      spaceline-workspace-numbers-unicode t
-      powerline-default-separator nil
-      ;; different color for different evil state in modeline
-      spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-;; (spaceline-spacemacs-theme '(buffer-encoding process))
-(spaceline-spacemacs-theme)
-(spaceline-helm-mode)
-(spaceline-info-mode)
-(redisplay)
+  (cond ((eq system-type 'windows-nt)
+         (set-face-font 'mode-line "Microsoft Yahei-9:bold")
+         (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
+        )
+
+  (setq spaceline-window-numbers-unicode t
+        spaceline-workspace-numbers-unicode t
+        powerline-default-separator 'bar
+        ;; different color for different evil state in modeline
+        spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  ;; (spaceline-spacemacs-theme '(buffer-encoding process))
+  (spaceline-spacemacs-theme)
+  (spaceline-helm-mode)
+  (spaceline-info-mode)
+  (redisplay)
+  )
+
 
 ;; inhibit annoying warning sound
 (setq ring-bell-function 'ignore)
 
-(mouse-avoidance-mode 'animate)
+(mouse-avoidance-mode 'none)
 ;; (show-paren-mode -1)
 ;; (setq show-paren-style 'mixed)
 ;; (set-background-color "#CCE8CF")

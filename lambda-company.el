@@ -46,6 +46,7 @@
   ;; Trigger completion immediately.
   (company-idle-delay 0.1)
   (company-show-quick-access 'right)
+  (company-minimum-prefix-length 1)
   (company-tooltip-minimum 10)
   :config
 
@@ -83,7 +84,8 @@ If all failed, try to complete the common part with `company-complete-common'"
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  (push '(company-capf :with company-yasnippet company-dabbrev-code) company-backends)
+  (setq company-backends '((company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files)) )
+  ;; (push '(company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files) company-backends)
   )
 
 (provide 'lambda-company)

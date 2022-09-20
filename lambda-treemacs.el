@@ -96,12 +96,14 @@
     ;; beautify treemacs mode line
     (setq treemacs-user-mode-line-format
           (progn
-            (spaceline-install
+            (spaceline-compile
               "treemacs" '(((persp-name workspace-number "➓")
                             :fallback evil-state :face highlight-face :priority 100)
                            (anzu :priority 95)
                            (major-mode :priority 79))
-              nil)
+              `(which-function
+                (buffer-position :priority 99)
+                (hud :priority 100)))
             '("%e" (:eval (spaceline-ml-treemacs)))))
 
     (treemacs-follow-mode t)
