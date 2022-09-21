@@ -110,6 +110,7 @@
     ;; (treemacs-tag-follow-mode t)
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode 'always)
+    (treemacs-git-commit-diff-mode t)
 
     (pcase (cons (not (null (executable-find "git")))
                  (not (null treemacs-python-executable)))

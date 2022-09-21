@@ -40,9 +40,10 @@
   ;;       ("TAB" . smarter-tab-to-complete))
   :custom
   (company-tooltip-align-annotations t)
-  (company-require-match 'never)
+  (company-require-match t)
   ;; Don't use company in the following modes
-  (company-global-modes '(not shell-mode eaf-mode))
+  ;; (company-global-modes '(not shell-mode eaf-mode))
+  (company-global-modes)
   ;; Trigger completion immediately.
   (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-show-quick-access 'right)
@@ -83,12 +84,10 @@ If all failed, try to complete the common part with `company-complete-common'"
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  ;; (setq company-backends '((company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files)) )
-  (setq company-backends '((company-capf :with company-dabbrev-code)
-                           (company-yasnippet company-keywords company-gtags company-files)))
-  (setq company-transformers '(delete-consecutive-dups
-                              company-sort-by-backend-importance))
   ;; (push '(company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files) company-backends)
+  (setq company-backends '((company-capf :with company-dabbrev company-yasnippet company-keywords company-gtags)
+                           (company-files)))
+  (setq company-transformers '(company-sort-by-backend-importance))
   )
 
 (provide 'lambda-company)
