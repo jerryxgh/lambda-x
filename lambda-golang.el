@@ -49,6 +49,7 @@
       lsp-ui-peek-enable nil
       lsp-ui-sideline-enable nil
       lsp-ui-sideline-show-hover nil
+      lsp-completion-provider :none
       )
 
 (add-hook 'go-mode-hook #'lsp-deferred)

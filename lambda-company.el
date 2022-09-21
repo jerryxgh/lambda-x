@@ -44,18 +44,17 @@
   ;; Don't use company in the following modes
   (company-global-modes '(not shell-mode eaf-mode))
   ;; Trigger completion immediately.
-  (company-idle-delay 0.1)
+  (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-show-quick-access 'right)
   (company-minimum-prefix-length 1)
   (company-tooltip-minimum 10)
-  :config
-
-
-  (setq company-frontends
+  (company-frontends
         '(company-pseudo-tooltip-unless-just-one-frontend-with-delay
           company-preview-frontend
           company-echo-metadata-frontend
           ))
+  (company-selection-wrap-around t)
+  :config
   (defun smarter-tab-to-complete ()
     "Try to `org-cycle', `yas-expand', and `yas-next-field' at current cursor position.
 
@@ -84,7 +83,11 @@ If all failed, try to complete the common part with `company-complete-common'"
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  (setq company-backends '((company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files)) )
+  ;; (setq company-backends '((company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files)) )
+  (setq company-backends '((company-capf :with company-dabbrev-code)
+                           (company-yasnippet company-keywords company-gtags company-files)))
+  (setq company-transformers '(delete-consecutive-dups
+                              company-sort-by-backend-importance))
   ;; (push '(company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files) company-backends)
   )
 

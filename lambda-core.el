@@ -160,6 +160,12 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; (lambda-package-ensure-install 'spacemacs-theme)
 ;; (lambda-load-theme 'spacemacs-dark)
 
+;; (use-package solarized-theme
+;;   :ensure
+;;   :config
+;;   (lambda-load-theme 'solarized-dark)
+;;   )
+
 (use-package zenburn-theme
   :ensure
   :config
@@ -595,18 +601,25 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
 
 ;; flycheck - much better than flymake -----------------------------------------
-(lambda-package-ensure-install 'flycheck)
-(require 'flycheck)
-(setq flycheck-emacs-lisp-initialize-packages t
-      flycheck-emacs-lisp-package-user-dir package-user-dir
-      flycheck-mode-line nil  ; use spaceline to show flycheck status instead
-      )
-;; enable on-the-fly syntax checking
-(add-hook 'after-init-hook #'(lambda ()
-                               (global-flycheck-mode)))
-(lambda-package-ensure-install 'helm-flycheck)
-(eval-after-load 'flycheck
-  '(define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
+;; (lambda-package-ensure-install 'flycheck)
+(use-package flycheck
+  :ensure
+  ;; enable on-the-fly syntax checking
+  :init (global-flycheck-mode)
+  :custom
+  (compilation-skip-threshold 0)
+  (flycheck-emacs-lisp-initialize-packages t)
+  (flycheck-emacs-lisp-package-user-dir package-user-dir)
+  (flycheck-mode-line nil)  ; use spaceline to show flycheck status instead
+
+  :config
+  )
+
+;; (lambda-package-ensure-install 'helm-flycheck)
+(use-package helm-flycheck
+  :ensure
+  :config
+  (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
@@ -819,15 +832,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (diminish 'auto-fill-function)
 
 ;; key-bindings for myself, you can change this to yours -----------------------
-(global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-c y") 'bury-buffer)
-(global-set-key (kbd "C-\\") 'toggle-truncate-lines)
-(global-set-key (kbd "C-<") 'shrink-window)
-(global-set-key (kbd "C->") 'enlarge-window)
-(global-set-key (kbd "M-n") 'next-error)
-(global-set-key (kbd "M-p") 'previous-error)
-(define-key global-map (kbd "C-x C-z") 'goto-previous-buffer)
 (global-set-key (kbd "C-x j") #'(lambda () (interactive)
                                   (ido-mode 1)
                                   (ido-find-file-in-dir lambda-x-direcotry)))
