@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2021-10-31 01:12:44 Guanghui Xu>
+;; Time-stamp: <2022-09-23 00:03:15 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -48,29 +48,6 @@
                                         ;(semanticdb-enable-gnu-global-databases 'c-mode)
                                         ;(semanticdb-enable-gnu-global-databases 'c++-mode)
   )
-
-;; irony-mode ------------------------------------------------------------------
-(lambda-package-ensure-install 'irony)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-
-;; (with-eval-after-load "irony"
-;;   (setq irony-server-install-prefix (expand-file-name "irony" lambda-auto-save-dir)
-;;         irony-user-dir (expand-file-name "irony" lambda-auto-save-dir))
-
-;;   (require 'ac-irony)
-;;   (add-hook 'irony-mode-hook
-;;             #'(lambda ()
-;;                 (irony-cdb-autosetup-compile-options)
-;;                 (unless (memq 'ac-source-irony ac-sources)
-;;                   (setq ac-sources (append '(ac-source-irony) ac-sources)))
-;;                 (diminish 'irony-mode)))
-;;   )
-
-;; (lambda-package-ensure-install 'flycheck-irony)
-;; (eval-after-load 'flycheck
-;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
 ;; google-c-style --------------------------------------------------------------
 (lambda-package-ensure-install 'google-c-style)
