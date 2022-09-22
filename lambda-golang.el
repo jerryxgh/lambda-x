@@ -32,57 +32,78 @@
 (require 'lambda-cc)
 (require 'lambda-treemacs)
 
+;; (lambda-package-ensure-install 'lsp-mode)
+(use-package lsp-mode
+  ;; :init
+  :hook (;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :custom
+  (lsp-completion-provider :none)
 
-;; https://github.com/dominikh/go-mode.el
-(lambda-package-ensure-install 'go-mode)
-(lambda-package-ensure-install 'lsp-mode)
-(lambda-package-ensure-install 'lsp-ui)
+  :commands lsp
+  :config
+  (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
+  (add-hook 'lsp-mode-hook
+            #'(lambda ()
+                (when (and (featurep 'evil) (featurep 'evil-leader))
+                  (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
+                  (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
 
-(require 'go-mode)
-
-;;; syntax chech for golang
-(require 'lsp-ui)
-;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-(require 'lsp-mode)
-(setq lsp-ui-doc-enable nil
-      lsp-ui-imenu-enable nil
-      lsp-ui-peek-enable nil
-      lsp-ui-sideline-enable nil
-      lsp-ui-sideline-show-hover nil
-      lsp-completion-provider :none
-      )
-
-(add-hook 'go-mode-hook #'lsp-deferred)
-(add-hook 'go-mode-hook #'(lambda ()
-                            (setq tab-width 4)))
-
-(add-hook 'lsp-mode-hook
-          #'(lambda ()
-              (when (and (featurep 'evil) (featurep 'evil-leader))
-                (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
-                (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
-
-(defun lsp-go-install-save-hooks ()
-  "Set up before-save hooks to format buffer and add/delete imports.
+  (defun lsp-go-install-save-hooks ()
+    "Set up before-save hooks to format buffer and add/delete imports.
 Make sure you don't have other gofmt/goimports hooks enabled."
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "GOPATH"))
-
-
-;; integrate with treemacs
-(lambda-package-ensure-install 'lsp-treemacs)
-(lsp-treemacs-sync-mode 1)
+(use-package lsp-ui
+  :ensure
+  :custom
+  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-imenu-enable nil)
+  (lsp-ui-peek-enable nil)
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-hover nil)
+  )
 
 ;; integrate with helm
-(lambda-package-ensure-install 'helm-lsp)
-(define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
+(use-package helm-lsp
+  :ensure
+  :commands helm-lsp-workspace-symbol
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
+  )
+
 ;; xref complete by helm
-(lambda-package-ensure-install 'helm-xref)
+(use-package helm-xref
+  :ensure)
+
+;; integrate with treemacs
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+;; optional if you want which-key integration
+(use-package which-key
+  :ensure
+  :config
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  ;; (which-key-setup-side-window-bottom)
+  )
+
+;; https://github.com/dominikh/go-mode.el
+(use-package go-mode
+  :ensure
+  :config
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'go-mode-hook #'(lambda ()
+                              (setq tab-width 4)))
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "GOPATH"))
+  )
 
 (provide 'lambda-golang)
 

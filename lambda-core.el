@@ -740,48 +740,55 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (ido-at-point-mode 1)
 
 ;; helm ------------------------------------------------------------------------
-(lambda-package-ensure-install 'helm)
-;; must set before helm-config,  otherwise helm use default
-;; prefix "C-x c", which is inconvenient because you can
-;; accidentially pressed "C-x C-c"
-(setq-default helm-command-prefix-key "C-c h"
-              ;; use ido-at-point
-              helm-mode-handle-completion-in-region nil)
-(require 'helm-config)
-(helm-mode 1)
-;; always split window for helm
-(setq helm-split-window-inside-p t)
+;; (lambda-package-ensure-install 'helm)
+(use-package helm
+  :ensure
+  :custom
+  ;; always split window for helm
+  (helm-split-window-inside-p t)
+  (helm-move-to-line-cycle-in-source t)
+  :config
+  ;; must set before helm-config,  otherwise helm use default
+  ;; prefix "C-x c", which is inconvenient because you can
+  ;; accidentially pressed "C-x C-c"
+  (setq-default helm-command-prefix-key "C-c h"
+                ;; use ido-at-point
+                helm-mode-handle-completion-in-region nil)
+  (require 'helm-config)
+  (helm-mode 1)
 
-(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-(add-hook 'eshell-mode-hook
-          #'(lambda ()
-              (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-;; (eval-after-load 'magit #'(lambda ()
-;;                             (setq magit-completing-read-function 'magit-ido-completing-read)))
+  (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
+  ;; (eval-after-load 'magit #'(lambda ()
+  ;;                             (setq magit-completing-read-function 'magit-ido-completing-read)))
 
-;; to use with ido, customize helm-completing-read-handlers-alist
-(setq-default helm-completing-read-handlers-alist
-              '((describe-function . ido)
-                (describe-variable . ido)
-                (where-is . ido)
-                (load-library . ido)
-                (debug-on-entry . ido)
-                (dired-do-copy . ido)
-                (dired-do-rename . ido)
-                (dired-create-directory . ido)
-                (find-function . ido)
-                (find-tag . ido)
-                (find-file . ido)
-                (find-file-other-window . ido)
-                (switch-to-buffer . ido)
-                (httpd-serve-directory . ido)
-                (helm-gtags-create-tags . ido)
-                (ffap-alternate-file . nil)
-                (tmm-menubar . nil)))
+  ;; to use with ido, customize helm-completing-read-handlers-alist
+  (setq-default helm-completing-read-handlers-alist
+                '((describe-function . ido)
+                  (describe-variable . ido)
+                  (where-is . ido)
+                  (load-library . ido)
+                  (debug-on-entry . ido)
+                  (dired-do-copy . ido)
+                  (dired-do-rename . ido)
+                  (dired-create-directory . ido)
+                  (find-function . ido)
+                  (find-tag . ido)
+                  (find-file . ido)
+                  (find-file-other-window . ido)
+                  (switch-to-buffer . ido)
+                  (httpd-serve-directory . ido)
+                  (helm-gtags-create-tags . ido)
+                  (ffap-alternate-file . nil)
+                  (tmm-menubar . nil)))
+  )
 
-(lambda-package-ensure-install 'helm-projectile)
-(require 'helm-projectile)
-(helm-projectile-on)
+;; (lambda-package-ensure-install 'helm-projectile)
+(use-package helm-projectile
+  :config
+  (helm-projectile-on))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE: helm-descbinds                      ;;
