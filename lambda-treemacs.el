@@ -156,6 +156,10 @@
   ;; should run all-the-icons-install-fonts after installation
   :config (treemacs-load-theme "all-the-icons"))
 
+(defun lsp-treemacs-generic-update (tree)
+  (setq lsp-treemacs-tree tree)
+  (lsp-treemacs-generic-refresh))
+
 (provide 'lambda-treemacs)
 
 ;;; lambda-treemacs.el ends here
