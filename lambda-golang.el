@@ -32,41 +32,6 @@
 (require 'lambda-cc)
 (require 'lambda-treemacs)
 
-;; (lambda-package-ensure-install 'lsp-mode)
-(use-package lsp-mode
-  ;; :init
-  :hook (;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :custom
-  (lsp-completion-provider :none)
-
-  :commands lsp
-  :config
-  (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
-  (add-hook 'lsp-mode-hook
-            #'(lambda ()
-                (when (and (featurep 'evil) (featurep 'evil-leader))
-                  (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
-                  (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
-
-  (defun lsp-go-install-save-hooks ()
-    "Set up before-save hooks to format buffer and add/delete imports.
-Make sure you don't have other gofmt/goimports hooks enabled."
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t))
-  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
-
-(use-package lsp-ui
-  :ensure
-  :custom
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (lsp-ui-doc-enable nil)
-  (lsp-ui-imenu-enable nil)
-  (lsp-ui-peek-enable nil)
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-show-hover nil)
-  )
-
 ;; integrate with helm
 (use-package helm-lsp
   :ensure
@@ -103,6 +68,47 @@ Make sure you don't have other gofmt/goimports hooks enabled."
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "GOPATH"))
+  )
+
+;; (lambda-package-ensure-install 'lsp-mode)
+(use-package lsp-mode
+  ;; :init
+  :hook (;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :custom
+  (lsp-completion-provider :none)
+  ;; (lsp-go-symbol-matcher "CaseSensitive")
+  ;; (lsp-go-symbol-style "Full")
+  ;; (lsp-go-use-placeholders nil)
+
+  :commands lsp
+  :config
+  (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
+  (add-hook 'lsp-mode-hook
+            #'(lambda ()
+                (when (and (featurep 'evil) (featurep 'evil-leader))
+                  (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
+                  (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
+
+  (defun lsp-go-install-save-hooks ()
+    "Set up before-save hooks to format buffer and add/delete imports.
+Make sure you don't have other gofmt/goimports hooks enabled."
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+  (lsp-register-custom-settings
+   '(("gopls.completeUnimported" t t)
+     ("gopls.staticcheck" t t))))
+
+(use-package lsp-ui
+  :ensure
+  :custom
+  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-imenu-enable nil)
+  (lsp-ui-peek-enable nil)
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-hover nil)
   )
 
 (provide 'lambda-golang)

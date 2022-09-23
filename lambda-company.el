@@ -33,11 +33,6 @@
 (use-package company
   :ensure t
   :diminish company-mode
-  :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode) . company-mode)
-  ;; :bind
-  ;; :map (company-active-map
-  ;;       ([tab] . smarter-tab-to-complete)
-  ;;       ("TAB" . smarter-tab-to-complete))
   :custom
   (company-tooltip-align-annotations t)
   (company-require-match t)
@@ -56,38 +51,22 @@
           ))
   (company-selection-wrap-around t)
   :config
-  (defun smarter-tab-to-complete ()
-    "Try to `org-cycle', `yas-expand', and `yas-next-field' at current cursor position.
-
-If all failed, try to complete the common part with `company-complete-common'"
-    (interactive)
-    (when yas-minor-mode
-      (let ((old-point (point))
-            (old-tick (buffer-chars-modified-tick))
-            (func-list
-             (if (equal major-mode 'org-mode) '(org-cycle yas-expand yas-next-field)
-               '(yas-expand yas-next-field))))
-        (catch 'func-suceed
-          (dolist (func func-list)
-            (ignore-errors (call-interactively func))
-            (unless (and (eq old-point (point))
-                         (eq old-tick (buffer-chars-modified-tick)))
-              (throw 'func-suceed t)))
-          (company-complete-common)))))
 
   (add-hook 'after-init-hook 'global-company-mode)
 
   (define-key company-mode-map (kbd "M-/") 'company-complete)
-  (define-key company-active-map (kbd "<tab>") 'company-complete)
+  (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
   ;; (push '(company-capf :with company-yasnippet :with company-dabbrev-code :with company-keywords :with company-gtags :with company-files) company-backends)
-  (setq company-backends '((company-capf :with company-dabbrev company-yasnippet company-keywords company-gtags)
-                           (company-files)))
-  (setq company-transformers '(company-sort-by-backend-importance))
+  (setq company-backends '((company-capf :with company-dabbrev company-yasnippet company-keywords company-gtags)))
+  (setq company-transformers
+        ;; '(company-sort-by-backend-importance)
+        '(company-sort-prefer-same-case-prefix))
   )
 
 (provide 'lambda-company)
