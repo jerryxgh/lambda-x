@@ -43,7 +43,7 @@
   (company-require-match t)
   ;; Don't use company in the following modes
   ;; (company-global-modes '(not shell-mode eaf-mode))
-  (company-global-modes)
+  (company-global-modes t)
   ;; Trigger completion immediately.
   (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-show-quick-access 'right)
