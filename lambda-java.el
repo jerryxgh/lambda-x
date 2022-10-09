@@ -6,6 +6,8 @@
 
 (require 'lambda-core)
 (require 'lambda-cc)
+(require 'lambda-company)
+(require 'semantic)
 
 ;; to recognize mvn compile errors
 (setq compilation-error-regexp-alist
@@ -13,8 +15,12 @@
        '("^\\(.*\\):\\[\\([0-9]*\\),\\([0-9]*\\)\\]" 1 2 3)
        compilation-error-regexp-alist))
 
-;; java-snippets A set of java-mode snippets for YASnippet. --------------------
-(lambda-package-ensure-install 'java-snippets)
+(add-hook 'java-mode-hook
+          (lambda ()
+            (semantic-mode 1)
+            (setq company-backends
+                  '((company-semantic
+                     :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))))
 
 (provide 'lambda-java)
 

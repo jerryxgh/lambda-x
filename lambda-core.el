@@ -68,7 +68,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
                                                        lambda-x-direcotry))
 
 ;; suppressing ad-handle-definition Warnings in Emacs
-;; (setq ad-redefinition-action 'accept)
+(setq ad-redefinition-action 'accept)
 
 ;; init PATH in mac, this should just after packages settings ==================
 (when (eq system-type 'darwin)
@@ -246,6 +246,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 ;; auto insert newline at end of file if it has none
 (setq-default require-final-newline t)
+;; (setq case-fold-search nil)
 
 ;; directory to store all backup and autosave files
 (setq backup-directory-alist

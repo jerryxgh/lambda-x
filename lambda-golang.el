@@ -31,6 +31,7 @@
 (require 'lambda-core)
 (require 'lambda-cc)
 (require 'lambda-treemacs)
+(require 'lambda-company)
 
 ;; integrate with helm
 (use-package helm-lsp
@@ -85,10 +86,14 @@
   :config
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
   (add-hook 'lsp-mode-hook
-            #'(lambda ()
-                (when (and (featurep 'evil) (featurep 'evil-leader))
-                  (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
-                  (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
+            (lambda ()
+              (setq company-backends
+                    '((company-capf
+                       :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))
+
+              (when (and (featurep 'evil) (featurep 'evil-leader))
+                (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)
+                (define-key evil-normal-state-map (kbd "g r") 'xref-find-references))))
 
   (defun lsp-go-install-save-hooks ()
     "Set up before-save hooks to format buffer and add/delete imports.
