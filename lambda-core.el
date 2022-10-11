@@ -178,6 +178,21 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (lambda-load-theme 'zenburn)
   )
 
+;;; which-key --------------------------------------------------------------------
+;; optional if you want which-key integration
+(use-package which-key
+  :ensure
+  :config
+  ;; Allow C-h to trigger which-key before it is done automatically
+  (setq which-key-show-early-on-C-h t)
+  ;; make sure which-key doesn't show normally but refreshes quickly after it is
+  ;; triggered.
+  (setq which-key-idle-delay 10000)
+  (setq which-key-idle-secondary-delay 0.05)
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  ;; (which-key-setup-side-window-bottom)
+  )
 
 ;;; mode line theme -------------------------------------------------------------
 ;; (lambda-package-ensure-install 'powerline)
@@ -762,8 +777,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (add-hook 'eshell-mode-hook
             #'(lambda ()
                 (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-  ;; (eval-after-load 'magit #'(lambda ()
-  ;;                             (setq magit-completing-read-function 'magit-ido-completing-read)))
 
   ;; to use with ido, customize helm-completing-read-handlers-alist
   (setq-default helm-completing-read-handlers-alist
@@ -813,22 +826,29 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
  )
 
 ;;; magit --- use git in emacs--------------------------------------------------
-(lambda-package-ensure-install 'magit)
-(require 'magit)
-(require 'magit-ediff)
-(setq magit-ediff-dwim-show-on-hunks t)
-;; windows support
-(let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
-  (when (and (eq system-type 'windows-nt)
-             (file-exists-p git-executable-windows))
-    (setq magit-git-executable git-executable-windows)
-    (setenv "PATH"
-            (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+(use-package magit
+  :ensure t
+  ;; :bind ("C-c g" . magit-status)
+  ;; :custom
+  ;; (magit-git-executable "/usr/local/bin/git")
+  :init
+  (use-package with-editor :ensure t)
 
-;; (setq magit-last-seen-setup-instructions "1.4.0")
-;; magit-ediff-restore
-
-;; (setq exec-path (append exec-path '("c:/Program Files (x86)/Git/bin/")))
+  :config
+  (setq magit-ediff-dwim-show-on-hunks t)
+  ;; windows support
+  (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
+    (when (and (eq system-type 'windows-nt)
+               (file-exists-p git-executable-windows))
+      (setq magit-git-executable git-executable-windows)
+      (setenv "PATH"
+              (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent))
 
 ;;; fill-column ----------------------------------------------------------------
 (setq-default fill-column 80)

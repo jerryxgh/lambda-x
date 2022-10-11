@@ -50,15 +50,6 @@
   :config
   (lsp-treemacs-sync-mode 1))
 
-;; optional if you want which-key integration
-(use-package which-key
-  :ensure
-  :config
-  (which-key-mode)
-  (which-key-setup-minibuffer)
-  ;; (which-key-setup-side-window-bottom)
-  )
-
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode
   :ensure

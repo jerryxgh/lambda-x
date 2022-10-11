@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-09-19 22:21:03 Guanghui Xu>
+;; Time-stamp: <2022-10-10 10:55:55 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -55,18 +55,18 @@
   (mapc #'(lambda (mode-state-pair)
             (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
         '(
-          (Info-mode . emacs)
-          (Man-mode . emacs)
+          ;; (Info-mode . emacs)
+          ;; (Man-mode . emacs)
           (calendar-mode . emacs)
-          (dired-mode . emacs)
+          ;; (dired-mode . emacs)
           (grep-mode . emacs)
-          (help-mode . emacs)
+          ;; (help-mode . emacs)
           (image-mode . emacs)
-          (svn-status-mode . emacs)
-          (view-mode . emacs)
+          ;; (svn-status-mode . emacs)
+          ;; (view-mode . emacs)
           (xref . emacs)
           (special-mode . emacs)
-          (ag-mode . emacs)
+          ;; (ag-mode . emacs)
           ))
 
   ;; Prevent the visual selection overriding my system clipboard?
