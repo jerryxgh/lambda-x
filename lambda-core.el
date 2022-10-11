@@ -829,13 +829,13 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (use-package magit
   :ensure t
   ;; :bind ("C-c g" . magit-status)
-  ;; :custom
+  :custom
   ;; (magit-git-executable "/usr/local/bin/git")
+  (magit-ediff-dwim-show-on-hunks t)
   :init
   (use-package with-editor :ensure t)
 
   :config
-  (setq magit-ediff-dwim-show-on-hunks t)
   ;; windows support
   (let ((git-executable-windows "C:/Program Files (x86)/Git/bin/git.exe"))
     (when (and (eq system-type 'windows-nt)
@@ -843,12 +843,13 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
       (setq magit-git-executable git-executable-windows)
       (setenv "PATH"
               (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
-  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
-  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
-  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
-  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
-  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
-  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent))
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+  ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
+  )
 
 ;;; fill-column ----------------------------------------------------------------
 (setq-default fill-column 80)
