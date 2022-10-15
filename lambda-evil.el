@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-10-15 22:31:39 Guanghui Xu>
+;; Time-stamp: <2022-10-15 23:49:17 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -15,8 +15,6 @@
 (use-package evil
   :ensure t
   :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
   (setq-default evil-want-C-w-delete nil
                 evil-want-visual-char-semi-exclusive t
                 evil-want-C-w-in-emacs-state t
@@ -57,18 +55,18 @@
   (mapc #'(lambda (mode-state-pair)
             (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
         '(
-          ;; (Info-mode . emacs)
-          ;; (Man-mode . emacs)
+          (Info-mode . emacs)
+          (Man-mode . emacs)
           (calendar-mode . emacs)
-          ;; (dired-mode . emacs)
+          (dired-mode . emacs)
           (grep-mode . emacs)
-          ;; (help-mode . emacs)
+          (help-mode . emacs)
           (image-mode . emacs)
-          ;; (svn-status-mode . emacs)
-          ;; (view-mode . emacs)
+          (svn-status-mode . emacs)
+          (view-mode . emacs)
           (xref . emacs)
           (special-mode . emacs)
-          ;; (ag-mode . emacs)
+          (ag-mode . emacs)
           ))
 
   ;; Prevent the visual selection overriding my system clipboard?
@@ -127,13 +125,6 @@
 
 ;; (require 'evil-tab-minor-mode)
 ;; (global-evil-tab-mode t)
-
-;; evil-collection -------------------------------------------------------------
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)

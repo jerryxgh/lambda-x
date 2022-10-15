@@ -43,6 +43,7 @@ prefix match (same case) will be prioritized."
 (defun lambda-company-dabbrev (command &optional arg &rest ignored)
   "If preceding char is dot(.), skip completion.
 All args are passed directory, including COMMAND ARG and IGNORED."
+  (message "lambda-company-dabbrev:%s,%s" arg (preceding-char))
   (if (eq (preceding-char) ?\.)
       nil
       (company-dabbrev command arg ignored)))
@@ -101,7 +102,13 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
   (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))
+  (make-variable-buffer-local 'company-backends)
   ;; (setq company-backends '((lambda-company-capf)))
+  (add-hook 'makefile-mode-hook
+            (lambda ()
+              (setq company-backends
+                    '((company-yasnippet company-dabbrev company-keywords company-capf)))
+              ))
 
   (setq company-transformers
         ;; '(company-sort-by-backend-importance)
