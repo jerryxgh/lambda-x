@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-10-10 10:55:55 Guanghui Xu>
+;; Time-stamp: <2022-10-15 22:31:39 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -15,12 +15,14 @@
 (use-package evil
   :ensure t
   :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
   (setq-default evil-want-C-w-delete nil
                 evil-want-visual-char-semi-exclusive t
                 evil-want-C-w-in-emacs-state t
                 evil-auto-balance-windows t
-                evil-cross-lines t) :config
-
+                evil-cross-lines t)
+  :config
   ;; let * and # search symbol instead of word at point
   (setq-default evil-symbol-word-search t)
 
@@ -125,6 +127,13 @@
 
 ;; (require 'evil-tab-minor-mode)
 ;; (global-evil-tab-mode t)
+
+;; evil-collection -------------------------------------------------------------
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 ;; evil-leader -----------------------------------------------------------------
 (lambda-package-ensure-install 'evil-leader)
