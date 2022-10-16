@@ -76,6 +76,7 @@
   :commands lsp
   :config
   (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
+  (define-key lsp-mode-map (kbd "<f6>") 'lsp-rename)
   (add-hook 'lsp-mode-hook
             (lambda ()
               (setq company-backends
