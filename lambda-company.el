@@ -43,7 +43,6 @@ prefix match (same case) will be prioritized."
 (defun lambda-company-dabbrev (command &optional arg &rest ignored)
   "If preceding char is dot(.), skip completion.
 All args are passed directory, including COMMAND ARG and IGNORED."
-  (message "lambda-company-dabbrev:%s,%s" arg (preceding-char))
   (if (eq (preceding-char) ?\.)
       nil
       (company-dabbrev command arg ignored)))
