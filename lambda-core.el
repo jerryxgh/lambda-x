@@ -233,7 +233,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; (spaceline-spacemacs-theme '(buffer-encoding process))
   (spaceline-spacemacs-theme)
   (spaceline-helm-mode)
-  (spaceline-info-mode)
   (redisplay)
   )
 
