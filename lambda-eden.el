@@ -10,16 +10,6 @@
 ;; elnode emacs server
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
-;; sql-indent
-(lambda-package-ensure-install 'sql-indent)
-(require 'sql-indent)
-(add-hook 'sql-mode-hook 'sqlind-minor-mode)
-
-;; sqlup-mode
-(lambda-package-ensure-install 'sqlup-mode)
-(require 'sqlup-mode)
-(add-hook 'sql-mode-hook 'sqlup-mode)
-
 ;; vlf - view large file -------------------------------------------------------
 (lambda-package-ensure-install 'vlf)
 (require 'vlf-setup)
