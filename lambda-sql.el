@@ -29,12 +29,14 @@
 ;;; Code:
 
 (require 'lambda-core)
+(require 'lambda-company)
 
 ;; sqlup-mode
 (use-package sqlup-mode
   :ensure t
   :config
-  (setq sqlup-blacklist '("name", "key"))
+  (setq sqlup-blacklist '("name" "key"))
+  (setq sqlup-blacklist nil)
   (add-hook 'sql-mode-hook 'sqlup-mode))
 
 ;; sql-indent
@@ -43,6 +45,12 @@
   :config
   (add-hook 'sql-mode-hook 'sqlind-minor-mode)
   )
+
+(add-hook 'sql-mode-hook
+          (lambda ()
+            (setq company-backends
+                  '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+            ))
 
 (provide 'lambda-sql)
 
