@@ -30,6 +30,11 @@
 
 (use-package bison-mode
   :ensure
+  :mode (("\\.y\\'" . bison-mode)
+         ("\\.yy\\'" . bison-mode)
+         ("\\.l\\'" . flex-mode)
+         ("\\.ll\\'" . flex-mode)
+         )
   :pin melpa
   )
 

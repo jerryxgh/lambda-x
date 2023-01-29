@@ -33,6 +33,16 @@
 (lambda-package-ensure-install 'thrift)
 (require 'thrift)
 (setq thrift-indent-level 4)
+(add-hook 'thrift-mode-hook (lambda ()
+                              (semantic-mode 1)
+                             ))
+
+;; use semanticdb-find-test-translate-path to debug include
+(add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
+(require 'thrift-wy)
+(require 'thrift-tags)
+(add-to-list 'semantic-new-buffer-setup-functions '(thrift-mode . wisent-thrift-default-setup))
+(require 'eieio-datadebug)
 
 (provide 'lambda-thrift)
 

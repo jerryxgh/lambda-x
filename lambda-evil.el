@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2022-10-15 23:49:17 Guanghui Xu>
+;; Time-stamp: <2023-01-29 20:30:39 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -67,6 +67,7 @@
           (xref . emacs)
           (special-mode . emacs)
           (ag-mode . emacs)
+          (data-debug-mode . emacs)
           ))
 
   ;; Prevent the visual selection overriding my system clipboard?
