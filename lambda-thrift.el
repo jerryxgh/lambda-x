@@ -29,16 +29,25 @@
 ;;; Code:
 
 (require 'lambda-core)
+(require 'cc-mode)
 
 (lambda-package-ensure-install 'thrift)
 (require 'thrift)
-(setq thrift-indent-level 4)
+(setq thrift-indent-level 4
+      thrift-mode-syntax-table (let ((table (copy-syntax-table java-mode-syntax-table)))
+                                 ;; Comments can start with //, /* or # characters.
+                                 (modify-syntax-entry ?/ ". 124" table)
+                                 (modify-syntax-entry ?* ". 23b" table)
+                                 (modify-syntax-entry ?# "<" table)
+                                 (modify-syntax-entry ?\n ">" table)
+                                 table))
+
 (add-hook 'thrift-mode-hook (lambda ()
                               (semantic-mode 1)
-                             ))
+                              ))
 
 ;; use semanticdb-find-test-translate-path to debug include
-(add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
+(add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
 (require 'thrift-wy)
 (require 'thrift-tags)
 (add-to-list 'semantic-new-buffer-setup-functions '(thrift-mode . wisent-thrift-default-setup))
