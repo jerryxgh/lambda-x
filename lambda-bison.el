@@ -28,8 +28,18 @@
 
 ;;; Code:
 
+(require 'lambda-company)
+
 (use-package bison-mode
   :ensure
+  :hook ((bisin-mode . (lambda ()
+                         (setq company-backends
+                               '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                         ))
+         (flex-mode . (lambda ()
+                        (setq company-backends
+                              '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                        )))
   :mode (("\\.y\\'" . bison-mode)
          ("\\.yy\\'" . bison-mode)
          ("\\.l\\'" . flex-mode)
@@ -37,6 +47,12 @@
          )
   :pin melpa
   )
+
+(add-hook 'semantic-grammar-mode-hook
+          (lambda ()
+            (setq company-backends
+                  '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+            ))
 
 (provide 'lambda-bison)
 
