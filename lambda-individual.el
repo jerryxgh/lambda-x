@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2021-11-07 19:56:45 Guanghui Xu>
+;; Time-stamp: <2023-02-07 11:34:34 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -23,11 +23,11 @@
       ;; org-refile-targets '(("/Users/hudandan/Documents/gtd/gtd.org" :maxlevel . 3))
       )
 
-(require 'smartwin)
-(smartwin-mode 1)
-(diminish 'smartwin-mode)
-(define-key smartwin-mode-map (kbd "C-c s") #'smartwin-switch-buffer)
-(define-key smartwin-mode-map (kbd "C-l") #'smartwin-clear-shell)
+(require 'shell-window)
+(shell-window-mode 1)
+(diminish 'shell-window-mode)
+(define-key shell-window-mode-map (kbd "C-c s") #'shell-window-switch-buffer)
+(define-key shell-window-mode-map (kbd "C-l") #'shell-window-clear-shell-buffer)
 
 ;; (add-to-list 'load-path "~/repository/simplesite")
 ;; (require 'simplesite)
