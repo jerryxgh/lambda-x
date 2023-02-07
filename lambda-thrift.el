@@ -34,21 +34,23 @@
 (require 'lambda-evil)
 
 ;; use semanticdb-find-test-translate-path to debug include
-(add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
+(add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
 (require 'lambda-thrift-tags)
 
-(lambda-package-ensure-install 'thrift)
-(require 'thrift)
-(define-key thrift-mode-map (kbd "M-.") 'semantic-ia-fast-jump)
+(use-package thrift
+  :ensure t
+  :bind (:map thrift-mode-map ("M-." . semantic-ia-fast-jump))
+  :custom
+  (thrift-indent-level 4)
+  (thrift-mode-syntax-table lambda-thrift-syntax-table)
+  :hook (('thrift-mode . (lambda ()
+                           (semantic-mode 1)
+                           (if (featurep 'evil)
+                               (setq evil-goto-definition-functions
+                                     '(evil-goto-definition-imenu
+                                       evil-goto-definition-semantic
+                                       evil-goto-definition-search)))))))
 
-(setq thrift-indent-level 4
-      thrift-mode-syntax-table lambda-thrift-syntax-table)
-
-(add-hook 'thrift-mode-hook (lambda ()
-                              (semantic-mode 1)
-                              (setq evil-goto-definition-functions '(evil-goto-definition-imenu
-                                                                     evil-goto-definition-semantic
-                                                                     evil-goto-definition-search))))
 (provide 'lambda-thrift)
 
 ;;; lambda-thrift.el ends here
