@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-07 11:39:44 Guanghui Xu>
+;; Time-stamp: <2023-02-07 11:48:32 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -237,6 +237,7 @@
 ;; define text objects
 (defmacro spacemacs|define-text-object (key name start end)
   "Define a text object and a surround pair.
+KEY is key of the text object, NAME is the name of text object,
 START and END are strings (not regular expressions) that define
 the boundaries of the text object."
   `(progn
@@ -252,7 +253,9 @@ the boundaries of the text object."
 
 (defmacro spacemacs|define-text-object-regexp (key name start-regexp end-regexp)
   "Define a text object.
-START-REGEXP and END-REGEXP are the boundaries of the text object."
+KEY is key of the text object, NAME is the name of text object,
+START-REGEXP and END-REGEXP are the boundaries of the text
+object."
   (let ((inner-name (make-symbol (concat "evil-inner-" name)))
         (outer-name (make-symbol (concat "evil-outer-" name))))
     `(progn
