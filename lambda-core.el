@@ -24,6 +24,7 @@
 ;; (add-hook 'after-init-hook 'lambda-maxmize-frame)
 
 (require 'lambda-package)
+(require 'dired)
 
 (defconst current-user
   (getenv
@@ -40,11 +41,10 @@
   (cond
    ;; In buffers with file name
    ((buffer-file-name)
-    (kill-new (buffer-file-name))))
+    (kill-new (buffer-file-name)))
    ((eq major-mode 'dired-mode)
     (kill-new (dired-current-directory)))
-   (t
-    (kill-new default-directory)))
+   ((kill-new default-directory))))
 
 (defun lambda-add-to-load-path-recursively
     (directory &optional exclude-directories-list)
@@ -809,10 +809,12 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
                   (tmm-menubar . nil)))
   )
 
-;; (lambda-package-ensure-install 'helm-projectile)
+;; M-x helm-projectile-ag
 (use-package helm-projectile
+  :ensure t
   :config
-  (helm-projectile-on))
+  (helm-projectile-on)
+  :pin melpa)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE: helm-descbinds                      ;;
