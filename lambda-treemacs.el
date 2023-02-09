@@ -136,6 +136,12 @@
   :after (treemacs projectile)
   :ensure t)
 
+(use-package treemacs-all-the-icons
+  :after (treemacs)
+  :ensure t
+  ;; should run all-the-icons-install-fonts after installation
+  :config (treemacs-load-theme "all-the-icons"))
+
 (use-package treemacs-icons-dired
   :hook (dired-mode . treemacs-icons-dired-enable-once)
   :ensure t)
@@ -148,12 +154,6 @@
   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
-
-(use-package treemacs-all-the-icons
-  :after (treemacs)
-  :ensure t
-  ;; should run all-the-icons-install-fonts after installation
-  :config (treemacs-load-theme "all-the-icons"))
 
 (defun lsp-treemacs-generic-update (tree)
   (setq lsp-treemacs-tree tree)

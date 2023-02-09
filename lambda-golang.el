@@ -30,7 +30,6 @@
 
 (require 'lambda-core)
 (require 'lambda-cc)
-(require 'lambda-treemacs)
 (require 'lambda-company)
 
 ;; integrate with helm
@@ -46,9 +45,10 @@
   :ensure)
 
 ;; integrate with treemacs
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list
-  :config
-  (lsp-treemacs-sync-mode 1))
+(if (featurep 'treemacs)
+    (use-package lsp-treemacs :commands lsp-treemacs-errors-list
+      :config
+      (lsp-treemacs-sync-mode 1)))
 
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode

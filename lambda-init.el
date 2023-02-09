@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-02-09 10:32:12 bytedance>
+;; Time-stamp: <2023-02-09 14:13:46 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -20,7 +20,7 @@
 (unless (frame-parameter nil 'fullscreen)
       (toggle-frame-maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-;; (redisplay)
+(redisplay)
 
 (defvar lambda-libraries
   '(
@@ -29,6 +29,7 @@
     ;; core settings, shared by all other modules
     lambda-core
     lambda-evil
+    ;; lambda-treemacs
     ;; lambda-corfu
     lambda-company
 
@@ -48,7 +49,6 @@
     lambda-individual
     lambda-golang
     lambda-thrift
-    ;; lambda-treemacs
     lambda-dap
 
     lambda-bison
