@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-09 13:08:41 Guanghui Xu>
+;; Time-stamp: <2023-02-09 23:29:27 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -207,10 +207,12 @@
 
 (use-package ace-window
   :ensure t
+  :custom
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?m ?n ?z ?v ?b))
   :bind (("C-x o" . ace-window)
          :map evil-window-map
-         ("w" ace-window)
-         ("C-w" ace-window)))
+         ("w" . ace-window)
+         ("C-w" . ace-window)))
 
 (use-package evil-commentary
   :ensure t
