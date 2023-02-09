@@ -34,7 +34,8 @@
 (require 'lambda-evil)
 
 ;; use semanticdb-find-test-translate-path to debug include
-(add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
+;; (add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
+(add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
 (require 'lambda-thrift-tags)
 
 (use-package thrift
