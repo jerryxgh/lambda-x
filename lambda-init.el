@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-02-07 11:42:03 Guanghui Xu>
+;; Time-stamp: <2023-02-09 10:32:12 bytedance>
 
 ;;; Commentary:
 
@@ -20,7 +20,7 @@
 (unless (frame-parameter nil 'fullscreen)
       (toggle-frame-maximized))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(redisplay)
+;; (redisplay)
 
 (defvar lambda-libraries
   '(

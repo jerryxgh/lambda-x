@@ -7,3 +7,5 @@ GPATH
 GRTAGS
 GTAGS
 lambda-custom.el
+
+flycheck_*.el

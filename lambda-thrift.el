@@ -44,12 +44,8 @@
   (thrift-indent-level 4)
   (thrift-mode-syntax-table lambda-thrift-syntax-table)
   :hook (('thrift-mode . (lambda ()
-                           (semantic-mode 1)
-                           (if (featurep 'evil)
-                               (setq evil-goto-definition-functions
-                                     '(evil-goto-definition-imenu
-                                       evil-goto-definition-semantic
-                                       evil-goto-definition-search)))))))
+                           (semantic-mode 1))))
+  :pin melpa)
 
 (provide 'lambda-thrift)
 

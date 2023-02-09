@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-07 11:48:32 Guanghui Xu>
+;; Time-stamp: <2023-02-09 10:42:33 bytedance>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -18,7 +18,6 @@
   (setq-default evil-want-C-w-delete nil
                 evil-want-visual-char-semi-exclusive t
                 evil-want-C-w-in-emacs-state t
-                evil-auto-balance-windows t
                 evil-cross-lines t)
   :config
   ;; let * and # search symbol instead of word at point
@@ -281,15 +280,57 @@ object."
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
 
-(lambda-package-ensure-install 'evil-org)
-(require 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-(require 'evil-org-agenda)
-(evil-org-agenda-set-keys)
-
 ;; (lambda-package-ensure-install 'evil-smartparens)
 ;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+
+
+;; work with scroll-all-mode
+(with-eval-after-load 'scroll-all
+  (defun scroll-all-check-to-scroll ()
+    "Check `this-command' to see if a scroll is to be done."
+    (cond 
+     ((eq this-command 'evil-scroll-line-down)
+      (let ((scroll-preserve-screen-position nil))
+        (scroll-all-function-all 'scroll-up 1)))
+     ((eq this-command 'evil-scroll-line-up)
+      (let ((scroll-preserve-screen-position nil))
+        (scroll-all-function-all 'scroll-down 1)))
+
+     ((eq this-command 'next-line)
+      (call-interactively 'scroll-all-scroll-down-all))
+     ((eq this-command 'previous-line)
+      (call-interactively 'scroll-all-scroll-up-all))
+     ((memq this-command '(scroll-up scroll-up-command))
+      (call-interactively 'scroll-all-page-down-all))
+     ((memq this-command '(scroll-down scroll-down-command))
+      (call-interactively 'scroll-all-page-up-all))
+     ((eq this-command 'beginning-of-buffer)
+      (call-interactively 'scroll-all-beginning-of-buffer-all))
+     ((eq this-command 'end-of-buffer)
+      (call-interactively 'scroll-all-end-of-buffer-all))))
+
+  (defun mwheel-scroll-all-function-all (func &optional arg)
+    (if (and scroll-all-mode arg)
+        (save-selected-window
+          (walk-windows
+           (lambda (win)
+             (select-window win)
+             (condition-case nil
+                 (funcall func arg)
+               (error nil)))))
+      (funcall func arg)))
+
+  (defun mwheel-scroll-all-scroll-up-all (&optional arg)
+    (mwheel-scroll-all-function-all 'scroll-up arg))
+
+  (defun mwheel-scroll-all-scroll-down-all (&optional arg)
+    (mwheel-scroll-all-function-all 'scroll-down arg))
+
+  (setq mwheel-scroll-up-function 'mwheel-scroll-all-scroll-up-all)
+  (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
+  )
+
+
 
 (provide 'lambda-evil)
 

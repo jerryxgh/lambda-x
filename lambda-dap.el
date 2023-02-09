@@ -37,8 +37,7 @@
   ;; :custom
   ;; (dap-dlv-go-delve-path "/usr/local/bin/dlv")
   :config
-  (dap-auto-configure-mode 1)
-  (require 'dap-dlv-go))
+  (dap-auto-configure-mode 1))
 
 (provide 'lambda-dap)
 

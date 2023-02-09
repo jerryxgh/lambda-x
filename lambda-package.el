@@ -44,11 +44,14 @@ This value is set automaticly, DONT set by hand.")
 (setq package-user-dir (expand-file-name "packages/elpa" lambda-x-direcotry))
 
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+            '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(setq package-archive-priorities
+      '(("melpa-stable" . 100)
+        ("gnu" . 50)
+        ("melpa" . 10)
+        ("nongnu" . 0)))
 
 ;; do not auto load packages
 (setq package-enable-at-startup nil)
@@ -114,8 +117,10 @@ used packages, this is mainly for getting unused packages."
               package-activated-list))))
 
 (lambda-package-ensure-install 'use-package)
+(setq use-package-always-ensure t)
+
+(lambda-package-ensure-install 'compat)
 (lambda-package-ensure-install 'dash)
-(require 'dash)
 
 (provide 'lambda-package)
 

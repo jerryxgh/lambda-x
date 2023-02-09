@@ -84,9 +84,6 @@ Note the weekly scope of the command's precision.")
 
 ;;(lambda-package-ensure-install 'zoom-frm)
 
-;; A-x string-edit-at-point "C-c C-c" "C-c C-k"
-(lambda-package-ensure-install 'string-edit)
-
 ;; trying
 ;; (lambda-package-ensure-install 'ac-ispell)
 ;; (lambda-package-ensure-install 'ace-link)

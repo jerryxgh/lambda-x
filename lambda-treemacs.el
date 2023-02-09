@@ -30,7 +30,6 @@
 
 (require 'lambda-core)
 
-(lambda-package-ensure-install 'use-package)
 (use-package treemacs
   :ensure t
   :defer t

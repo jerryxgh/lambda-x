@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2022-09-23 00:03:15 Guanghui Xu>
+;; Time-stamp: <2023-02-09 10:47:39 bytedance>
 ;;; Commentary:
 
 ;;; Code:
@@ -48,13 +48,6 @@
                                         ;(semanticdb-enable-gnu-global-databases 'c-mode)
                                         ;(semanticdb-enable-gnu-global-databases 'c++-mode)
   )
-
-;; google-c-style --------------------------------------------------------------
-(lambda-package-ensure-install 'google-c-style)
-;; (require 'google-c-style)
-;; (add-hook 'c-mode-common-hook
-;;           #'(lambda ()
-;;               (google-set-c-style)))
 
 ;; ffap - find file at point ---------------------------------------------------
 (autoload 'ffap-href-enable "ffap-href" nil t)
@@ -132,10 +125,6 @@
 ;; cmake -----------------------------------------------------------------------
 (lambda-package-ensure-install 'cmake-mode)
 (require 'cmake-mode)
-
-(lambda-package-ensure-install 'cmake-font-lock)
-(autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
-(add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
 
 (provide 'lambda-cc)
 

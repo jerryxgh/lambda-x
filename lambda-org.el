@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2022-09-19 20:59:51 Guanghui Xu>
+;; Time-stamp: <2023-02-09 10:51:47 bytedance>
 ;;; Commentary:
 ;; org about settings
 
@@ -48,7 +48,6 @@
 ;; markdown -------------------------------------------------------------------
 (lambda-package-ensure-install 'markdown-mode)
 (lambda-package-ensure-install 'markdown-preview-mode)
-(lambda-package-ensure-install 'markdownfmt)
 ;; (add-hook 'markdown-mode-hook
 ;;           #'(lambda()
 ;;               (setq ac-sources

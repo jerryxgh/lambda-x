@@ -781,7 +781,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq-default helm-command-prefix-key "C-c h"
                 ;; use ido-at-point
                 helm-mode-handle-completion-in-region nil)
-  (require 'helm-config)
   (helm-mode 1)
 
   (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
