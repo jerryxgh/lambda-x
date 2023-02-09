@@ -66,11 +66,6 @@
   ;; :init
   :hook (;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
-  :custom
-  (lsp-completion-provider :none)
-  ;; (lsp-go-symbol-matcher "CaseSensitive")
-  ;; (lsp-go-symbol-style "Full")
-  ;; (lsp-go-use-placeholders nil)
 
   :commands lsp
   :config

@@ -35,18 +35,19 @@
 
 ;; use semanticdb-find-test-translate-path to debug include
 ;; (add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
-(add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
-(require 'lambda-thrift-tags)
 
 (use-package thrift
   :ensure t
   :bind (:map thrift-mode-map ("M-." . semantic-ia-fast-jump))
-  :custom
-  (thrift-indent-level 4)
-  (thrift-mode-syntax-table lambda-thrift-syntax-table)
   :hook ((thrift-mode . (lambda ()
                           (semantic-mode 1))))
-  :pin melpa)
+  :pin melpa
+  :config
+  (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
+  (require 'lambda-thrift-tags)
+  (setq thrift-mode-syntax-table lambda-thrift-syntax-table
+        thrift-indent-level 4)
+  )
 
 (provide 'lambda-thrift)
 

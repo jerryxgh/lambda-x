@@ -73,7 +73,6 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (company-global-modes t)
   ;; Trigger completion immediately.
   (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
-  (company-show-quick-access 'right)
   (company-minimum-prefix-length 1)
   (company-tooltip-minimum 10)
   (company-frontends
@@ -100,7 +99,9 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))
+  (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords))
+        company-show-quick-access 'right
+        )
   (make-variable-buffer-local 'company-backends)
   ;; (setq company-backends '((lambda-company-capf)))
   (add-hook 'makefile-mode-hook

@@ -12,9 +12,7 @@
 
 ;; vlf - view large file -------------------------------------------------------
 (use-package vlf
-  :ensure t
-  :custom
-  (vlf-application 'dont-ask))
+  :ensure t)
 
 ;; iedit -----------------------------------------------------------------------
 (use-package iedit

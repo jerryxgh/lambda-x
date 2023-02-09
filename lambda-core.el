@@ -216,7 +216,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; winum
 (defun window-numbering-install-mode-line (&optional position)
   "Do nothing, the display is handled by the spaceline(powerline).
-  POSITION: just inhibit warning.")
+POSITION: just inhibit warning.")
 
 (use-package winum
   :ensure t
@@ -231,13 +231,14 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
          (set-face-font 'mode-line "Microsoft Yahei-9:bold")
          (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold")))
 
-  (require 'spaceline-config)
   (setq spaceline-window-numbers-unicode t
         spaceline-workspace-numbers-unicode t
         powerline-default-separator 'bar
         ;; different color for different evil state in modeline
         spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
   ;; (spaceline-spacemacs-theme '(buffer-encoding process))
+  ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
+  (require 'spaceline-config)
   (spaceline-spacemacs-theme)
   (spaceline-helm-mode)
   (redisplay))
@@ -631,10 +632,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (compilation-skip-threshold 0)
   (flycheck-emacs-lisp-initialize-packages t)
   (flycheck-emacs-lisp-package-user-dir package-user-dir)
-  (flycheck-mode-line nil)  ; use spaceline to show flycheck status instead
-
-  :config
-  )
+  ;; use spaceline to show flycheck status instead
+  (flycheck-mode-line nil))
 
 ;; (lambda-package-ensure-install 'helm-flycheck)
 (use-package helm-flycheck
