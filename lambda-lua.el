@@ -7,7 +7,8 @@
 (require 'lambda-core)
 
 ;; lua-mode -------------------------------------------------------------------
-(lambda-package-ensure-install 'lua-mode)
+(use-package lua-mode
+  :ensure t)
 
 (provide 'lambda-lua)
 

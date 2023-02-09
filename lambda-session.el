@@ -44,27 +44,13 @@
 ;; activate it for all buffers
 (setq-default save-place t)
 
-;; elscreen manage tabs --------------------------------------------------------
-;; (lambda-package-ensure-install 'elscreen)
-;; (require 'elscreen)
-;; (setq elscreen-display-tab nil
-;;       elscreen-prefix-key (kbd "C-;"))
-;; (elscreen-start)
-;; (define-key evil-normal-state-map (kbd "g t") 'elscreen-next)
-;; (define-key evil-normal-state-map (kbd "g T") 'elscreen-previous)
-
-;; (lambda-package-ensure-install 'elscreen-persist)
-;; (require 'elscreen-persist)
-;; (setq elscreen-persist-file (expand-file-name "elscreen"
-;;                                               lambda-auto-save-dir))
-;; (elscreen-persist-mode 1)
-
 ;; persp-mode - replace elscreen -----------------------------------------------
-;; TODO: compare to perspective-el
-(lambda-package-ensure-install 'persp-mode)
-(setq persp-keymap-prefix (kbd "C-;")
-      persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)
-      )
+(use-package persp-mode
+  :ensure t
+  :custom
+  (persp-keymap-prefix (kbd "C-;"))
+  (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
+  )
 
 (defun persp-desktop-ignore-this-minor-mode (buffer)
   "Installed as a minor-mode initializer for Desktop mode.
@@ -90,14 +76,14 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
-(lambda-package-ensure-install 'zoom-window)
-;; (require 'zoom-window)
-;; (setq zoom-window-use-elscreen t)
-(setq zoom-window-use-persp t
-      ;; zoom-window-mode-line-color "black"
-      zoom-window-mode-line-color "DarkGreen")
-(zoom-window-setup)
-(global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+(use-package zoom-window
+  :ensure t
+  :bind ("C-x C-z" . 'zoom-window-zoom)
+  :custom
+  (zoom-window-use-persp t)
+  (zoom-window-mode-line-color "DarkGreen")
+  :config
+  (zoom-window-setup))
 
 ;; Restore buffers automaticly -------------------------------------------------
 (require 'desktop)

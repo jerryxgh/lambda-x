@@ -119,8 +119,11 @@ used packages, this is mainly for getting unused packages."
 (lambda-package-ensure-install 'use-package)
 (setq use-package-always-ensure t)
 
-(lambda-package-ensure-install 'compat)
-(lambda-package-ensure-install 'dash)
+(use-package compat
+  :ensure t)
+
+(use-package dash
+  :ensure t)
 
 (provide 'lambda-package)
 

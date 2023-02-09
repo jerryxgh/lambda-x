@@ -1,13 +1,15 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2022-09-19 21:21:09 Guanghui Xu>
+;; Time-stamp: <2023-02-09 12:46:30 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'lambda-core)
 
-(lambda-package-ensure-install 'web-mode)
-(require 'web-mode)
+(use-package web-mode
+  :ensure t
+  :config
+  (require 'web-mode))
 
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -54,16 +56,19 @@ and set yas--extra-mode to use html snippets."
 ;; (setq ac-modes (append ac-modes '(web-mode)))
 
 ;; less-css-mode --------------------------------------------------------------
-(lambda-package-ensure-install 'less-css-mode)
-(require 'less-css-mode)
-(setq less-css-compile-at-save t)
+(use-package less-css-mode
+  :custom
+  (less-css-compile-at-save t)
+  :ensure t
+  :config
+  (require 'less-css-mode))
 
 ;; rainbow-mode ---------------------------------------------------------------
-(lambda-package-ensure-install 'rainbow-mode)
-(add-hook 'prog-mode-hook #'(lambda ()
-                              (rainbow-mode 1)
-                              (diminish 'rainbow-mode)))
-
+(use-package rainbow-mode
+  :ensure t
+  :hook ((prog-mode . (lambda ()
+                        (rainbow-mode 1)
+                        (diminish 'rainbow-mode)))))
 
 (provide 'lambda-web)
 

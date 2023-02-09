@@ -193,7 +193,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;; which-key --------------------------------------------------------------------
 ;; optional if you want which-key integration
 (use-package which-key
-  :ensure
+  :ensure t
   :config
   ;; Allow C-h to trigger which-key before it is done automatically
   (setq which-key-show-early-on-C-h t)

@@ -62,7 +62,6 @@
     (exec-path-from-shell-copy-env "GOPATH"))
   )
 
-;; (lambda-package-ensure-install 'lsp-mode)
 (use-package lsp-mode
   ;; :init
   :hook (;; if you want which-key integration

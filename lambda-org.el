@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2023-02-09 10:51:47 bytedance>
+;; Time-stamp: <2023-02-09 12:48:43 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -46,8 +46,10 @@
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 
 ;; markdown -------------------------------------------------------------------
-(lambda-package-ensure-install 'markdown-mode)
-(lambda-package-ensure-install 'markdown-preview-mode)
+(use-package markdown-mode
+  :ensure t)
+(use-package markdown-preview-mode
+  :ensure t)
 ;; (add-hook 'markdown-mode-hook
 ;;           #'(lambda()
 ;;               (setq ac-sources
@@ -57,16 +59,18 @@
 ;;                             ac-sources))))
 
 ;; htmlize --------------------------------------------------------------------
-(lambda-package-ensure-install 'htmlize)
-(defadvice htmlize-buffer-1 (around ome-htmlize-buffer-1 disable)
-  "Rainbow-delimiters-mode has some problems with htmlize, this advice disable\
+(use-package htmlize
+  :ensure t
+  :config
+  (defadvice htmlize-buffer-1 (around ome-htmlize-buffer-1 disable)
+    "Rainbow-delimiters-mode has some problems with htmlize, this advice disable\
 rainbow-delimiters-mode temporarily when using htmlize."
-  (rainbow-delimiters-mode-disable)
-  ad-do-it
-  (rainbow-delimiters-mode-enable))
+    (rainbow-delimiters-mode-disable)
+    ad-do-it
+    (rainbow-delimiters-mode-enable))
 
-(ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
-(ad-activate 'htmlize-buffer-1)
+  (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
+  (ad-activate 'htmlize-buffer-1))
 
 ;; export org to pdf
 ;;git clone git://github.com/tsdye/org-article.git
@@ -93,9 +97,10 @@ rainbow-delimiters-mode temporarily when using htmlize."
         "xelatex -interaction nonstopmode %b"))
 
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
-(lambda-package-ensure-install 'graphviz-dot-mode)
-(setq graphviz-dot-indent-width 4)
+(use-package graphviz-dot-mode
+  :ensure t
+  :custom
+  (graphviz-dot-indent-width 4))
 
 (provide 'lambda-org)
-
-;;; lambda-org ends here
+;;; lambda-org.el ends here

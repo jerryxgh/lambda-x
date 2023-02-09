@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-09 10:42:33 bytedance>
+;; Time-stamp: <2023-02-09 13:08:41 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -11,7 +11,6 @@
 
 (require 'lambda-core)
 
-;; (lambda-package-ensure-install 'evil)
 (use-package evil
   :ensure t
   :init
@@ -128,56 +127,50 @@
 ;; (global-evil-tab-mode t)
 
 ;; evil-leader -----------------------------------------------------------------
-(lambda-package-ensure-install 'evil-leader)
-(require 'evil-leader)
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "a" 'helm-ag
-  "p" 'helm-projectile-ag
-  ;; "b" #'(lambda ()
-  ;;         (interactive)
-  ;;         ;; skip persp-mode like filters, let it show more candidates
-  ;;         (let ((ido-make-buffer-list-hook nil))
-  ;;           (ido-switch-buffer)))
-  "b" 'ido-switch-buffer
-  "e" 'helm-projectile
-  "k" 'kill-this-buffer
-  "o" 'helm-occur
-  "f" 'find-file)
-(global-evil-leader-mode 1)
+(use-package evil-leader
+  :ensure t
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "a" 'helm-ag
+    "p" 'helm-projectile-ag
+    ;; "b" #'(lambda ()
+    ;;         (interactive)
+    ;;         ;; skip persp-mode like filters, let it show more candidates
+    ;;         (let ((ido-make-buffer-list-hook nil))
+    ;;           (ido-switch-buffer)))
+    "b" 'ido-switch-buffer
+    "e" 'helm-projectile
+    "k" 'kill-this-buffer
+    "o" 'helm-occur
+    "f" 'find-file)
+  (global-evil-leader-mode 1))
 
-(lambda-package-ensure-install 'evil-nerd-commenter)
-;; (evil-leader/set-key
-;;   "ci" 'evilnc-comment-or-uncomment-lines
-;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
-;;   "cc" 'evilnc-copy-and-comment-lines
-;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
-;;   "cr" 'comment-or-uncomment-region
-;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
-;;   "."  'evilnc-copy-and-comment-operator
-;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
-;; )
+(use-package evil-nerd-commenter
+  :ensure t)
 
 ;; evil-exchange ---------------------------------------------------------------
 ;; powerful tool to exchange text
 ;; gx (evil-exchange)
 ;; gX (evil-exchange-cancel)
 ;; evil-exchange can be used with ace-jump, it's perfect
-(lambda-package-ensure-install 'evil-exchange)
-(require 'evil-exchange)
-(evil-exchange-install)
+(use-package evil-exchange
+  :ensure t
+  :config
+  (evil-exchange-install))
 
 ;; evil-matchit ----------------------------------------------------------------
 ;; Jump between beginning and ending of structure like parens, html tags etc..
-(lambda-package-ensure-install 'evil-matchit)
-(require 'evil-matchit)
-(global-evil-matchit-mode 1)
+(use-package evil-matchit
+  :ensure t
+  :config
+  (global-evil-matchit-mode 1))
 
 ;; evil-visualstar -------------------------------------------------------------
-(lambda-package-ensure-install 'evil-visualstar)
-(require 'evil-visualstar)
-(global-evil-visualstar-mode t)
+(use-package evil-visualstar
+  :ensure t
+  :config
+  (global-evil-visualstar-mode t))
 
 ;; expand-region ---------------------------------------------------------------
 (lambda-package-ensure-install 'expand-region)
@@ -197,41 +190,46 @@
 
 ;; delete surrounding
 ;; ds<trigger>.
-(lambda-package-ensure-install 'evil-surround)
-(require 'evil-surround)
-(global-evil-surround-mode 1)
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 ;; ace jump --------------------------------------------------------------------
-(lambda-package-ensure-install 'ace-jump-mode)
-(require 'ace-jump-mode)
+(use-package ace-jump-mode
+  :ensure t
+  :config
+  (when (and (featurep 'evil) (featurep 'evil-leader))
+    (evil-leader/set-key
+      "c" 'ace-jump-char-mode
+      "w" 'ace-jump-word-mode
+      "l" 'ace-jump-line-mode)))
 
-(when (and (featurep 'evil) (featurep 'evil-leader))
-  (evil-leader/set-key
-    "c" 'ace-jump-char-mode
-    "w" 'ace-jump-word-mode
-    "l" 'ace-jump-line-mode))
-(lambda-package-ensure-install 'ace-window)
-(global-set-key (kbd "C-x o") 'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-(define-key evil-window-map (kbd "w") 'ace-window)
-(define-key evil-window-map (kbd "C-w") 'ace-window)
+(use-package ace-window
+  :ensure t
+  :bind (("C-x o" . ace-window)
+         :map evil-window-map
+         ("w" ace-window)
+         ("C-w" ace-window)))
 
-(lambda-package-ensure-install 'evil-commentary)
-(require 'evil-commentary)
-(evil-commentary-mode)
-(diminish 'evil-commentary-mode)
+(use-package evil-commentary
+  :ensure t
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
 
-(lambda-package-ensure-install 'evil-numbers)
-(require 'evil-numbers)
-(define-key evil-normal-state-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
-(define-key evil-visual-state-map (kbd "C-c +") 'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
-(define-key evil-visual-state-map (kbd "C-c -") 'evil-numbers/dec-at-pt)
+(use-package evil-numbers
+  :ensure t
+  :bind (:map evil-normal-state-map
+              ("C-c +" . evil-numbers/inc-at-pt)
+              ("C-c +" . evil-numbers/inc-at-pt)
+              ("C-c -" . evil-numbers/dec-at-pt)
+              ("C-c -" . evil-numbers/dec-at-pt)))
 
 ;; anzu for evil ---------------------------------------------------------------
 ;; support for * or # search command
-(lambda-package-ensure-install 'evil-anzu)
-(require 'evil-anzu)
+(use-package evil-anzu
+  :ensure t)
 
 ;; define text objects
 (defmacro spacemacs|define-text-object (key name start end)

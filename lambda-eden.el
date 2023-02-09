@@ -11,14 +11,18 @@
 ;; 研究 prelude purcell elpy srecode-mode, improve lambda-x according to prelude.
 
 ;; vlf - view large file -------------------------------------------------------
-(lambda-package-ensure-install 'vlf)
-(require 'vlf-setup)
-(custom-set-variables '(vlf-application 'dont-ask))
+(use-package vlf
+  :ensure t
+  :custom
+  (vlf-application 'dont-ask))
+
 ;; iedit -----------------------------------------------------------------------
-(lambda-package-ensure-install 'iedit)
+(use-package iedit
+  :ensure t)
 
 ;; ztree - compare directories -------------------------------------------------
-(lambda-package-ensure-install 'ztree)
+(use-package ztree
+  :ensure t)
 ;; (push (substitute-in-file-name "path-to-ztree-directory") load-path)
 ;; (require 'ztree-dir)
 
@@ -62,117 +66,51 @@ Note the weekly scope of the command's precision.")
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
-;;; es-mode
-;; (lambda-package-ensure-install 'es-mode)
-
 ;; template engine
-(lambda-package-ensure-install 'mustache)
-(lambda-package-ensure-install 'f)
+(use-package mustache
+  :ensure t)
+(use-package f
+  :ensure t)
 
-(lambda-package-ensure-install 'nginx-mode)
-;; (require 'nginx-mode)
-(add-to-list 'auto-mode-alist
-             '("modsecurity\.conf$" . nginx-mode))
+(use-package nginx-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist
+               '("modsecurity\.conf$" . nginx-mode)))
 
-;; to try
-;; Comment-dwim-2 evil-nerd-commenter chinese-fonts-?
-;; default-text-scale font-utils fontawesome zap-to-char zlc
-;; good
-(lambda-package-ensure-install 'git-messenger)
-;; (require 'git-messenger)
-;; (setq git-messenger:show-detail t)
-
-;;(lambda-package-ensure-install 'zoom-frm)
+(use-package git-messenger
+  :ensure t)
 
 ;; trying
-;; (lambda-package-ensure-install 'ac-ispell)
-;; (lambda-package-ensure-install 'ace-link)
-;; (lambda-package-ensure-install 'adaptive-wrap)
-;; (lambda-package-ensure-install 'aggressive-indent)
-;; (lambda-package-ensure-install 'auto-highlight-symbol)
-;; (lambda-package-ensure-install 'bind-key)
-;; (lambda-package-ensure-install 'clean-aindent-mode)
-;; (lambda-package-ensure-install 'eval-sexp-fu)
-;; (lambda-package-ensure-install 'expand-region)
-;; (lambda-package-ensure-install 'git-timemachine)
-;; (lambda-package-ensure-install 'golden-ratio)
-;; (lambda-package-ensure-install 'guide-key)
-;; (require 'guide-key)
-;; (setq guide-key/popup-window-position 'bottom
-;;       guide-key/guide-key-sequence t)
-;; (guide-key-mode 1) ; Enable guide-key-mode
-;; (diminish 'guide-key-mode)
-
-;; (lambda-package-ensure-install 'helm-c-yasnippet)
-;; (lambda-package-ensure-install 'helm-descbinds)
-;; (lambda-package-ensure-install 'helm-gitignore)
-;; (lambda-package-ensure-install 'helm-mode-manager)
-;; (lambda-package-ensure-install 'helm-orgcard)
-;;(lambda-package-ensure-install 'helm-swoop)
-;; (lambda-package-ensure-install 'highlight)
-;; (lambda-package-ensure-install 'highlight-indentation)
-;; (lambda-package-ensure-install 'highlight-numbers)
-;; (lambda-package-ensure-install 'highlight-parentheses)
-;; (lambda-package-ensure-install 'hl-anything)
-;; (lambda-package-ensure-install 'ibuffer-projectile)
-;; (lambda-package-ensure-install 'indent-guide)
-;;(lambda-package-ensure-install 'info+)
-;; (lambda-package-ensure-install 'linum-relative)
-;; (lambda-package-ensure-install 'move-text)
-
-;; (lambda-package-ensure-install 'org-bullets)
-;; (require 'org-bullets)
-;; (add-hook 'org-mode-hook #'(lambda () (org-bullets-mode 1)))
-;; (lambda-package-ensure-install 'org-present)
-;; (lambda-package-ensure-install 'org-repo-todo)
-;; (lambda-package-ensure-install 'page-break-lines)
-;; (lambda-package-ensure-install 'paradox)
-;;(lambda-package-ensure-install 'rfringe)
-;; (lambda-package-ensure-install 'csv-mode)
-;; (lambda-package-ensure-install 'evil-textobj-anyblock)
-;; (lambda-package-ensure-install 'expand-line)
-;; (lambda-package-ensure-install 'multi-term)
-
 ;; web servers
-(lambda-package-ensure-install 'simple-httpd)
-;; (lambda-package-ensure-install 'elnode)
-;; (lambda-package-ensure-install 'web-server)
+(use-package simple-httpd
+  :ensure t)
 
 ;; knowledge
 ;; locate-library
 ;; list-load-path-shadows
 
 ;;; svn - psvn =================================================================
-(lambda-package-ensure-install 'magit-svn)
-(add-hook 'magit-mode-hook 'magit-svn-mode)
-
-;;; rfc  =======================================================================
-;; (lambda-package-ensure-install 'irfc)
-;; (setq irfc-directory "/Users/xgh/repository/docs/rfc")
-;; (setq irfc-assoc-mode t)
-;; (add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\'" . irfc-mode))
-
-;; yasnippet ===================================================================
-;; (lambda-package-ensure-install 'auto-yasnippet)
-;; (lambda-package-ensure-install 'language-detection)
+(use-package magit-svn
+  :ensure t
+  :hook (magit-mode . magit-svn-mode))
 
 ;; fasd ========================================================================
 (require 'fasd-shell)
 (add-hook 'shell-mode-hook 'fasd-shell-mode)
 
 ;; whitespace-cleanup-mode =====================================================
-(lambda-package-ensure-install 'whitespace-cleanup-mode)
-(global-whitespace-cleanup-mode 1)
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :config
+  (global-whitespace-cleanup-mode 1))
 
-;; graphql-mode=================================================================
-;; (lambda-package-ensure-install 'graphql-mode)
-(require 'graphql-mode)
-(setq graphql-indent-level 4)
-
-(lambda-package-ensure-install 'yaml-mode)
+(use-package yaml-mode
+  :ensure t)
 
 ;; show free key bindings
-(lambda-package-ensure-install 'free-keys)
+(use-package free-keys
+  :ensure t)
 
 (provide 'lambda-eden)
 

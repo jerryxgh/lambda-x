@@ -7,11 +7,15 @@
 (require 'lambda-core)
 
 ;; json-mode -------------------------------------------------------------------
-(lambda-package-ensure-install 'json-reformat)
-(lambda-package-ensure-install 'json-snatcher)
-(lambda-package-ensure-install 'json-mode)
+(use-package json-mode
+  :ensure t
+  :config
+  (require 'json-mode))
 
-(require 'json-mode)
+(use-package json-reformat
+  :ensure t)
+(use-package json-snatcher
+  :ensure t)
 
 (provide 'lambda-json)
 
