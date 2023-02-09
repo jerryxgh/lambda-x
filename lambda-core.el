@@ -209,34 +209,29 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;; mode line theme -------------------------------------------------------------
 ;; (lambda-package-ensure-install 'powerline)
 (use-package powerline
-  :ensure
-  :init
-  ;; (setq-default powerline-height 23)
+  :ensure t
   :custom
-  (powerline-height 23)
-  )
+  (powerline-height 23))
 
-;; (lambda-package-ensure-install 'spaceline)
-(use-package spaceline
-  :ensure
-  :config
   ;; winum
-  ;; (defun window-numbering-install-mode-line (&optional position)
-  ;;   "Do nothing, the display is handled by the spaceline(powerline).
-  ;; POSITION: just inhibit warning.")
+(defun window-numbering-install-mode-line (&optional position)
+  "Do nothing, the display is handled by the spaceline(powerline).
+  POSITION: just inhibit warning.")
 
-  (lambda-package-ensure-install 'winum)
-  (require 'winum)
+(use-package winum
+  :ensure t
+  :config
   (winum-set-keymap-prefix (kbd "C-w"))
-  (winum-mode)
+  (winum-mode))
 
-  (require 'spaceline-config)
-
+(use-package spaceline
+  :ensure t
+  :config
   (cond ((eq system-type 'windows-nt)
          (set-face-font 'mode-line "Microsoft Yahei-9:bold")
-         (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold"))
-        )
+         (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold")))
 
+  (require 'spaceline-config)
   (setq spaceline-window-numbers-unicode t
         spaceline-workspace-numbers-unicode t
         powerline-default-separator 'bar
@@ -245,8 +240,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; (spaceline-spacemacs-theme '(buffer-encoding process))
   (spaceline-spacemacs-theme)
   (spaceline-helm-mode)
-  (redisplay)
-  )
+  (redisplay))
 
 
 ;; inhibit annoying warning sound
