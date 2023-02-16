@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-09 23:29:27 Guanghui Xu>
+;; Time-stamp: <2023-02-16 17:10:28 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -194,6 +194,14 @@
   :ensure t
   :config
   (global-evil-surround-mode 1))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . (lambda () (evil-org-mode)))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 ;; ace jump --------------------------------------------------------------------
 (use-package ace-jump-mode
