@@ -25,7 +25,7 @@
 (setq recentf-save-file (expand-file-name
                          "recentf"
                          lambda-auto-save-dir)
-      recentf-max-saved-items 500
+      recentf-max-saved-items nil ; save whole list
       recentf-max-menu-items 15
       ;; disable recentf-cleanup on Emacs start, because it can cause
       ;; problems with remote files

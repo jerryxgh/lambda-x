@@ -217,8 +217,15 @@ BUFFER-OR-NAME is a buffer name to match, _ACTION is not used."
 (defun shell-window--display-buffer-action (buffer-or-name _alist)
   "Part of pair in `display-buffer-alist'.
 BUFFER-OR-NAME is a buffer to display, _ALIST is not used."
-  (let ((buffer (window-normalize-buffer-to-switch-to buffer-or-name)))
-    (display-buffer-in-side-window buffer `((side . ,'bottom)))))
+  (let ((buffer (window-normalize-buffer-to-switch-to buffer-or-name))
+        (window (shell-window--get-shell-window)))
+    (if (and window (shell-window--match-buffer buffer-or-name))
+        (set-window-dedicated-p window nil))
+    (setq window (display-buffer-in-side-window buffer `((side . ,'bottom))))
+    (set-window-dedicated-p window t)
+    (select-window window)
+    ;; (shell-window--enlarge-window window)
+    ))
 
 (defun shell-window--make-shell-buffer-list ()
   "Return shell buffer list that not shown in shell-window."
@@ -241,13 +248,14 @@ BUFFER-OR-NAME is a buffer to display, _ALIST is not used."
 (defun shell-window--display-and-select-buffer (buffer)
   "Display BUFFER in shell window and select the window."
   (let ((window (shell-window--get-shell-window)))
-    (if window
-        (progn (set-window-buffer window buffer)
-               (select-window window)
-               (shell-window--enlarge-window window))
-      (let ((window (display-buffer-in-side-window (get-buffer buffer) `((side . ,'bottom)))))
-        (select-window window)
-        (shell-window--enlarge-window window)))))
+    (if (not window)
+        (setq window (display-buffer-in-side-window (get-buffer buffer) `((side . ,'bottom)))))
+    (set-window-dedicated-p window nil)
+    (set-window-buffer window buffer)
+    (set-window-dedicated-p window t)
+    (select-window window)
+    ;; (shell-window--enlarge-window window)
+    ))
 
 (defun shell-window--get-C-l-command ()
   "Get the command <tab> should be bound.
@@ -372,16 +380,6 @@ Shell window is a window for showing shell like buffers, temp buffers and etc."
       (let ((window (shell-window--get-shell-window)))
         (if window
             (delete-window window)))
-    (message "shell-window-mode is not enabled, do nothing")))
-
-(defun shell-window-show ()
-  "Show shell window."
-  (interactive)
-  (if shell-window-mode
-      (let ((buffer (shell-window--scratch-buffer)))
-        (let ((window (display-buffer-in-side-window buffer `((side . ,'bottom)))))
-          (if (called-interactively-p 'interactive)
-              (shell-window--enlarge-window window))))
     (message "shell-window-mode is not enabled, do nothing")))
 
 (provide 'shell-window)
