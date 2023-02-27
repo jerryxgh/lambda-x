@@ -641,6 +641,10 @@ POSITION: just inhibit warning.")
   :config
   (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 
+(use-package emacs
+  :custom
+  (switch-to-buffer-in-dedicated-window 'pop))
+
 ;; sensible undo ---------------------------------------------------------------
 (lambda-package-ensure-install 'undo-tree)
 (require 'undo-tree)
