@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2023-02-09 12:48:43 Guanghui Xu>
+;; Time-stamp: <2023-03-16 10:55:59 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -17,6 +17,7 @@
 (setq org-use-speed-commands t
       org-src-fontify-natively t
       org-completion-use-ido t
+      org-odd-levels-only nil
       org-id-locations-file
       (expand-file-name ".org-id-locations" lambda-auto-save-dir)
       org-src-tab-acts-natively t)
