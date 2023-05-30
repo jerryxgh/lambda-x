@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2023-03-16 10:55:59 Guanghui Xu>
+;; Time-stamp: <2023-05-05 10:49:47 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -28,7 +28,8 @@
 ;; headers. You would use these settings:
 (setq org-adapt-indentation t
       org-hide-leading-stars t
-      org-odd-levels-only t)
+      ;; org-odd-levels-only t
+      )
 
 (global-set-key (kbd "C-c c") 'org-capture)
 ;; (setq org-capture-templates '(("t" "Todo [inbox]" entry
