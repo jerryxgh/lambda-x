@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2023-05-30 16:50:03 Guanghui Xu>
+;; Time-stamp: <2023-05-30 17:06:53 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -71,56 +71,56 @@
   )
 
 
-;; global ------- code navigating ----------------------------------------------
-;; (lambda-package-ensure-install 'ggtags)
-;; (if (featurep 'evil)
-;;     (define-key evil-normal-state-map
-;;       (kbd "M-.") 'ggtags-find-tag-dwim))
+;; ;; global ------- code navigating ----------------------------------------------
+;; ;; (lambda-package-ensure-install 'ggtags)
+;; ;; (if (featurep 'evil)
+;; ;;     (define-key evil-normal-state-map
+;; ;;       (kbd "M-.") 'ggtags-find-tag-dwim))
+;; ;; (add-hook 'c-mode-common-hook
+;; ;;        (lambda ()
+;; ;;          (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+;; ;;            (ggtags-mode 1)
+;; ;;            ;; do not echo help message when point is on a tag, it's annoying
+;; ;;            (if (get 'ggtags-active-tag 'help-echo)
+;; ;;                (put 'ggtags-active-tag 'help-echo nil))
+;; ;;            (diminish 'ggtags-mode))))
+
+;; (lambda-package-ensure-install 'helm-gtags)
 ;; (add-hook 'c-mode-common-hook
-;;        (lambda ()
-;;          (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-;;            (ggtags-mode 1)
-;;            ;; do not echo help message when point is on a tag, it's annoying
-;;            (if (get 'ggtags-active-tag 'help-echo)
-;;                (put 'ggtags-active-tag 'help-echo nil))
-;;            (diminish 'ggtags-mode))))
+;;           (lambda ()
+;;             ;; (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+;;             (when (derived-mode-p 'java-mode)
+;;               (helm-gtags-mode 1)
+;;               (diminish 'helm-gtags-mode))))
+;; (with-eval-after-load "helm-gtags"
+;;   ;; Key          Command
+;;   ;; Prefix h     helm-gtags-display-browser
+;;   ;; Prefix C-]   helm-gtags-find-tag-from-here
+;;   ;; Prefix C-t   helm-gtags-pop-stack
+;;   ;; Prefix P     helm-gtags-find-files
+;;   ;; Prefix f     helm-gtags-parse-file
+;;   ;; Prefix g     helm-gtags-find-pattern
+;;   ;; Prefix s     helm-gtags-find-symbol
+;;   ;; Prefix r     helm-gtags-find-rtag
+;;   ;; Prefix t     helm-gtags-find-tag
+;;   ;; Prefix d     helm-gtags-find-tag
+;;   ;; M-*          helm-gtags-pop-stack
+;;   ;; M-.          helm-gtags-find-tag
+;;   ;; C-x 4 .      helm-gtags-find-tag-other-window
+;;   (setq helm-gtags-suggested-key-mapping t)
 
-(lambda-package-ensure-install 'helm-gtags)
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            ;; (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-            (when (derived-mode-p 'java-mode)
-              (helm-gtags-mode 1)
-              (diminish 'helm-gtags-mode))))
-(with-eval-after-load "helm-gtags"
-  ;; Key          Command
-  ;; Prefix h     helm-gtags-display-browser
-  ;; Prefix C-]   helm-gtags-find-tag-from-here
-  ;; Prefix C-t   helm-gtags-pop-stack
-  ;; Prefix P     helm-gtags-find-files
-  ;; Prefix f     helm-gtags-parse-file
-  ;; Prefix g     helm-gtags-find-pattern
-  ;; Prefix s     helm-gtags-find-symbol
-  ;; Prefix r     helm-gtags-find-rtag
-  ;; Prefix t     helm-gtags-find-tag
-  ;; Prefix d     helm-gtags-find-tag
-  ;; M-*          helm-gtags-pop-stack
-  ;; M-.          helm-gtags-find-tag
-  ;; C-x 4 .      helm-gtags-find-tag-other-window
-  (setq helm-gtags-suggested-key-mapping t)
+;;   ;; customize
+;;   (custom-set-variables
+;;    '(helm-gtags-path-style 'relative)
+;;    '(helm-gtags-ignore-case t)
+;;    '(helm-gtags-auto-update t))
 
-  ;; customize
-  (custom-set-variables
-   '(helm-gtags-path-style 'relative)
-   '(helm-gtags-ignore-case t)
-   '(helm-gtags-auto-update t))
-
-  ;; key bindings
-  ;; (define-key c-mode-base-map (kbd "M-.") 'helm-gtags-dwim)
-  ;; (define-key c-mode-base-map (kbd "C-t") 'helm-gtags-pop-stack)
-  (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-  (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-)
+;;   ;; key bindings
+;;   ;; (define-key c-mode-base-map (kbd "M-.") 'helm-gtags-dwim)
+;;   ;; (define-key c-mode-base-map (kbd "C-t") 'helm-gtags-pop-stack)
+;;   (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+;;   (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+;; )
 
 
 ;; cmake -----------------------------------------------------------------------
