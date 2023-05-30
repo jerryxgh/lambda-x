@@ -627,7 +627,7 @@ POSITION: just inhibit warning.")
 (use-package flycheck
   :ensure
   ;; enable on-the-fly syntax checking
-  :init (global-flycheck-mode)
+  ;; :init (global-flycheck-mode)
   :custom
   (compilation-skip-threshold 0)
   (flycheck-emacs-lisp-initialize-packages t)
@@ -806,7 +806,6 @@ POSITION: just inhibit warning.")
                   (find-file-other-window . ido)
                   (switch-to-buffer . ido)
                   (httpd-serve-directory . ido)
-                  (helm-gtags-create-tags . ido)
                   (ffap-alternate-file . nil)
                   (tmm-menubar . nil)))
   )
