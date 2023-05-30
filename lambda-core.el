@@ -641,6 +641,11 @@ POSITION: just inhibit warning.")
   :config
   (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 
+(use-package helm-flymake
+  :ensure
+  :config
+  )
+
 (use-package emacs
   :custom
   (switch-to-buffer-in-dedicated-window 'pop))

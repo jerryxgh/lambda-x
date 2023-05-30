@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2023-02-09 10:47:39 bytedance>
+;; Time-stamp: <2023-05-30 16:50:03 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -88,7 +88,8 @@
 (lambda-package-ensure-install 'helm-gtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+            ;; (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+            (when (derived-mode-p 'java-mode)
               (helm-gtags-mode 1)
               (diminish 'helm-gtags-mode))))
 (with-eval-after-load "helm-gtags"
