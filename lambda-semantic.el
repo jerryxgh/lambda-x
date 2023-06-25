@@ -30,7 +30,8 @@
 
 (require 'semantic)
 
-(add-to-list 'semantic-inhibit-functions (lambda () (member major-mode '(java-mode emacs-lisp-mode))))
+;; only thrift-mode use semantic, golang c and java use lsp
+(add-to-list 'semantic-inhibit-functions (lambda () (not (member major-mode '(thrift-mode)))))
 
 (provide 'lambda-semantic)
 

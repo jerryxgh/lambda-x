@@ -34,18 +34,18 @@
 (require 'lambda-evil)
 
 (use-package thrift
-  :ensure t
-  :hook ((thrift-mode . (lambda () (semantic-mode 1))))
-  :pin melpa
-  :config
+  :ensure t)
+
+(add-to-list 'load-path "/Users/bytedance/repository/public/semantic-thrift")
+;; (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
+
+(require 'semantic-thrift-tags)
+(with-eval-after-load 'semantic-thrift-tags
+  (add-hook 'thrift-mode-hook (lambda () (semantic-mode 1)))
   (if (bound-and-true-p evil-mode)
       ;; support evil-jump
       (define-key thrift-mode-map (kbd "M-.") 'evil-goto-definition)
     (define-key thrift-mode-map (kbd "M-.") 'semantic-ia-fast-jump))
-  ;; use semanticdb-find-test-translate-path to debug include
-  (add-to-list 'load-path "/Users/bytedance/repository/public/semantic-thrift")
-  ;; (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
-  (require 'semantic-thrift-tags)
   (setq thrift-mode-syntax-table semantic-thrift-syntax-table
         thrift-indent-level 4)
   )

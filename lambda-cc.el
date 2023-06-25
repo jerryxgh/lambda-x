@@ -1,12 +1,12 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2023-05-30 17:06:53 Guanghui Xu>
+;; Time-stamp: <2023-06-25 21:09:36 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'lambda-core)
 (require 'lambda-evil)
-(with-eval-after-load "cc-mode"
+(with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
   (add-hook 'c-mode-common-hook
             #'(lambda ()
@@ -51,22 +51,22 @@
 
 ;; ffap - find file at point ---------------------------------------------------
 (autoload 'ffap-href-enable "ffap-href" nil t)
-(eval-after-load "ffap" '(ffap-href-enable))
-
 (autoload 'ffap-I-option-enable "ffap-I-option" nil t)
-(eval-after-load "ffap" '(ffap-I-option-enable))
-(eval-after-load "ffap" '(require 'ffap-include-start))
-(eval-after-load "ffap" '(require 'ffap-gcc-path))
+(with-eval-after-load 'ffap
+  (require 'ffap-include-start)
+  (require 'ffap-gcc-path)
+  (ffap-href-enable)
+  (ffap-I-option-enable))
 
 ;; gdb configs -----------------------------------------------------------------
-(with-eval-after-load "gud"
+(with-eval-after-load 'gud
   (define-key gud-mode-map (kbd "<f5>") 'gud-step)
   (define-key gud-mode-map (kbd "<f6>") 'gud-next)
   (define-key gud-mode-map (kbd "<f7>") 'gud-up)
   (define-key gud-mode-map (kbd "<f8>") 'gud-go)
   )
 
-(with-eval-after-load "gdb-mi"
+(with-eval-after-load 'gdb-mi
   (setq gdb-many-windows t)
   )
 
@@ -92,7 +92,7 @@
 ;;             (when (derived-mode-p 'java-mode)
 ;;               (helm-gtags-mode 1)
 ;;               (diminish 'helm-gtags-mode))))
-;; (with-eval-after-load "helm-gtags"
+;; (with-eval-after-load 'helm-gtags
 ;;   ;; Key          Command
 ;;   ;; Prefix h     helm-gtags-display-browser
 ;;   ;; Prefix C-]   helm-gtags-find-tag-from-here

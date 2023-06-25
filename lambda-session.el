@@ -60,7 +60,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
 ;; (add-to-list 'desktop-minor-mode-handlers
 ;;              '(persp-mode . persp-desktop-ignore-this-minor-mode))
 
-(with-eval-after-load "persp-mode-autoloads"
+(with-eval-after-load 'persp-mode-autoloads
   (setq persp-autokill-buffer-on-remove 'kill-weak
         persp-kill-foreign-buffer-action 'kill)
   (add-hook
