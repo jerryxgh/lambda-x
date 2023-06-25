@@ -813,6 +813,8 @@ POSITION: just inhibit warning.")
 ;; M-x helm-projectile-ag
 (use-package helm-projectile
   :ensure t
+  :custom
+  (helm-ag-insert-at-point 'symbol)
   :config
   (helm-projectile-on)
   :pin melpa)

@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-02-15 17:08:39 Guanghui Xu>
+;; Time-stamp: <2023-06-25 17:14:14 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -32,6 +32,7 @@
     lambda-treemacs
     ;; lambda-corfu
     lambda-company
+    lambda-semantic
 
     lambda-cc
     lambda-org
@@ -53,6 +54,8 @@
 
     lambda-bison
 
+    lambda-eglot
+
     ;; lambda-csharp
     ;; lambda-octave
     ;; lambda-haskell
@@ -60,7 +63,7 @@
 
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.
-    lambda-session
+    ;; lambda-session
     )
   "Libraries to be loaded of lambda-x.")
 

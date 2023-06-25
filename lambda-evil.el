@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-02-16 17:13:41 Guanghui Xu>
+;; Time-stamp: <2023-06-25 20:36:25 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -37,16 +37,17 @@
   (define-key evil-insert-state-map (kbd "C-n") 'next-line)
   (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
+  (define-key evil-insert-state-map (kbd "M-.") 'evil-goto-definition)
   (define-key evil-insert-state-map (kbd "C-y") 'yank)
-  (define-key evil-normal-state-map (kbd "M-.") ())
-  (define-key evil-normal-state-map (kbd "C-t") ())
 
   (when (eq system-type 'darwin)
     (define-key evil-insert-state-map (kbd "C-v") 'yank))
 
-
+  (define-key evil-normal-state-map (kbd "M-.") ())
+  (define-key evil-normal-state-map (kbd "C-t") ())
   (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
   (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
+  (define-key evil-normal-state-map (kbd "M-.") 'evil-goto-definition)
 
   (delete 'ag-mode evil-motion-state-modes)
 

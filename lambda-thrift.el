@@ -33,19 +33,20 @@
 (require 'eieio-datadebug)
 (require 'lambda-evil)
 
-;; use semanticdb-find-test-translate-path to debug include
-;; (add-to-list 'load-path "/Users/bytedance/repository/public/lambda-thrift")
-
 (use-package thrift
   :ensure t
-  :bind (:map thrift-mode-map ("M-." . semantic-ia-fast-jump))
-  :hook ((thrift-mode . (lambda ()
-                          (semantic-mode 1))))
+  :hook ((thrift-mode . (lambda () (semantic-mode 1))))
   :pin melpa
   :config
-  (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
-  (require 'lambda-thrift-tags)
-  (setq thrift-mode-syntax-table lambda-thrift-syntax-table
+  (if (bound-and-true-p evil-mode)
+      ;; support evil-jump
+      (define-key thrift-mode-map (kbd "M-.") 'evil-goto-definition)
+    (define-key thrift-mode-map (kbd "M-.") 'semantic-ia-fast-jump))
+  ;; use semanticdb-find-test-translate-path to debug include
+  (add-to-list 'load-path "/Users/bytedance/repository/public/semantic-thrift")
+  ;; (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
+  (require 'semantic-thrift-tags)
+  (setq thrift-mode-syntax-table semantic-thrift-syntax-table
         thrift-indent-level 4)
   )
 
