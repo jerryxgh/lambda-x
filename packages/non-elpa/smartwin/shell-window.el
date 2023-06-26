@@ -1,16 +1,14 @@
-;;; shell-window.el --- A minor mode shows shell like buffers. -*- lexical-binding:t -*-
+;;; shell-window.el --- A minor mode shows shell like buffers -*- lexical-binding:t -*-
 
-;; Copyright (C) 2015 GuanghuiXu
-;; Copyright (C) 2011-2015 Tomohiro Matsuyama
+;; Copyright (C) 2023 GuanghuiXu
 
 ;; Author: GuanghuiXu gh_xu@qq.com
-;;         Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; Maintainer: GuanghuiXu gh_xu@qq.com
 ;; Created: 2015-4-28
-;; Keywords: convenience
-;; Version: 1.0
 ;; URL: https://github.com/jerryxgh/shell-window
-;; Package-Version: 0.1
+;; Keywords: extensions, convenience
+;; Version: 0.0.1
+;; Package-Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4"))
 ;;
 
@@ -22,8 +20,8 @@
 
 ;; This minor mode let shell like buffers share a window, called shell window,
 ;; the shell window is always at the bottom of Emacs window.  Besides that, when
-;; point move into or out the shell window, it will be enlarged or shrinked
-;; automaticly.  Warning: this package can not work with popwin.el.
+;; point move in or out the shell window, it will be enlarged or shrinked
+;; automaticly.
 ;;
 ;; To use shell-window, place this file to load path and add this to .emacs:
 ;;
@@ -40,12 +38,6 @@
 
 ;;; Change Log:
 
-;;; TODO:
-;; 1. Replace advices to others means
-
-;;; BUGS:
-;; 1. can not work with popwin or packages using popwin like guide-key
-
 ;;; Code:
 
 (require 'ido)
@@ -55,21 +47,18 @@
 (defgroup shell-window nil
   "A minor mode show shell like buffers in window anchored to the bottom of frame."
   :prefix "shell-window-"
-  :version "0.1"
+  :version "0.0.1"
   :group 'convenience
   :group 'windows)
 
 (defcustom shell-window-buffers
-  '(;; Emacs
+  '(;; Emacs scratch buffer
     "*scratch*"
     ;; shell and eshell buffers
     ("^\\*.*?shell\\*\\(<.*>\\)?$" :regexp t)
     ("^\\*shell.*\\*\\(<.*>\\)?$" :regexp t)
     "*terminal*"
-    "*ansi-term*"
-    compilation-mode
-    term-mode
-    )
+    "*ansi-term*")
   "Configuration of buffers to be shown in shell window."
   :type '(repeat
           (cons :tag "Config"
@@ -140,8 +129,7 @@ if BUFFER is nil, use `current-buffer'."
          #'(lambda (process state)
              (when (or (string-match "exited abnormally with code." state)
                        (string-match "\\(finished\\|exited\\)" state))
-               (kill-buffer (process-buffer process))
-               ))))))
+               (kill-buffer (process-buffer process))))))))
 
 (defun shell-window--shrink-window (window)
   "Try to shrink shell WINDOW."
@@ -186,8 +174,7 @@ If ENFORCE-MAX-P is not nil, try to maximize WINDOW."
                                left-to-forward
                                (>= forward-line-num 0))
                            (setq done t)
-                         (setq forward-line-num (+ forward-line-num 1)))
-                       ))
+                         (setq forward-line-num (+ forward-line-num 1)))))
                    return)
                  t)))))))
 
