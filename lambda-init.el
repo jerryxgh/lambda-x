@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-06-25 17:14:14 Guanghui Xu>
+;; Time-stamp: <2023-06-26 17:36:39 bytedance>
 
 ;;; Commentary:
 
@@ -63,8 +63,7 @@
 
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.
-    ;; lambda-session
-    )
+    lambda-session)
   "Libraries to be loaded of lambda-x.")
 
 ;; load libraries and show the progress

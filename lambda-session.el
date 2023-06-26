@@ -80,6 +80,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
   :ensure t
   :bind ("C-x C-z" . 'zoom-window-zoom)
   :custom
+  ;; depends on persp-mode
   (zoom-window-use-persp t)
   (zoom-window-mode-line-color "DarkGreen")
   :config

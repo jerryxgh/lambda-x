@@ -187,8 +187,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq zenburn-scale-org-headlines t)
   ;; scale headings in outline-mode
   (setq zenburn-scale-outline-headlines t)
-  (lambda-load-theme 'zenburn)
-  )
+  (lambda-load-theme 'zenburn))
 
 ;;; which-key --------------------------------------------------------------------
 ;; optional if you want which-key integration
@@ -202,9 +201,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq which-key-idle-delay 10000)
   (setq which-key-idle-secondary-delay 0.05)
   (which-key-mode)
-  (which-key-setup-minibuffer)
-  ;; (which-key-setup-side-window-bottom)
-  )
+  (which-key-setup-side-window-bottom))
 
 ;;; mode line theme -------------------------------------------------------------
 ;; (lambda-package-ensure-install 'powerline)
