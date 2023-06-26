@@ -39,8 +39,8 @@
 (add-to-list 'load-path "/Users/bytedance/repository/public/semantic-thrift")
 ;; (add-to-list 'load-path "/Users/hudandan/repository/lambda-thrift")
 
-(require 'semantic-thrift-tags)
-(with-eval-after-load 'semantic-thrift-tags
+(require 'semantic-thrift)
+(with-eval-after-load 'semantic-thrift
   (add-hook 'thrift-mode-hook (lambda () (semantic-mode 1)))
   (if (bound-and-true-p evil-mode)
       ;; support evil-jump

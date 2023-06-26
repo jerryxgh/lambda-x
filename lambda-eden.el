@@ -117,6 +117,11 @@ Note the weekly scope of the command's precision.")
 (use-package free-keys
   :ensure t)
 
+(use-package package-lint
+  :ensure t
+  :pin melpa
+  )
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
