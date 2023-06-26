@@ -47,10 +47,10 @@
 ;; persp-mode - replace elscreen -----------------------------------------------
 (use-package persp-mode
   :ensure t
+  :diminish persp-mode
   :custom
   (persp-keymap-prefix (kbd "C-;"))
-  (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
-  )
+  (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)))
 
 (defun persp-desktop-ignore-this-minor-mode (buffer)
   "Installed as a minor-mode initializer for Desktop mode.
