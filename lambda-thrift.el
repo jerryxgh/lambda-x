@@ -41,7 +41,10 @@
 
 (require 'semantic-thrift)
 (with-eval-after-load 'semantic-thrift
-  (add-hook 'thrift-mode-hook (lambda () (semantic-mode 1)))
+  (add-hook 'thrift-mode-hook (lambda ()
+                                (semantic-mode 1)
+                                (if (featurep 'company)
+                                    (setq company-backends '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))))))
   (if (bound-and-true-p evil-mode)
       ;; support evil-jump
       (define-key thrift-mode-map (kbd "M-.") 'evil-goto-definition)

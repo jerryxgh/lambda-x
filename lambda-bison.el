@@ -34,11 +34,11 @@
   :ensure
   :hook ((bisin-mode . (lambda ()
                          (setq company-backends
-                               '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                               '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
                          ))
          (flex-mode . (lambda ()
                         (setq company-backends
-                              '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                              '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
                         )))
   :mode (("\\.y\\'" . bison-mode)
          ("\\.yy\\'" . bison-mode)
@@ -51,7 +51,7 @@
 (add-hook 'semantic-grammar-mode-hook
           (lambda ()
             (setq company-backends
-                  '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                  '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
             ))
 
 (provide 'lambda-bison)

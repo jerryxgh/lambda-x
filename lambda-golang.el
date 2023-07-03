@@ -75,7 +75,7 @@
             (lambda ()
               (setq company-backends
                     '((company-capf
-                       :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))
+                       :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
 
               (when (and (featurep 'evil) (featurep 'evil-leader))
                 (define-key evil-normal-state-map (kbd "g i") 'lsp-find-implementation)

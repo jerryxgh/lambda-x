@@ -20,7 +20,7 @@
             (semantic-mode 1)
             (setq company-backends
                   '((company-semantic
-                     :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords)))))
+                     :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
 (provide 'lambda-java)
 

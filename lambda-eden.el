@@ -122,6 +122,28 @@ Note the weekly scope of the command's precision.")
   :pin melpa
   )
 
+(use-package quelpa
+  :ensure t)
+(use-package quelpa-use-package
+  :ensure t
+  :config
+  (require 'quelpa-use-package))
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
+
+(use-package copilot
+  :quelpa (copilot :fetcher github
+                   :repo "zerolfx/copilot.el"
+                   :branch "main"
+                   :files ("dist" "*.el")))
+(add-hook 'prog-mode-hook 'copilot-mode)
+
+(define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

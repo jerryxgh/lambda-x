@@ -47,6 +47,13 @@ All args are passed directory, including COMMAND ARG and IGNORED."
       nil
       (company-dabbrev command arg ignored)))
 
+(defun lambda-company-dabbrev-code (command &optional arg &rest ignored)
+  "If preceding char is dot(.), skip completion.
+All args are passed directory, including COMMAND ARG and IGNORED."
+  (if (eq (preceding-char) ?\.)
+      nil
+      (company-dabbrev-code command arg ignored)))
+
 (defun lambda-company-yasnippet (command &optional arg &rest ignored)
   "If preceding char is dot(.), skip completion.
 All args are passed directory, including COMMAND ARG and IGNORED."
@@ -64,6 +71,7 @@ All args are passed directory, including COMMAND ARG and IGNORED."
 (require 'dabbrev)
 (use-package company
   :ensure t
+  :pin melpa
   :diminish company-mode
   :custom
   (company-tooltip-align-annotations t)
@@ -75,11 +83,11 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-minimum-prefix-length 1)
   (company-tooltip-minimum 10)
-  (company-frontends
-   '(company-pseudo-tooltip-unless-just-one-frontend-with-delay
-     company-preview-frontend
-     company-echo-metadata-frontend
-     ))
+  ;; (company-frontends
+  ;;  '(company-pseudo-tooltip-unless-just-one-frontend-with-delay
+  ;;    company-preview-frontend
+  ;;    company-echo-metadata-frontend
+  ;;    ))
   (company-selection-wrap-around t)
 
   ;; dabbrev configuration
@@ -99,23 +107,35 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
 
-  (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev lambda-company-keywords))
-        company-show-quick-access 'right
-        )
+  (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))
+        company-show-quick-access 'right)
+
   (make-variable-buffer-local 'company-backends)
-  ;; (setq company-backends '((lambda-company-capf)))
   (add-hook 'makefile-mode-hook
             (lambda ()
               (setq company-backends
-                    '((company-yasnippet company-dabbrev company-keywords company-capf)))
-              ))
+                    '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
   (setq company-transformers
         ;; '(company-sort-by-backend-importance)
         ;; '(company-sort-prefer-same-case-prefix)
-        '(lambda-company-sort-by-prefix-and-backend-importance)
-        )
-  )
+        '(lambda-company-sort-by-prefix-and-backend-importance)))
+
+;; company-box
+(use-package company-box
+  :after company
+  :ensure t
+  :hook (company-mode . company-box-mode)
+  :config
+  (add-to-list 'company-box-frame-parameters '(line-spacing . 3))
+  (add-to-list 'company-box-frame-parameters '(line-height . 18))
+  (add-to-list 'company-box-frame-parameters
+               (cond ((eq system-type 'windows-nt)
+                      '(font . "Consolas-11"))
+                     ((eq system-type 'gnu/linux)
+                      '(font . "Source Code Pro-11"))
+                     ((eq system-type 'darwin)
+                      '(font . "menlo-14")))))
 
 (provide 'lambda-company)
 

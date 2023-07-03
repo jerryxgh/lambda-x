@@ -49,7 +49,7 @@
 (add-hook 'sql-mode-hook
           (lambda ()
             (setq company-backends
-                  '((company-yasnippet company-dabbrev-code company-dabbrev company-keywords company-capf)))
+                  '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
             ))
 
 (provide 'lambda-sql)
