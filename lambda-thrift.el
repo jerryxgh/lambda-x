@@ -32,6 +32,7 @@
 (require 'cc-mode)
 (require 'eieio-datadebug)
 (require 'lambda-evil)
+(require 'lambda-company)
 
 ;; (use-package thrift
 ;;   :ensure t)
@@ -57,7 +58,10 @@
   :ensure t
   :config
   ;; enable semantic-mode when open thrift file
-  (add-hook 'thrift-mode-hook (lambda () (semantic-mode 1)))
+  (add-hook 'thrift-mode-hook (lambda ()
+                                (semantic-mode 1)
+                                (if (featurep 'company)
+                                    (setq company-backends '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))))))
   ;; only thrift-mode use semantic, since at present most language use lsp instead of semantic
   (add-to-list 'semantic-inhibit-functions (lambda () (not (member major-mode '(thrift-mode)))))
 
