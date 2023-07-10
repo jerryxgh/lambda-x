@@ -88,13 +88,6 @@ Note the weekly scope of the command's precision.")
 ;; locate-library
 ;; list-load-path-shadows
 
-(use-package better-jumper
-  :config
-  (better-jumper-mode +1)
-  (with-eval-after-load 'evil-maps
-    (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
-    (define-key evil-motion-state-map (kbd "C-i") 'better-jumper-jump-forward)))
-
 ;;; svn - psvn =================================================================
 (use-package magit-svn
   :ensure t

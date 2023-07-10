@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-06-25 20:36:25 Guanghui Xu>
+;; Time-stamp: <2023-07-10 16:58:57 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -339,7 +339,13 @@ object."
   (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
   )
 
-
+;; better-jumper ---------------------------------------------------------------
+(use-package better-jumper
+  :config
+  (better-jumper-mode +1)
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
+    (define-key evil-motion-state-map (kbd "C-i") 'better-jumper-jump-forward)))
 
 (provide 'lambda-evil)
 
