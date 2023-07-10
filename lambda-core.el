@@ -624,13 +624,18 @@ POSITION: just inhibit warning.")
 (use-package flycheck
   :ensure
   ;; enable on-the-fly syntax checking
-  ;; :init (global-flycheck-mode)
+  :init (global-flycheck-mode)
   :custom
   (compilation-skip-threshold 0)
   (flycheck-emacs-lisp-initialize-packages t)
   (flycheck-emacs-lisp-package-user-dir package-user-dir)
   ;; use spaceline to show flycheck status instead
   (flycheck-mode-line nil))
+
+(use-package flycheck-package
+  :ensure
+  :config
+  (flycheck-package-setup))
 
 ;; (lambda-package-ensure-install 'helm-flycheck)
 (use-package helm-flycheck
