@@ -497,7 +497,7 @@ POSITION: just inhibit warning.")
   :ensure t
   ;; :delight projectile-mode
   :custom
-  (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
+  ;; (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
   (projectile-enable-caching t)
   (projectile-file-exists-remote-cache-expire nil)
   (projectile-completion-system 'ivy)
