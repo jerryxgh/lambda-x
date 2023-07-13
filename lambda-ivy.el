@@ -56,10 +56,10 @@
   ;; configure regexp engine.
   (setq ivy-re-builders-alist
         ;; allow input not in order
-        '(
-          (t . ivy--regex-fuzzy)
-          ;; (t . ivy--regex-ignore-order)
-          ))
+        '((counsel-ag . ivy--regex-plus)
+          ;; (counsel-ag . ivy--regex-ignore-order)
+          (swiper . ivy--regex-fuzzy)
+          (t . ivy--regex-fuzzy)))
   ;; incompatible with ivy
   (if (and (bound-and-true-p hungry-delete-except-modes)
            (not (member 'minibuffer-mode hungry-delete-except-modes)))
