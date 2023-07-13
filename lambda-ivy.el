@@ -85,5 +85,26 @@
 (global-set-key (kbd "C-x j") (lambda ()
                                 (interactive)
                                 (counsel-find-file lambda-package-direcotry)))
+
+(defun counsel-flymake ()
+  (interactive)
+  (let* ((flymake--diagnostics-buffer-source (current-buffer))
+         (file (let ((file (buffer-file-name flymake--diagnostics-buffer-source)))
+                 (when file (file-name-base (file-name-sans-extension file)))))
+         (errors (flymake--diagnostics-buffer-entries))
+         (cands (cl-loop with diag     = nil
+                         with vec      = nil                                    ; a vector containing already propertized attributes
+                         with line     = nil
+                         with message  = nil
+                         for err in errors                                      ; for structure of err see:`flymake--diagnostics-buffer-entries'
+                         do (setq diag    (plist-get (car err) :diagnostic)
+                                  vec     (nth 1 err)
+                                  line    (aref vec 0)
+                                  message (concat (aref vec 2) " " (car (aref vec 4))))
+                         collect (propertize (concat (when file (concat file ":"))
+                                                     line ":"
+                                                     message)
+                                             'point (flymake--diag-beg diag)))))
+    (counsel-mark--ivy-read "flymake: " cands 'counsel-flymake)))
 (provide 'lambda-ivy)
 ;;; lambda-ivy.el ends here
