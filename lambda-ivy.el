@@ -54,6 +54,10 @@
           (t . ivy--regex-fuzzy)
           ;; (t . ivy--regex-ignore-order)
           ))
+  ;; incompatible with ivy
+  (if (and (bound-and-true-p hungry-delete-except-modes)
+           (not (member 'minibuffer-mode hungry-delete-except-modes)))
+      (add-to-list 'hungry-delete-except-modes 'minibuffer-mode))
   ;; Use C-j for immediate termination with the current value, and RET for
   ;; continuing completion for that directory. This is the ido behaviour.
   (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-immediate-done)

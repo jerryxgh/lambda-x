@@ -796,8 +796,6 @@ POSITION: just inhibit warning.")
   :ensure t
   :diminish hungry-delete-mode
   :config
-  ;; incompatible with ivy
-  (add-to-list 'hungry-delete-except-modes 'minibuffer-mode)
   (global-hungry-delete-mode 1))
 
 ;; M-? do not prompt, just use current word
