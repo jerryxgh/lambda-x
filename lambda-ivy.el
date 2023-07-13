@@ -13,7 +13,13 @@
   :ensure t)
 
 (use-package avy
-  :ensure t)
+  :ensure t
+  :config
+  (when (and (featurep 'evil) (featurep 'evil-leader))
+    (evil-leader/set-key
+      "c" 'avy-goto-char
+      "w" 'avy-goto-word-0
+      "l" 'avy-goto-line)))
 
 ;; show most-used commands in the completion list and showing keyboard shortcuts
 (use-package amx

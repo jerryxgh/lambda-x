@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-07-11 16:58:18 Guanghui Xu>
+;; Time-stamp: <2023-07-13 16:18:31 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -203,16 +203,6 @@
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
-
-;; ace jump --------------------------------------------------------------------
-(use-package ace-jump-mode
-  :ensure t
-  :config
-  (when (and (featurep 'evil) (featurep 'evil-leader))
-    (evil-leader/set-key
-      "c" 'ace-jump-char-mode
-      "w" 'ace-jump-word-mode
-      "l" 'ace-jump-line-mode)))
 
 (use-package ace-window
   :ensure t
