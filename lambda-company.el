@@ -125,6 +125,7 @@ All args are passed directory, including COMMAND ARG and IGNORED."
 (use-package company-box
   :after company
   :ensure t
+  :diminish company-box-mode
   :hook (company-mode . company-box-mode)
   :config
   (add-to-list 'company-box-frame-parameters '(line-spacing . 3))

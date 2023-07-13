@@ -100,6 +100,7 @@ Note the weekly scope of the command's precision.")
 ;; whitespace-cleanup-mode =====================================================
 (use-package whitespace-cleanup-mode
   :ensure t
+  :delight
   :config
   (global-whitespace-cleanup-mode 1))
 
@@ -112,8 +113,7 @@ Note the weekly scope of the command's precision.")
 
 (use-package package-lint
   :ensure t
-  :pin melpa
-  )
+  :pin melpa)
 
 (use-package quelpa
   :ensure t)
@@ -128,6 +128,8 @@ Note the weekly scope of the command's precision.")
 ;; (require 'quelpa-use-package)
 
 (use-package copilot
+  :ensure t
+  :delight copilot-mode
   :quelpa (copilot :fetcher github
                    :repo "zerolfx/copilot.el"
                    :branch "main"
@@ -137,10 +139,10 @@ Note the weekly scope of the command's precision.")
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
-(use-package good-scroll
-  :ensure t
-  :if window-system          ; 在图形化界面时才使用这个插件
-  :init (good-scroll-mode))
+;; (use-package good-scroll
+;;   :ensure t
+;;   :if window-system          ; 在图形化界面时才使用这个插件
+;;   :init (good-scroll-mode))
 
 (provide 'lambda-eden)
 

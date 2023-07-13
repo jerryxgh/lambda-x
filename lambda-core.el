@@ -104,6 +104,9 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (use-package diminish
   :ensure t)
 
+(use-package delight
+  :ensure t)
+
 ;; toolbar is just a waste of valuable screen estate in a tty tool-bar-mode does
 ;; not properly auto-load, and is already disabled anyway
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -193,6 +196,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; optional if you want which-key integration
 (use-package which-key
   :ensure t
+  :delight which-key-mode
   :config
   ;; Allow C-h to trigger which-key before it is done automatically
   (setq which-key-show-early-on-C-h t)
@@ -489,23 +493,23 @@ POSITION: just inhibit warning.")
                                               lambda-auto-save-dir))
 
 ;; projectile is a project management mode -------------------------------------
-(lambda-package-ensure-install 'projectile)
-(require 'projectile)
-(setq projectile-enable-caching t
-      projectile-file-exists-remote-cache-expire nil
-      projectile-completion-system 'ivy
-      ;; projectile-require-project-root nil
-      projectile-cache-file (expand-file-name
-                             "projectile.cache"
-                             lambda-auto-save-dir)
-      projectile-known-projects-file (expand-file-name
-                                      "projectile-bookmarks.eld"
-                                      lambda-auto-save-dir))
-
-(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-
-(projectile-mode t)
-;;(diminish 'projectile-mode)
+(use-package projectile
+  :ensure t
+  ;; :delight projectile-mode
+  :custom
+  (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
+  (projectile-enable-caching t)
+  (projectile-file-exists-remote-cache-expire nil)
+  (projectile-completion-system 'ivy)
+  (projectile-cache-file (expand-file-name
+                          "projectile.cache"
+                          lambda-auto-save-dir))
+  (projectile-known-projects-file (expand-file-name
+                                   "projectile-bookmarks.eld"
+                                   lambda-auto-save-dir))
+  :config
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+  (projectile-mode t))
 
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
@@ -580,12 +584,16 @@ POSITION: just inhibit warning.")
 ;; outline mode
 (require 'outline)
 (add-hook 'prog-mode-hook
-          #'(lambda ()
-              (outline-minor-mode t)))
-(diminish 'outline-minor-mode)
+          (lambda ()
+            (outline-minor-mode t)
+            (diminish 'outline-minor-mode)))
+
 
 ;; enable hs-minor-mode for programming, hide or show code
-(add-hook 'prog-mode-hook #'hs-minor-mode)
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (hs-minor-mode t)
+            (diminish 'hs-minor-mode)))
 
 (defmacro with-region-or-buffer (func)
   "When called with no active region, call FUNC on current buffer."

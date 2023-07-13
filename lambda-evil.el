@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-07-13 16:18:31 Guanghui Xu>
+;; Time-stamp: <2023-07-13 20:25:49 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -332,7 +332,7 @@ object."
 ;; better-jumper ---------------------------------------------------------------
 (use-package better-jumper
   :ensure t
-  :diminish t
+  :delight better-jumper-local-mode
   :config
   (better-jumper-mode +1)
   (with-eval-after-load 'evil-maps
