@@ -6,31 +6,25 @@
 ;; Maintainer: Guanghui Xu gh_xu@qq.com
 ;; Created: 2022-09-18
 ;; Version: 0.1
-;; Keywords: package
-;; Homepage: not distributed yet
+;; Keywords: extensions
+;; Homepage: https://github.com/jerryxgh/lambda-x
 ;; Package-Version: 0.1
-;; Package-Requires:
+;; Package-Requires: ((emacs "25.1"))
 ;;
 
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
-
-;;
+;; Package management.
 
 ;; Put this file into your load-path and the following into your ~/.emacs:
 ;;   (require 'lambda-package)
-
-;;; Change Log:
-
-;; Version $(3) 2022-09-18 GuanghuiXu
-;;   - Initial release
 
 ;;; Code:
 
 (require 'package)
 
-(defconst lambda-x-direcotry (file-name-directory
+(defconst lambda-package-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
   "Root directory of lambda-x.")
 
@@ -41,7 +35,7 @@ This value is set automaticly, DONT set by hand.")
 
 
 ;; place package files relative to configuration directory
-(setq package-user-dir (expand-file-name "packages/elpa" lambda-x-direcotry))
+(setq package-user-dir (expand-file-name "packages/elpa" lambda-package-direcotry))
 
 (add-to-list 'package-archives
             '("melpa" . "https://melpa.org/packages/"))
@@ -55,6 +49,7 @@ This value is set automaticly, DONT set by hand.")
 
 ;; Load packages explictly
 (package-initialize)
+(require'warnings)
 (setq warning-suppress-log-types '((package reinitialization)))
 
 (defun lambda-package-ensure-install (package)
@@ -114,6 +109,7 @@ used packages, this is mainly for getting unused packages."
               package-activated-list))))
 
 (lambda-package-ensure-install 'use-package)
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
 (use-package compat

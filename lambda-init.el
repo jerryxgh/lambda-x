@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-06-26 17:36:39 bytedance>
+;; Time-stamp: <2023-07-13 15:16:15 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -28,6 +28,7 @@
     lambda-mac
     ;; core settings, shared by all other modules
     lambda-core
+    lambda-ivy
     lambda-evil
     lambda-treemacs
     ;; lambda-corfu

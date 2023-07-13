@@ -32,18 +32,6 @@
 (require 'lambda-cc)
 (require 'lambda-company)
 
-;; integrate with helm
-(use-package helm-lsp
-  :ensure
-  :commands helm-lsp-workspace-symbol
-  :config
-  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)
-  )
-
-;; xref complete by helm
-(use-package helm-xref
-  :ensure)
-
 ;; integrate with treemacs
 (if (featurep 'treemacs)
     (use-package lsp-treemacs :commands lsp-treemacs-errors-list

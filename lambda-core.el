@@ -77,7 +77,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
             (add-to-list 'load-path current-directory))))))
 
 (lambda-add-to-load-path-recursively (expand-file-name "packages/non-elpa"
-                                                       lambda-x-direcotry))
+                                                       lambda-package-direcotry))
 
 ;; suppressing ad-handle-definition Warnings in Emacs
 (setq ad-redefinition-action 'accept)
@@ -101,8 +101,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 ;; diminish keeps the modeline tidy, this package is needed by others, so put
 ;; this at the beginning -------------------------------------------------------
-(lambda-package-ensure-install 'diminish)
-(require 'diminish)
+(use-package diminish
+  :ensure t)
 
 ;; toolbar is just a waste of valuable screen estate in a tty tool-bar-mode does
 ;; not properly auto-load, and is already disabled anyway
@@ -237,7 +237,7 @@ POSITION: just inhibit warning.")
   ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
   (require 'spaceline-config)
   (spaceline-spacemacs-theme)
-  (spaceline-helm-mode)
+  ;; (spaceline-helm-mode)
   (redisplay))
 
 
@@ -429,7 +429,7 @@ POSITION: just inhibit warning.")
     (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/"))
 (setq ispell-program-name "aspell"
       ispell-extra-args '("--sug-mode=ultra"))
-(setq ispell-personal-dictionary (expand-file-name "ispell" lambda-x-direcotry))
+(setq ispell-personal-dictionary (expand-file-name "ispell" lambda-package-direcotry))
 
 ;; enable narrowing commands
 (put 'narrow-to-region 'disabled nil)
@@ -493,7 +493,7 @@ POSITION: just inhibit warning.")
 (require 'projectile)
 (setq projectile-enable-caching t
       projectile-file-exists-remote-cache-expire nil
-      projectile-completion-system 'helm
+      projectile-completion-system 'ivy
       ;; projectile-require-project-root nil
       projectile-cache-file (expand-file-name
                              "projectile.cache"
@@ -562,7 +562,7 @@ POSITION: just inhibit warning.")
 ;; editor settings end here ====================================================
 
 ;; miscellaneous basic settings ------------------------------------------------
-(setq custom-file (expand-file-name "lambda-custom.el" lambda-x-direcotry)
+(setq custom-file (expand-file-name "lambda-custom.el" lambda-package-direcotry)
       make-backup-files nil
       resize-mini-windows t
       enable-recursive-minibuffers t
@@ -637,17 +637,6 @@ POSITION: just inhibit warning.")
   :config
   (flycheck-package-setup))
 
-;; (lambda-package-ensure-install 'helm-flycheck)
-(use-package helm-flycheck
-  :ensure
-  :config
-  (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
-
-;; (use-package helm-flymake
-;;   :ensure
-;;   :config
-;;   )
-
 (use-package emacs
   :custom
   (switch-to-buffer-in-dedicated-window 'pop))
@@ -717,131 +706,6 @@ POSITION: just inhibit warning.")
 ;; do not load custom file, all the configuration should be done by code
 (load "lambda-custom" t)
 
-;;; ido --- interactively do things---------------------------------------------
-;; ffap - find file at point is not userful when ido-mode is on
-(lambda-package-ensure-install 'flx-ido)
-(require 'flx-ido)
-
-(require 'ido)
-(setq ido-enable-flex-matching t
-      ido-use-url-at-point t
-      ido-use-faces nil
-      ido-auto-merge-work-directories-length -1
-      ido-use-virtual-buffers t
-      ido-ignore-buffers '("\\` "
-                           "^\\*Ibuffer\\*$"
-                           "^\\*helm.*\\*$"
-                           "^\\*Compile-Log\\*$"
-                           "^\\*Messages\\*$"
-                           "^\\*Help\\*$")
-      ido-save-directory-list-file
-      (expand-file-name "ido.hist" lambda-auto-save-dir)
-      ;; ido-cannot-complete-command 'ido-next-match
-      ;; ido-default-file-method 'selected-window
-      ;; ffap-require-prefix t ; get find-file-at-point with C-u C-x C-f
-      )
-
-(add-hook 'ido-setup-hook
-          #'(lambda ()
-              (define-key ido-completion-map (kbd "<tab>") 'ido-next-match)))
-
-(setq ido-ignore-buffers  '("\\` " "^\\*.*\\*$"))
-(put 'dired-do-copy   'ido nil) ; use ido there
-(put 'dired-do-rename 'ido nil) ; ^
-;; (put 'dired-do-rename 'ido 'find-file)
-(ido-mode 1)
-;;; smarter fuzzy matching for ido
-(flx-ido-mode 1)
-
-(lambda-package-ensure-install 'ido-completing-read+)
-(require 'ido-completing-read+)
-(ido-ubiquitous-mode 1)
-
-;;; smex, remember recently and most frequently used commands ------------------
-(lambda-package-ensure-install 'smex)
-(require 'smex)
-(setq smex-save-file (expand-file-name "smex-items"
-                                       lambda-auto-save-dir))
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
-;;; ido-at-point --- use ido to do completion-at-point -------------------------
-(lambda-package-ensure-install 'ido-at-point)
-(ido-at-point-mode 1)
-
-;; helm ------------------------------------------------------------------------
-;; (lambda-package-ensure-install 'helm)
-(use-package helm
-  :ensure
-  :custom
-  ;; always split window for helm
-  (helm-split-window-inside-p t)
-  (helm-move-to-line-cycle-in-source t)
-  :config
-  ;; must set before helm-config,  otherwise helm use default
-  ;; prefix "C-x c", which is inconvenient because you can
-  ;; accidentially pressed "C-x C-c"
-  (setq-default helm-command-prefix-key "C-c h"
-                ;; use ido-at-point
-                helm-mode-handle-completion-in-region nil)
-  (helm-mode 1)
-
-  (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
-
-  ;; to use with ido, customize helm-completing-read-handlers-alist
-  (setq-default helm-completing-read-handlers-alist
-                '((describe-function . ido)
-                  (describe-variable . ido)
-                  (where-is . ido)
-                  (load-library . ido)
-                  (debug-on-entry . ido)
-                  (dired-do-copy . ido)
-                  (dired-do-rename . ido)
-                  (dired-create-directory . ido)
-                  (find-function . ido)
-                  (find-tag . ido)
-                  (find-file . ido)
-                  (find-file-other-window . ido)
-                  (switch-to-buffer . ido)
-                  (httpd-serve-directory . ido)
-                  (ffap-alternate-file . nil)
-                  (tmm-menubar . nil)))
-  )
-
-;; M-x helm-projectile-ag
-(use-package helm-projectile
-  :ensure t
-  :custom
-  (helm-ag-insert-at-point 'symbol)
-  :config
-  (helm-projectile-on)
-  :pin melpa)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; PACKAGE: helm-descbinds                      ;;
-;;                                              ;;
-;; GROUP: Convenience -> Helm -> Helm Descbinds ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(lambda-package-ensure-install 'helm-descbinds)
-(require 'helm-descbinds)
-(helm-descbinds-mode 1)
-(lambda-package-ensure-install 'helm-ag)
-(lambda-package-ensure-install 'ag)
-(require 'ag)
-(setq
- ;; If your version of ag is recent enough, you can add highlighting by
- ;; adding the following to your Emacs configuration:
- ag-highlight-search t
- ;; By default, ag.el will open results in a different window in the frame,
- ;; so the results buffer is still visible. You can override this so the
- ;; results buffer is hidden and the selected result is shown in its place:
- ag-reuse-window t
- )
-
 ;;; magit --- use git in emacs--------------------------------------------------
 (use-package magit
   :ensure t
@@ -879,9 +743,6 @@ POSITION: just inhibit warning.")
 
 ;; key-bindings for myself, you can change this to yours -----------------------
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-(global-set-key (kbd "C-x j") #'(lambda () (interactive)
-                                  (ido-mode 1)
-                                  (ido-find-file-in-dir lambda-x-direcotry)))
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling
@@ -893,7 +754,7 @@ POSITION: just inhibit warning.")
 (lambda-package-ensure-install 'yasnippet)
 (lambda-package-ensure-install 'yasnippet-snippets)
 (require 'yasnippet)
-(add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-x-direcotry))
+(add-to-list 'yas-snippet-dirs (expand-file-name "snippets" lambda-package-direcotry))
 ;; delete dirs that not exist in yas-snippet-dirs
 (dolist (dir yas-snippet-dirs)
   (if (stringp dir)
@@ -931,9 +792,13 @@ POSITION: just inhibit warning.")
 (setq enable-remote-dir-locals t)
 
 ;; hungry-delete ---------------------------------------------------------------
-(lambda-package-ensure-install 'hungry-delete)
-(global-hungry-delete-mode 1)
-(diminish 'hungry-delete-mode)
+(use-package hungry-delete
+  :ensure t
+  :diminish hungry-delete-mode
+  :config
+  ;; incompatible with ivy
+  (add-to-list 'hungry-delete-except-modes 'minibuffer-mode)
+  (global-hungry-delete-mode 1))
 
 ;; M-? do not prompt, just use current word
 (setq xref-prompt-for-identifier nil)
