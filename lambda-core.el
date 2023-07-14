@@ -508,7 +508,7 @@ POSITION: just inhibit warning.")
                                    "projectile-bookmarks.eld"
                                    lambda-auto-save-dir))
   :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t))
 
 ;; anzu-mode enhances isearch by showing total matches and current match
