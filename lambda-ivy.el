@@ -49,13 +49,6 @@
   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
   (enable-recursive-minibuffers t)
   (ivy-use-virtual-buffers t)
-  ;; configure regexp engine.
-  (ivy-re-builders-alist
-   '((counsel-ag . ivy--regex-plus)
-     ;; allow input not in order
-     ;; (counsel-ag . ivy--regex-ignore-order)
-     (swiper . ivy--regex)
-     (t . ivy--regex-fuzzy)))
 
   :bind
   (;; Use C-j for immediate termination with the current value, and RET for
@@ -64,6 +57,13 @@
          ("C-j" . ivy-immediate-done)
          ("RET" . ivy-alt-done)))
   :config
+  ;; configure regexp engine.
+  (setq ivy-re-builders-alist
+        '((counsel-ag . ivy--regex-plus)
+          ;; allow input not in order
+          ;; (counsel-ag . ivy--regex-ignore-order)
+          (swiper . ivy--regex)
+          (t . ivy--regex-fuzzy)))
   (ivy-mode 1)
   ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
   (if (and (bound-and-true-p hungry-delete-except-modes)
@@ -74,6 +74,7 @@
   :ensure t
   :bind (("C-s" . swiper))
   :config
+  (counsel-mode 1)
   ;; Don't show '.' and '..' in counsel-find-file
   (setq ivy-extra-directories nil)
   (setq counsel-find-file-at-point t))
@@ -102,13 +103,13 @@ BUFFER defaults to current buffer."
          ;; for dolist result
          result
          (cands (reverse (dolist (err errors result)
-                               (let* ((diag (plist-get (car err) :diagnostic))
-                                      (vec (nth 1 err))
-                                      (line (aref vec 0))
-                                      (message (concat (aref vec 2) " " (car (aref vec 4)))))
-                                 (setq result (cons (propertize (concat file-name ":" line ":" message)
-                                                                'point (flymake--diag-beg diag))
-                                                    result)))))))
+                           (let* ((diag (plist-get (car err) :diagnostic))
+                                  (vec (nth 1 err))
+                                  (line (aref vec 0))
+                                  (message (concat (aref vec 2) " " (car (aref vec 4)))))
+                             (setq result (cons (propertize (concat file-name ":" line ":" message)
+                                                            'point (flymake--diag-beg diag))
+                                                result)))))))
     (if cands (counsel-mark--ivy-read "flymake errors: " cands 'counsel-flymake)
       (message "flymake errors: no errors"))))
 
