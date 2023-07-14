@@ -39,41 +39,42 @@
 (use-package ivy
   :ensure t
   :diminish (ivy-mode . "")
+  :custom
+  ;; number of result lines to display
+  (ivy-height 10)
+  ;; does not count candidates
+  ;; (ivy-count-format "")
+  ;; no regexp by default
+  (ivy-initial-inputs-alist nil)
+  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+  (enable-recursive-minibuffers t)
+  (ivy-use-virtual-buffers t)
+  ;; configure regexp engine.
+  (ivy-re-builders-alist
+   '((counsel-ag . ivy--regex-plus)
+     ;; allow input not in order
+     ;; (counsel-ag . ivy--regex-ignore-order)
+     (swiper . ivy--regex)
+     (t . ivy--regex-fuzzy)))
+
   :bind
-  (:map ivy-mode-map
-   ("C-'" . ivy-avy))
+  (;; Use C-j for immediate termination with the current value, and RET for
+   ;; continuing completion for that directory. This is the ido behaviour.
+   (:map ivy-minibuffer-map
+         ("C-j" . ivy-immediate-done)
+         ("RET" . ivy-alt-done)))
   :config
   (ivy-mode 1)
-  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (setq enable-recursive-minibuffers t
-        ivy-use-virtual-buffers t)
-  ;; number of result lines to display
-  (setq ivy-height 10)
-  ;; does not count candidates
-  (setq ivy-count-format "")
-  ;; no regexp by default
-  (setq ivy-initial-inputs-alist nil)
-  ;; configure regexp engine.
-  (setq ivy-re-builders-alist
-        ;; allow input not in order
-        '((counsel-ag . ivy--regex-plus)
-          ;; (counsel-ag . ivy--regex-ignore-order)
-          (swiper . ivy--regex-fuzzy)
-          (t . ivy--regex-fuzzy)))
-  ;; incompatible with ivy
+  ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
   (if (and (bound-and-true-p hungry-delete-except-modes)
            (not (member 'minibuffer-mode hungry-delete-except-modes)))
-      (add-to-list 'hungry-delete-except-modes 'minibuffer-mode))
-  ;; Use C-j for immediate termination with the current value, and RET for
-  ;; continuing completion for that directory. This is the ido behaviour.
-  (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-immediate-done)
-  (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done))
+      (add-to-list 'hungry-delete-except-modes 'minibuffer-mode)))
 
 (use-package counsel
   :ensure t
   :bind (("C-s" . swiper))
   :config
-  ;; Don't show "." and ".." in counsel-find-file
+  ;; Don't show '.' and '..' in counsel-find-file
   (setq ivy-extra-directories nil)
   (setq counsel-find-file-at-point t))
 
@@ -86,25 +87,30 @@
                                 (interactive)
                                 (counsel-find-file lambda-package-direcotry)))
 
-(defun counsel-flymake ()
+(require 'flymake)
+(require 'counsel)
+(defun counsel-flymake (&optional buffer)
+  "Show flymake errors of BUFFER in ivy.
+BUFFER defaults to current buffer."
   (interactive)
-  (let* ((flymake--diagnostics-buffer-source (current-buffer))
-         (file (let ((file (buffer-file-name flymake--diagnostics-buffer-source)))
-                 (when file (file-name-base (file-name-sans-extension file)))))
+  (let* (;; flymake--diagnostics-buffer-source is needed by (flymake--diagnostics-buffer-entries)
+         (flymake--diagnostics-buffer-source (or buffer (current-buffer)))
+         (file-name (let ((bfn (buffer-file-name flymake--diagnostics-buffer-source)))
+                      (if bfn (file-name-base (file-name-sans-extension bfn))
+                        (file-name-sans-extension (buffer-name flymake--diagnostics-buffer-source)))))
          (errors (flymake--diagnostics-buffer-entries))
-         (cands (cl-loop with diag     = nil
-                         with vec      = nil                                    ; a vector containing already propertized attributes
-                         with line     = nil
-                         with message  = nil
-                         for err in errors                                      ; for structure of err see:`flymake--diagnostics-buffer-entries'
-                         do (setq diag    (plist-get (car err) :diagnostic)
-                                  vec     (nth 1 err)
-                                  line    (aref vec 0)
-                                  message (concat (aref vec 2) " " (car (aref vec 4))))
-                         collect (propertize (concat (when file (concat file ":"))
-                                                     line ":"
-                                                     message)
-                                             'point (flymake--diag-beg diag)))))
-    (counsel-mark--ivy-read "flymake: " cands 'counsel-flymake)))
+         ;; for dolist result
+         result
+         (cands (reverse (dolist (err errors result)
+                               (let* ((diag (plist-get (car err) :diagnostic))
+                                      (vec (nth 1 err))
+                                      (line (aref vec 0))
+                                      (message (concat (aref vec 2) " " (car (aref vec 4)))))
+                                 (setq result (cons (propertize (concat file-name ":" line ":" message)
+                                                                'point (flymake--diag-beg diag))
+                                                    result)))))))
+    (if cands (counsel-mark--ivy-read "flymake errors: " cands 'counsel-flymake)
+      (message "flymake errors: no errors"))))
+
 (provide 'lambda-ivy)
 ;;; lambda-ivy.el ends here
