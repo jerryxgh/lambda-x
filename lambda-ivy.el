@@ -73,6 +73,7 @@
 (use-package counsel
   :ensure t
   :bind (("C-s" . swiper))
+  :delight counsel-mode
   :config
   (counsel-mode 1)
   ;; Don't show '.' and '..' in counsel-find-file

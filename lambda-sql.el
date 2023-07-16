@@ -34,6 +34,7 @@
 ;; sqlup-mode
 (use-package sqlup-mode
   :ensure t
+  :delight sqlup-mode
   :config
   (setq sqlup-blacklist '("name" "key"))
   (setq sqlup-blacklist nil)
@@ -42,9 +43,9 @@
 ;; sql-indent
 (use-package sql-indent
   :ensure t
+  :delight sqlind-minor-mode
   :config
-  (add-hook 'sql-mode-hook 'sqlind-minor-mode)
-  )
+  (add-hook 'sql-mode-hook 'sqlind-minor-mode))
 
 (add-hook 'sql-mode-hook
           (lambda ()
