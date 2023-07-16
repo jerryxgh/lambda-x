@@ -1,17 +1,5 @@
 ;;; lambda-sql.el --- for sql editing -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2022-10-29
-;; Version: 0.0.1
-;; Keywords: sql
-;; Homepage: not distributed yet
-;; Package-Version: 0.0.1
-;; Package-Requires: sql-mode
-;;
-
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
@@ -50,8 +38,7 @@
 (add-hook 'sql-mode-hook
           (lambda ()
             (setq company-backends
-                  '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
-            ))
+                  '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
 (provide 'lambda-sql)
 
