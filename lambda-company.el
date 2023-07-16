@@ -72,7 +72,9 @@ All args are passed directory, including COMMAND ARG and IGNORED."
 (use-package company
   :ensure t
   :pin melpa
+
   :diminish company-mode
+
   :custom
   (company-tooltip-align-annotations t)
   (company-require-match nil)
@@ -93,6 +95,7 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   ;; dabbrev configuration
   (dabbrev-case-fold-search nil)
   (dabbrev-upcase-means-case-search t)
+  (company-box-doc-enable nil)
   (company-dabbrev-downcase nil)
 
   :config
@@ -102,10 +105,11 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-mode-map (kbd "M-/") 'company-complete)
   (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+  ;; (define-key company-active-map (kbd "M-n") nil)
+  ;; (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
   (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))
         company-show-quick-access 'right)
