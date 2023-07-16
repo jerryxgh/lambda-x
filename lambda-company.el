@@ -1,17 +1,5 @@
 ;;; lambda-company.el --- company config -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2021-10-30
-;; Version: 0.1
-;; Keywords: company
-;; Homepage: not distributed yet
-;; Package-Version: 0.1
-;; Package-Requires:
-;;
-
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
@@ -85,17 +73,15 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-minimum-prefix-length 1)
   (company-tooltip-minimum 10)
-  ;; (company-frontends
-  ;;  '(company-pseudo-tooltip-unless-just-one-frontend-with-delay
-  ;;    company-preview-frontend
-  ;;    company-echo-metadata-frontend
-  ;;    ))
+  (company-frontends
+   '(company-preview-common-frontend
+     company-pseudo-tooltip-frontend
+     company-echo-metadata-frontend))
   (company-selection-wrap-around t)
 
   ;; dabbrev configuration
   (dabbrev-case-fold-search nil)
   (dabbrev-upcase-means-case-search t)
-  (company-box-doc-enable nil)
   (company-dabbrev-downcase nil)
 
   :config
@@ -106,8 +92,6 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-  ;; (define-key company-active-map (kbd "M-n") nil)
-  ;; (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
 
@@ -124,23 +108,6 @@ All args are passed directory, including COMMAND ARG and IGNORED."
         ;; '(company-sort-by-backend-importance)
         ;; '(company-sort-prefer-same-case-prefix)
         '(lambda-company-sort-by-prefix-and-backend-importance)))
-
-;; company-box
-(use-package company-box
-  :after company
-  :ensure t
-  :diminish company-box-mode
-  :hook (company-mode . company-box-mode)
-  :config
-  (add-to-list 'company-box-frame-parameters '(line-spacing . 3))
-  (add-to-list 'company-box-frame-parameters '(line-height . 18))
-  (add-to-list 'company-box-frame-parameters
-               (cond ((eq system-type 'windows-nt)
-                      '(font . "Consolas-11"))
-                     ((eq system-type 'gnu/linux)
-                      '(font . "Source Code Pro-11"))
-                     ((eq system-type 'darwin)
-                      '(font . "menlo-14")))))
 
 (provide 'lambda-company)
 
