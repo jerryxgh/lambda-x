@@ -21,20 +21,6 @@
       "w" 'avy-goto-word-0
       "l" 'avy-goto-line)))
 
-;; show most-used commands in the completion list and showing keyboard shortcuts
-(use-package amx
-  :ensure t
-  :custom
-  ;; There are two features that can cause a noticeable delay (around 1/4 of a
-  ;; second) when running amx: command ignoring and showing key
-  ;; bindings. Generally this delay is not a problem, since you can start typing
-  ;; imediately and Amx will catch up after the short delay. However, if it
-  ;; bothers you, these delays can be greatly reduced by setting one or both of
-  ;; amx-ignored-command-matchers and amx-show-key-bindings to nil.
-  (amx-ignored-command-matchers nil)
-  (amx-show-key-bindings nil)
-  :init (amx-mode 1))
-
 ;; ivy ======================================================================
 (use-package ivy
   :ensure t
@@ -42,6 +28,7 @@
   :custom
   ;; number of result lines to display
   (ivy-height 10)
+  (ivy-sort-max-size 100000)
   ;; does not count candidates
   ;; (ivy-count-format "")
   ;; no regexp by default
@@ -100,8 +87,17 @@
   :config
   (counsel-projectile-mode))
 
+(use-package prescient
+  :ensure t
+  :after (counsel)
+  :custom
+  (prescient-filter-method '(literal regexp fuzzy))
+  :config
+  (prescient-persist-mode 1))
+
 (use-package ivy-prescient
   :ensure t
+  :after (counsel)
   :config
   (ivy-prescient-mode 1))
 
