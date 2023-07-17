@@ -59,7 +59,7 @@
   :config
   ;; configure regexp engine.
   (setq ivy-re-builders-alist
-        '((counsel-ag . ivy--regex-plus)
+        '((counsel-ag . ivy--regex)
           ;; allow input not in order
           ;; (counsel-ag . ivy--regex-ignore-order)
           (swiper . ivy--regex)
@@ -99,6 +99,11 @@
   :ensure t
   :config
   (counsel-projectile-mode))
+
+(use-package ivy-prescient
+  :ensure t
+  :config
+  (ivy-prescient-mode 1))
 
 (global-set-key (kbd "C-x j") (lambda ()
                                 (interactive)

@@ -109,6 +109,11 @@ All args are passed directory, including COMMAND ARG and IGNORED."
         ;; '(company-sort-prefer-same-case-prefix)
         '(lambda-company-sort-by-prefix-and-backend-importance)))
 
+(use-package company-prescient
+  :ensure t
+  :config
+  (company-prescient-mode 1))
+
 (provide 'lambda-company)
 
 ;;; lambda-company.el ends here
