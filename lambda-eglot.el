@@ -1,17 +1,6 @@
 ;;; lambda-eglot.el --- support elgot -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2023 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2023-05-30
-;; Version: 0.01
-;; Keywords:
-;; Homepage: not distributed yet
-;; Package-Version: 0.01
-;; Package-Requires:
-;;
-
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:

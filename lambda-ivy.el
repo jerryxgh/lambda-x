@@ -78,7 +78,22 @@
   (counsel-mode 1)
   ;; Don't show '.' and '..' in counsel-find-file
   (setq ivy-extra-directories nil)
-  (setq counsel-find-file-at-point t))
+  (setq counsel-find-file-at-point t)
+  (defun lambda-counsel-ag ()
+    (interactive)
+    (counsel-ag nil default-directory)))
+
+(use-package ivy-xref
+  :ensure t
+  :init
+  ;; xref initialization is different in Emacs 27 - there are two different
+  ;; variables which can be set rather than just one
+  (when (>= emacs-major-version 27)
+    (setq xref-show-definitions-function 'ivy-xref-show-defs))
+  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
+  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
+  ;; as well
+  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
 (use-package counsel-projectile
   :ensure t
