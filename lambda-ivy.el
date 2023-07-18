@@ -27,8 +27,8 @@
   :diminish (ivy-mode . "")
   :custom
   ;; number of result lines to display
-  (ivy-height 10)
-  (ivy-sort-max-size 100000)
+  ;; (ivy-height 10) ; 10 is the default value
+  ;; (ivy-sort-max-size 100000) ; counsel-describe-function will not use prescient sorting
   ;; does not count candidates
   ;; (ivy-count-format "")
   ;; no regexp by default
@@ -67,6 +67,7 @@
   (setq ivy-extra-directories nil)
   (setq counsel-find-file-at-point t)
   (defun lambda-counsel-ag ()
+    "Counsel-ag at `default-directory'"
     (interactive)
     (counsel-ag nil default-directory)))
 
