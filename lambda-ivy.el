@@ -28,7 +28,9 @@
   :custom
   ;; number of result lines to display
   ;; (ivy-height 10) ; 10 is the default value
-  ;; (ivy-sort-max-size 100000) ; counsel-describe-function will not use prescient sorting
+  ;; (ivy-sort-max-size 100000) ; counsel-describe-function will not use prescient
+  ;;                            ; sorting because function number is over
+  ;;                            ; ivy-sort-max-size, which defualt value is 30000
   ;; does not count candidates
   ;; (ivy-count-format "")
   ;; no regexp by default
@@ -44,12 +46,15 @@
          ("C-j" . ivy-immediate-done)
          ("RET" . ivy-alt-done)))
   :config
+  (add-to-list 'ivy-more-chars-alist '(counsel-ag . 1))
+  (add-to-list 'ivy-more-chars-alist '(counsel-rg . 1))
   ;; configure regexp engine.
   (setq ivy-re-builders-alist
         '((counsel-ag . ivy--regex)
           ;; allow input not in order
           ;; (counsel-ag . ivy--regex-ignore-order)
           (swiper . ivy--regex)
+          (counsel-M-x . ivy--regex-fuzzy)
           (t . ivy--regex-fuzzy)))
   (ivy-mode 1)
   ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
@@ -91,8 +96,8 @@
 (use-package prescient
   :ensure t
   :after (counsel)
-  :custom
-  (prescient-filter-method '(literal regexp fuzzy))
+  ;; :custom
+  ;; (prescient-filter-method '(literal regexp fuzzy))
   :config
   (prescient-persist-mode 1))
 
