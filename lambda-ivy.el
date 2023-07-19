@@ -74,7 +74,11 @@
   (defun lambda-counsel-ag ()
     "Counsel-ag at `default-directory'"
     (interactive)
-    (counsel-ag nil default-directory)))
+    (counsel-ag nil default-directory))
+  (defun lambda-counsel-rg ()
+    "Counsel-rg at `default-directory'"
+    (interactive)
+    (counsel-rg nil default-directory)))
 
 (use-package ivy-xref
   :ensure t

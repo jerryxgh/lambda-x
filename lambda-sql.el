@@ -35,6 +35,14 @@
   :config
   (add-hook 'sql-mode-hook 'sqlind-minor-mode))
 
+(use-package sqlformat
+  :ensure t
+  :config
+  (setq sqlformat-command 'sql-formatter)
+  (setq sqlformat-args (cons (concat "-c" (concat lambda-package-direcotry "misc/sql-formatter.json")) '()))
+  (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
+
 (add-hook 'sql-mode-hook
           (lambda ()
             (setq company-backends

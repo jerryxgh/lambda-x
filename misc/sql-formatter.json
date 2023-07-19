@@ -1,0 +1,8 @@
+{
+    "language": "spark",
+    "tabWidth": 4,
+    "keywordCase": "upper",
+    "linesBetweenQueries": 2,
+    "indentStyle": "tabularLeft",
+    "denseOperators": false
+}

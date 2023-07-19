@@ -632,8 +632,9 @@ POSITION: just inhibit warning.")
 (use-package flycheck
   :ensure
   ;; enable on-the-fly syntax checking
-  :init (global-flycheck-mode)
+  :init (global-flycheck-mode 1)
   :custom
+  (flycheck-global-modes '(not go-mode java-mode c-mode c++-mode cc-mode))
   (compilation-skip-threshold 0)
   (flycheck-emacs-lisp-initialize-packages t)
   (flycheck-emacs-lisp-package-user-dir package-user-dir)

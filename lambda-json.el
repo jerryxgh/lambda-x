@@ -9,11 +9,14 @@
 ;; json-mode -------------------------------------------------------------------
 (use-package json-mode
   :ensure t
-  :config
-  (require 'json-mode))
+  :custom
+  (json-mode-indent-level 4)
+  ;; :config
+  )
 
 (use-package json-reformat
   :ensure t)
+
 (use-package json-snatcher
   :ensure t)
 
