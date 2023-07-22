@@ -42,10 +42,17 @@
   (setq sqlformat-command 'sql-formatter)
   (setq sqlformat-args (cons (concat "-c" (concat lambda-package-direcotry "misc/sql-formatter.json")) '()))
   (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
-  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
+  ;; (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+  )
+
+(use-package flymake-sqlfluff
+  :ensure t
+  :config
+  (add-hook 'sql-mode-hook 'flymake-sqlfluff-load))
 
 (add-hook 'sql-mode-hook
           (lambda ()
+            (flymake-mode 1)
             (setq company-backends
                   '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 

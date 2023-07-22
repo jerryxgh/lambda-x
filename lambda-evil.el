@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-07-13 20:25:49 Guanghui Xu>
+;; Time-stamp: <2023-07-21 14:27:43 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -338,6 +338,15 @@ object."
   (with-eval-after-load 'evil-maps
     (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
     (define-key evil-motion-state-map (kbd "C-i") 'better-jumper-jump-forward)))
+
+(use-package evil-vimish-fold
+  :ensure
+  :after vimish-fold
+  :init
+  (setq evil-vimish-fold-mode-lighter " ⮒")
+  (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
+  :config
+  (global-evil-vimish-fold-mode 1))
 
 (provide 'lambda-evil)
 
