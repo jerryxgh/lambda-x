@@ -28,13 +28,6 @@
   (setq sqlup-blacklist nil)
   (add-hook 'sql-mode-hook 'sqlup-mode))
 
-;; sql-indent
-(use-package sql-indent
-  :ensure t
-  :delight sqlind-minor-mode
-  :config
-  (add-hook 'sql-mode-hook 'sqlind-minor-mode))
-
 (use-package sqlformat
   :ensure t
   :delight sqlformat-on-save-mode
@@ -45,14 +38,8 @@
   ;; (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
   )
 
-(use-package flymake-sqlfluff
-  :ensure t
-  :config
-  (add-hook 'sql-mode-hook 'flymake-sqlfluff-load))
-
 (add-hook 'sql-mode-hook
           (lambda ()
-            (flymake-mode 1)
             (setq company-backends
                   '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
