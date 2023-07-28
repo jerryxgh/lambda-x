@@ -50,7 +50,14 @@
   :diminish persp-mode
   :custom
   (persp-keymap-prefix (kbd "C-;"))
-  (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir)))
+  (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
+  :config
+  (with-eval-after-load "persp-mode-autoloads"
+    ;; work with workgroups.el
+    (setq wg-morph-on nil)
+    ;; switch off the animation of restoring window configuration
+    (setq persp-autokill-buffer-on-remove 'kill-weak)
+    (add-hook 'after-init-hook (lambda () (persp-mode 1)))))
 
 (defun persp-desktop-ignore-this-minor-mode (buffer)
   "Installed as a minor-mode initializer for Desktop mode.

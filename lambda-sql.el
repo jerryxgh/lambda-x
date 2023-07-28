@@ -23,9 +23,9 @@
 (use-package sqlup-mode
   :ensure t
   :delight sqlup-mode
+  :custom
+  (sqlup-blacklist '("name" "key" "type" "date"))
   :config
-  (setq sqlup-blacklist '("name" "key"))
-  (setq sqlup-blacklist nil)
   (add-hook 'sql-mode-hook 'sqlup-mode))
 
 (use-package sqlformat

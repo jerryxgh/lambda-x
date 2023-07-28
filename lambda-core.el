@@ -570,8 +570,7 @@ POSITION: just inhibit warning.")
       make-backup-files nil
       resize-mini-windows t
       enable-recursive-minibuffers t
-      gc-cons-threshold 20480000
-      confirm-kill-emacs 'y-or-n-p)
+      gc-cons-threshold 20480000)
 
 
 (if (string< emacs-version "24.3.50")
