@@ -154,18 +154,16 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
   (cond ((eq system-type 'windows-nt)
          (set-frame-font "Consolas-11")
-         ;; (setq face-font-rescale-alist (list (cons "微软雅黑" 1.1)))
-         (setq face-font-rescale-alist (list (cons "Î˘ČíŃĹşÚ" 1.1)))
-         (if (fboundp 'set-fontset-font)
-             (set-fontset-font t 'unicode '("Microsoft Yahei" .
-                                            "unicode-bmp"))))
+         (set-face-attribute 'default nil :font "Consolas-11")
+         (set-face-attribute 'mode-line nil :font "Consolas-11"))
+
         ((eq system-type 'gnu/linux)
          (set-frame-font "Source Code Pro-11")
          (if (fboundp 'set-fontset-font)
              (set-fontset-font t 'unicode '("Noto Sans CJK SC" .
                                             "unicode-bmp")))
-
          (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
+
         ((eq system-type 'darwin)
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
@@ -228,10 +226,6 @@ POSITION: just inhibit warning.")
 (use-package spaceline
   :ensure t
   :config
-  (cond ((eq system-type 'windows-nt)
-         (set-face-font 'mode-line "Microsoft Yahei-9:bold")
-         (set-face-font 'mode-line-inactive "Microsoft Yahei-9:bold")))
-
   (setq spaceline-window-numbers-unicode t
         spaceline-workspace-numbers-unicode t
         powerline-default-separator 'bar
