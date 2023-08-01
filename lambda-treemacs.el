@@ -137,14 +137,44 @@
   :ensure t)
 
 (use-package treemacs-all-the-icons
-  :after (treemacs)
   :ensure t
+  :after (treemacs)
   ;; should run all-the-icons-install-fonts after installation
   :config (treemacs-load-theme "all-the-icons"))
 
 (use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
+  :ensure t
+  :hook (dired-mode . (lambda ()
+                        (interactive)
+                        (unless (file-remote-p default-directory)
+                          (treemacs-icons-dired-enable-once)))))
+
+(use-package dired-subtree
+  :ensure t
+   :bind (:map dired-mode-map
+                    ("<tab>" . dired-subtree-cycle)
+                    ("TAB" . dired-subtree-cycle))
+   :config
+   (defun treemacs-icons-after-subtree-insert-a ()
+     (let ((pos (point))
+           (end (overlay-end (dired-subtree--get-ov))))
+       (treemacs-with-writable-buffer
+        (save-excursion
+          (goto-char pos)
+          (dired-goto-next-file)
+          (treemacs-block
+           (while (< (point) end)
+             (if (dired-move-to-filename nil)
+                 (let* ((file (dired-get-filename nil t))
+                        (icon (if (file-directory-p file)
+                                  treemacs-icon-dir-closed
+                                (treemacs-icon-for-file file))))
+                   (insert icon))
+               (treemacs-return nil))
+             (forward-line 1)))))))
+   (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a))
+
+
 
 (use-package treemacs-magit
   :after (treemacs magit)
