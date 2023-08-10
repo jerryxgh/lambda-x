@@ -108,7 +108,6 @@ used packages, this is mainly for getting unused packages."
                   (not (memq p used-packages)))
               package-activated-list))))
 
-(lambda-package-ensure-install 'use-package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 

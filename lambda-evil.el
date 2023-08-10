@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-07-21 14:27:43 Guanghui Xu>
+;; Time-stamp: <2023-08-10 13:58:53 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -342,8 +342,10 @@ object."
 (use-package evil-vimish-fold
   :ensure
   :after vimish-fold
+  :delight evil-vimish-fold-mode
+  :custom
+  (vimish-fold-dir (expand-file-name "vimish-fold" lambda-auto-save-dir))
   :init
-  (setq evil-vimish-fold-mode-lighter " ⮒")
   (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
   :config
   (global-evil-vimish-fold-mode 1))
