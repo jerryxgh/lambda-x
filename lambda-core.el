@@ -155,6 +155,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (cond ((eq system-type 'windows-nt)
          (set-frame-font "Consolas-11")
          (set-face-attribute 'default nil :font "Consolas-11")
+         (set-face-attribute 'default t :font "Consolas-11")
          (set-face-attribute 'mode-line nil :font "Consolas-11"))
 
         ((eq system-type 'gnu/linux)
@@ -259,6 +260,10 @@ POSITION: just inhibit warning.")
 ;; Emacs UI about settings end here ===========================================
 
 ;; editor settings ============================================================
+;; confirm when quit emacs
+(use-package emacs
+  :custom
+  (confirm-kill-emacs 'y-or-n-p))
 
 ;; auto insert newline at end of file if it has none
 (setq-default require-final-newline t)

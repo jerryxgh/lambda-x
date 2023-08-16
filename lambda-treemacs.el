@@ -136,18 +136,16 @@
   :after (treemacs projectile)
   :ensure t)
 
+(use-package treemacs-icons-dired
+  :after treemacs dired
+  :ensure t
+  :config (treemacs-icons-dired-mode))
+
 (use-package treemacs-all-the-icons
   :ensure t
   :after (treemacs)
   ;; should run all-the-icons-install-fonts after installation
   :config (treemacs-load-theme "all-the-icons"))
-
-(use-package treemacs-icons-dired
-  :ensure t
-  :hook (dired-mode . (lambda ()
-                        (interactive)
-                        (unless (file-remote-p default-directory)
-                          (treemacs-icons-dired-enable-once)))))
 
 (use-package dired-subtree
   :ensure t
