@@ -1,19 +1,5 @@
 ;;; lambda-dap.el --- lambda-dap -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2022-09-22
-;; Version: 0.01
-;; Keywords: dap-mode debug
-;; Homepage: not distributed yet
-;; Package-Version: 0.01
-;; Package-Requires:
-;;
-
-;; This file is not part of GNU Emacs.
-
 ;;; Commentary:
 
 ;; Emacs client/library for Debug Adapter Protocol is a wire protocol for
