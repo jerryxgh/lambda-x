@@ -14,12 +14,6 @@
   ;; :config
   )
 
-(use-package json-reformat
-  :ensure t)
-
-(use-package json-snatcher
-  :ensure t)
-
 (provide 'lambda-json)
 
 ;;; lambda-json.el ends here

@@ -1,8 +1,8 @@
 {
-    "language": "spark",
+    "language": "hive",
     "tabWidth": 4,
     "keywordCase": "upper",
     "linesBetweenQueries": 2,
-    "indentStyle": "tabularLeft",
+    "indentStyle": "tabularRight",
     "denseOperators": false
 }
