@@ -826,7 +826,7 @@ Just call (apply CMD ARGS) otherwise."
 (defun lambda-tmp-buffer ()
   "Create temporary buffer."
   (interactive)
-  (let ((buf-name (concat (make-temp-name "scratch-") "." (read-string "File Format: " nil nil "json" nil))))
+  (let ((buf-name (concat (make-temp-name "scratch-") "." (read-string (concat (propertize "File Format: " 'face '(bold default)))nil nil "json" nil))))
     (switch-to-buffer buf-name)
     (let ((buffer-file-name buf-name))
       (set-auto-mode))))

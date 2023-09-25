@@ -2,7 +2,9 @@
     "language": "hive",
     "tabWidth": 4,
     "keywordCase": "upper",
-    "linesBetweenQueries": 2,
+    "linesBetweenQueries": 0,
     "indentStyle": "tabularRight",
+    "expressionWidth": 120,
+    "newlineBeforeSemicolon": false,
     "denseOperators": false
 }
