@@ -28,20 +28,33 @@
   :config
   (add-hook 'sql-mode-hook 'sqlup-mode))
 
-(use-package sqlformat
-  :ensure t
-  :delight sqlformat-on-save-mode
-  :config
-  (setq sqlformat-command 'sql-formatter)
-  (setq sqlformat-args (cons (concat "-c" (concat lambda-package-direcotry "misc/sql-formatter.json")) '()))
-  (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
-  ;; (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
-  )
-
 (add-hook 'sql-mode-hook
           (lambda ()
             (setq company-backends
                   '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
+
+;; use sqlfluff instead of sqlformat
+;; (use-package sqlformat
+;;   :ensure t
+;;   :delight sqlformat-on-save-mode
+;;   :config
+;;   ;; (setq sqlformat-command 'sql-formatter)
+;;   ;; (setq sqlformat-args (cons (concat "-c" (concat lambda-package-direcotry "misc/sql-formatter.json")) '()))
+;;   (setq sqlformat-command 'sqlfluff)
+;;   (setq sqlformat-args nil)
+;;   (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
+;;   ;; (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+;;   )
+
+(use-package flymake-sqlfluff
+  :ensure t
+  :custom
+  (flymake-sqlfluff-dialect "hive")
+  :config
+  (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
+  (add-hook 'sql-mode-hook (lambda ()
+                             (flymake-sqlfluff-load)
+                             (flymake-mode 1))))
 
 (provide 'lambda-sql)
 
