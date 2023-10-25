@@ -48,7 +48,7 @@
 (use-package flymake-sqlfluff
   :ensure t
   :custom
-  (flymake-sqlfluff-dialect "hive")
+  (flymake-sqlfluff-dialect "sparksql")
   :config
   (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
   (add-hook 'sql-mode-hook (lambda ()
