@@ -625,6 +625,13 @@ POSITION: just inhibit warning.")
       epa-file-inhibit-auto-save t)
 (setenv "GPG_AGENT_INFO" nil) ; use minibuffer to input passphrase
 
+;; flymake - try best to use built-in package
+(use-package flymake
+  :custom
+  (flymake-start-on-save-buffer t)
+  :config
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
+
 ;; flycheck - much better than flymake -----------------------------------------
 ;; (lambda-package-ensure-install 'flycheck)
 (use-package flycheck
