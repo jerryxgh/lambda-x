@@ -38,13 +38,16 @@
 (defun lambda-copy-current-file-path-or-directory ()
   "Copy current buffer file'a path if exist, else try `default-directory`."
   (interactive)
-  (cond
-   ;; In buffers with file name
-   ((buffer-file-name)
-    (kill-new (buffer-file-name)))
-   ((eq major-mode 'dired-mode)
-    (kill-new (dired-current-directory)))
-   ((kill-new default-directory))))
+  (let ((filename))
+    (cond
+     ;; In buffers with file name
+     ((buffer-file-name)
+      (setq filename (buffer-file-name)))
+     ((eq major-mode 'dired-mode)
+      (set filename (dired-current-directory)))
+     ((setq filename default-directory)))
+    (kill-new filename)
+    (message "'%s' is copied to the clipboard." filename)))
 
 (defun lambda-add-to-load-path-recursively
     (directory &optional exclude-directories-list)
