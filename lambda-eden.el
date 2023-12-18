@@ -129,10 +129,11 @@ Note the weekly scope of the command's precision.")
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
-;; (use-package good-scroll
-;;   :ensure t
-;;   :if window-system          ; 在图形化界面时才使用这个插件
-;;   :init (good-scroll-mode))
+(use-package eglot-java
+  :ensure t
+  :config
+  (add-hook 'java-mode-hook 'eglot-java-mode)
+  )
 
 (provide 'lambda-eden)
 
