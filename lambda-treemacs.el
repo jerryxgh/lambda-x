@@ -156,16 +156,14 @@
    :config
    (require 'dired-subtree)
    (defun treemacs-icons-after-subtree-insert-a ()
-     (if (dired-subtree--dired-line-is-directory-or-link-p)
+     (if (> (line-number-at-pos) 1)
          (let ((ov (dired-subtree--get-ov)))
            (cl-letf (((symbol-function 'eobp)
                       (lambda ()
                         (when ov
                           (<= (overlay-end ov) (point))))))
              (treemacs-icons-dired--reset)
-             (treemacs-icons-dired--display-icons-for-subdir
-              (dired-current-directory)
-              (point))))))
+             (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
 
    ;; (defun treemacs-icons-after-subtree-insert-a ()
    ;;   (let ((pos (point))
