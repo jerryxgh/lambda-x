@@ -185,6 +185,29 @@
               (forward-line 1)))))))
   (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook))
 
+;; redefine this function to avoid double directory icon when revert-buffer in dired-mode.
+(defun treemacs-icons-dired--display-icons-for-subdir (path pos)
+  "Display icons for subdir PATH at given POS."
+  (unless (member path treemacs-icons-dired--covered-subdirs)
+    (add-to-list 'treemacs-icons-dired--covered-subdirs path)
+    (treemacs-with-writable-buffer
+     (save-excursion
+       (goto-char pos)
+       (dired-goto-next-file)
+       (treemacs-block
+        (while (not (eobp))
+          (if (dired-move-to-filename nil)
+              (let* ((file (dired-get-filename nil t))
+                     (icon (if (file-directory-p file)
+                               (treemacs-icon-for-dir file 'closed)
+                             (treemacs-icon-for-file file))))
+                (if (file-directory-p file)
+                    (if (not (string-suffix-p icon (buffer-substring (line-beginning-position) (point))))
+                        (insert icon))
+                  (insert icon)))
+            (treemacs-return nil))
+          (forward-line 1)))))))
+
 (use-package treemacs-magit
   :after (treemacs magit)
   :ensure t)
