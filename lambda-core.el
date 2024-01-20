@@ -642,7 +642,7 @@ POSITION: just inhibit warning.")
   ;; enable on-the-fly syntax checking
   :init (global-flycheck-mode 1)
   :custom
-  (flycheck-global-modes '(not sql-mode go-mode java-mode c-mode c++-mode cc-mode))
+  (flycheck-global-modes '(not sql-mode go-mode java-mode c-mode c++-mode cc-mode python-mode))
   (compilation-skip-threshold 0)
   (flycheck-emacs-lisp-initialize-packages t)
   (flycheck-emacs-lisp-package-user-dir package-user-dir)
