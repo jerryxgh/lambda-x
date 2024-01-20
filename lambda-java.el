@@ -8,6 +8,7 @@
 (require 'lambda-cc)
 (require 'lambda-company)
 (require 'semantic)
+(require 'lambda-eglot)
 
 ;; to recognize mvn compile errors
 (setq compilation-error-regexp-alist

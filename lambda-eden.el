@@ -129,12 +129,6 @@ Note the weekly scope of the command's precision.")
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
-(use-package eglot-java
-  :ensure t
-  :config
-  (add-hook 'java-mode-hook 'eglot-java-mode)
-  )
-
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
