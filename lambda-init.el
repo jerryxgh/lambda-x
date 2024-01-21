@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2023-12-07 20:53:19 Guanghui Xu>
+;; Time-stamp: <2024-01-20 23:35:36 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -52,6 +52,7 @@
     lambda-golang
     lambda-thrift
     lambda-dap
+    lambda-python
 
     lambda-bison
 
