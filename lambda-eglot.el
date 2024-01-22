@@ -35,7 +35,8 @@
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
-  (add-hook 'python-mode-hook 'eglot-ensure))
+  (add-hook 'python-ts-mode-hook 'eglot-ensure) ; python use python-ts-mode instead of python-mode
+  )
 
 (use-package eglot-java
   :ensure t
