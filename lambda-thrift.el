@@ -27,6 +27,7 @@
   :ensure t
   :config
   ;; enable semantic-mode when open thrift file
+  (setq thrift-indent-level 4)
   (add-hook 'thrift-mode-hook (lambda ()
                                 (semantic-mode 1)
                                 (if (featurep 'company)

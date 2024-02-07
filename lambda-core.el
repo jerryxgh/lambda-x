@@ -664,7 +664,7 @@ POSITION: just inhibit warning.")
 ;; autosave the undo-tree history
 (setq undo-tree-history-directory-alist
       `((".*" . ,temporary-file-directory))
-      undo-tree-auto-save-history t
+      undo-tree-auto-save-history nil
       ;; https://github.com/syl20bnr/spacemacs/issues/9903
       undo-tree-enable-undo-in-region nil
       ;; undo-tree-visualizer-timestamps t

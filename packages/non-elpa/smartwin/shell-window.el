@@ -223,13 +223,19 @@ BUFFER-OR-NAME is a buffer to display, _ALIST is not used."
                           (let ((name (buffer-name b)))
                             (if (shell-window--match-buffer b)
                                 name)))
-                        (buffer-list)))))
-    ;; move visible buffers to end of buffer list
+                        (buffer-list))))
+        (current-buf (buffer-name (current-buffer))))
+    ;; move visible buffers to start of buffer list
     (mapc #'(lambda (b)
-              (when (memq b buffers)
+              (when (member b buffers)
                 (setq buffers (delq b buffers))
-                (setq buffers (append buffers (list b)))))
+                (setq buffers (cons b buffers))))
           visible-buffers)
+    ;; move current buffers to end of buffer list
+    (when (member current-buf buffers)
+      (setq buffers (delq current-buf buffers))
+      (setq buffers (append buffers (list current-buf))))
+
     buffers))
 
 (defun shell-window--display-and-select-buffer (buffer)

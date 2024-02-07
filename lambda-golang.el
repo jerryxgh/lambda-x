@@ -26,8 +26,7 @@
   :ensure
   :config
   (add-hook 'go-mode-hook (lambda ()
-                            (setq tab-width 4)
-                            (eglot-ensure)))
+                            (setq tab-width 4)))
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "GOPATH")))
