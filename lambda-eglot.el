@@ -52,6 +52,13 @@
   :config
   (add-hook 'java-mode-hook 'eglot-java-mode))
 
+(use-package breadcrumb
+  :ensure
+  ;; :custom
+  ;; ()
+  :config
+  (breadcrumb-mode t))
+
 (provide 'lambda-eglot)
 
 ;;; lambda-eglot.el ends here

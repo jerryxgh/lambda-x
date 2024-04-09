@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2023-08-10 13:58:53 Guanghui Xu>
+;; Time-stamp: <2024-04-09 19:05:25 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -127,24 +127,20 @@
 ;; (require 'evil-tab-minor-mode)
 ;; (global-evil-tab-mode t)
 
+(use-package avy
+  :ensure t)
+
 ;; evil-leader -----------------------------------------------------------------
 (use-package evil-leader
   :ensure t
   :config
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-    "a" 'helm-ag
-    "p" 'helm-projectile-ag
-    ;; "b" #'(lambda ()
-    ;;         (interactive)
-    ;;         ;; skip persp-mode like filters, let it show more candidates
-    ;;         (let ((ido-make-buffer-list-hook nil))
-    ;;           (ido-switch-buffer)))
+    "a" 'lambda-counsel-rg
     "b" 'ido-switch-buffer
-    "e" 'helm-projectile
-    "k" 'kill-this-buffer
-    "o" 'helm-occur
-    "f" 'find-file)
+    "c" 'avy-goto-char
+    "w" 'avy-goto-word-0
+    "l" 'avy-goto-line)
   (global-evil-leader-mode 1))
 
 (use-package evil-nerd-commenter
@@ -229,6 +225,9 @@
 
 ;; anzu for evil ---------------------------------------------------------------
 ;; support for * or # search command
+;; anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor mode which
+;; displays current match and total matches information in the mode-line in
+;; various search modes.
 (use-package evil-anzu
   :ensure t)
 

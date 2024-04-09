@@ -12,15 +12,6 @@
 (use-package flx
   :ensure t)
 
-(use-package avy
-  :ensure t
-  :config
-  (when (and (featurep 'evil) (featurep 'evil-leader))
-    (evil-leader/set-key
-      "c" 'avy-goto-char
-      "w" 'avy-goto-word-0
-      "l" 'avy-goto-line)))
-
 ;; ivy ======================================================================
 (use-package ivy
   :ensure t
