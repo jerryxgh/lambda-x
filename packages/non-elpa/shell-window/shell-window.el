@@ -335,6 +335,15 @@ If BUFFER-OR-NAME is not nil, treat is as scratch buffer."
           (set-buffer-modified-p nil)
           (goto-char (point-max))))))
 
+(defadvice delete-other-windows (around shell-window-around-delete-other-windows)
+  "If in shell window, just enlarge it instead of `delete-other-windows'."
+  (let ((win-to-reserve (or (ad-get-arg 0) (selected-window)))
+        (shell-window (shell-window--get-shell-window)))
+    (if (eq win-to-reserve shell-window)
+        ;; maximize shell window
+        (shell-window--enlarge-window shell-window t)
+      ad-do-it)))
+
 ;;;###autoload
 (define-minor-mode shell-window-mode
   "Toggle shell-window minor mode.
@@ -355,6 +364,8 @@ Shell window is a window for showing shell like buffers, temp buffers and etc."
           (add-hook 'kill-buffer-query-functions #'shell-window--protect-scratch-buffer)
           (add-hook 'buffer-list-update-hook #'shell-window--auto-resize-hook)
 
+          (ad-activate #'delete-other-windows)
+
           (shell-window-create-scratch-buffer))
 
       ;; quite shell-window
@@ -363,6 +374,8 @@ Shell window is a window for showing shell like buffers, temp buffers and etc."
       (remove-hook 'comint-mode-hook #'shell-window--kill-buffer-when-shell-exit)
       (remove-hook 'kill-buffer-query-functions #'shell-window--protect-scratch-buffer)
       (remove-hook 'buffer-list-update-hook #'shell-window--auto-resize-hook)
+
+      (ad-deactivate #'delete-other-windows)
 
       (shell-window-hide))))
 

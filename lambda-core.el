@@ -633,7 +633,11 @@ POSITION: just inhibit warning.")
   :custom
   (flymake-start-on-save-buffer t)
   :config
-  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  (with-eval-after-load 'prog-mode
+    (with-eval-after-load 'flymake
+        (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
+        (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error))))
 
 ;; flycheck - much better than flymake -----------------------------------------
 ;; (lambda-package-ensure-install 'flycheck)
