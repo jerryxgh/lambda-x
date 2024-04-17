@@ -46,7 +46,8 @@
           ;; (counsel-ag . ivy--regex-ignore-order)
           (swiper . ivy--regex)
           (counsel-M-x . ivy--regex-fuzzy)
-          (t . ivy--regex-fuzzy)))
+          (t . ivy--regex-fuzzy))
+        ivy-auto-select-single-candidate t)
   (ivy-mode 1)
   ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
   (if (and (bound-and-true-p hungry-delete-except-modes)

@@ -39,7 +39,6 @@
   (eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit) ; auto show doc info in minibuffer
   :bind (:map eglot-mode-map
               ("C-c e a" . eglot-code-actions)
-              ("C-c e d" . xref-find-definitions-at-mouse)
               ("C-c e f" . eglot-format)
               ("C-c e h" . eldoc)
               ("C-c e i" . eglot-find-implementation)
