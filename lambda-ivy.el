@@ -70,7 +70,13 @@
   (defun lambda-counsel-rg ()
     "Counsel-rg at `default-directory'"
     (interactive)
-    (counsel-rg nil default-directory)))
+    (counsel-rg nil default-directory))
+
+  (defadvice counsel-find-file (around shell-window-around-delete-other-windows)
+    "Disable `ivy-auto-select-single-candidate' when in `counsel-find-file'"
+    (let ((ivy-auto-select-single-candidate nil))
+      ad-do-it))
+  (ad-activate 'counsel-find-file))
 
 (use-package ivy-xref
   :ensure t

@@ -210,7 +210,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (which-key-setup-side-window-bottom))
 
 ;;; mode line theme -------------------------------------------------------------
-;; (lambda-package-ensure-install 'powerline)
 (use-package powerline
   :ensure t
   :custom
