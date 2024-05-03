@@ -26,7 +26,7 @@
 
 (use-package treemacs
   :ensure t
-  :defer t
+  ;; :defer t
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
@@ -129,21 +129,21 @@
         ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-evil
-  :after (treemacs evil)
+  ;; :after (treemacs evil)
   :ensure t)
 
 (use-package treemacs-projectile
-  :after (treemacs projectile)
+  ;; :after (treemacs projectile)
   :ensure t)
 
 (use-package treemacs-icons-dired
-  :after treemacs dired
+  ;; :after treemacs dired
   :ensure t
   :config (treemacs-icons-dired-mode))
 
 (use-package treemacs-all-the-icons
   :ensure t
-  :after (treemacs)
+  ;; :after (treemacs)
   ;; should run all-the-icons-install-fonts after installation
   :config (treemacs-load-theme "all-the-icons"))
 
@@ -209,11 +209,11 @@
           (forward-line 1)))))))
 
 (use-package treemacs-magit
-  :after (treemacs magit)
+  ;; :after (treemacs magit)
   :ensure t)
 
 (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+  ;; :after (treemacs persp-mode) ;;or perspective vs. persp-mode
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
 

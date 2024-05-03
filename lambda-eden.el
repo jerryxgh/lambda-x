@@ -129,6 +129,9 @@ Note the weekly scope of the command's precision.")
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
+(use-package vterm
+    :ensure t)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

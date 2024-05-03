@@ -54,6 +54,7 @@
 (defcustom shell-window-buffers
   '(;; Emacs scratch buffer
     "*scratch*"
+    ("^\\*.*?vterm\\*\\(<.*>\\)?$" :regexp t)
     ;; shell and eshell buffers
     ("^\\*.*?shell\\*\\(<.*>\\)?$" :regexp t)
     ("^\\*shell.*\\*\\(<.*>\\)?$" :regexp t)
