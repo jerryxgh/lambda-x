@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-04-09 19:05:25 Guanghui Xu>
+;; Time-stamp: <2024-05-04 22:39:31 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -14,6 +14,8 @@
 (use-package evil
   :ensure t
   :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
   (setq-default evil-want-C-w-delete nil
                 evil-want-visual-char-semi-exclusive t
                 evil-want-C-w-in-emacs-state t
@@ -27,26 +29,24 @@
   (defalias #'forward-evil-word #'forward-evil-symbol)
 
   ;; settings below restore key bindings in emacs in insert state
-  (define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
-  (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
-  (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
-  (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
-  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
-  (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
-  (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-  (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
+  ;; (define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
+  ;; (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
+  ;; (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+  ;; (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
+  ;; (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+  ;; (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+  ;; (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+  ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  ;; (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
   (define-key evil-insert-state-map (kbd "M-.") 'evil-goto-definition)
   (define-key evil-insert-state-map (kbd "C-y") 'yank)
 
-  (when (eq system-type 'darwin)
-    (define-key evil-insert-state-map (kbd "C-v") 'yank))
+  ;; (when (eq system-type 'darwin)
+  ;;   (define-key evil-insert-state-map (kbd "C-v") 'yank))
 
-  (define-key evil-normal-state-map (kbd "M-.") ())
-  (define-key evil-normal-state-map (kbd "C-t") ())
-  (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
-  (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
+  ;; (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
+  ;; (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
   (define-key evil-normal-state-map (kbd "M-.") 'evil-goto-definition)
 
   (delete 'ag-mode evil-motion-state-modes)
@@ -54,20 +54,20 @@
   (mapc #'(lambda (mode-state-pair)
             (evil-set-initial-state (car mode-state-pair) (cdr mode-state-pair)))
         '(
-          (Info-mode . emacs)
-          (Man-mode . emacs)
-          (calendar-mode . emacs)
-          (dired-mode . emacs)
-          (grep-mode . emacs)
-          (help-mode . emacs)
-          (image-mode . emacs)
-          (svn-status-mode . emacs)
-          (view-mode . emacs)
-          (xref . emacs)
-          (special-mode . emacs)
-          (ag-mode . emacs)
-          (data-debug-mode . emacs)
-          (messages-buffer-mode . normal)
+          ;; (Info-mode . emacs)
+          ;; (Man-mode . emacs)
+          ;; (calendar-mode . emacs)
+          ;; (dired-mode . emacs)
+          ;; (grep-mode . emacs)
+          ;; (help-mode . emacs)
+          ;; (image-mode . emacs)
+          ;; (svn-status-mode . emacs)
+          ;; (view-mode . emacs)
+          ;; (xref . emacs)
+          ;; (special-mode . emacs)
+          ;; (ag-mode . emacs)
+          ;; (data-debug-mode . emacs)
+          ;; (messages-buffer-mode . normal)
           ))
 
   ;; Prevent the visual selection overriding my system clipboard?
@@ -348,6 +348,13 @@ object."
   (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
   :config
   (global-evil-vimish-fold-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :custom (evil-collection-setup-minibuffer t)
+  :config
+  (evil-collection-init))
 
 (provide 'lambda-evil)
 
