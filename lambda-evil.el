@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-04 23:11:45 Guanghui Xu>
+;; Time-stamp: <2024-05-04 23:49:54 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -29,24 +29,28 @@
   (defalias #'forward-evil-word #'forward-evil-symbol)
 
   ;; settings below restore key bindings in emacs in insert state
-  ;; (define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
-  ;; (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
-  ;; (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
-  ;; (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
-  ;; (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
-  ;; (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
-  ;; (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-  ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-  ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-  ;; (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
+  (define-key evil-insert-state-map (kbd "C-S-k") 'evil-insert-digraph)
+  (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key evil-insert-state-map (kbd "C-b") 'backward-char)
+  (define-key evil-insert-state-map (kbd "C-d") 'delete-char)
+  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+  (define-key evil-insert-state-map (kbd "C-f") 'forward-char)
+  (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
   (define-key evil-insert-state-map (kbd "M-.") 'evil-goto-definition)
   (define-key evil-insert-state-map (kbd "C-y") 'yank)
+
+  (define-key evil-operator-state-map "i" 'evil-insert)
+  (define-key evil-operator-state-map "a" 'evil-append)
+
 
   (when (eq system-type 'darwin)
     (define-key evil-insert-state-map (kbd "C-v") 'yank))
 
   ;; (define-key evil-normal-state-map (kbd "Y") 'lambda-copy-to-end-of-line)
-  ;; (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
+  (define-key evil-normal-state-map (kbd "g f") 'find-file-at-point)
   (define-key evil-normal-state-map (kbd "M-.") 'evil-goto-definition)
 
   (delete 'ag-mode evil-motion-state-modes)
@@ -102,10 +106,10 @@
   "Just fold level 1 elements."
   (hs-hide-level 1))
 (define-key evil-normal-state-map (kbd "zM")
-  #'(lambda ()
-      (interactive)
-      (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
-        (evil-close-folds))))
+            #'(lambda ()
+                (interactive)
+                (let ((hs-hide-all-non-comment-function 'lambda-hs-hide-level-1))
+                  (evil-close-folds))))
 
 (defun lambda-copy-to-end-of-line ()
   "Copy to end of line, and bind this funciton to Y in normal mode."
