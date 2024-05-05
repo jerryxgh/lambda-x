@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-04 23:49:54 Guanghui Xu>
+;; Time-stamp: <2024-05-04 23:56:24 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -41,10 +41,6 @@
   (define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
   (define-key evil-insert-state-map (kbd "M-.") 'evil-goto-definition)
   (define-key evil-insert-state-map (kbd "C-y") 'yank)
-
-  (define-key evil-operator-state-map "i" 'evil-insert)
-  (define-key evil-operator-state-map "a" 'evil-append)
-
 
   (when (eq system-type 'darwin)
     (define-key evil-insert-state-map (kbd "C-v") 'yank))
