@@ -47,7 +47,7 @@
           (swiper . ivy--regex)
           (counsel-M-x . ivy--regex-fuzzy)
           (t . ivy--regex-fuzzy))
-        ivy-auto-select-single-candidate t)
+        ivy-auto-select-single-candidate nil)
   (ivy-mode 1)
   ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
   (if (and (bound-and-true-p hungry-delete-except-modes)
@@ -70,25 +70,21 @@
   (defun lambda-counsel-rg ()
     "Counsel-rg at `default-directory'"
     (interactive)
-    (counsel-rg nil default-directory))
-
-  (defadvice counsel-find-file (around shell-window-around-delete-other-windows)
-    "Disable `ivy-auto-select-single-candidate' when in `counsel-find-file'"
-    (let ((ivy-auto-select-single-candidate nil))
-      ad-do-it))
-  (ad-activate 'counsel-find-file))
+    (counsel-rg nil default-directory)))
 
 (use-package ivy-xref
   :ensure t
   :init
-  ;; xref initialization is different in Emacs 27 - there are two different
-  ;; variables which can be set rather than just one
-  (when (>= emacs-major-version 27)
-    (setq xref-show-definitions-function 'ivy-xref-show-defs))
   ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
   ;; commands other than xref-find-definitions (e.g. project-find-regexp)
   ;; as well
-  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
+  (setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
+  :config
+  (defadvice ivy-xref-show-xrefs (around ivy-xref-show-xrefs-advice)
+    "Enable `ivy-auto-select-single-candidate' when in `ivy-xref-show-xrefs'"
+    (let ((ivy-auto-select-single-candidate t))
+      ad-do-it))
+  (ad-activate 'ivy-xref-show-xrefs))
 
 (use-package counsel-projectile
   :ensure t

@@ -636,7 +636,9 @@ POSITION: just inhibit warning.")
   (with-eval-after-load 'prog-mode
     (with-eval-after-load 'flymake
         (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
-        (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error))))
+        (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+        (define-key go-dot-mod-mode-map (kbd "M-n") 'flymake-goto-next-error)
+        (define-key go-dot-mod-mode-map (kbd "M-p") 'flymake-goto-prev-error))))
 
 ;; flycheck - much better than flymake -----------------------------------------
 ;; (lambda-package-ensure-install 'flycheck)

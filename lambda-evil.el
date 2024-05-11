@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-04 23:56:24 Guanghui Xu>
+;; Time-stamp: <2024-05-10 18:13:23 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -352,7 +352,10 @@ object."
 (use-package evil-collection
   :after evil
   :ensure t
-  :custom (evil-collection-setup-minibuffer t)
+  :custom
+  (evil-collection-setup-minibuffer t)
+  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
+                                               evil-collection--supported-modes))
   :config
   (evil-collection-init))
 
