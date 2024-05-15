@@ -1,5 +1,5 @@
 ;;; lambda-individual.el --- Individual info of Emacs config
-;; Time-stamp: <2023-02-07 11:34:34 Guanghui Xu>
+;; Time-stamp: <2024-05-15 20:48:19 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -28,29 +28,6 @@
 (diminish 'shell-window-mode)
 (define-key shell-window-mode-map (kbd "C-c s") #'shell-window-switch-buffer)
 (define-key shell-window-mode-map (kbd "C-l") #'shell-window-clear-shell-buffer)
-
-;; (add-to-list 'load-path "~/repository/simplesite")
-;; (require 'simplesite)
-;; (setq simplesite-author "Guanghui Xu"
-;;       simplesite-personal-avatar "/home/xgh/repository/jerryxgh.github.io/posts/Heckert_GNU_white.png"
-;;       simplesite-source-directory "/home/xgh/repository/jerryxgh.github.io/posts"
-;;       simplesite-output-directory "/home/xgh/repository/jerryxgh.github.io"
-;;       simplesite-personal-github-link "http://jerryxgh.github.io"
-;;       simplesite-site-domain "http://jerryxgh.github.io"
-
-;;       simplesite-log-level 'SIMPLESITE-LOG-DEBUG
-
-;;       simplesite-personal-disqus-shortname "jerryxgh"
-;;       simplesite-personal-duoshuo-shortname nil)
-
-;; set font for myself
-
-(when (eq system-type 'gnu/linux)
-  (set-frame-font "Consolas-11.5")
-  (if (fboundp 'set-fontset-font)
-      (set-fontset-font t 'unicode '("Microsoft Yahei" .
-                                     "unicode-bmp")))
-  (setq face-font-rescale-alist (list (cons "Microsoft Yahei" 1.1))))
 
 (provide 'lambda-individual)
 

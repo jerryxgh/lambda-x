@@ -95,6 +95,9 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
+(when (eq system-type 'gnu/linux)
+  ;; close menu bar
+  (menu-bar-mode -1))
 ;; init PATH in mac ends here ==================================================
 
 ;; Emacs UI about settings =====================================================
