@@ -112,7 +112,7 @@ bold_italic = { style = "Bold Italic" }  # Inherits family from normal, Default 
 size = 14  # Default: 11.25
 
 # Offset is extra space around each character
-offset = { x = 0, y = 0 }  # Default: x = 0, y = 0
+offset = { x = 0, y = 9 }  # Default: x = 0, y = 0
 
 # Glyph offset determines the locations of the glyphs within their cells
 glyph_offset = { x = 0, y = 0 }  # Default: x = 0, y = 0
