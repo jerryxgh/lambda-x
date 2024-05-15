@@ -144,6 +144,21 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
                    (abbreviate-file-name (buffer-file-name)) "%b"))))
 
 ;; theme -----------------------------------------------------------------------
+(if (display-graphic-p)
+    ;;; if graphic
+    (progn
+      ;; fix title bar text color broken: https://github.com/d12frosted/homebrew-emacs-plus/issues/55
+      (when (and(eq system-type 'darwin) (> emacs-major-version 26))
+        (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+
+      )
+  ;;; else (terminal)
+  ;; close menu bar
+  (menu-bar-mode -1)
+
+  ;; use command as control
+  (setq ns-command-modifier 'control))
+
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
   ;; make font in the vertical middle of line
@@ -181,65 +196,50 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;   (lambda-load-theme 'solarized-dark)
 ;;   )
 
-(if (display-graphic-p)
-    ;;; if graphic
-    (progn
-      ;; fix title bar text color broken: https://github.com/d12frosted/homebrew-emacs-plus/issues/55
-      (when (and(eq system-type 'darwin) (> emacs-major-version 26))
-        (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+(use-package zenburn-theme
+  :ensure
+  :config
+  ;; use variable-pitch fonts for some headings and titles
+  (setq zenburn-use-variable-pitch t)
+  ;; scale headings in org-mode
+  (setq zenburn-scale-org-headlines t)
+  ;; scale headings in outline-mode
+  (setq zenburn-scale-outline-headlines t)
+  (lambda-load-theme 'zenburn))
 
-      (use-package zenburn-theme
-        :ensure
-        :config
-        ;; use variable-pitch fonts for some headings and titles
-        (setq zenburn-use-variable-pitch t)
-        ;; scale headings in org-mode
-        (setq zenburn-scale-org-headlines t)
-        ;; scale headings in outline-mode
-        (setq zenburn-scale-outline-headlines t)
-        (lambda-load-theme 'zenburn))
-
-      ;; mode line theme -------------------------------------------------------------
-      (use-package powerline
-        :ensure t
-        :custom
-        (powerline-height 23))
-
-      (use-package spaceline
-        :ensure t
-        :config
-        (setq spaceline-window-numbers-unicode t
-              spaceline-workspace-numbers-unicode t
-              powerline-default-separator 'bar
-              ;; different color for different evil state in modeline
-              spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-        ;; (spaceline-spacemacs-theme '(buffer-encoding process))
-        ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
-        (require 'spaceline-config)
-        (spaceline-spacemacs-theme)
-        ;; (spaceline-helm-mode)
-        (redisplay))
-
-      ;; winum
-      (defun window-numbering-install-mode-line (&optional position)
-        "Do nothing, the display is handled by the spaceline(powerline).
+;; winum
+(defun window-numbering-install-mode-line (&optional position)
+  "Do nothing, the display is handled by the spaceline(powerline).
 POSITION: just inhibit warning.")
 
-      (use-package winum
-        :ensure t
-        :config
-        (winum-set-keymap-prefix (kbd "C-w"))
-        (winum-mode))
-      )
-  ;;; else (terminal)
-  (use-package kaolin-themes
+(use-package winum
+  :ensure t
   :config
-  (load-theme 'kaolin-dark t)
-  (kaolin-treemacs-theme))
-  ;; close menu bar
-  (menu-bar-mode -1)
-  ;; use command as control
-  (setq ns-command-modifier 'control))
+  (winum-set-keymap-prefix (kbd "C-w"))
+  ;; do not show winum in mode line, let spaceline do it
+  (setq winum-format nil)
+  (winum-mode))
+
+;; mode line theme -------------------------------------------------------------
+(use-package powerline
+  :ensure t
+  :custom
+  (powerline-height 23))
+
+(use-package spaceline
+  :ensure t
+  :config
+  (setq spaceline-window-numbers-unicode t
+        spaceline-workspace-numbers-unicode t
+        powerline-default-separator 'bar
+        ;; different color for different evil state in modeline
+        spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  ;; (spaceline-spacemacs-theme '(buffer-encoding process))
+  ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme)
+  ;; (spaceline-helm-mode)
+  (redisplay))
 
 ;;; which-key --------------------------------------------------------------------
 ;; optional if you want which-key integration

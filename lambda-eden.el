@@ -129,11 +129,6 @@ Note the weekly scope of the command's precision.")
 ;; (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 ;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
-(use-package vterm
-  :ensure t
-  :custom
-  (vterm-keymap-exceptions '("C-c" "C-x" "C-u" "C-h" "C-l" "M-x" "M-o" "C-y" "M-y" "C-n" "C-p")))
-
 (use-package marginalia
   :ensure t
   :config
