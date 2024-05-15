@@ -166,12 +166,14 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
          (if (fboundp 'set-fontset-font)
              (set-fontset-font t 'unicode '("Noto Sans CJK SC" .
                                             "unicode-bmp")))
-         (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2))))
+         ;; (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2)))
+         (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.0))))
 
         ((eq system-type 'darwin)
          (set-frame-font "menlo-14")
          (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
+         ;; (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
+         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.0)))
          )))
 
 ;; (lambda-package-ensure-install 'spacemacs-theme)

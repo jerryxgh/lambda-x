@@ -19,4 +19,19 @@ export PATH="/usr/local/sbin:$PATH"
 export GOPATH=$HOME/repository/go_repository
 export PATH="$HOME/repository/go_repository/bin:$PATH"
 
+## z init
+. /usr/local/etc/profile.d/z.sh
+
+## GOPATH
+export GOPATH=~/repository/private/go_path
+
+## GOPATH bin
+export PATH=$PATH:$GOPATH/bin:~/local/bin
+
+## gvm
+[[ -s "/Users/bytedance/.gvm/scripts/gvm" ]] && source "/Users/bytedance/.gvm/scripts/gvm"
+
+## devbox
+alias devbox="ssh guanghui.xgh@10.37.41.252"
+
 ### added by xgh ends here

@@ -40,6 +40,8 @@
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "GOPATH")))
 
+(require 'go-template-mode)
+
 (provide 'lambda-golang)
 
 ;;; lambda-golang.el ends here
