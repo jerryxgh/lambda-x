@@ -91,22 +91,10 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
   ;; use command as control
   (setq ns-command-modifier 'control)
-  ;; close menu bar
-  ;; (menu-bar-mode -1)
   (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
-
-(if (display-graphic-p)
-    (progn
-      ;; if graphic
-      )
-  ;; else (optional)
-  ;; use command as control
-  (setq ns-command-modifier 'control))
-  ;; close menu bar
-  (menu-bar-mode -1)
 ;; init PATH in mac ends here ==================================================
 
 ;; Emacs UI about settings =====================================================
@@ -155,10 +143,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name)) "%b"))))
 
-
-(when (and(eq system-type 'darwin) (> emacs-major-version 26))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
-
 ;; theme -----------------------------------------------------------------------
 (defun lambda-load-theme (theme)
   "Load THEME, plus that, set font and tweak mode-line style."
@@ -197,16 +181,65 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;   (lambda-load-theme 'solarized-dark)
 ;;   )
 
-(use-package zenburn-theme
-  :ensure
+(if (display-graphic-p)
+    ;;; if graphic
+    (progn
+      ;; fix title bar text color broken: https://github.com/d12frosted/homebrew-emacs-plus/issues/55
+      (when (and(eq system-type 'darwin) (> emacs-major-version 26))
+        (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+
+      (use-package zenburn-theme
+        :ensure
+        :config
+        ;; use variable-pitch fonts for some headings and titles
+        (setq zenburn-use-variable-pitch t)
+        ;; scale headings in org-mode
+        (setq zenburn-scale-org-headlines t)
+        ;; scale headings in outline-mode
+        (setq zenburn-scale-outline-headlines t)
+        (lambda-load-theme 'zenburn))
+
+      ;; mode line theme -------------------------------------------------------------
+      (use-package powerline
+        :ensure t
+        :custom
+        (powerline-height 23))
+
+      (use-package spaceline
+        :ensure t
+        :config
+        (setq spaceline-window-numbers-unicode t
+              spaceline-workspace-numbers-unicode t
+              powerline-default-separator 'bar
+              ;; different color for different evil state in modeline
+              spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+        ;; (spaceline-spacemacs-theme '(buffer-encoding process))
+        ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
+        (require 'spaceline-config)
+        (spaceline-spacemacs-theme)
+        ;; (spaceline-helm-mode)
+        (redisplay))
+
+      ;; winum
+      (defun window-numbering-install-mode-line (&optional position)
+        "Do nothing, the display is handled by the spaceline(powerline).
+POSITION: just inhibit warning.")
+
+      (use-package winum
+        :ensure t
+        :config
+        (winum-set-keymap-prefix (kbd "C-w"))
+        (winum-mode))
+      )
+  ;;; else (terminal)
+  (use-package kaolin-themes
   :config
-  ;; use variable-pitch fonts for some headings and titles
-  (setq zenburn-use-variable-pitch t)
-  ;; scale headings in org-mode
-  (setq zenburn-scale-org-headlines t)
-  ;; scale headings in outline-mode
-  (setq zenburn-scale-outline-headlines t)
-  (lambda-load-theme 'zenburn))
+  (load-theme 'kaolin-dark t)
+  (kaolin-treemacs-theme))
+  ;; close menu bar
+  (menu-bar-mode -1)
+  ;; use command as control
+  (setq ns-command-modifier 'control))
 
 ;;; which-key --------------------------------------------------------------------
 ;; optional if you want which-key integration
@@ -222,39 +255,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq which-key-idle-secondary-delay 0.05)
   (which-key-mode)
   (which-key-setup-side-window-bottom))
-
-;;; mode line theme -------------------------------------------------------------
-(use-package powerline
-  :ensure t
-  :custom
-  (powerline-height 23))
-
-;; winum
-(defun window-numbering-install-mode-line (&optional position)
-  "Do nothing, the display is handled by the spaceline(powerline).
-POSITION: just inhibit warning.")
-
-(use-package winum
-  :ensure t
-  :config
-  (winum-set-keymap-prefix (kbd "C-w"))
-  (winum-mode))
-
-(use-package spaceline
-  :ensure t
-  :config
-  (setq spaceline-window-numbers-unicode t
-        spaceline-workspace-numbers-unicode t
-        powerline-default-separator 'bar
-        ;; different color for different evil state in modeline
-        spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
-  ;; (spaceline-spacemacs-theme '(buffer-encoding process))
-  ;; this require is for spaceline-spacemacs-theme on the first installation of spaceline
-  (require 'spaceline-config)
-  (spaceline-spacemacs-theme)
-  ;; (spaceline-helm-mode)
-  (redisplay))
-
 
 ;; inhibit annoying warning sound
 (setq ring-bell-function 'ignore)
@@ -703,12 +703,6 @@ POSITION: just inhibit warning.")
 (require 'esh-mode)
 
 (define-key shell-mode-map (kbd "C-j") 'comint-send-input)
-
-;; (when (and (or
-;;             (eq system-type 'gnu/linux)
-;;             (eq system-type 'darwin))
-;;            (file-exists-p "/bin/bash"))
-;;   (setq explicit-shell-file-name "/bin/bash"))
 
 ;; close *compilation* buffer when compilation success
 ;; (add-hook 'compilation-start-hook 'kill-buffer-when-shell-command-exit)
