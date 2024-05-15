@@ -214,10 +214,11 @@ POSITION: just inhibit warning.")
 
 (use-package winum
   :ensure t
+  :custom
+  ;; do not show winum in mode line, let spaceline do it
+  (winum-format nil)
   :config
   (winum-set-keymap-prefix (kbd "C-w"))
-  ;; do not show winum in mode line, let spaceline do it
-  (setq winum-format nil)
   (winum-mode))
 
 ;; mode line theme -------------------------------------------------------------
