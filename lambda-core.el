@@ -98,11 +98,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
 
-(when (eq system-type 'gnu/linux)
-  ;; close menu bar
-  (menu-bar-mode -1)
-  )
-
 (if (display-graphic-p)
     (progn
       ;; if graphic
@@ -110,6 +105,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; else (optional)
   ;; use command as control
   (setq ns-command-modifier 'control))
+  ;; close menu bar
+  (menu-bar-mode -1)
 ;; init PATH in mac ends here ==================================================
 
 ;; Emacs UI about settings =====================================================
