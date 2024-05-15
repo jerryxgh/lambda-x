@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2024-05-04 01:24:30 Guanghui Xu>
+;; Time-stamp: <2024-05-15 20:55:52 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -25,7 +25,6 @@
 (defvar lambda-libraries
   '(
     lambda-package
-    lambda-mac
     ;; core settings, shared by all other modules
     lambda-core
     lambda-ivy

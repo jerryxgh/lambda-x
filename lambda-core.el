@@ -89,15 +89,27 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (when (eq system-type 'darwin)
   ;; open file in Find will reuse current frame instead creating a new one
 
+  ;; use command as control
+  (setq ns-command-modifier 'control)
   ;; close menu bar
   ;; (menu-bar-mode -1)
   (setq ns-pop-up-frames nil)
   (lambda-package-ensure-install 'exec-path-from-shell)
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
+
 (when (eq system-type 'gnu/linux)
   ;; close menu bar
-  (menu-bar-mode -1))
+  (menu-bar-mode -1)
+  )
+
+(if (display-graphic-p)
+    (progn
+      ;; if graphic
+      )
+  ;; else (optional)
+  ;; use command as control
+  (setq ns-command-modifier 'control))
 ;; init PATH in mac ends here ==================================================
 
 ;; Emacs UI about settings =====================================================
@@ -220,7 +232,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   :custom
   (powerline-height 23))
 
-  ;; winum
+;; winum
 (defun window-numbering-install-mode-line (&optional position)
   "Do nothing, the display is handled by the spaceline(powerline).
 POSITION: just inhibit warning.")
@@ -640,11 +652,11 @@ POSITION: just inhibit warning.")
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
   (with-eval-after-load 'prog-mode
     (with-eval-after-load 'flymake
-        (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
-        (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-        (with-eval-after-load 'go-mode
-          (define-key go-dot-mod-mode-map (kbd "M-n") 'flymake-goto-next-error)
-          (define-key go-dot-mod-mode-map (kbd "M-p") 'flymake-goto-prev-error)))))
+      (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
+      (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+      (with-eval-after-load 'go-mode
+        (define-key go-dot-mod-mode-map (kbd "M-n") 'flymake-goto-next-error)
+        (define-key go-dot-mod-mode-map (kbd "M-p") 'flymake-goto-prev-error)))))
 
 ;; flycheck - much better than flymake -----------------------------------------
 ;; (lambda-package-ensure-install 'flycheck)
