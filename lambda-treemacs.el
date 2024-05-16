@@ -136,17 +136,19 @@
   ;; :after (treemacs projectile)
   :ensure t)
 
-(use-package treemacs-icons-dired
-  ;; :after treemacs dired
-  :ensure t
-  :config (treemacs-icons-dired-mode))
+(when (display-graphic-p)
+  (use-package treemacs-icons-dired
+    ;; :after treemacs dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
 
-(use-package treemacs-all-the-icons
-  :ensure t
-  ;; :after (treemacs)
-  ;; should run all-the-icons-install-fonts after installation
-  :config (treemacs-load-theme "all-the-icons"))
-
+  (use-package treemacs-all-the-icons
+    :ensure t
+    ;; :after (treemacs)
+    ;; should run all-the-icons-install-fonts after installation
+    :config
+    (treemacs-load-theme "all-the-icons"))
+  )
 
 (use-package dired-subtree
   :ensure t
@@ -166,24 +168,25 @@
   ;;           (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
   ;; (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a)
 
-  (defun treemacs-icons-after-subtree-insert-hook ()
-    (let ((pos (point))
-          (end (overlay-end (dired-subtree--get-ov))))
-      (treemacs-with-writable-buffer
-         (save-excursion
-           (goto-char pos)
-           (dired-goto-next-file)
-           (treemacs-block
-            (while (< (point) end)
-              (if (dired-move-to-filename nil)
-                  (let* ((file (dired-get-filename nil t))
-                         (icon (if (file-directory-p file)
-                                   (treemacs-icon-for-dir file 'closed)
-                                 (treemacs-icon-for-file file))))
-                    (insert icon))
-                (treemacs-return nil))
-              (forward-line 1)))))))
-  (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook))
+  (if (display-graphic-p)
+      (defun treemacs-icons-after-subtree-insert-hook ()
+        (let ((pos (point))
+              (end (overlay-end (dired-subtree--get-ov))))
+          (treemacs-with-writable-buffer
+           (save-excursion
+             (goto-char pos)
+             (dired-goto-next-file)
+             (treemacs-block
+              (while (< (point) end)
+                (if (dired-move-to-filename nil)
+                    (let* ((file (dired-get-filename nil t))
+                           (icon (if (file-directory-p file)
+                                     (treemacs-icon-for-dir file 'closed)
+                                   (treemacs-icon-for-file file))))
+                      (insert icon))
+                  (treemacs-return nil))
+                (forward-line 1)))))))
+    (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook)))
 
 ;; redefine this function to avoid double directory icon when revert-buffer in dired-mode.
 (defun treemacs-icons-dired--display-icons-for-subdir (path pos)

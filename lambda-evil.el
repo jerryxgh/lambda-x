@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-10 18:13:23 Guanghui Xu>
+;; Time-stamp: <2024-05-16 13:15:18 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -139,7 +139,7 @@
     "a" 'lambda-counsel-rg
     "b" 'ido-switch-buffer
     "c" 'avy-goto-char
-    "w" 'avy-goto-word-0
+    "w" 'avy-goto-word-1
     "l" 'avy-goto-line)
   (global-evil-leader-mode 1))
 
