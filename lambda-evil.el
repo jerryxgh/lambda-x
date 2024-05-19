@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-16 13:15:18 Guanghui Xu>
+;; Time-stamp: <2024-05-19 18:43:49 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -328,6 +328,67 @@ object."
   (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
   )
 
+(use-package dired-subtree
+  :ensure t
+  :bind (:map dired-mode-map
+              ("<tab>" . dired-subtree-cycle)
+              ("TAB" . dired-subtree-cycle))
+  :config
+  (require 'dired-subtree)
+  ;; (defun treemacs-icons-after-subtree-insert-a ()
+  ;;   (if (> (line-number-at-pos) 1)
+  ;;       (let ((ov (dired-subtree--get-ov)))
+  ;;         (cl-letf (((symbol-function 'eobp)
+  ;;                    (lambda ()
+  ;;                      (when ov
+  ;;                        (<= (overlay-end ov) (point))))))
+  ;;           (treemacs-icons-dired--reset)
+  ;;           (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
+  ;; (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a)
+
+  (if (display-graphic-p)
+      (defun treemacs-icons-after-subtree-insert-hook ()
+        (let ((pos (point))
+              (end (overlay-end (dired-subtree--get-ov))))
+          (treemacs-with-writable-buffer
+           (save-excursion
+             (goto-char pos)
+             (dired-goto-next-file)
+             (treemacs-block
+              (while (< (point) end)
+                (if (dired-move-to-filename nil)
+                    (let* ((file (dired-get-filename nil t))
+                           (icon (if (file-directory-p file)
+                                     (treemacs-icon-for-dir file 'closed)
+                                   (treemacs-icon-for-file file))))
+                      (insert icon))
+                  (treemacs-return nil))
+                (forward-line 1)))))))
+    (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook)))
+
+;; redefine this function to avoid double directory icon when revert-buffer in dired-mode.
+(defun treemacs-icons-dired--display-icons-for-subdir (path pos)
+  "Display icons for subdir PATH at given POS."
+  (unless (member path treemacs-icons-dired--covered-subdirs)
+    (add-to-list 'treemacs-icons-dired--covered-subdirs path)
+    (treemacs-with-writable-buffer
+     (save-excursion
+       (goto-char pos)
+       (dired-goto-next-file)
+       (treemacs-block
+        (while (not (eobp))
+          (if (dired-move-to-filename nil)
+              (let* ((file (dired-get-filename nil t))
+                     (icon (if (file-directory-p file)
+                               (treemacs-icon-for-dir file 'closed)
+                             (treemacs-icon-for-file file))))
+                (if (file-directory-p file)
+                    (if (not (string-suffix-p icon (buffer-substring (line-beginning-position) (point))))
+                        (insert icon))
+                  (insert icon)))
+            (treemacs-return nil))
+          (forward-line 1)))))))
+
 ;; better-jumper ---------------------------------------------------------------
 (use-package better-jumper
   :ensure t
@@ -336,7 +397,12 @@ object."
   (better-jumper-mode +1)
   (with-eval-after-load 'evil-maps
     (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
-    (define-key evil-motion-state-map (kbd "C-i") 'better-jumper-jump-forward)))
+    (define-key evil-motion-state-map (kbd "C-i") (lambda ()
+                                                    (interactive)
+                                                    (if (and (eq major-mode 'dired-mode)
+                                                             (featurep 'dired-subtree))
+                                                        (dired-subtree-cycle)
+                                                      (better-jumper-jump-forward))))))
 
 (use-package evil-vimish-fold
   :ensure
