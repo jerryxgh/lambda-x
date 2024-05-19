@@ -148,8 +148,7 @@
     ;; :after (treemacs)
     ;; should run all-the-icons-install-fonts after installation
     :config
-    (treemacs-load-theme "all-the-icons"))
-  )
+    (treemacs-load-theme "all-the-icons")))
 
 (use-package treemacs-magit
   ;; :after (treemacs magit)

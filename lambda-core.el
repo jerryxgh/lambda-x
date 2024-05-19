@@ -197,7 +197,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;   )
 
 (use-package zenburn-theme
-  :ensure
+  :ensure t
   :config
   ;; use variable-pitch fonts for some headings and titles
   (setq zenburn-use-variable-pitch t)
@@ -278,13 +278,13 @@ POSITION: just inhibit warning.")
 
 ;; editor settings ============================================================
 ;; confirm when quit emacs
-(use-package emacs
+(use-package files
+  :ensure nil
   :custom
   (confirm-kill-emacs 'y-or-n-p))
 
 ;; auto insert newline at end of file if it has none
-(setq-default require-final-newline t)
-;; (setq case-fold-search nil)
+(setq-default require-final-newline nil)
 
 ;; directory to store all backup and autosave files
 (setq backup-directory-alist
@@ -292,30 +292,26 @@ POSITION: just inhibit warning.")
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; seperate system clipboard and emacs kill-ring
-;; (setq select-enable-primary t)
-;; (setq select-enable-clipboard t)
-;; (setq select-active-regions nil)
-
-
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
 (diminish 'auto-revert-mode)
 (electric-indent-mode 1)
-;; using smartparens instead
-;; (electric-pair-mode 1)
 
 ;; hippie expand is dabbrev expand on steroids
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-all-buffers
-                                         try-expand-dabbrev-from-kill
-                                         try-complete-file-name-partially
-                                         try-complete-file-name
-                                         try-expand-all-abbrevs
-                                         try-expand-list
-                                         try-expand-line
-                                         try-complete-lisp-symbol-partially
-                                         try-complete-lisp-symbol))
+(use-package hippie-exp
+  :ensure nil
+  :custom
+  (hippie-expand-try-functions-list '(try-expand-dabbrev
+                                      try-expand-dabbrev-all-buffers
+                                      try-expand-dabbrev-from-kill
+                                      try-complete-file-name-partially
+                                      try-complete-file-name
+                                      try-expand-all-abbrevs
+                                      try-expand-list
+                                      try-expand-line
+                                      try-complete-lisp-symbol-partially
+                                      try-complete-lisp-symbol)))
+
 ;; abbrev-mode settings
 (setq abbrev-file-name (expand-file-name "abbrev_defs" lambda-auto-save-dir))
 (setq-default abbrev-mode t)
@@ -325,89 +321,89 @@ POSITION: just inhibit warning.")
 
 ;; smartparens -----------------------------------------------------------------
 (lambda-package-ensure-install 'smartparens)
-(require 'smartparens)
-(require 'smartparens-config)
-(setq sp-autoskip-closing-pair 'always)
-;; use smartparens key bindings
-(smartparens-global-mode t)
-(smartparens-global-strict-mode t)
-(show-smartparens-global-mode t)
-(bind-keys
- :map smartparens-mode-map
- ;; ("C-M-a" . sp-beginning-of-sexp)
- ;; ("C-M-e" . sp-end-of-sexp)
+(use-package smartparens
+  :ensure t
+  :custom
+  (sp-autoskip-closing-pair 'always)
+  :bind (:map smartparens-mode-map
+              ;; ("C-M-a" . sp-beginning-of-sexp)
+              ;; ("C-M-e" . sp-end-of-sexp)
 
- ;; ("C-<down>" . sp-down-sexp)
- ;; ("C-<up>"   . sp-up-sexp)
- ;; ("M-<down>" . sp-backward-down-sexp)
- ;; ("M-<up>"   . sp-backward-up-sexp)
+              ;; ("C-<down>" . sp-down-sexp)
+              ;; ("C-<up>"   . sp-up-sexp)
+              ;; ("M-<down>" . sp-backward-down-sexp)
+              ;; ("M-<up>"   . sp-backward-up-sexp)
 
- ;; ("C-M-f" . sp-forward-sexp)
- ;; ("C-M-b" . sp-backward-sexp)
+              ;; ("C-M-f" . sp-forward-sexp)
+              ;; ("C-M-b" . sp-backward-sexp)
 
- ;; ("C-M-n" . sp-next-sexp)
- ;; ("C-M-p" . sp-previous-sexp)
+              ;; ("C-M-n" . sp-next-sexp)
+              ;; ("C-M-p" . sp-previous-sexp)
 
- ;; ("C-S-f" . sp-forward-symbol)
- ;; ("C-S-b" . sp-backward-symbol)
+              ;; ("C-S-f" . sp-forward-symbol)
+              ;; ("C-S-b" . sp-backward-symbol)
 
- ("C-<right>" . sp-forward-slurp-sexp)
- ("M-<right>" . sp-forward-barf-sexp)
- ("C-<left>"  . sp-backward-slurp-sexp)
- ("M-<left>"  . sp-backward-barf-sexp)
+              ("C-<right>" . sp-forward-slurp-sexp)
+              ("M-<right>" . sp-forward-barf-sexp)
+              ("C-<left>"  . sp-backward-slurp-sexp)
+              ("M-<left>"  . sp-backward-barf-sexp)
 
- ;; ("C-M-t" . sp-transpose-sexp)
- ;; ("C-M-k" . sp-kill-sexp)
- ;; ("C-k"   . sp-kill-hybrid-sexp)
- ;; ("M-k"   . sp-backward-kill-sexp)
- ;; ("C-M-w" . sp-copy-sexp)
- ;; ("C-M-d" . delete-sexp)
+              ;; ("C-M-t" . sp-transpose-sexp)
+              ;; ("C-M-k" . sp-kill-sexp)
+              ;; ("C-k"   . sp-kill-hybrid-sexp)
+              ;; ("M-k"   . sp-backward-kill-sexp)
+              ;; ("C-M-w" . sp-copy-sexp)
+              ;; ("C-M-d" . delete-sexp)
 
- ;; ("M-<backspace>" . backward-kill-word)
- ;; ("C-<backspace>" . sp-backward-kill-word)
- ;; ([remap sp-backward-kill-word] . backward-kill-word)
+              ;; ("M-<backspace>" . backward-kill-word)
+              ;; ("C-<backspace>" . sp-backward-kill-word)
+              ;; ([remap sp-backward-kill-word] . backward-kill-word)
 
- ;; ("M-[" . sp-backward-unwrap-sexp)
- ;; ("M-]" . sp-unwrap-sexp)
+              ;; ("M-[" . sp-backward-unwrap-sexp)
+              ;; ("M-]" . sp-unwrap-sexp)
 
- ;; ("C-x C-t" . sp-transpose-hybrid-sexp)
+              ;; ("C-x C-t" . sp-transpose-hybrid-sexp)
 
- ;; ("C-c ("  . wrap-with-parens)
- ;; ("C-c ["  . wrap-with-brackets)
- ;; ("C-c {"  . wrap-with-braces)
- ;; ("C-c '"  . wrap-with-single-quotes)
- ;; ("C-c \"" . wrap-with-double-quotes)
- ;; ("C-c _"  . wrap-with-underscores)
- ;; ("C-c `"  . wrap-with-back-quotes)
- )
-(diminish 'smartparens-mode)
+              ;; ("C-c ("  . wrap-with-parens)
+              ;; ("C-c ["  . wrap-with-brackets)
+              ;; ("C-c {"  . wrap-with-braces)
+              ;; ("C-c '"  . wrap-with-single-quotes)
+              ;; ("C-c \"" . wrap-with-double-quotes)
+              ;; ("C-c _"  . wrap-with-underscores)
+              ;; ("C-c `"  . wrap-with-back-quotes)
+              )
+  :config
+  (smartparens-global-mode t)
+  (smartparens-global-strict-mode t)
+  (show-smartparens-global-mode t)
+  (diminish 'smartparens-mode)
 
-;; pair management
-(sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+  ;; pair management
+  (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
-;; markdown-mode
-(sp-with-modes '(markdown-mode gfm-mode rst-mode)
-  (sp-local-pair "*" "*" :bind "C-*")
-  (sp-local-tag "2" "**" "**")
-  (sp-local-tag "s" "```scheme" "```")
-  (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+  ;; markdown-mode
+  (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+    (sp-local-pair "*" "*" :bind "C-*")
+    (sp-local-tag "2" "**" "**")
+    (sp-local-tag "s" "```scheme" "```")
+    (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-;; tex-mode latex-mode
-(sp-with-modes '(tex-mode plain-tex-mode latex-mode)
-  (sp-local-tag "i" "\"<" "\">"))
+  ;; tex-mode latex-mode
+  (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
+    (sp-local-tag "i" "\"<" "\">"))
 
-;; html-mode
-(sp-with-modes '(html-mode sgml-mode)
-  (sp-local-pair "<" ">"))
+  ;; html-mode
+  (sp-with-modes '(html-mode sgml-mode)
+    (sp-local-pair "<" ">"))
 
-;; lisp modes
-(sp-with-modes sp--lisp-modes
-  (sp-local-pair "(" nil :bind "C-("))
+  ;; lisp modes
+  (sp-with-modes sp--lisp-modes
+    (sp-local-pair "(" nil :bind "C-("))
 
-(with-eval-after-load 'smartparens
-  (sp-with-modes
-      '(c-mode c++-mode java-mode sh-mode css-mode go-mode)
-    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))))
+  (with-eval-after-load 'smartparens
+    (sp-with-modes
+        '(c-mode c++-mode java-mode sh-mode css-mode go-mode)
+      (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET"))))))
 
 ;; uniquify --- easy to distinguish same name buffers
 (require 'uniquify)
@@ -484,29 +480,77 @@ POSITION: just inhibit warning.")
       (t (setq dired-listing-switches "-AlX --group-directories-first")))
 
 ;;; dired-subtree --------------------------------------------------------------
-;; (lambda-package-ensure-install 'dired-subtree)
-;; (require 'dired-subtree)
-;; (unless (or (eq system-type 'windows-nt)
-;;             (string-match-p "--dired" dired-listing-switches))
-;;   (setq dired-listing-switches (concat dired-listing-switches " --dired")))
-;; (define-key dired-mode-map (kbd "i") #'(lambda ()
-;;                                          (interactive)
-;;                                          (if (dired-subtree--is-expanded-p)
-;;                                              (message "already expanded")
-;;                                            (dired-subtree-insert))))
-;; (define-key dired-mode-map (kbd "K") 'dired-subtree-remove)
-;; (define-key dired-mode-map (kbd "<tab>") 'dired-subtree-cycle)
-;; (define-key dired-mode-map (kbd "C-i") 'dired-subtree-toggle)
+(use-package dired-subtree
+  :ensure t
+  :bind (:map dired-mode-map
+              ("<tab>" . dired-subtree-cycle)
+              ("TAB" . dired-subtree-cycle))
+  :config
+  (require 'dired-subtree)
+  ;; (defun treemacs-icons-after-subtree-insert-a ()
+  ;;   (if (> (line-number-at-pos) 1)
+  ;;       (let ((ov (dired-subtree--get-ov)))
+  ;;         (cl-letf (((symbol-function 'eobp)
+  ;;                    (lambda ()
+  ;;                      (when ov
+  ;;                        (<= (overlay-end ov) (point))))))
+  ;;           (treemacs-icons-dired--reset)
+  ;;           (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
+  ;; (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a)
 
-;; if there is a dired buffer displayed in the next window, use its
-;; current subdir, instead of the current subdir of this dired buffer
-(setq dired-dwim-target t)
+  (defun treemacs-icons-after-subtree-insert-hook ()
+    (let ((pos (point))
+          (end (overlay-end (dired-subtree--get-ov))))
+      (treemacs-with-writable-buffer
+       (save-excursion
+         (goto-char pos)
+         (dired-goto-next-file)
+         (treemacs-block
+          (while (< (point) end)
+            (if (dired-move-to-filename nil)
+                (let* ((file (dired-get-filename nil t))
+                       (icon (if (file-directory-p file)
+                                 (treemacs-icon-for-dir file 'closed)
+                               (treemacs-icon-for-file file))))
+                  (insert icon))
+              (treemacs-return nil))
+            (forward-line 1)))))))
+  (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook))
 
+;; redefine this function to avoid double directory icon when revert-buffer in dired-mode.
+(defun treemacs-icons-dired--display-icons-for-subdir (path pos)
+  "Display icons for subdir PATH at given POS."
+  (unless (member path treemacs-icons-dired--covered-subdirs)
+    (add-to-list 'treemacs-icons-dired--covered-subdirs path)
+    (treemacs-with-writable-buffer
+     (save-excursion
+       (goto-char pos)
+       (dired-goto-next-file)
+       (treemacs-block
+        (while (not (eobp))
+          (if (dired-move-to-filename nil)
+              (let* ((file (dired-get-filename nil t))
+                     (icon (if (file-directory-p file)
+                               (treemacs-icon-for-dir file 'closed)
+                             (treemacs-icon-for-file file))))
+                (if (file-directory-p file)
+                    (if (not (string-suffix-p icon (buffer-substring (line-beginning-position) (point))))
+                        (insert icon))
+                  (insert icon)))
+            (treemacs-return nil))
+          (forward-line 1)))))))
+
+(use-package dired
+  :ensure nil
+  :custom
+  (dired-dwim-target t))
 
 ;;; bookmark -------------------------------------------------------------------
-(require 'bookmark)
-(setq bookmark-default-file (expand-file-name "bookmarks"
-                                              lambda-auto-save-dir))
+(use-package bookmark
+  :ensure nil
+  :custom
+  (bookmark-default-file (expand-file-name "bookmarks"
+                                           lambda-auto-save-dir)))
 
 ;; projectile is a project management mode -------------------------------------
 (use-package projectile
@@ -529,11 +573,13 @@ POSITION: just inhibit warning.")
 
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
-(lambda-package-ensure-install 'anzu)
-(require 'anzu)
-(setq anzu-cons-mode-line-p nil)
-(global-anzu-mode 1)
-(diminish 'anzu-mode)
+(use-package anzu
+  :ensure t
+  :custom
+  (anzu-cons-mode-line-p nil)
+  :config
+  (global-anzu-mode 1)
+  (diminish 'anzu-mode))
 
 ;; ediff - don't start another frame
 (require 'ediff)
