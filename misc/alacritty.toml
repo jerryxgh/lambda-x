@@ -349,9 +349,8 @@ bindings = [
     { key = "s", mods = "Command", chars = "\u0013" },
     { key = "t", mods = "Command", chars = "\u0014" },
     { key = "u", mods = "Command", chars = "\u0015" },
-    { key = "v", mods = "Command", chars = "\u0016" },
     { key = "w", mods = "Command", chars = "\u0017" },
     { key = "x", mods = "Command", chars = "\u0018" },
     { key = "y", mods = "Command", chars = "\u0019" },
-    { key = "z", mods = "Command", chars = "\u0020" },
+    { key = "z", mods = "Command", chars = "\u001a" },
 ]
