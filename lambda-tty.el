@@ -48,4 +48,6 @@
     (setq evil-emacs-state-cursor  'hbar) ; _
     ))
 
+(provide 'lambda-tty)
+
 ;;; lambda-tty.el ends here
