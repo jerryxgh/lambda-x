@@ -216,7 +216,7 @@ POSITION: just inhibit warning.")
   :ensure t
   :custom
   ;; do not show winum in mode line, let spaceline do it
-  (winum-format nil)
+  (winum-format "")
   :config
   (winum-set-keymap-prefix (kbd "C-w"))
   (winum-mode))
@@ -320,7 +320,6 @@ POSITION: just inhibit warning.")
     (quietly-read-abbrev-file))
 
 ;; smartparens -----------------------------------------------------------------
-(lambda-package-ensure-install 'smartparens)
 (use-package smartparens
   :ensure t
   :custom
@@ -377,33 +376,8 @@ POSITION: just inhibit warning.")
   (smartparens-global-strict-mode t)
   (show-smartparens-global-mode t)
   (diminish 'smartparens-mode)
-
-  ;; pair management
-  (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
-
-  ;; markdown-mode
-  (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-    (sp-local-pair "*" "*" :bind "C-*")
-    (sp-local-tag "2" "**" "**")
-    (sp-local-tag "s" "```scheme" "```")
-    (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
-
-  ;; tex-mode latex-mode
-  (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
-    (sp-local-tag "i" "\"<" "\">"))
-
-  ;; html-mode
-  (sp-with-modes '(html-mode sgml-mode)
-    (sp-local-pair "<" ">"))
-
-  ;; lisp modes
-  (sp-with-modes sp--lisp-modes
-    (sp-local-pair "(" nil :bind "C-("))
-
-  (with-eval-after-load 'smartparens
-    (sp-with-modes
-        '(c-mode c++-mode java-mode sh-mode css-mode go-mode)
-      (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET"))))))
+   ;; load default config
+  (require 'smartparens-config))
 
 ;; uniquify --- easy to distinguish same name buffers
 (require 'uniquify)
