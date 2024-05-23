@@ -199,6 +199,10 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;   (lambda-load-theme 'solarized-dark)
 ;;   )
 
+;; highlight current line in prog-mode
+(add-hook 'prog-mode-hook 'hl-line-mode)
+(add-hook 'text-mode-hook 'hl-line-mode)
+
 (use-package zenburn-theme
   :ensure t
   :config
@@ -353,10 +357,6 @@ POSITION: just inhibit warning.")
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
 (windmove-default-keybindings)
-
-;; highlight current line in prog-mode
-(add-hook 'prog-mode-hook 'hl-line-mode)
-(add-hook 'text-mode-hook 'hl-line-mode)
 
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
