@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-23 17:52:28 Guanghui Xu>
+;; Time-stamp: <2024-05-24 02:14:13 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -278,9 +278,10 @@ object."
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
 
-;; (lambda-package-ensure-install 'evil-smartparens)
-;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
-
+(use-package evil-smartparens
+  :ensure t
+  :config
+  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
 
 ;; work with scroll-all-mode
 (with-eval-after-load 'scroll-all

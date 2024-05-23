@@ -208,7 +208,9 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq zenburn-scale-org-headlines t)
   ;; scale headings in outline-mode
   (setq zenburn-scale-outline-headlines t)
-  (lambda-load-theme 'zenburn))
+  (lambda-load-theme 'zenburn)
+  (unless (display-graphic-p)
+    (set-face-background 'hl-line "#333333")))
 
 ;; winum
 (defun window-numbering-install-mode-line (&optional position)

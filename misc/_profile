@@ -1,6 +1,7 @@
 ### added by xgh
 export LC_ALL="zh_CN.UTF-8"
 export PATH="/Users/hudandan/local/bin:$PATH"
+
 ## for emacs theme zenburn
 export TERM=xterm-256color
 
