@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-19 18:43:49 Guanghui Xu>
+;; Time-stamp: <2024-05-23 17:52:28 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -399,8 +399,7 @@ object."
     (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
     (define-key evil-motion-state-map (kbd "C-i") (lambda ()
                                                     (interactive)
-                                                    (if (and (eq major-mode 'dired-mode)
-                                                             (featurep 'dired-subtree))
+                                                    (if (eq major-mode 'dired-mode)
                                                         (dired-subtree-cycle)
                                                       (better-jumper-jump-forward))))))
 
