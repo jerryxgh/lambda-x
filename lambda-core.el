@@ -199,9 +199,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;;   (lambda-load-theme 'solarized-dark)
 ;;   )
 
-;; highlight current line in prog-mode
-(add-hook 'prog-mode-hook 'hl-line-mode)
-(add-hook 'text-mode-hook 'hl-line-mode)
+;; highlight current line
+(global-hl-line-mode t)
 
 (use-package zenburn-theme
   :ensure t
@@ -214,6 +213,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   (setq zenburn-scale-outline-headlines t)
   (lambda-load-theme 'zenburn)
   (unless (display-graphic-p)
+    (require 'hl-line)
     (set-face-background 'hl-line "#333333")))
 
 ;; winum
