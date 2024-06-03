@@ -145,6 +145,11 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 ;; show line numbers left side when in prog mode
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(use-package display-line-numbers
+  :ensure nil
+  :custom
+  (display-line-numbers-grow-only t)
+  (display-line-numbers-width-start 100))
 
 ;; set language environment ----------------------------------------------------
 ;; Contrary to what many Emacs users have in their configs, you don't need
