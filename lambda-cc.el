@@ -1,5 +1,5 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2023-08-10 14:56:56 Guanghui Xu>
+;; Time-stamp: <2024-06-21 10:56:14 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -26,14 +26,6 @@
                 ;; equal to c-toggle-auto-newline + c-toggle-hungry-state
                 (c-toggle-electric-state 1)))
 
-  (setq semantic-default-submodes '(global-semanticdb-minor-mode
-                                    global-semantic-idle-scheduler-mode
-                                    ;;global-semantic-idle-summary-mode
-                                    ;;global-semantic-decoration-mode
-                                    ;;global-semantic-highlight-func-mode
-                                    ;;global-semantic-stickyfunc-mode
-                                    global-semantic-mru-bookmark-mode
-                                    ))
   ;;(semantic-mode 1)
   ;;(global-semantic-highlight-edits-mode 1)
   ;;(global-semantic-idle-local-symbol-highlight-mode 1)

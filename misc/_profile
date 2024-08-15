@@ -37,4 +37,7 @@ export PATH=$PATH:$GOPATH/bin:~/local/bin
 ## devbox
 alias devbox="ssh guanghui.xgh@10.37.41.252"
 
+## fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 ### added by xgh ends here
