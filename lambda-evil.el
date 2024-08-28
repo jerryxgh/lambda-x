@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-05-24 02:14:13 Guanghui Xu>
+;; Time-stamp: <2024-08-28 10:52:40 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -419,7 +419,8 @@ object."
   :after evil
   :ensure t
   :custom
-  (evil-collection-setup-minibuffer t)
+  ;; minibuffer use emacs default key bindings
+  ;; (evil-collection-setup-minibuffer t)
   (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
                                                evil-collection--supported-modes))
   :config
