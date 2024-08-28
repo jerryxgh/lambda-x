@@ -341,13 +341,6 @@ POSITION: just inhibit warning.")
 (if (file-exists-p abbrev-file-name)
     (quietly-read-abbrev-file))
 
-;; hungry-delete ---------------------------------------------------------------
-(use-package hungry-delete
-  :ensure t
-  :diminish hungry-delete-mode
-  :config
-  (global-hungry-delete-mode 1))
-
 ;; smartparens -----------------------------------------------------------------
 (use-package smartparens
   :ensure t
