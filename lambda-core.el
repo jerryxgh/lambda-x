@@ -155,7 +155,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; Contrary to what many Emacs users have in their configs, you don't need
 ;; more than this to make UTF-8 the default coding system:
 (set-locale-environment "en_US.UTF-8")
-(set-language-environment 'UTF-8)
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
 (setq system-time-locale "C") ; 这个是为了在 org mode 中用英文显示日期，默认是中文
 
 ;; theme -----------------------------------------------------------------------
