@@ -362,8 +362,13 @@ POSITION: just inhibit warning.")
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
 ;; use shift + arrow keys to switch between visible buffers
-(require 'windmove)
-(windmove-default-keybindings)
+(use-package windmove
+  :ensure t
+  :custom
+  (windmove-allow-all-windows t)
+  :config
+  (require 'windmove)
+  (windmove-default-keybindings))
 
 ;;; tramp
 ;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
