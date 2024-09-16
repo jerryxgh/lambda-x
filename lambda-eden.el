@@ -185,6 +185,18 @@ Note the weekly scope of the command's precision.")
         fzf/position-bottom t
         fzf/window-height 15))
 
+(use-package vimrc-mode
+  :ensure t
+  :config
+  (require 'vimrc-mode)
+  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
+
+(use-package package-lint
+  :ensure t
+  :config
+  (require 'package-lint-flymake)
+  (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here

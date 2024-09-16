@@ -677,24 +677,27 @@ POSITION: just inhibit warning.")
   (switch-to-buffer-in-dedicated-window 'pop))
 
 ;; sensible undo ---------------------------------------------------------------
-(lambda-package-ensure-install 'undo-tree)
-(require 'undo-tree)
-;; autosave the undo-tree history
-(setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory))
-      undo-tree-auto-save-history nil
-      ;; https://github.com/syl20bnr/spacemacs/issues/9903
-      undo-tree-enable-undo-in-region nil
-      ;; undo-tree-visualizer-timestamps t
-      )
-
-(global-undo-tree-mode 1)
-(diminish 'undo-tree-mode)
+(use-package undo-tree
+  :ensure t
+  :config
+  (require 'undo-tree)
+  ;; autosave the undo-tree history
+  (setq undo-tree-history-directory-alist
+        `((".*" . ,temporary-file-directory))
+        undo-tree-auto-save-history nil
+        ;; https://github.com/syl20bnr/spacemacs/issues/9903
+        undo-tree-enable-undo-in-region nil
+        ;; undo-tree-visualizer-timestamps t
+        )
+  (global-undo-tree-mode 1)
+  (diminish 'undo-tree-mode))
 
 ;;temp-buffer-browse -----------------------------------------------------------
-(lambda-package-ensure-install 'temp-buffer-browse)
-(require 'temp-buffer-browse)
-(temp-buffer-browse-mode 1)
+(use-package temp-buffer-browse
+  :ensure t
+  :config
+  (require 'temp-buffer-browse)
+  (temp-buffer-browse-mode 1))
 
 ;; shell configs ---------------------------------------------------------------
 (require 'shell)
@@ -808,9 +811,6 @@ POSITION: just inhibit warning.")
 
 (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-
-;; unicad --- say goodbye to Garbled -------------------------------------------
-(require 'unicad)
 
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)

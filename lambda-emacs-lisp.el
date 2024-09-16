@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2023-06-25 17:17:09 Guanghui Xu>
+;; Time-stamp: <2024-09-16 22:38:19 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -10,19 +10,10 @@
 (add-hook 'emacs-lisp-mode-hook
           #'(lambda ()
               (eldoc-mode 1)
+              (flymake-mode 1)
+              (setq elisp-flymake-byte-compile-load-path load-path)
               (diminish 'eldoc-mode)
               (setq-default flycheck-emacs-lisp-load-path load-path)))
-
-;; elisp-slime-nav --- Make M-. and M-, work in elisp like they do in slime-----
-(use-package elisp-slime-nav
-  :ensure t
-  :config
-
-  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-    (add-hook hook #'(lambda ()
-                       (turn-on-elisp-slime-nav-mode)
-                       (diminish 'elisp-slime-nav-mode)))))
-
 
 ;; morlock --- more font-lock keywords for elisp -------------------------------
 (use-package morlock
