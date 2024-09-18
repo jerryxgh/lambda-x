@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-09-05 20:01:58 Guanghui Xu>
+;; Time-stamp: <2024-09-18 15:26:03 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -130,18 +130,18 @@
 (use-package avy
   :ensure t)
 
-;; evil-leader -----------------------------------------------------------------
-(use-package evil-leader
-  :ensure t
-  :config
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "a" 'lambda-counsel-rg
-    "b" 'ido-switch-buffer
-    "c" 'avy-goto-char
-    "w" 'avy-goto-word-1
-    "l" 'avy-goto-line)
-  (global-evil-leader-mode 1))
+;; ;; evil-leader -----------------------------------------------------------------
+;; (use-package evil-leader
+;;   :ensure t
+;;   :config
+;;   (evil-leader/set-leader "<SPC>")
+;;   (evil-leader/set-key
+;;     "a" 'lambda-counsel-rg
+;;     "b" 'ido-switch-buffer
+;;     "c" 'avy-goto-char
+;;     "w" 'avy-goto-word-1
+;;     "l" 'avy-goto-line)
+;;   (global-evil-leader-mode 1))
 
 (use-package evil-nerd-commenter
   :ensure t)
