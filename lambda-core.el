@@ -674,6 +674,7 @@ POSITION: just inhibit warning.")
 
 (use-package emacs
   :custom
+  (mode-require-final-newline nil) ; do't auto insert new line when saving file
   (switch-to-buffer-in-dedicated-window 'pop))
 
 ;; sensible undo ---------------------------------------------------------------
@@ -739,6 +740,15 @@ POSITION: just inhibit warning.")
 (load "lambda-custom" t)
 
 ;;; magit --- use git in emacs--------------------------------------------------
+(use-package transient
+  :ensure t
+  :custom
+  (transient-display-buffer-action
+   '(display-buffer-below-selected
+    (dedicated . t)
+    (inhibit-same-window . t)
+    (window-parameters (no-other-window . t)))))
+
 (use-package magit
   :ensure t
   ;; :bind ("C-c g" . magit-status)
