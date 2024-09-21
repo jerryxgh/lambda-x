@@ -39,8 +39,11 @@ This value is set automaticly, DONT set by hand.")
 
 (add-to-list 'package-archives
             '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+            '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (setq package-archive-priorities
-      '(("melpa" . 50)
+      '(("melpa-stable" . 50)
+        ("melpa" . 50)
         ("gnu" . 50)
         ("nongnu" . 0)))
 

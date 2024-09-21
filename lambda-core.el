@@ -674,7 +674,7 @@ POSITION: just inhibit warning.")
 
 (use-package emacs
   :custom
-  (mode-require-final-newline nil) ; do't auto insert new line when saving file
+  ;; (mode-require-final-newline nil) ; do't auto insert new line when saving file
   (switch-to-buffer-in-dedicated-window 'pop))
 
 ;; sensible undo ---------------------------------------------------------------
@@ -742,6 +742,7 @@ POSITION: just inhibit warning.")
 ;;; magit --- use git in emacs--------------------------------------------------
 (use-package transient
   :ensure t
+  :pin melpa-stable
   :custom
   (transient-display-buffer-action
    '(display-buffer-below-selected
@@ -751,6 +752,7 @@ POSITION: just inhibit warning.")
 
 (use-package magit
   :ensure t
+  :pin melpa-stable
   ;; :bind ("C-c g" . magit-status)
   :custom
   ;; (magit-git-executable "/usr/local/bin/git")
