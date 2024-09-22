@@ -758,7 +758,10 @@ POSITION: just inhibit warning.")
   :custom
   (magit-refresh-status-buffer nil)
   (magit-ediff-dwim-show-on-hunks t)
-  (magit-bury-buffer-function (lambda (&rest _) (magit-mode-quit-window t)))
+  (magit-bury-buffer-function (lambda (&rest _)
+                                (magit-mode-quit-window t)
+                                (dolist (buf (magit-mode-get-buffers))
+                                        (kill-buffer buf))))
   :init
   (use-package with-editor :ensure t)
 
