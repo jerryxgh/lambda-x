@@ -744,6 +744,7 @@ POSITION: just inhibit warning.")
   :ensure t
   :pin melpa-stable
   :custom
+  (auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffer-p)
   (transient-display-buffer-action
    '(display-buffer-below-selected
     (dedicated . t)
@@ -755,8 +756,9 @@ POSITION: just inhibit warning.")
   :pin melpa-stable
   ;; :bind ("C-c g" . magit-status)
   :custom
-  ;; (magit-git-executable "/usr/local/bin/git")
+  (magit-refresh-status-buffer nil)
   (magit-ediff-dwim-show-on-hunks t)
+  (magit-bury-buffer-function (lambda (&rest _) (magit-mode-quit-window t)))
   :init
   (use-package with-editor :ensure t)
 
@@ -768,6 +770,22 @@ POSITION: just inhibit warning.")
       (setq magit-git-executable git-executable-windows)
       (setenv "PATH"
               (concat (getenv "PATH") ";c:/Program Files (x86)/Git/bin/"))))
+
+  (defun kill-magit-diff-buffer-in-current-repo (&rest _)
+    "Delete the magit-diff buffer related to the current repo"
+    (let ((magit-diff-buffer-in-current-repo (magit-get-mode-buffer 'magit-diff-mode))
+          (magit-meta-diff-buffer-in-current-repo (magit-get-mode-buffer 'ediff-meta-mode)))
+      (kill-buffer magit-diff-buffer-in-current-repo)))
+  ;;
+  ;; When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer,
+  ;; delete the magit-diff buffer related to the current repo.
+  ;;
+  (add-hook 'git-commit-setup-hook
+            (lambda ()
+              (add-hook 'with-editor-post-finish-hook #'kill-magit-diff-buffer-in-current-repo
+                        nil t)
+              (add-hook 'with-editor-post-cancel-hook #'kill-magit-diff-buffer-in-current-repo
+                        nil t)))
   ;; (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
   ;; (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
   ;; (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
