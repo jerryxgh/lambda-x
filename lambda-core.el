@@ -593,14 +593,6 @@ POSITION: just inhibit warning.")
 (auto-compression-mode t)
 (auto-image-file-mode t)
 
-;; outline mode
-(require 'outline)
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (outline-minor-mode t)
-            (diminish 'outline-minor-mode)))
-
-
 ;; enable hs-minor-mode for programming, hide or show code
 (add-hook 'prog-mode-hook
           (lambda ()
