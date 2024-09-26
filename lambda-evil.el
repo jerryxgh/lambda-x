@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-09-26 11:18:50 Guanghui Xu>
+;; Time-stamp: <2024-09-26 11:42:37 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -393,7 +393,6 @@ object."
           (forward-line 1)))))))
 
 (use-package evil-collection
-  :after evil dired-subtree
   :ensure t
   :custom
   ;; minibuffer use emacs default key bindings
