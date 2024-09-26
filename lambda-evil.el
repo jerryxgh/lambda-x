@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-09-24 11:36:18 Guanghui Xu>
+;; Time-stamp: <2024-09-26 11:18:50 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -331,6 +331,7 @@ object."
   )
 
 (use-package dired-subtree
+  :after dired
   :ensure t
   :bind (:map dired-mode-map
               ("<tab>" . dired-subtree-cycle)
@@ -391,33 +392,8 @@ object."
             (treemacs-return nil))
           (forward-line 1)))))))
 
-;; better-jumper ---------------------------------------------------------------
-(use-package better-jumper
-  :ensure t
-  :delight better-jumper-local-mode
-  :config
-  (better-jumper-mode +1)
-  (with-eval-after-load 'evil-maps
-    (define-key evil-motion-state-map (kbd "C-o") 'better-jumper-jump-backward)
-    (define-key evil-motion-state-map (kbd "C-i") (lambda ()
-                                                    (interactive)
-                                                    (if (eq major-mode 'dired-mode)
-                                                        (dired-subtree-cycle)
-                                                      (better-jumper-jump-forward))))))
-
-(use-package evil-vimish-fold
-  :ensure
-  :after vimish-fold
-  :delight evil-vimish-fold-mode
-  :custom
-  (vimish-fold-dir (expand-file-name "vimish-fold" lambda-auto-save-dir))
-  :init
-  (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
-  :config
-  (global-evil-vimish-fold-mode 1))
-
 (use-package evil-collection
-  :after evil
+  :after evil dired-subtree
   :ensure t
   :custom
   ;; minibuffer use emacs default key bindings
