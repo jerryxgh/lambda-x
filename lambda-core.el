@@ -347,6 +347,7 @@ POSITION: just inhibit warning.")
   :ensure t
   :custom
   (sp-autoskip-closing-pair 'always)
+  (sp-base-key-bindings 'sp)
   :config
   (smartparens-global-mode t)
   (smartparens-global-strict-mode t)
