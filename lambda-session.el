@@ -76,7 +76,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
        (add-hook
         'persp-mode-hook
         #'(lambda ()
-            (setq persp-interactive-completion-function #'ido-completing-read)))
+            (setq persp-interactive-completion-function #'ivy-completing-read)))
 
        (persp-mode 1)
        (diminish 'persp-mode))))

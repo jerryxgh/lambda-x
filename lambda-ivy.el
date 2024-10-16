@@ -29,6 +29,7 @@
   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
   (enable-recursive-minibuffers t)
   (ivy-use-virtual-buffers t)
+  (ivy-wrap t)
 
   :bind
   (;; Use C-j for immediate termination with the current value, and RET for
@@ -46,6 +47,9 @@
           ;; (counsel-ag . ivy--regex-ignore-order)
           (swiper . ivy--regex)
           (counsel-M-x . ivy--regex-fuzzy)
+          (counsel-describe-variable . ivy--regex-fuzzy)
+          (counsel-describe-function . ivy--regex-fuzzy)
+          (counsel-flymake . ivy--regex-fuzzy)
           (t . ivy--regex-fuzzy))
         ivy-auto-select-single-candidate nil)
   (ivy-mode 1)
