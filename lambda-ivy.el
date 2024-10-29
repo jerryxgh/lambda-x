@@ -52,6 +52,7 @@
           (counsel-find-file . ivy--regex-fuzzy)
           (counsel-projectile-find-file . ivy--regex-fuzzy)
           (counsel-switch-buffer . ivy--regex-fuzzy)
+          (ivy-switch-buffer . ivy--regex-fuzzy)
           (counsel-projectile-switch-to-buffer . ivy--regex-fuzzy)
           (counsel-switch-to-shell-buffer . ivy--regex-fuzzy)
           (counsel-flymake . ivy--regex-fuzzy)
