@@ -749,15 +749,17 @@ POSITION: just inhibit warning.")
   :pin melpa-stable
   ;; :bind ("C-c g" . magit-status)
   :custom
+  (split-height-threshold 98)                          ; try to split vertically
+  (ediff-split-window-function 'split-window-sensibly) ; try to split vertically in ediff
   (magit-refresh-status-buffer nil)
   (magit-ediff-dwim-show-on-hunks t)
   (magit-bury-buffer-function (lambda (&rest _)
-                                (let ((window (selected-window)))
-                                  (quit-window t)
-                                  (when (window-live-p window)
-                                    (delete-window window)))
-                                (dolist (buf (magit-mode-get-buffers))
-                                        (kill-buffer buf))))
+                                (let* ((buf (window-buffer (selected-window)))
+                                       (status-buf (magit-get-mode-buffer 'magit-status-mode))
+                                       (is-quit-status-buf (eq buf status-buf)))
+                                  (magit-mode-quit-window 1)
+                                  (if is-quit-status-buf
+                                      (mapc #'kill-buffer (magit-mode-get-buffers))))))
   :init
   (use-package with-editor :ensure t)
 
