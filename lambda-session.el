@@ -94,14 +94,17 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
   (zoom-window-setup))
 
 ;; Restore buffers automaticly -------------------------------------------------
+(require 'desktop)
 (use-package desktop
   :ensure t
+
   :custom
   (desktop-path (list (expand-file-name lambda-auto-save-dir)))
-  ;; (history-length 100)
+  (history-length 100)
   (desktop-restore-frames t)
   (desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$"))
   (desktop-base-file-name "emacs-desktop")
+
   :config
   (desktop-save-mode 1))
 
