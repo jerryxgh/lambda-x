@@ -104,9 +104,18 @@
 (use-package prescient
   :ensure t
   :after (counsel)
-  ;; :custom
-  ;; (prescient-filter-method '(literal regexp fuzzy))
+  :custom
+  ;; avoid err: Invalid regexp: "Regular expression too big", which can reproduce by
+  ;; (completing-read "Create directory: "
+  ;;                  'read-file-name-internal
+  ;;                  'file-exists-p
+  ;;                  nil
+  ;;                  "/data00/home/guanghui.xgh/repository/private/go_path/src/code.byted.org/ecom/ai_agent/src/faas/ai_agent_faas/biz/service/id_detect_from_input_service"
+  ;;                  nil
+  ;;                  nil)
+  (prescient-filter-method '())
   :config
+  (require 'prescient)
   (prescient-persist-mode 1))
 
 (use-package ivy-prescient
