@@ -523,6 +523,15 @@ POSITION: just inhibit warning.")
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t))
 
+(use-package ibuffer-projectile
+  :ensure t
+  :config
+  (add-hook 'ibuffer-hook
+    (lambda ()
+      (ibuffer-projectile-set-filter-groups)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic)))))
+
 ;; anzu-mode enhances isearch by showing total matches and current match
 ;; position --------------------------------------------------------------------
 (use-package anzu
