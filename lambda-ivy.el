@@ -73,10 +73,12 @@
   ;; Don't show '.' and '..' in counsel-find-file
   (setq ivy-extra-directories nil)
   (setq counsel-find-file-at-point t)
+
   (defun lambda-counsel-ag ()
     "Counsel-ag at `default-directory'"
     (interactive)
     (counsel-ag nil default-directory))
+
   (defun lambda-counsel-rg ()
     "Counsel-rg at `default-directory'"
     (interactive)
@@ -113,7 +115,7 @@
   ;;                  "/data00/home/guanghui.xgh/repository/private/go_path/src/code.byted.org/ecom/ai_agent/src/faas/ai_agent_faas/biz/service/id_detect_from_input_service"
   ;;                  nil
   ;;                  nil)
-  (prescient-filter-method '())
+  (prescient-filter-method '(literal))
   :config
   (require 'prescient)
   (prescient-persist-mode 1))
