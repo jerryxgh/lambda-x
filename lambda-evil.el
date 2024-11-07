@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-11-07 15:40:57 Guanghui Xu>
+;; Time-stamp: <2024-11-07 16:45:04 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -20,7 +20,7 @@
   (evil-want-visual-char-semi-exclusive t)
   (evil-want-C-w-in-emacs-state t)
   (evil-cross-lines t)
-  (evil-symbol-word-search nil) ;; let * and # search symbol instead of word at point
+  (evil-symbol-word-search t) ;; let * and # search symbol instead of word at point
   (evil-want-Y-yank-to-eol t)
   (evil-want-change-word-to-end nil)
 
