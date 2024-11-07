@@ -1,5 +1,5 @@
 ;;; lambda-org --- org
-;; Time-stamp: <2023-05-05 10:49:47 Guanghui Xu>
+;; Time-stamp: <2024-11-07 17:33:40 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
 
@@ -45,7 +45,6 @@
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c b") 'org-iswitchb)
 
 ;; markdown -------------------------------------------------------------------
 (use-package markdown-mode
