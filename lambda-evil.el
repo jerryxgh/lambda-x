@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-09-26 11:42:37 Guanghui Xu>
+;; Time-stamp: <2024-11-07 15:40:57 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -13,17 +13,18 @@
 
 (use-package evil
   :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq-default evil-want-C-w-delete nil
-                evil-want-visual-char-semi-exclusive t
-                evil-want-C-w-in-emacs-state t
-                evil-cross-lines t)
-  :config
-  ;; let * and # search symbol instead of word at point
-  (setq-default evil-symbol-word-search t)
+  :custom
+  (evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (evil-want-keybinding nil)
+  (evil-want-C-w-delete nil)
+  (evil-want-visual-char-semi-exclusive t)
+  (evil-want-C-w-in-emacs-state t)
+  (evil-cross-lines t)
+  (evil-symbol-word-search nil) ;; let * and # search symbol instead of word at point
+  (evil-want-Y-yank-to-eol t)
+  (evil-want-change-word-to-end nil)
 
+  :config
   (evil-set-undo-system 'undo-tree)
   ;; treat underscore as part of the word
   (defalias #'forward-evil-word #'forward-evil-symbol)
