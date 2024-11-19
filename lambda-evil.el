@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-11-19 10:28:00 Guanghui Xu>
+;; Time-stamp: <2024-11-19 11:21:32 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -331,6 +331,17 @@ object."
   (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
   )
 
+(use-package evil-collection
+  :ensure t
+  :custom
+  ;; minibuffer use emacs default key bindings
+  ;; (evil-collection-setup-minibuffer t)
+  (evil-collection-outline-enable-in-minor-mode-p nil)
+  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
+                                               evil-collection--supported-modes))
+  :config
+  (evil-collection-init))
+
 (use-package dired-subtree
   :ensure t
   :bind (:map dired-mode-map
@@ -348,6 +359,12 @@ object."
   ;;           (treemacs-icons-dired--reset)
   ;;           (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
   ;; (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a)
+  (evil-collection-define-key 'normal 'dired-mode-map
+      (kbd "TAB") 'dired-subtree-cycle
+      "gh" 'dired-subtree-up
+      "gl" 'dired-subtree-down
+      (kbd "M-j") 'dired-subtree-next-sibling
+      (kbd "M-k") 'dired-subtree-previous-sibling)
 
   (if (display-graphic-p)
       (defun treemacs-icons-after-subtree-insert-hook ()
@@ -391,17 +408,6 @@ object."
                   (insert icon)))
             (treemacs-return nil))
           (forward-line 1)))))))
-
-(use-package evil-collection
-  :ensure t
-  :custom
-  ;; minibuffer use emacs default key bindings
-  ;; (evil-collection-setup-minibuffer t)
-  (evil-collection-outline-enable-in-minor-mode-p nil)
-  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
-                                               evil-collection--supported-modes))
-  :config
-  (evil-collection-init))
 
 (provide 'lambda-evil)
 
