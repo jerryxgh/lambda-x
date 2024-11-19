@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-11-19 11:21:32 Guanghui Xu>
+;; Time-stamp: <2024-11-19 19:14:50 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -331,43 +331,9 @@ object."
   (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
   )
 
-(use-package evil-collection
-  :ensure t
-  :custom
-  ;; minibuffer use emacs default key bindings
-  ;; (evil-collection-setup-minibuffer t)
-  (evil-collection-outline-enable-in-minor-mode-p nil)
-  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
-                                               evil-collection--supported-modes))
-  :config
-  (evil-collection-init))
-
-(use-package dired-subtree
-  :ensure t
-  :bind (:map dired-mode-map
-              ("<tab>" . dired-subtree-cycle)
-              ("TAB" . dired-subtree-cycle))
-  :config
-  (require 'dired-subtree)
-  ;; (defun treemacs-icons-after-subtree-insert-a ()
-  ;;   (if (> (line-number-at-pos) 1)
-  ;;       (let ((ov (dired-subtree--get-ov)))
-  ;;         (cl-letf (((symbol-function 'eobp)
-  ;;                    (lambda ()
-  ;;                      (when ov
-  ;;                        (<= (overlay-end ov) (point))))))
-  ;;           (treemacs-icons-dired--reset)
-  ;;           (treemacs-icons-dired--display-icons-for-subdir (dired-current-directory) (point))))))
-  ;; (advice-add 'dired-subtree-insert :after #'treemacs-icons-after-subtree-insert-a)
-  (evil-collection-define-key 'normal 'dired-mode-map
-      (kbd "TAB") 'dired-subtree-cycle
-      "gh" 'dired-subtree-up
-      "gl" 'dired-subtree-down
-      (kbd "M-j") 'dired-subtree-next-sibling
-      (kbd "M-k") 'dired-subtree-previous-sibling)
-
-  (if (display-graphic-p)
-      (defun treemacs-icons-after-subtree-insert-hook ()
+(require 'lambda-treemacs)
+;; when open dire-subtree, insert icons
+(defun treemacs-icons-after-subtree-insert-hook ()
         (let ((pos (point))
               (end (overlay-end (dired-subtree--get-ov))))
           (treemacs-with-writable-buffer
@@ -384,7 +350,17 @@ object."
                       (insert icon))
                   (treemacs-return nil))
                 (forward-line 1)))))))
-    (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook)))
+
+(use-package dired-subtree
+  :ensure t
+  :bind (:map dired-mode-map
+              ("<tab>" . dired-subtree-cycle)
+              ("TAB" . dired-subtree-cycle))
+  :config
+  (if (display-graphic-p)
+      ;; when open dire-subtree, insert icons
+      (add-hook 'dired-subtree-after-insert-hook 'treemacs-icons-after-subtree-insert-hook)))
+(require 'dired-subtree)
 
 ;; redefine this function to avoid double directory icon when revert-buffer in dired-mode.
 (defun treemacs-icons-dired--display-icons-for-subdir (path pos)
@@ -408,6 +384,17 @@ object."
                   (insert icon)))
             (treemacs-return nil))
           (forward-line 1)))))))
+
+(use-package evil-collection
+  :ensure t
+  :custom
+  ;; minibuffer use emacs default key bindings
+  ;; (evil-collection-setup-minibuffer t)
+  (evil-collection-outline-enable-in-minor-mode-p nil)
+  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
+                                               evil-collection--supported-modes))
+  :config
+  (evil-collection-init))
 
 (provide 'lambda-evil)
 
