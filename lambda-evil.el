@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-11-07 16:45:04 Guanghui Xu>
+;; Time-stamp: <2024-11-19 10:28:00 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -332,7 +332,6 @@ object."
   )
 
 (use-package dired-subtree
-  :after dired
   :ensure t
   :bind (:map dired-mode-map
               ("<tab>" . dired-subtree-cycle)

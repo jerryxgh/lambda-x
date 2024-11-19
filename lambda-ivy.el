@@ -56,6 +56,7 @@
           (counsel-projectile-switch-to-buffer . ivy--regex-fuzzy)
           (counsel-switch-to-shell-buffer . ivy--regex-fuzzy)
           (counsel-flymake . ivy--regex-fuzzy)
+          (where-is. ivy--regex-fuzzy)
           (t . ivy--regex-fuzzy))
         ivy-auto-select-single-candidate nil)
   (ivy-mode 1)
