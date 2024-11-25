@@ -348,6 +348,12 @@ POSITION: just inhibit warning.")
   :custom
   (sp-autoskip-closing-pair 'always)
   (sp-base-key-bindings 'sp)
+  (sp-override-key-bindings
+     '(("C-S-<left>" . sp-backward-slurp-sexp)
+       ("C-S-<right>" . sp-backward-barf-sexp)
+       ("M-<delete>" . nil)
+       ("M-<backspace>" . nil)
+       ))
   :config
   (smartparens-global-mode t)
   (smartparens-global-strict-mode t)
