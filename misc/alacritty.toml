@@ -4,6 +4,8 @@
 # GENERAL #
 ###########
 
+[general]
+
 # Import additional configuration files
 import = []
 
@@ -15,13 +17,6 @@ live_config_reload = true  # Default: true
 
 # Offer IPC using alacritty msg (unix only)
 ipc_socket = true  # Default: true
-
-# Shell program and its arguments
-# Default for Linux/BSD/macOS is $SHELL or user's login shell
-# Default for Windows is "powershell"
-[shell]
-program = "/bin/zsh"  # Example for Linux/BSD/macOS
-args = ["-l"]
 
 #######
 # ENV #
@@ -275,6 +270,11 @@ thickness = 0.15  # Default: 0.15
 
 [terminal]
 
+# Shell program and its arguments
+# Default for Linux/BSD/macOS is $SHELL or user's login shell
+# Default for Windows is "powershell"
+shell = { program = "/bin/zsh", args = ["-l"] } # Example for Linux/BSD/macOS
+
 # Controls the OSC 52 behavior for clipboard interactions
 osc52 = "CopyPaste"  # Default: "OnlyCopy"
 
@@ -289,7 +289,11 @@ hide_when_typing = true  # Default: false
 
 # Mouse bindings (actual bindings need to be defined as per user preference)
 # Example: bindings = [{ mouse = "Left", action = "Paste" }]
-bindings = []
+bindings = [
+{ mouse = "Left", mods = "Control", action = "IncreaseFontSize" },
+{ mouse = "Right", mods = "Control", action = "DecreaseFontSize" },
+{ mouse = "Middle", mods = "Control", action = "ResetFontSize" },
+]
 
 #########
 # HINTS #
@@ -353,4 +357,12 @@ bindings = [
     { key = "x", mods = "Command", chars = "\u0018" },
     { key = "y", mods = "Command", chars = "\u0019" },
     { key = "z", mods = "Command", chars = "\u001a" },
+    { key = "/", mods = "Control", chars = "\u001f" },
+    { key = "/", mods = "Command", chars = "\u001f" },
+    { key = "n", mods = "Command | Shift", action = "CreateNewWindow" },
+    { key = "c", mods = "Command | Shift", action = "Copy" },
+    { key = "v", mods = "Command | Shift", action = "Paste" },
+    { key = "+", mods = "Command | Shift", action = "IncreaseFontSize" },
+    { key = "_", mods = "Command | Shift", action = "DecreaseFontSize" },
+    { key = ")", mods = "Command | Shift", action = "ResetFontSize" },
 ]
