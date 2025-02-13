@@ -2,8 +2,10 @@
 export LC_ALL="zh_CN.UTF-8"
 export PATH="/Users/hudandan/local/bin:$PATH"
 
-## for emacs theme zenburn
-export TERM=xterm-256color
+## 让emacs tty展示正确的颜色
+export COLORTERM=truecolor
+## 上面的truecolor效果比下面的256color更好
+# export TERM=xterm-256color
 
 ## for ls color
 export CLICOLOR=1
