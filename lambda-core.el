@@ -465,6 +465,7 @@ POSITION: just inhibit warning.")
                                    "projectile-bookmarks.eld"
                                    lambda-auto-save-dir))
   :config
+  (setq projectile-globally-ignored-directories (add-to-list 'projectile-globally-ignored-directories "*.gvm"))
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t))
 
