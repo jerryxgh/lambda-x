@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2024-09-16 22:38:19 Guanghui Xu>
+;; Time-stamp: <2025-02-25 20:08:33 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -19,8 +19,7 @@
 (use-package morlock
   :ensure t
   :config
-  (font-lock-add-keywords 'emacs-lisp-mode
-                          morlock-el-font-lock-keywords))
+  (morlock-mode 1))
 
 (provide 'lambda-emacs-lisp)
 
