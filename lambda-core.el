@@ -464,10 +464,31 @@ POSITION: just inhibit warning.")
   (projectile-known-projects-file (expand-file-name
                                    "projectile-bookmarks.eld"
                                    lambda-auto-save-dir))
+  (projectile-ignored-project-function (lambda (project-root)
+                                         (lambda-x-under-gvm-directory-p project-root)))
+
   :config
-  (setq projectile-globally-ignored-directories (add-to-list 'projectile-globally-ignored-directories "*.gvm"))
+  (defadvice projectile-project-files (around projectile-project-files-advice)
+    "Do not load file list when under specific directory"
+    (if (lambda-x-under-gvm-directory-p (ad-get-arg 0))
+        nil
+      ad-do-it))
+  (ad-activate 'projectile-project-files)
+
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t))
+
+(defun lambda-x-under-gvm-directory-p (project-root)
+  "When PROJECT-ROOT is under ~/.gvm directory, do not add it to projectile."
+  (let ((gvm-dir (expand-file-name "~/.gvm"))
+        (true-gvm-dir (file-truename "~/.gvm"))
+        (project-root-dir (expand-file-name project-root))
+        (true-project-root-dir (file-truename project-root)))
+
+    (or (string-prefix-p gvm-dir project-root-dir)
+        (string-prefix-p true-gvm-dir project-root-dir)
+        (string-prefix-p gvm-dir true-project-root-dir)
+        (string-prefix-p true-gvm-dir true-project-root-dir))))
 
 (use-package ibuffer-projectile
   :ensure t

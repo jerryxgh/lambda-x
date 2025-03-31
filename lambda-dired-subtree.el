@@ -1,6 +1,6 @@
 ;;; lambda-dired-subtree.el ---  -*- lexical-binding: t -*-
 
-;; Time-stamp: <2024-11-19 19:20:03 Guanghui Xu>
+;; Time-stamp: <2025-02-17 15:09:17 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for dired-subtree.
@@ -69,7 +69,7 @@
   ;; minibuffer use emacs default key bindings
   ;; (evil-collection-setup-minibuffer t)
   (evil-collection-outline-enable-in-minor-mode-p nil)
-  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(company)))
+  (evil-collection-mode-list (evil-filter-list (lambda (item) (member item '(comint company)))
                                                evil-collection--supported-modes))
   :config
   (evil-collection-init))
