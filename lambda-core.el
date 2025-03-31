@@ -428,14 +428,14 @@ POSITION: just inhibit warning.")
 ;;; dired-x
 (require 'dired-x)
 (cond ((eq system-type 'windows-nt)
-       (setq dired-listing-switches "-AlX"))
+       (setq dired-listing-switches "-Al"))
       ((eq system-type 'darwin)
        (if (executable-find "gls")
            (progn
              (setq insert-directory-program (executable-find "gls"))
-             (setq dired-listing-switches "-AlX --group-directories-first"))
+             (setq dired-listing-switches "-Al --group-directories-first"))
          (setq dired-listing-switches "-Al")))
-      (t (setq dired-listing-switches "-AlX --group-directories-first")))
+      (t (setq dired-listing-switches "-Al --group-directories-first")))
 
 (use-package dired
   :ensure nil
