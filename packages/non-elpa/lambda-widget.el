@@ -44,30 +44,6 @@
     (kill-new filename)
     (message "'%s' is copied to the clipboard." filename)))
 
-;; (defun lambda-widget-escape-string ()
-;;   "Replace \" with \\\" and ewline with \\n in the selected text or the whole buffer."
-;;   (interactive)
-;;   (let* ((beg (if (use-region-p) (region-beginning) (point-min)))
-;;          (end (if (use-region-p) (region-end) (point-max)))
-;;          (text (buffer-substring-no-properties beg end))
-;;          (processed-text (replace-regexp-in-string "\n" "\\\\n" text)))
-;;     (setq processed-text (replace-regexp-in-string "\"" "\\\\\"" processed-text))
-;;     (setq processed-text (replace-regexp-in-string "\\" "\\\\" processed-text))
-;;     (delete-region beg end)
-;;     (insert processed-text)))
-
-;; (defun lambda-widget-unescape-string ()
-;;     "Replace \\\" with \" and \\n with newline in the selected text or the whole buffer."
-;;   (interactive)
-;;   (let* ((beg (if (use-region-p) (region-beginning) (point-min)))
-;;          (end (if (use-region-p) (region-end) (point-max)))
-;;          (text (buffer-substring-no-properties beg end))
-;;          (processed-text (replace-regexp-in-string "\\\\n" "\n" text)))
-;;     (setq processed-text (replace-regexp-in-string "\\\\\"" "\"" processed-text))
-;;     (setq processed-text (replace-regexp-in-string "\\\\" "\\" processed-text))
-;;     (delete-region beg end)
-;;     (insert processed-text)))
-
 (defun lambda-widget-escape-text (text)
   "Escape backslashes, double quotes, and newlines in TEXT."
   (replace-regexp-in-string
