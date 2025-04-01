@@ -35,20 +35,6 @@
                                                  user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
-(defun lambda-copy-current-file-path-or-directory ()
-  "Copy current buffer file'a path if exist, else try `default-directory`."
-  (interactive)
-  (let ((filename))
-    (cond
-     ;; In buffers with file name
-     ((buffer-file-name)
-      (setq filename (buffer-file-name)))
-     ((eq major-mode 'dired-mode)
-      (set filename (dired-current-directory)))
-     ((setq filename default-directory)))
-    (kill-new filename)
-    (message "'%s' is copied to the clipboard." filename)))
-
 (defun lambda-add-to-load-path-recursively
     (directory &optional exclude-directories-list)
   "Add DIRECTORY to `load-path' recursively, those has `get-load-suffixes' file.
