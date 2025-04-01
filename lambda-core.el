@@ -25,6 +25,7 @@
 
 (require 'lambda-package)
 (require 'dired)
+(require 'lambda-widget)
 
 (defconst current-user
   (getenv
