@@ -25,7 +25,6 @@
 
 (require 'lambda-package)
 (require 'dired)
-(require 'lambda-widget)
 
 (defconst current-user
   (getenv
@@ -68,6 +67,8 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 (lambda-add-to-load-path-recursively (expand-file-name "packages/non-elpa"
                                                        lambda-package-direcotry))
+
+(require 'lambda-widget)
 
 ;; suppressing ad-handle-definition Warnings in Emacs
 (setq ad-redefinition-action 'accept)
