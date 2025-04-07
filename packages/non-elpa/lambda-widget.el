@@ -47,11 +47,13 @@
 (defun lambda-widget-escape-text (text)
   "Escape backslashes, double quotes, and newlines in TEXT."
   (replace-regexp-in-string
-   "\n" "\\\\n"
+   "\t" "\\\\t"
    (replace-regexp-in-string
-    "\"" "\\\\\""
+    "\n" "\\\\n"
     (replace-regexp-in-string
-     "\\\\" "\\\\\\\\" text))))
+     "\"" "\\\\\""
+     (replace-regexp-in-string
+      "\\\\" "\\\\\\\\" text)))))
 
 (defun lambda-widget-escape-string ()
   "Escape the current buffer or active region by replacing:
@@ -70,11 +72,13 @@
 (defun lambda-widget-unescape-text (text)
   "Unescape backslashes, double quotes, and newlines in TEXT."
   (replace-regexp-in-string
-   "\\\\n" "\n"
+   "\\\\t" "\t"
    (replace-regexp-in-string
-    "\\\\\"" "\""
+    "\\\\n" "\n"
     (replace-regexp-in-string
-     "\\\\\\\\" "\\\\" text))))
+     "\\\\\"" "\""
+     (replace-regexp-in-string
+      "\\\\\\\\" "\\\\" text)))))
 
 (defun lambda-widget-unescape-string ()
   "Unescape the current buffer or active region by replacing:
