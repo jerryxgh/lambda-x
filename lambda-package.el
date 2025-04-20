@@ -1,4 +1,4 @@
-;;; lambda-package.el --- packages about settings -*- lexical-binding: t -*-
+;;; lambda-package.el --- Packages about settings -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2022 Guanghui Xu
 ;;
@@ -9,7 +9,7 @@
 ;; Keywords: extensions
 ;; Homepage: https://github.com/jerryxgh/lambda-x
 ;; Package-Version: 0.1
-;; Package-Requires: ((emacs "25.1"))
+;; Package-Requires: ((emacs "29.1"))
 ;;
 
 ;; This file is not part of GNU Emacs.
@@ -23,6 +23,7 @@
 ;;; Code:
 
 (require 'package)
+(require 'dash)
 
 (defconst lambda-package-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
@@ -41,10 +42,13 @@ This value is set automaticly, DONT set by hand.")
             '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("cselpa" . "https://elpa.thecybershadow.net/packages/"))
 (setq package-archive-priorities
       '(("melpa-stable" . 50)
         ("melpa" . 50)
         ("gnu" . 50)
+        ("cselpa" . 50)
         ("nongnu" . 0)))
 
 ;; do not auto load packages

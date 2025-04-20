@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2024-11-19 19:21:01 Guanghui Xu>
+;; Time-stamp: <2025-04-20 11:36:31 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -27,6 +27,7 @@
     lambda-package
     ;; core settings, shared by all other modules
     lambda-core
+    lambda-tramp
     lambda-ivy
     lambda-evil
     lambda-tty
@@ -83,13 +84,6 @@
     (redisplay))
 
   (progress-reporter-done progress-reporter))
-
-;;; tramp
-(setq tramp-default-method "sshx")
-(tramp-set-completion-function "sshx"
-                               '((tramp-parse-sconfig "/etc/ssh_config")
-                                 (tramp-parse-sconfig "~/.ssh/config")))
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
 (provide 'lambda-init)
 

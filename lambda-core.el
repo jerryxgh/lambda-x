@@ -80,7 +80,9 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; use command as control
   (setq ns-command-modifier 'control)
   (setq ns-pop-up-frames nil)
-  (lambda-package-ensure-install 'exec-path-from-shell)
+  (use-package exec-path-from-shell
+    :ensure t)
+
   (if (memq window-system '(mac ns))
       (exec-path-from-shell-initialize)))
 ;; init PATH in mac ends here ==================================================

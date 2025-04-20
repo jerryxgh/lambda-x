@@ -197,6 +197,57 @@ Note the weekly scope of the command's precision.")
   (require 'package-lint-flymake)
   (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
 
+(defun lambda-term-keys-want-key-p-def (key mods)
+  "Lambda implementation for `term-keys/want-key-p-func'.
+
+This function controls which key combinations are to be encoded
+and decoded using the term-keys protocol extension.
+KEY is the KeySym name as listed in `term-keys/mapping'; MODS is
+a 6-element bool vector representing the modifiers Shift /
+Control / Meta / Super / Hyper / Alt respectively, with t or nil
+representing whether they are depressed or not.  Returns non-nil
+if the specified key combination should be encoded.
+
+Note that the ALT modifier rarely actually corresponds to the Alt
+key on PC keyboards; the META modifier will usually be used
+instead."
+  (let ((shift   (elt mods 0))
+        (control (elt mods 1))
+        (meta    (elt mods 2))
+        (super   (elt mods 3))
+        (hyper   (elt mods 4))
+        (alt     (elt mods 5)))
+    (and
+
+     ;; We don't care about Super/Hyper/Alt modifiers
+     (not super)
+     (not hyper)
+     (not alt)
+
+     (or
+      ;; Navigation keys and Control/Alt
+      (and (member key '("Left" "Right")) control)
+      ))))
+
+;; use command below to generate alacritty config, convert to toml like this:
+;; { key = "Left", mods = "Command", chars = "\u001b\u001f\u0054\u0062\u001f" },
+;; { key = "Left", mods = "Command | Shift", chars = "\u001b\u001f\u0054\u0063\u001f" },
+;; { key = "Right", mods = "Command", chars = "\u001b\u001f\u0055\u0042\u001f" },
+;; { key = "Right", mods = "Command | Shift", chars = "\u001b\u001f\u0055\u0043\u001f" },
+
+;; (require 'term-keys-alacritty)
+;; (with-temp-buffer
+;;   (insert (term-keys/alacritty-config))
+;;   (write-region
+;;    (point-min) (point-max) "~/alacritty-for-term-keys.yml"))
+
+(use-package term-keys
+  :ensure t
+  :custom
+  (term-keys/want-key-p-func 'lambda-term-keys-want-key-p-def)
+  :config
+  (term-keys-mode t))
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
