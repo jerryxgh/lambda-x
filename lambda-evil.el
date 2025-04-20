@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2024-11-19 19:19:56 Guanghui Xu>
+;; Time-stamp: <2025-04-20 11:13:34 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -169,6 +169,23 @@
   :ensure t
   :config
   (global-evil-visualstar-mode t))
+(require 'evil-visualstar)
+;; evil-visualstar bugfix in terminal mode
+(evil-define-motion evil-visualstar/begin-search-forward (beg end)
+  "Search for the visual selection forwards."
+  :jump t
+  :repeat nil
+  (if (use-region-p)
+      (evil-visualstar/begin-search (region-beginning) (+ 1 (region-end)) t)))
+
+;; evil-visualstar bugfix in terminal mode
+(evil-define-motion evil-visualstar/begin-search-backward (beg end)
+  "Search for the visual selection backwards."
+  :jump t
+  :repeat nil
+  (if (use-region-p)
+      (evil-visualstar/begin-search (region-beginning) (+ 1 (region-end)) nil)))
+
 
 ;; expand-region ---------------------------------------------------------------
 (lambda-package-ensure-install 'expand-region)
