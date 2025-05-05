@@ -846,7 +846,7 @@ Just call (apply CMD ARGS) otherwise."
 (lambda-package-ensure-install 'gxref)
 (add-to-list 'xref-backend-functions 'gxref-xref-backend)
 
-(use-package xterm
+(use-package term/xterm
   :ensure nil ;; when use build-in package, add this to prenvent use-package load package from network
   :custom
   (xterm-max-cut-length 134217728))
