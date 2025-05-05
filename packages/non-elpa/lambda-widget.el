@@ -44,55 +44,49 @@
     (kill-new filename)
     (message "'%s' is copied to the clipboard." filename)))
 
-(defun lambda-widget-escape-text (text)
-  "Escape backslashes, double quotes, and newlines in TEXT."
-  (replace-regexp-in-string
-   "\t" "\\\\t"
-   (replace-regexp-in-string
-    "\n" "\\\\n"
-    (replace-regexp-in-string
-     "\"" "\\\\\""
-     (replace-regexp-in-string
-      "\\\\" "\\\\\\\\" text)))))
+(defun lambda-widget-escape-string (input)
+  "Escape newline, carriage return, tab, single quote and quote in INPUT."
+  (let ((result ""))
+    (dotimes (i (length input))
+      (let ((char (aref input i)))
+        (setq result
+              (concat result
+                      (cond
+                       ((= char ?\n) "\\n")
+                       ((= char ?\r) "\\r")
+                       ((= char ?\t) "\\t")
+                       ((= char ?\") "\\\"")
+                       ((= char ?\') "\\\'")
+                       ((= char ?\\) "\\\\")
+                       (t (string char)))))))
+    result))
 
-(defun lambda-widget-escape-string ()
-  "Escape the current buffer or active region by replacing:
-\\n -> \\\\\\n (newline)
-\" -> \\\\\\\" (double quote)
-\\ -> \\\\\\\\ (backslash)"
-  (interactive)
-  (let* ((region-active (use-region-p))
-         (start (if region-active (region-beginning) (point-min)))
-         (end (if region-active (region-end) (point-max)))
-         (text (buffer-substring start end))
-         (escaped-text (lambda-widget-escape-text text)))
-    (delete-region start end)
-    (insert escaped-text)))
-
-(defun lambda-widget-unescape-text (text)
-  "Unescape backslashes, double quotes, and newlines in TEXT."
-  (replace-regexp-in-string
-   "\\\\t" "\t"
-   (replace-regexp-in-string
-    "\\\\n" "\n"
-    (replace-regexp-in-string
-     "\\\\\"" "\""
-     (replace-regexp-in-string
-      "\\\\\\\\" "\\\\" text)))))
-
-(defun lambda-widget-unescape-string ()
-  "Unescape the current buffer or active region by replacing:
-\\\\\\n -> \\n (newline)
-\\\\\\\" -> \" (double quote)
-\\\\\\\\ -> \\ (backslash)"
-  (interactive)
-  (let* ((region-active (use-region-p))
-         (start (if region-active (region-beginning) (point-min)))
-         (end (if region-active (region-end) (point-max)))
-         (text (buffer-substring start end))
-         (escaped-text (lambda-widget-unescape-text text)))
-    (delete-region start end)
-    (insert escaped-text)))
+(defun lambda-widget-unescape-string (input)
+  "Unescape newline, carriage return, tab, single quote and quote in INPUT."
+  (let ((result "")
+        (escaped nil))
+    (dotimes (i (length input))
+      (let ((char (aref input i)))
+        (if escaped
+            (progn
+              (setq result
+                    (concat result
+                            (cond
+                             ((= char ?n) "\n")
+                             ((= char ?r) "\r")
+                             ((= char ?t) "\t")
+                             ((= char ?\") "\"")
+                             ((= char ?\') "'")
+                             ((= char ?\\) "\\")
+                             (t (concat "\\" (string char))))))
+              (setq escaped nil))
+          (if (= char ?\\)
+              (setq escaped t)
+            (setq result
+                  (concat result (string char)))))))
+    (if escaped
+        (setq result (concat result "\\")))
+    result))
 
 (provide 'lambda-widget)
 
