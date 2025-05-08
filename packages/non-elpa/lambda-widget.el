@@ -88,6 +88,28 @@
         (setq result (concat result "\\")))
     result))
 
+(defun lambda-widget-escape-region ()
+  "Escape newline, carriage return, tab, single quote and quote in region."
+  (interactive)
+  (let* ((region-active (use-region-p))
+         (start (if region-active (region-beginning) (point-min)))
+         (end (if region-active (region-end) (point-max)))
+         (text (buffer-substring start end))
+         (escaped-text (lambda-widget-escape-string text)))
+    (delete-region start end)
+    (insert escaped-text)))
+
+(defun lambda-widget-unescape-region ()
+  "Unescape newline, carriage return, tab, single quote and quote in region."
+  (interactive)
+  (let* ((region-active (use-region-p))
+         (start (if region-active (region-beginning) (point-min)))
+         (end (if region-active (region-end) (point-max)))
+         (text (buffer-substring start end))
+         (escaped-text (lambda-widget-unescape-string text)))
+    (delete-region start end)
+    (insert escaped-text)))
+
 (provide 'lambda-widget)
 
 ;;; lambda-widget.el ends here
