@@ -1,30 +1,6 @@
 ;;; lambda-corfu.el --- auto complete config -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2022-09-18
-;; Version: 0.1
-;; Keywords: corfu
-;; Homepage: not distributed yet
-;; Package-Version: 0.1
-;; Package-Requires:
-;;
-
-;; This file is not part of GNU Emacs.
-
 ;;; Commentary:
-
-;;
-
-;; Put this file into your load-path and the following into your ~/.emacs:
-;;   (require 'lambda-corfu)
-
-;;; Change Log:
-
-;; Version $(3) 2022-09-18 GuanghuiXu
-;;   - Initial release
 
 ;;; Code:
 

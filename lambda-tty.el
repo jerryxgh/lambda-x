@@ -1,30 +1,6 @@
 ;;; lambda-tty.el --- Make TTY Emacs suck less -*- lexical-binding: t -*-
 
-;; Copyright (C) 2024 Guanghui Xu
-;;
-;; Author: Guanghui Xu gh_xu@qq.com
-;; Maintainer: Guanghui Xu gh_xu@qq.com
-;; Created: 2024-05-20
-;; Version:
-;; Keywords:
-;; Homepage: not distributed yet
-;; Package-Version:
-;; Package-Requires:
-;;
-
-;; This file is not part of GNU Emacs.
-
 ;;; Commentary:
-
-;; Reference doc:https://docs.doomemacs.org/v21.12/modules/os/tty/
-
-;; Put this file into your load-path and the following into your ~/.emacs:
-;;   (require 'lambda-tty)
-
-;;; Change Log:
-
-;; Version $(3) 2024-05-20 GuanghuiXu
-;;   - Initial release
 
 ;;; Code:
 
