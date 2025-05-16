@@ -10,14 +10,14 @@
 (require 'lambda-evil)
 
 ;; savehist keeps track of some history ----------------------------------------
-;; very useful
-(require 'savehist)
-(setq savehist-additional-variables '(search ring regexp-search-ring)
-      savehist-autosave-interval 60 ; save every minute
-      savehist-file (expand-file-name ; keep the home clean
-                     "savehist"
-                     lambda-auto-save-dir))
-(savehist-mode 1)
+(use-package savehist
+  :init
+  (savehist-mode)
+  (setq savehist-additional-variables '(search ring regexp-search-ring)
+        savehist-autosave-interval 60 ; save every minute
+        savehist-file (expand-file-name ; keep the home clean
+                       "savehist"
+                       lambda-auto-save-dir)))
 
 ;; save recent files -----------------------------------------------------------
 ;; very useful
@@ -73,11 +73,6 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
   (add-hook
    'after-init-hook
    #'(lambda ()
-       (add-hook
-        'persp-mode-hook
-        #'(lambda ()
-            (setq persp-interactive-completion-function #'ivy-completing-read)))
-
        (persp-mode 1)
        (diminish 'persp-mode))))
 

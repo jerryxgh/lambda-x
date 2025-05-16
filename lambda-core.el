@@ -447,7 +447,6 @@ POSITION: just inhibit warning.")
   ;; (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
   (projectile-enable-caching t)
   (projectile-file-exists-remote-cache-expire nil)
-  (projectile-completion-system 'ivy)
   (projectile-cache-file (expand-file-name
                           "projectile.cache"
                           lambda-auto-save-dir))

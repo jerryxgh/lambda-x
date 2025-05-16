@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2025-04-20 11:13:34 Guanghui Xu>
+;; Time-stamp: <2025-05-16 19:25:03 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -137,7 +137,6 @@
   :config
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-    "r" 'lambda-counsel-rg
     "c" 'avy-goto-char
     "w" 'avy-goto-word-1
     "l" 'avy-goto-line)
