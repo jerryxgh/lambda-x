@@ -21,7 +21,6 @@
 (require 'lambda-core)
 (require 'cc-mode)
 (require 'lambda-evil)
-(require 'lambda-company)
 
 (use-package semantic-thrift
   :ensure t
@@ -29,9 +28,7 @@
   ;; enable semantic-mode when open thrift file
   (setq thrift-indent-level 4)
   (add-hook 'thrift-mode-hook (lambda ()
-                                (semantic-mode 1)
-                                (if (featurep 'company)
-                                    (setq company-backends '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))))))
+                                (semantic-mode 1)))
   ;; only thrift-mode use semantic, since at present most language use lsp instead of semantic
   (add-to-list 'semantic-inhibit-functions (lambda () (not (member major-mode '(thrift-mode)))))
 

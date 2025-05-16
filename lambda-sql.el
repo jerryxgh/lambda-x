@@ -17,7 +17,7 @@
 ;;; Code:
 
 (require 'lambda-core)
-(require 'lambda-company)
+;; (require 'lambda-company)
 
 ;; sqlup-mode
 (use-package sqlup-mode
@@ -28,10 +28,10 @@
   :config
   (add-hook 'sql-mode-hook 'sqlup-mode))
 
-(add-hook 'sql-mode-hook
-          (lambda ()
-            (setq company-backends
-                  '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
+;; (add-hook 'sql-mode-hook
+;;           (lambda ()
+;;             (setq company-backends
+;;                   '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
 (use-package sqlformat
   :ensure t

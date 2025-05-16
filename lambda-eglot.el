@@ -19,7 +19,6 @@
 
 (require 'lambda-core)
 (require 'lambda-cc)
-(require 'lambda-company)
 
 ;; speed up lsp https://github.com/blahgeek/emacs-lsp-booster
 (use-package eglot-booster

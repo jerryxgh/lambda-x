@@ -1,6 +1,6 @@
 ;; lambda-evil.el --- configuration for evil
 
-;; Time-stamp: <2025-05-16 19:25:03 Guanghui Xu>
+;; Time-stamp: <2025-05-16 20:19:59 Guanghui Xu>
 
 ;;; Commentary:
 ;; Configuration for evil.
@@ -79,23 +79,23 @@
   ;; following code to the dotspacemacs/user-config of your .spacemacs:
   (fset 'evil-visual-update-x-selection 'ignore)
 
-  (add-hook 'evil-local-mode-hook
-            (lambda ()
-              ;; Note:
-              ;; Check if `company-emulation-alist' is in
-              ;; `emulation-mode-map-alists', if true, call
-              ;; `company-ensure-emulation-alist' to ensure
-              ;; `company-emulation-alist' is the first item of
-              ;; `emulation-mode-map-alists', thus has a higher
-              ;; priority than keymaps of evil-mode.
-              ;; We raise the priority of company-mode keymaps
-              ;; unconditionally even when completion is not
-              ;; activated. This should not cause problems,
-              ;; because when completion is activated, the value of
-              ;; `company-emulation-alist' is ((t . company-my-keymap)),
-              ;; when completion is not activated, the value is ((t . nil)).
-              (when (memq 'company-emulation-alist emulation-mode-map-alists)
-                (company-ensure-emulation-alist))))
+  ;; (add-hook 'evil-local-mode-hook
+  ;;           (lambda ()
+  ;;             ;; Note:
+  ;;             ;; Check if `company-emulation-alist' is in
+  ;;             ;; `emulation-mode-map-alists', if true, call
+  ;;             ;; `company-ensure-emulation-alist' to ensure
+  ;;             ;; `company-emulation-alist' is the first item of
+  ;;             ;; `emulation-mode-map-alists', thus has a higher
+  ;;             ;; priority than keymaps of evil-mode.
+  ;;             ;; We raise the priority of company-mode keymaps
+  ;;             ;; unconditionally even when completion is not
+  ;;             ;; activated. This should not cause problems,
+  ;;             ;; because when completion is activated, the value of
+  ;;             ;; `company-emulation-alist' is ((t . company-my-keymap)),
+  ;;             ;; when completion is not activated, the value is ((t . nil)).
+  ;;             (when (memq 'company-emulation-alist emulation-mode-map-alists)
+  ;;               (company-ensure-emulation-alist))))
 
   (evil-mode 1))
 

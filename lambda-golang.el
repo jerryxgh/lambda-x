@@ -18,7 +18,6 @@
 
 (require 'lambda-core)
 (require 'lambda-cc)
-(require 'lambda-company)
 (require 'lambda-eglot)
 
 ;; https://github.com/dominikh/go-mode.el
