@@ -771,7 +771,7 @@ POSITION: just inhibit warning.")
 (diminish 'auto-fill-function)
 
 ;; key-bindings for myself, you can change this to yours -----------------------
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
 
 (setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
       mouse-wheel-progressive-speed nil ; don't accelerate scrolling
