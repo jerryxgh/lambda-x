@@ -63,6 +63,20 @@
   (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
   (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode))
 
+;; install manually
+;; (use-package emacs-corfu-terminal
+;;   :straight (:repo "https://codeberg.org/akib/emacs-corfu-terminal")
+;;   :ensure t
+;;   :init
+;;   (unless (display-graphic-p)
+;;     (corfu-terminal-mode +1)))
+;; needed by corful-terminal
+(use-package popon
+  :ensure t)
+(require 'corfu-terminal)
+(unless (display-graphic-p)
+    (corfu-terminal-mode +1))
+
 (provide 'lambda-corfu)
 
 ;;; lambda-corfu.el ends here
