@@ -1,5 +1,5 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2025-05-16 20:08:39 Guanghui Xu>
+;; Time-stamp: <2025-05-19 20:27:42 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -38,7 +38,7 @@
     ;; lambda-ivy
     ;; lambda-company
     lambda-semantic
-    lambda-treesit
+    ;; lambda-treesit
 
     lambda-cc
     lambda-org
