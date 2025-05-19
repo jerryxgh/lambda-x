@@ -42,7 +42,9 @@
   (add-hook 'go-ts-mode-hook
             (lambda ()
               (setq tab-width 4)
-              (setq-local go-ts-mode-indent-offset 4)
+              (setq-default tab-width 4)
+              (setq-default go-ts-mode-indent-offset tab-width)
+              (setq-default go-mode-indent-offset tab-width)
 
               (eglot-ensure)
               (add-hook 'before-save-hook
