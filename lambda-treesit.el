@@ -42,6 +42,8 @@
   (add-hook 'go-ts-mode-hook
             (lambda ()
               (setq tab-width 4)
+              (setq go-ts-mode-indent-offset tab-width)
+              (setq go-mode-indent-offset tab-width)
               (setq-default tab-width 4)
               (setq-default go-ts-mode-indent-offset tab-width)
               (setq-default go-mode-indent-offset tab-width)
