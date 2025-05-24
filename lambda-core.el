@@ -439,13 +439,14 @@ POSITION: just inhibit warning.")
   (bookmark-default-file (expand-file-name "bookmarks"
                                            lambda-auto-save-dir)))
 
-;; projectile is a project management mode -------------------------------------
+;; projectile is a project management mode ------------------------------------
 (use-package projectile
   :ensure t
   ;; :delight projectile-mode
   :custom
-  ;; (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
+  (projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
   (projectile-enable-caching t)
+  ;; (projectile-completion-system 'ivy)
   (projectile-file-exists-remote-cache-expire nil)
   (projectile-cache-file (expand-file-name
                           "projectile.cache"
