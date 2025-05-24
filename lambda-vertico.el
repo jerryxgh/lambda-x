@@ -6,10 +6,6 @@
 
 (require 'lambda-evil)
 
-(global-set-key (kbd "C-x j") (lambda ()
-                                (interactive)
-                                (counsel-find-file nil lambda-package-direcotry)))
-
 ;; Example configuration for Consult
 (use-package consult
   ;; Replace bindings. Lazily loaded by `use-package'.
