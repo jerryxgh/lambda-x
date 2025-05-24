@@ -3,8 +3,6 @@
 ;;; Commentary:
 
 ;;; Code:
-(require 'lambda-vertico)
-
 (use-package corfu
   :ensure
   ;; Optional customizations
