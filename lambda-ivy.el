@@ -6,6 +6,7 @@
 ;;; Code:
 
 (require 'lambda-core)
+(require 'lambda-core)
 
 ;; Ivy re-uses the following packages if they are installed: avy, amx or smex, flx, and wgrep.
 ;; for fuzzy matching sorting
@@ -73,17 +74,20 @@
   (counsel-mode 1)
   ;; Don't show '.' and '..' in counsel-find-file
   (setq ivy-extra-directories nil)
-  (setq counsel-find-file-at-point t)
+  (setq counsel-find-file-at-point t))
 
-  (defun lambda-counsel-ag ()
-    "Counsel-ag at `default-directory'"
-    (interactive)
-    (counsel-ag nil default-directory))
+(defun lambda-counsel-ag ()
+  "Counsel-ag at `default-directory'."
+  (interactive)
+  (counsel-ag nil default-directory))
 
-  (defun lambda-counsel-rg ()
-    "Counsel-rg at `default-directory'"
-    (interactive)
-    (counsel-rg nil default-directory)))
+(defun lambda-counsel-rg ()
+  "Counsel-rg at `default-directory'."
+  (interactive)
+  (counsel-rg nil default-directory))
+
+(evil-leader/set-key
+    "r" 'lambda-counsel-rg)
 
 (use-package ivy-xref
   :ensure t
