@@ -42,24 +42,26 @@
   (add-to-list 'ivy-more-chars-alist '(counsel-ag . 1))
   (add-to-list 'ivy-more-chars-alist '(counsel-rg . 1))
   ;; configure regexp engine.
-  (setq ivy-re-builders-alist
-        '((counsel-ag . ivy--regex)
-          ;; allow input not in order
-          ;; (counsel-ag . ivy--regex-ignore-order)
-          (swiper . ivy--regex)
-          (counsel-M-x . ivy--regex-fuzzy)
-          (counsel-describe-variable . ivy--regex-fuzzy)
-          (counsel-describe-function . ivy--regex-fuzzy)
-          (counsel-find-file . ivy--regex-fuzzy)
-          (counsel-projectile-find-file . ivy--regex-fuzzy)
-          (counsel-switch-buffer . ivy--regex-fuzzy)
-          (ivy-switch-buffer . ivy--regex-fuzzy)
-          (counsel-projectile-switch-to-buffer . ivy--regex-fuzzy)
-          (counsel-switch-to-shell-buffer . ivy--regex-fuzzy)
-          (counsel-flymake . ivy--regex-fuzzy)
-          (where-is. ivy--regex-fuzzy)
-          (t . ivy--regex-fuzzy))
-        ivy-auto-select-single-candidate nil)
+  (setq
+   ;; ivy-re-builders-alist '((counsel-ag . ivy--regex)
+   ;;                         ;; allow input not in order
+   ;;                         ;; (counsel-ag . ivy--regex-ignore-order)
+   ;;                         (swiper . ivy--regex)
+   ;;                         (counsel-M-x . ivy--regex-fuzzy)
+   ;;                         (counsel-describe-variable . ivy--regex-fuzzy)
+   ;;                         (counsel-describe-function . ivy--regex-fuzzy)
+   ;;                         (counsel-find-file . ivy--regex-fuzzy)
+   ;;                         (counsel-projectile-find-file . ivy--regex-fuzzy)
+   ;;                         (counsel-switch-buffer . ivy--regex-fuzzy)
+   ;;                         (ivy-switch-buffer . ivy--regex-fuzzy)
+   ;;                         (counsel-projectile-switch-to-buffer . ivy--regex-fuzzy)
+   ;;                         (counsel-switch-to-shell-buffer . ivy--regex-fuzzy)
+   ;;                         (counsel-flymake . ivy--regex-fuzzy)
+   ;;                         (where-is. ivy--regex-fuzzy)
+   ;;                         (t . ivy--regex-fuzzy))
+   ivy-auto-select-single-candidate nil)
+  (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+  (add-to-list 'ivy-highlight-functions-alist '(orderless-ivy-re-builder . orderless-ivy-highlight))
   (ivy-mode 1)
   ;; hungry-delete-mode is incompatible with ivy in minibuffer-mode
   (if (and (bound-and-true-p hungry-delete-except-modes)
@@ -87,7 +89,7 @@
   (counsel-rg nil default-directory))
 
 (evil-leader/set-key
-    "r" 'lambda-counsel-rg)
+  "r" 'lambda-counsel-rg)
 
 (use-package ivy-xref
   :ensure t
