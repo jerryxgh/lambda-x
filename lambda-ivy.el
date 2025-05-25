@@ -14,6 +14,9 @@
   :ensure t)
 
 ;; ivy ======================================================================
+(use-package orderless
+  :ensure t)
+
 (use-package ivy
   :ensure t
   :diminish (ivy-mode . "")
