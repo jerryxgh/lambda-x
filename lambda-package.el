@@ -23,7 +23,6 @@
 ;;; Code:
 
 (require 'package)
-(require 'dash)
 
 (defconst lambda-package-direcotry (file-name-directory
                               (or load-file-name (buffer-file-name)))
