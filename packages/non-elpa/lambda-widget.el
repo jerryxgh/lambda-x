@@ -28,8 +28,6 @@
 
 ;;; Code:
 
-(require 'dired-subtree)
-
 (defun lambda-widget-copy-current-file-path-or-directory ()
   "Copy current buffer file'a path if exist, else try `default-directory`."
   (interactive)
