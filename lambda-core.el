@@ -719,11 +719,10 @@ POSITION: just inhibit warning.")
   (ediff-split-window-function 'split-window-sensibly) ; try to split vertically in ediff
   (magit-refresh-status-buffer nil)
   (magit-ediff-dwim-show-on-hunks t)
-  (magit-section-initial-visibility-alist
-   '((stashes . hide)
-     (staged . hide)
-     (unstaged . hide)
-     ))
+  ;; (magit-section-initial-visibility-alist
+  ;;  '((stashes . hide)
+  ;;    (staged . hide)
+  ;;    (unstaged . hide)))
   (magit-bury-buffer-function (lambda (&rest _)
                                 (let* ((buf (window-buffer (selected-window)))
                                        (status-buf (magit-get-mode-buffer 'magit-status-mode))
