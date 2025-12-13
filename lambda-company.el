@@ -95,14 +95,15 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
 
-  (setq company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))
-        company-show-quick-access 'right)
-
-  (make-variable-buffer-local 'company-backends)
-  (add-hook 'makefile-mode-hook
-            (lambda ()
-              (setq company-backends
-                    '((lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
+  (setq
+   ;; company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))
+   company-backends
+   '((company-capf
+      company-dabbrev-code
+      company-keywords)
+     company-files
+     company-dabbrev)
+   company-show-quick-access 'right)
 
   (setq company-transformers
         ;; '(company-sort-by-backend-importance)

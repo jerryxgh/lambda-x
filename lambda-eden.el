@@ -232,6 +232,9 @@ instead."
   :config
   (term-keys-mode t))
 
+(use-package elisp-autofmt
+  :ensure t)
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
