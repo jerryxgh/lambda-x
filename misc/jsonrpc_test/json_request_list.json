@@ -1,0 +1,8 @@
+{
+    "id": 1001,
+    "jsonrpc": "2.0",
+    "method":"auth",
+    "params": {
+        "prefer_scan_login": true
+    }
+}
