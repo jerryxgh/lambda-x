@@ -71,7 +71,7 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (company-global-modes t)
   ;; Trigger completion immediately.
   ;; (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
-  (company-minimum-prefix-length 1)
+  (company-minimum-prefix-length 0)
   ;; (company-tooltip-minimum 10)
   ;; (company-frontends
   ;;  '(company-preview-common-frontend
