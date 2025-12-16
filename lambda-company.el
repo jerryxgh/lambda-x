@@ -66,12 +66,10 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   :custom
   ;; (company-tooltip-align-annotations t)
   ;; (company-require-match nil)
-  ;; Don't use company in the following modes
-  ;; (company-global-modes '(not shell-mode eaf-mode))
   (company-global-modes t)
   ;; Trigger completion immediately.
   ;; (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
-  (company-minimum-prefix-length 0)
+  (company-minimum-prefix-length 1)
   ;; (company-tooltip-minimum 10)
   ;; (company-frontends
   ;;  '(company-preview-common-frontend
@@ -80,9 +78,8 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (company-selection-wrap-around t)
 
   ;; dabbrev configuration
-  ;; (dabbrev-case-fold-search nil)
-  ;; (dabbrev-upcase-means-case-search t)
-  ;; (company-dabbrev-downcase nil)
+  (dabbrev-case-fold-search nil)
+  (company-dabbrev-downcase nil)
 
   :config
 
@@ -95,15 +92,16 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
 
+  (setq company-backends
+        '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))
   ;; (setq
-  ;;  ;; company-backends '((company-capf :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords))
   ;;  company-backends
   ;;  '((company-capf
   ;;     company-dabbrev-code
   ;;     company-keywords)
   ;;    company-files
-  ;;    company-dabbrev)
-  ;;  company-show-quick-access 'right)
+  ;;    company-dabbrev))
+  ;; (setq company-show-quick-access 'right)
 
   ;; (setq company-transformers
   ;;       ;; '(company-sort-by-backend-importance)
