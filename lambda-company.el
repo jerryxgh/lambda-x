@@ -54,21 +54,14 @@
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
 
-  (setq
-   company-backends
-   '((company-capf
-      company-dabbrev-code
-      company-yasnippet
-      company-keywords)
-     company-files
-     company-dabbrev))
-  ;; (setq company-show-quick-access 'right)
-
-  ;; (setq company-transformers
-  ;;       ;; '(company-sort-by-backend-importance)
-  ;;       ;; '(company-sort-prefer-same-case-prefix)
-  ;;       '(lambda-company-sort-by-prefix-and-backend-importance))
-  )
+  (setq company-backends
+        '((company-capf
+           company-dabbrev-code
+           company-yasnippet
+           company-keywords
+           company-files
+           company-dabbrev)))
+  (setq company-show-quick-access 'right))
 
 (use-package company-prescient
   :ensure t
