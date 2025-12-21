@@ -120,6 +120,11 @@ All args are passed directory, including COMMAND ARG and IGNORED."
   :config
   (company-prescient-mode 1))
 
+(use-package company-statistics
+  :ensure t
+  :config
+  (company-statistics-mode))
+
 (provide 'lambda-company)
 
 ;;; lambda-company.el ends here
