@@ -31,9 +31,14 @@
               (eglot-ensure)
               (add-hook 'before-save-hook
                         (lambda ()
+                          ;; auto format and organize imports when save buffer
                           (eglot-format-buffer)
                           (call-interactively 'eglot-code-action-organize-imports))
-                        nil t)))
+                        nil t))
+            ;; enable static check
+            (setq-default eglot-workspace-configuration
+                          '((:gopls .
+                                    ((staticcheck . t))))))
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
