@@ -24,6 +24,11 @@
 (use-package go-mode
   :ensure
   :config
+  ;; enable static check
+  (setq-default eglot-workspace-configuration
+                '((:gopls .
+                          ((staticcheck . t)))))
+
   (add-hook 'go-mode-hook
             (lambda ()
               (setq tab-width 4)
@@ -34,11 +39,7 @@
                           ;; auto format and organize imports when save buffer
                           (eglot-format-buffer)
                           (call-interactively 'eglot-code-action-organize-imports))
-                        nil t))
-            ;; enable static check
-            (setq-default eglot-workspace-configuration
-                          '((:gopls .
-                                    ((staticcheck . t))))))
+                        nil t)))
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
