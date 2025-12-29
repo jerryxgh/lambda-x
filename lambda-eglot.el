@@ -50,12 +50,14 @@
   :config
   (add-hook 'java-mode-hook 'eglot-java-mode))
 
-(use-package breadcrumb
-  :ensure
-  ;; :custom
-  ;; ()
-  :config
-  (breadcrumb-mode t))
+;; (use-package breadcrumb
+;;   ;; :ensure
+;;   ;; :custom
+;;   :config
+;;   (breadcrumb-mode t))
+(require 'breadcrumb)
+(setq breadcrumb-header-line-height 23)
+(breadcrumb-mode t)
 
 (provide 'lambda-eglot)
 
