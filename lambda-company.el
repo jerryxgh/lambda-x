@@ -58,7 +58,6 @@
                       company-dabbrev))
   (company-frontends
    '(company-preview-common-frontend
-     company-preview-if-just-one-frontend
      company-pseudo-tooltip-frontend
      company-echo-metadata-frontend))
 
