@@ -19,6 +19,18 @@
 (require 'lambda-core)
 
 (require 'dabbrev)
+
+(defun company-unique-by-display (candidates)
+  "Remove duplicates of CANDIDATES by displayed text."
+  (let ((seen '())
+        (result '()))
+    (dolist (cand candidates)
+      (let ((text (if (consp cand) (car cand) cand)))
+        (unless (member text seen)
+          (push text seen)
+          (push cand result))))
+    (nreverse result)))
+
 (use-package company
   :ensure t
   :pin melpa
@@ -26,22 +38,33 @@
   :diminish company-mode
 
   :custom
-  ;; (company-tooltip-align-annotations t)
+  (company-tooltip-align-annotations t)
   ;; (company-require-match nil)
   (company-global-modes t)
   ;; Trigger completion immediately.
   ;; (company-idle-delay (lambda () (if (company-in-string-or-comment) nil 0.3)))
   (company-minimum-prefix-length 1)
-  ;; (company-tooltip-minimum 10)
-  ;; (company-frontends
-  ;;  '(company-preview-common-frontend
-  ;;    company-pseudo-tooltip-frontend
-  ;;    company-echo-metadata-frontend))
+  (company-show-quick-access 'right)
   (company-selection-wrap-around t)
-
   ;; dabbrev configuration
   (dabbrev-case-fold-search nil)
   (company-dabbrev-downcase nil)
+  (company-backends '((company-capf
+                       :with
+                       company-dabbrev-code
+                       company-yasnippet
+                       company-keywords)
+                      company-files
+                      company-dabbrev))
+  (company-frontends
+   '(company-preview-common-frontend
+     company-preview-if-just-one-frontend
+     company-pseudo-tooltip-frontend
+     company-echo-metadata-frontend))
+
+  (company-transformers '(company-sort-by-backend-importance
+                          company-sort-prefer-same-case-prefix
+                          company-unique-by-display))
 
   :config
 
@@ -52,16 +75,7 @@
   (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
-
-  (setq company-backends
-        '((company-capf
-           company-dabbrev-code
-           company-yasnippet
-           company-keywords
-           company-files
-           company-dabbrev)))
-  (setq company-show-quick-access 'right))
+  (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort))
 
 (use-package company-prescient
   :ensure t
