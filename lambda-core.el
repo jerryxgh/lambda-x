@@ -701,7 +701,7 @@ POSITION: just inhibit warning.")
 ;;; magit --- use git in emacs--------------------------------------------------
 (use-package transient
   :ensure t
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :custom
   (auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffer-p)
   (transient-display-buffer-action
@@ -712,7 +712,7 @@ POSITION: just inhibit warning.")
 
 (use-package magit
   :ensure t
-  :pin melpa-stable
+  ;; :pin melpa-stable
   ;; :bind ("C-c g" . magit-status)
   :custom
   (split-height-threshold 98)                          ; try to split vertically
