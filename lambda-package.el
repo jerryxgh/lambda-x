@@ -126,6 +126,7 @@ used packages, this is mainly for getting unused packages."
 ;; straight straight.el is a replacement for package.el, not
 ;; use-package. use-package can be used with either package.el or straight.el
 (defvar bootstrap-version)
+(setq straight-package--warning-displayed t)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 6))
