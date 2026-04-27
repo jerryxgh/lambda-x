@@ -20,6 +20,11 @@
 (require 'lambda-cc)
 (require 'lambda-eglot)
 
+;; 核心：覆盖 eglot-server-programs，用 trae-gopls 替代 gopls
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(go-mode . ("trae-gopls"))))
+
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode
   :ensure
