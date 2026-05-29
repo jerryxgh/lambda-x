@@ -6,13 +6,6 @@
 
 (require 'lambda-core)
 
-;; js2-mode --------------------------------------------------------------------
-(lambda-package-ensure-install 'js2-mode)
-(require 'js2-mode)
-
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-
 ;; rjsx-mode--------------------------------------------------------------------
 (lambda-package-ensure-install 'rjsx-mode)
 (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
