@@ -9,7 +9,7 @@
 ;; Keywords: convenience
 ;; Homepage: https://github.com/jerryxgh
 ;; Package-Version:
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "28.1"))
 ;;
 
 ;; This file is not part of GNU Emacs.
@@ -28,19 +28,54 @@
 
 ;;; Code:
 
+;; (defun lambda-widget-copy-current-file-path-or-directory ()
+;;   ""
+;;   (interactive)
+;;   (let ((filename))
+;;     (cond
+;;      ;; In buffers with file name
+;;      ((buffer-file-name)
+;;       (setq filename (buffer-file-name)))
+;;      ((eq major-mode 'dired-mode)
+;;       (set filename (dired-current-directory)))
+;;      ((setq filename default-directory)))
+;;     (kill-new filename)
+;;     (message "'%s' is copied to the clipboard." filename)))
+
+(require 'project)
+
 (defun lambda-widget-copy-current-file-path-or-directory ()
-  "Copy current buffer file'a path if exist, else try `default-directory`."
+  "Copy current buffer file'a absolute path if exist, else try `default-directory`."
   (interactive)
-  (let ((filename))
-    (cond
-     ;; In buffers with file name
-     ((buffer-file-name)
-      (setq filename (buffer-file-name)))
-     ((eq major-mode 'dired-mode)
-      (set filename (dired-current-directory)))
-     ((setq filename default-directory)))
-    (kill-new filename)
-    (message "'%s' is copied to the clipboard." filename)))
+  (lambda-widget--copy-current-file-path-or-directory))
+
+(defun lambda-widget-copy-current-file-path-or-directory-relative ()
+  "Copy current buffer file'a relative path if exist, else try `default-directory`."
+  (interactive)
+  (lambda-widget--copy-current-file-path-or-directory t))
+
+(defun lambda-widget--copy-current-file-path-or-directory (&optional relative)
+  "Copy current buffer file'a path if exist, else try `default-directory`.
+When RELATIVE is not nil, copy relative path of current project."
+  (let* ((file-path (buffer-file-name))
+         (dir-p (eq major-mode 'dired-mode))
+         (raw-path (cond
+                    (file-path file-path)
+                    (dir-p (dired-current-directory))
+                    (t default-directory)))
+         ;; 核心修复：统一转成 真实物理路径（解决软链接不一致问题）
+         (project-root (when (project-current)
+                         (file-truename (project-root (project-current)))))
+         (true-path (file-truename raw-path))
+         ;; 生成纯相对路径
+         (copy-path (if (and relative project-root)
+                        (string-remove-prefix project-root true-path)
+                      raw-path)))
+    (kill-new copy-path)
+    (message (if relative
+                 "Copied[relative]: %s"
+               "Copied[absolute]: %s")
+             copy-path)))
 
 (defun lambda-widget-escape-string (input)
   "Escape newline, carriage return, tab, single quote and quote in INPUT."
