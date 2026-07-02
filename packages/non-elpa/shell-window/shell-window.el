@@ -53,6 +53,7 @@
 
 (defcustom shell-window-buffers
   '(;; Emacs scratch buffer
+    agent-shell-mode
     "*scratch*"
     ("^\\*.*?vterm\\*\\(<.*>\\)?$" :regexp t)
     ;; shell and eshell buffers
