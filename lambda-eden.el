@@ -258,9 +258,6 @@ instead."
   )
 ;; support jsonl format ends
 
-(use-package tsx-mode
-  :straight '(tsx-mode :type git :host github :repo "orzechowskid/tsx-mode.el" :branch "emacs30"))
-
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
