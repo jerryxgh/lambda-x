@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2023-02-09 12:46:30 Guanghui Xu>
+;; Time-stamp: <2026-08-19 21:41:45 Guanghui Xu>
 ;;; Commentary:
 
 ;;; Code:
@@ -69,6 +69,9 @@ and set yas--extra-mode to use html snippets."
   :hook ((prog-mode . (lambda ()
                         (rainbow-mode 1)
                         (diminish 'rainbow-mode)))))
+
+(use-package typescript-mode
+  :ensure t)
 
 (provide 'lambda-web)
 
