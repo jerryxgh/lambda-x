@@ -247,6 +247,20 @@ instead."
               (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
                 (evil-emacs-state)))))
 
+;; support jsonl format
+(use-package structured-log-mode
+  :vc (:url "https://github.com/lgfang/structured-log-mode" :rev :newest)
+  :commands structured-log-mode
+  )
+(use-package json-ts-mode
+  :ensure t
+  :mode "\\.jsonl?\\'" "mongod*\\.log"
+  )
+;; support jsonl format ends
+
+(use-package tsx-mode
+  :straight '(tsx-mode :type git :host github :repo "orzechowskid/tsx-mode.el" :branch "emacs30"))
+
 (provide 'lambda-eden)
 
 ;;; lambda-eden.el ends here
