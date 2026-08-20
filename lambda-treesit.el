@@ -13,7 +13,7 @@
    (cmake "https://github.com/uyha/tree-sitter-cmake")
    (css "https://github.com/tree-sitter/tree-sitter-css")
    (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-   (go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
+   (go "https://github.com/tree-sitter/tree-sitter-go")
    (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
    (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
    (html "https://github.com/tree-sitter/tree-sitter-html")
@@ -29,7 +29,7 @@
    (java "https://github.com/tree-sitter/tree-sitter-java")
    (sql "https://github.com/DerekStride/tree-sitter-sql" "gh-pages")
    ))
-(mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
 (setq treesit-load-name-override-list '((js "libtree-sitter-js" "tree_sitter_javascript")))
 
 (use-package treesit-auto

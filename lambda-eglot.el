@@ -39,6 +39,11 @@
               ("C-c e F" . eglot-format-buffer)
               ("C-c e R" . eglot-reconnect))
 
+  :hook
+  ((typescript-ts-mode . eglot-ensure)
+   (tsx-ts-mode . eglot-ensure)
+   (go-ts-mode . eglot-ensure))
+
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
 

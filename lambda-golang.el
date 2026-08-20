@@ -34,11 +34,10 @@
                 '((:gopls .
                           ((staticcheck . t)))))
 
-  (add-hook 'go-mode-hook
+  (add-hook 'go-ts-mode-hook
             (lambda ()
               (setq tab-width 4)
 
-              (eglot-ensure)
               (add-hook 'before-save-hook
                         (lambda ()
                           ;; auto format and organize imports when save buffer
