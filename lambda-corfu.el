@@ -9,7 +9,7 @@
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
-  (corfu-auto-prefix 0)
+  (corfu-auto-prefix 2)
   ;; (corfu-auto-delay 0.2)
   ;; Enable auto completion and configure quitting
   ;; (corfu-separator ?\s)          ;; Orderless field separator
