@@ -117,6 +117,11 @@
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
 
+(with-eval-after-load 'projectile
+  (define-key projectile-mode-map
+              [remap projectile-ripgrep]
+              #'consult-ripgrep))
+
 ;; Enable Vertico.
 (use-package vertico
   :custom
