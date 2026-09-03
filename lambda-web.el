@@ -1,10 +1,13 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2026-08-20 14:00:06 Guanghui Xu>
+;; Time-stamp: <2026-09-03 16:03:56 Guanghui Xu>
 ;;; Commentary:
+;; To use eglot, install git@code.byted.org:ecom/ecam-ai-assistant.git
+;; npm install -g typescript-language-server typescript
 
 ;;; Code:
 
 (require 'lambda-core)
+(require 'lambda-eglot)
 
 (use-package web-mode
   :ensure t
