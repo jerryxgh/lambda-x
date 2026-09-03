@@ -147,7 +147,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (set-locale-environment "en_US.UTF-8")
 (set-language-environment 'utf-8)
 (set-default-coding-systems 'utf-8)
-(setq system-time-locale "C") ; 这个是为了在 org mode 中用英文显示日期，默认是中文
+(setq system-time-locale "C") ; Use English date names in Org mode.
 
 ;; theme -----------------------------------------------------------------------
 
@@ -458,12 +458,13 @@ POSITION: just inhibit warning.")
                                          (lambda-x-under-gvm-directory-p project-root)))
 
   :config
-  (defadvice projectile-project-files (around projectile-project-files-advice)
-    "Do not load file list when under specific directory"
-    (if (lambda-x-under-gvm-directory-p (ad-get-arg 0))
-        nil
-      ad-do-it))
-  (ad-activate 'projectile-project-files)
+  (defun lambda-projectile-project-files (original-function project-root
+                                                             &rest args)
+    "Call ORIGINAL-FUNCTION for PROJECT-ROOT with ARGS unless it is ignored."
+    (unless (lambda-x-under-gvm-directory-p project-root)
+      (apply original-function project-root args)))
+  (advice-add 'projectile-project-files
+              :around #'lambda-projectile-project-files)
 
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t))
@@ -566,16 +567,15 @@ POSITION: just inhibit warning.")
             (hs-minor-mode t)
             (diminish 'hs-minor-mode)))
 
-(defmacro with-region-or-buffer (func)
-  "When called with no active region, call FUNC on current buffer."
-  `(defadvice ,func (before with-region-or-buffer activate compile)
-     (interactive
-      (if mark-active
-          (list (region-beginning) (region-end))
-        (list (point-min) (point-max))))))
+(defun lambda-indent-region-or-buffer (start end)
+  "Indent the active region from START to END, or the entire buffer."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-max))))
+  (indent-region start end))
 
-(with-region-or-buffer indent-region)
-;; (with-region-or-buffer untabify)
+(global-set-key [remap indent-region] #'lambda-indent-region-or-buffer)
 
 ;;; ibuffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -816,10 +816,6 @@ POSITION: just inhibit warning.")
 ;; highlights parentheses, brackets, and braces according to their depth--------
 (lambda-package-ensure-install 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode-enable)
-
-(setq enable-local-eval t)
-(setq enable-local-variables :all)
-(setq enable-remote-dir-locals t)
 
 ;; M-? do not prompt, just use current word
 (setq xref-prompt-for-identifier nil)

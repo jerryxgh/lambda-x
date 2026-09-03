@@ -16,12 +16,14 @@
 (with-eval-after-load 'rjsx-mode
   (add-hook 'rjsx-mode-hook (lambda ()
                               (add-node-modules-path)
-                              (tern-mode t))))
+                              (when (executable-find "tern")
+                                (tern-mode t)))))
 
 ;; tern: a stand-alone code-analysis engine for JavaScript ---------------------
 ;; Here we use tern and auto-complete to complete JavaScript
 (lambda-package-ensure-install 'tern)
-(setq tern-command (cons (executable-find "tern") '()))
+(when-let* ((tern-executable (executable-find "tern")))
+  (setq tern-command (list tern-executable)))
 
 ;; (lambda-package-ensure-install 'tern-auto-complete)
 ;; (eval-after-load 'tern

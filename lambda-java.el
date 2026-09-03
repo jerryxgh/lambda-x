@@ -23,6 +23,11 @@
 ;;                   '((company-semantic
 ;;                      :with lambda-company-yasnippet lambda-company-dabbrev-code lambda-company-dabbrev lambda-company-keywords)))))
 
+(use-package eglot-java
+  :ensure t
+  :config
+  (add-hook 'java-mode-hook 'eglot-java-mode))
+
 (provide 'lambda-java)
 
 ;;; lambda-java.el ends here

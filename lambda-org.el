@@ -63,15 +63,19 @@
 (use-package htmlize
   :ensure t
   :config
-  (defadvice htmlize-buffer-1 (around ome-htmlize-buffer-1 disable)
-    "Rainbow-delimiters-mode has some problems with htmlize, this advice disable\
-rainbow-delimiters-mode temporarily when using htmlize."
-    (rainbow-delimiters-mode-disable)
-    ad-do-it
-    (rainbow-delimiters-mode-enable))
+  (defun lambda-htmlize-without-rainbow-delimiters (original-function &rest args)
+    "Call ORIGINAL-FUNCTION with ARGS while rainbow delimiters are disabled."
+    (let ((rainbow-delimiters-was-enabled
+           (bound-and-true-p rainbow-delimiters-mode)))
+      (when rainbow-delimiters-was-enabled
+        (rainbow-delimiters-mode-disable))
+      (unwind-protect
+          (apply original-function args)
+        (when rainbow-delimiters-was-enabled
+          (rainbow-delimiters-mode-enable)))))
 
-  (ad-enable-advice 'htmlize-buffer-1 'around 'ome-htmlize-buffer-1)
-  (ad-activate 'htmlize-buffer-1))
+  (advice-add 'htmlize-buffer-1
+              :around #'lambda-htmlize-without-rainbow-delimiters))
 
 ;; export org to pdf
 ;;git clone git://github.com/tsdye/org-article.git

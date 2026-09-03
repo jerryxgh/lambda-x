@@ -11,13 +11,12 @@
 
 ;; savehist keeps track of some history ----------------------------------------
 (use-package savehist
+  :ensure nil
+  :custom
+  (savehist-autosave-interval 60)
+  (savehist-file (expand-file-name "savehist" lambda-auto-save-dir))
   :init
-  (savehist-mode)
-  (setq savehist-additional-variables '(search ring regexp-search-ring)
-        savehist-autosave-interval 60 ; save every minute
-        savehist-file (expand-file-name ; keep the home clean
-                       "savehist"
-                       lambda-auto-save-dir)))
+  (savehist-mode 1))
 
 ;; save recent files -----------------------------------------------------------
 ;; very useful
@@ -103,7 +102,7 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
   :config
   (desktop-save-mode 1))
 
-;;加快emacs的启动速度
+;; Start the server so emacsclient can reuse this Emacs instance.
 (if (or (eq system-type 'darwin) (eq system-type 'gnu/linux))
     (server-start))
 

@@ -37,23 +37,7 @@
               ("C-c e o" . eglot-code-action-organize-imports)
               ("C-c e r" . eglot-rename)
               ("C-c e F" . eglot-format-buffer)
-              ("C-c e R" . eglot-reconnect))
-
-  :hook
-  ((typescript-ts-mode . eglot-ensure)
-   (tsx-ts-mode . eglot-ensure)
-   (go-ts-mode . eglot-ensure))
-
-  :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure))
-
-(use-package eglot-java
-  :ensure t
-  :config
-  (add-hook 'java-mode-hook 'eglot-java-mode))
+              ("C-c e R" . eglot-reconnect)))
 
 ;; (use-package breadcrumb
 ;;   ;; :ensure

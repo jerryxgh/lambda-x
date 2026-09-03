@@ -30,7 +30,8 @@
                         (insert icon))
                   (insert icon)))
             (treemacs-return nil))
-          (forward-line 1)))))))
+          (forward-line 1))))
+     (set-buffer-modified-p nil))))
 
 
 ;; when open dire-subtree, insert icons

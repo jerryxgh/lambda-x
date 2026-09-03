@@ -1,5 +1,5 @@
 ;;; lambda-web.el --- Web
-;; Time-stamp: <2026-09-03 16:03:56 Guanghui Xu>
+
 ;;; Commentary:
 ;; To use eglot, install git@code.byted.org:ecom/ecam-ai-assistant.git
 ;; npm install -g typescript-language-server typescript
@@ -26,10 +26,10 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.ftl?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.ftl\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 ;; for velocity template engine script
-(add-to-list 'auto-mode-alist '("\\.vm?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vm\\'" . web-mode))
 
 ;; Use web-mode instead of html-mode.
 (setq auto-mode-alist
@@ -78,11 +78,17 @@ and set yas--extra-mode to use html snippets."
 
 (use-package typescript-ts-mode
   :ensure nil
+
   :mode
   (("\\.ts\\'" . typescript-ts-mode)
    ("\\.tsx\\'" . tsx-ts-mode))
+
   :custom
-  (typescript-ts-mode-indent-offset 2))
+  (typescript-ts-mode-indent-offset 2)
+
+  :hook
+  ((typescript-ts-mode . eglot-ensure)
+   (tsx-ts-mode . eglot-ensure)))
 
 (provide 'lambda-web)
 

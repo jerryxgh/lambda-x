@@ -1,11 +1,12 @@
 ;;; lambda-cc.el --- c&c++
-;; Time-stamp: <2024-06-21 10:56:14 Guanghui Xu>
+
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'lambda-core)
 (require 'lambda-evil)
+
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
   (add-hook 'c-mode-common-hook
@@ -40,6 +41,12 @@
                                         ;(semanticdb-enable-gnu-global-databases 'c-mode)
                                         ;(semanticdb-enable-gnu-global-databases 'c++-mode)
   )
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; ffap - find file at point ---------------------------------------------------
 (autoload 'ffap-href-enable "ffap-href" nil t)

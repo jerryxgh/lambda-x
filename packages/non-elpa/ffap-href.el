@@ -68,7 +68,7 @@
 ;; (don't unload 'advice before our -unload-function)
 (require 'advice)
 
-(require 'cl) ;; for `position'
+(require 'cl-lib) ;; for `cl-position'
 
 (put  'ffap-href-ucs-string 'side-effect-free t)
 (defun ffap-href-ucs-string (num)
@@ -115,9 +115,9 @@ available (Emacs 21, or XEmacs 21 with mule-ucs)."
           (while (re-search-forward "&\\(#\\([0-9]+\\)\\|[^;]*\\);" nil t)
             (let* ((num (or (and (match-beginning 2) ;; numbered
                                  (string-to-number (match-string 2)))
-                            (position (match-string 1)  ;; named
-                                      sgml-char-names
-                                      :test 'equal))))
+                            (cl-position (match-string 1)  ;; named
+                                         sgml-char-names
+                                         :test 'equal))))
               (when num ;; recognised &foo;, or a number &1234;
                 (let* ((beg  (match-beginning 0))
                        (end  (match-end 0))

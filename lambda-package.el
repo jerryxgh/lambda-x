@@ -90,7 +90,8 @@ Including requirements and requirements of requirements.  Which means get all
 used packages, this is mainly for getting unused packages."
   (delete-dups (-flatten
                 (-map 'lambda-package-get-pkg-with-reqs
-                      lambda-package-installed-packages))))
+                      (append lambda-package-installed-packages
+                              package-selected-packages)))))
 
 (defun lambda-package-get-pkg-with-reqs (package)
   "Get PACKAGE and requirements of PACKAGE and requirements of requirements."
@@ -122,22 +123,6 @@ used packages, this is mainly for getting unused packages."
 
 (use-package dash
   :ensure t)
-
-;; straight straight.el is a replacement for package.el, not
-;; use-package. use-package can be used with either package.el or straight.el
-(defvar bootstrap-version)
-(setq straight-package--warning-displayed t)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
 
 (provide 'lambda-package)
 

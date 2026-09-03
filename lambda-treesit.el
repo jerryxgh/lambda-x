@@ -38,22 +38,7 @@
   (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
-  ;; (global-treesit-auto-mode)
-  (add-hook 'go-ts-mode-hook
-            (lambda ()
-              (setq tab-width 4)
-              (setq go-ts-mode-indent-offset tab-width)
-              (setq go-mode-indent-offset tab-width)
-              (setq-default tab-width 4)
-              (setq-default go-ts-mode-indent-offset tab-width)
-              (setq-default go-mode-indent-offset tab-width)
-
-              (eglot-ensure)
-              (add-hook 'before-save-hook
-                        (lambda ()
-                          (eglot-format-buffer)
-                          (call-interactively 'eglot-code-action-organize-imports))
-                        nil t))))
+  (global-treesit-auto-mode))
 
 (provide 'lambda-treesit)
 

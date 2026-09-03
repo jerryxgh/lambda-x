@@ -12,7 +12,9 @@
 
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 
-(add-to-list 'eglot-server-programs '(python-mode . ("pyright-langserver" "--stdio")))
+(add-to-list 'eglot-server-programs
+             '((python-mode python-ts-mode)
+               "pyright-langserver" "--stdio"))
 (add-hook 'python-ts-mode-hook 'eglot-ensure) ; python use python-ts-mode instead of python-mode
 
 (provide 'lambda-python)

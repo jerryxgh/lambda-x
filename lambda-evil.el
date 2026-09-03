@@ -111,7 +111,7 @@
 (defun lambda-copy-to-end-of-line ()
   "Copy to end of line, and bind this funciton to Y in normal mode."
   (interactive)
-  (evil-yank (point) (point-at-eol)))
+  (evil-yank (point) (line-end-position)))
 ;; (define-key evil-normal-state-map (kbd "C-w") 'evil-window-map)
 
 ;; when entering edebug, change to evil-emacs-state to use simple key bindings
