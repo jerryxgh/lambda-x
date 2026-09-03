@@ -1,5 +1,5 @@
 ;;; lambda-emacs-lisp.el --- emacs lisp
-;; Time-stamp: <2025-02-25 20:08:33 Guanghui Xu>
+
 ;;; Commentary:
 
 ;;; Code:
@@ -12,8 +12,7 @@
               (eldoc-mode 1)
               (flymake-mode 1)
               (setq elisp-flymake-byte-compile-load-path load-path)
-              (diminish 'eldoc-mode)
-              (setq-default flycheck-emacs-lisp-load-path load-path)))
+              (diminish 'eldoc-mode)))
 
 ;; morlock --- more font-lock keywords for elisp -------------------------------
 (use-package morlock

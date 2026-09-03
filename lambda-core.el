@@ -614,25 +614,6 @@ POSITION: just inhibit warning.")
         (define-key go-dot-mod-mode-map (kbd "M-n") 'flymake-goto-next-error)
         (define-key go-dot-mod-mode-map (kbd "M-p") 'flymake-goto-prev-error)))))
 
-;; flycheck - much better than flymake -----------------------------------------
-;; (lambda-package-ensure-install 'flycheck)
-(use-package flycheck
-  :ensure
-  ;; enable on-the-fly syntax checking
-  :init (global-flycheck-mode 1)
-  :custom
-  (flycheck-global-modes '(not sql-mode go-mode java-mode c-mode c++-mode cc-mode python-mode emacs-lisp-mode))
-  (compilation-skip-threshold 0)
-  (flycheck-emacs-lisp-initialize-packages t)
-  (flycheck-emacs-lisp-package-user-dir package-user-dir)
-  ;; use spaceline to show flycheck status instead
-  (flycheck-mode-line nil))
-
-(use-package flycheck-package
-  :ensure
-  :config
-  (flycheck-package-setup))
-
 (use-package emacs
   :custom
   ;; (mode-require-final-newline nil) ; do't auto insert new line when saving file
