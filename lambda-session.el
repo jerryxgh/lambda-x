@@ -40,8 +40,8 @@
 (setq save-place-file (expand-file-name
                        "savedplace"
                        lambda-auto-save-dir))
-;; activate it for all buffers
-(setq-default save-place t)
+;; Activate it for all buffers.
+(save-place-mode 1)
 
 ;; persp-mode - replace elscreen -----------------------------------------------
 (use-package persp-mode
