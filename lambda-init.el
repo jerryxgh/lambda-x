@@ -1,5 +1,4 @@
 ;;; lambda-init.el --- Emacs configuration start point.
-;; Time-stamp: <2026-08-19 22:26:16 Guanghui Xu>
 
 ;;; Commentary:
 
@@ -32,11 +31,11 @@
     lambda-tty
     lambda-treemacs
 
-    ;; lambda-vertico
-    ;; lambda-corfu
+    lambda-vertico
+    lambda-corfu
 
-    lambda-ivy
-    lambda-company
+    ;; lambda-ivy
+    ;; lambda-company
     lambda-semantic
     lambda-treesit
 
