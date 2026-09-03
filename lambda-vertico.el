@@ -161,6 +161,11 @@
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
+;; Persistent search result buffers.
+(use-package rg
+  :ensure t
+  :commands (rg rg-dwim rg-project rg-menu))
+
 (provide 'lambda-vertico)
 
 ;;; lambda-vertico.el ends here
