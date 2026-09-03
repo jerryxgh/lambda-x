@@ -34,9 +34,6 @@
 This value is set automaticly, DONT set by hand.")
 
 
-;; place package files relative to configuration directory
-(setq package-user-dir (expand-file-name "packages/elpa" lambda-package-direcotry))
-
 (add-to-list 'package-archives
             '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
