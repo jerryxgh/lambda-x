@@ -88,11 +88,19 @@ Note the weekly scope of the command's precision.")
 (add-hook 'shell-mode-hook 'fasd-shell-mode)
 
 ;; whitespace-cleanup-mode =====================================================
+(defun lambda-whitespace-cleanup-mode-maybe ()
+  "Enable whitespace cleanup unless the current buffer is large or uses VLF."
+  (unless (or (bound-and-true-p vlf-mode)
+              (and (local-variable-p 'vlf-file-size)
+                   (> vlf-file-size 0))
+              (and large-file-warning-threshold
+                   (> (buffer-size) large-file-warning-threshold)))
+    (whitespace-cleanup-mode 1)))
+
 (use-package whitespace-cleanup-mode
   :ensure t
   :delight
-  :config
-  (global-whitespace-cleanup-mode 1))
+  :hook (prog-mode . lambda-whitespace-cleanup-mode-maybe))
 
 (use-package yaml-mode
   :ensure t)
