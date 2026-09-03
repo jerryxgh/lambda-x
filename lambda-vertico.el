@@ -6,6 +6,14 @@
 
 (require 'lambda-evil)
 
+(defun lambda-find-package-file ()
+  "Find a file under `lambda-package-direcotry'."
+  (interactive)
+  (let ((default-directory lambda-package-direcotry))
+    (call-interactively #'find-file)))
+
+(global-set-key (kbd "C-x j") #'lambda-find-package-file)
+
 ;; Example configuration for Consult
 (use-package consult
   ;; Replace bindings. Lazily loaded by `use-package'.
