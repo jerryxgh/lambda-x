@@ -35,6 +35,8 @@
                                                  user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
+(make-directory lambda-auto-save-dir t)
+
 (defun lambda-add-to-load-path-recursively
     (directory &optional exclude-directories-list)
   "Add DIRECTORY to `load-path' recursively, those has `get-load-suffixes' file.
