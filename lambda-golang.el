@@ -28,6 +28,19 @@
                           go-ts-mode go-mod-ts-mode go-work-ts-mode)
                  "trae-gopls")))
 
+(defun lambda--golang-eglot-format-and-organize ()
+  "Format and organize imports for Go buffers when eglot is ready."
+  (when (and (bound-and-true-p eglot-mode)
+             (fboundp 'eglot-current-server)
+             (eglot-current-server))
+    (ignore-errors
+      ;; 避免保存时显示消息
+      (let ((inhibit-message t))
+        (eglot-format-buffer)
+        (when (fboundp 'eglot-code-action-organize-imports)
+          ;; 非交互执行，避免走 minibuffer 流程
+          (eglot-code-action-organize-imports))))))
+
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode
   :ensure
@@ -48,12 +61,7 @@
 
               (eglot-ensure)
 
-              (add-hook 'before-save-hook
-                        (lambda ()
-                          ;; Format the buffer and organize imports before saving.
-                          (eglot-format-buffer)
-                          (call-interactively 'eglot-code-action-organize-imports))
-                        nil t)))
+              (add-hook 'before-save-hook #'lambda--golang-eglot-format-and-organize nil t)))
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
