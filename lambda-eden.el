@@ -83,10 +83,6 @@ Note the weekly scope of the command's precision.")
   :ensure t
   :hook (magit-mode . magit-svn-mode))
 
-;; fasd ========================================================================
-(require 'fasd-shell)
-(add-hook 'shell-mode-hook 'fasd-shell-mode)
-
 ;; whitespace-cleanup-mode =====================================================
 (defun lambda-whitespace-cleanup-mode-maybe ()
   "Enable whitespace cleanup unless the current buffer is large or uses VLF."
