@@ -76,18 +76,31 @@ and set yas--extra-mode to use html snippets."
 (use-package typescript-mode
   :ensure t)
 
+(defun lambda-typescript-select-mode ()
+  "Use Tree-sitter for TypeScript when its grammar is ready."
+  (if (treesit-ready-p 'typescript t)
+      (typescript-ts-mode)
+    (typescript-mode)))
+
+(defun lambda-tsx-select-mode ()
+  "Use Tree-sitter for TSX when its grammar is ready."
+  (if (treesit-ready-p 'tsx t)
+      (tsx-ts-mode)
+    (typescript-mode)))
+
 (use-package typescript-ts-mode
   :ensure nil
 
   :mode
-  (("\\.ts\\'" . typescript-ts-mode)
-   ("\\.tsx\\'" . tsx-ts-mode))
+  (("\\.ts\\'" . lambda-typescript-select-mode)
+   ("\\.tsx\\'" . lambda-tsx-select-mode))
 
   :custom
   (typescript-ts-mode-indent-offset 2)
 
   :hook
-  ((typescript-ts-mode . eglot-ensure)
+  ((typescript-mode . eglot-ensure)
+   (typescript-ts-mode . eglot-ensure)
    (tsx-ts-mode . eglot-ensure)))
 
 (provide 'lambda-web)

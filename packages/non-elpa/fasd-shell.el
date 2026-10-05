@@ -42,6 +42,9 @@
 ;;; Code:
 
 (require 's)
+(require 'comint)
+(require 'ido)
+(require 'subr-x)
 
 (defgroup fasd-shell nil
   "Quickly cd to previously-visited directories in shell mode, with ido-completion."
@@ -50,7 +53,8 @@
 
 (defun fasd-get-path-list (pattern)
   "Call fasd with the given pattern and return the list of possibilities."
-  (s-split "\n" (s-trim (shell-command-to-string (format "fasd -l -R %s" pattern))))
+  (s-split "\n" (s-trim (shell-command-to-string
+                         (format "fasd -l -R %s" (shell-quote-argument pattern)))) t)
 )
 
 (defun fasd ()
@@ -58,19 +62,17 @@
   (interactive)
   (let* ((user-input (buffer-substring-no-properties (comint-line-beginning-position)
                                                      (point-max))))
-    (if (and (string= (substring user-input 0 2) "d "))  ;; todo: mapping to use something else than d and change directory.
-        (progn
-          ;; get what is after "d "
-          (setq fasd-pattern (buffer-substring-no-properties (+ (comint-line-beginning-position) 2) (point-max)))
-          (setq fasd-command (concat "cd " (ido-completing-read "cd to: " (fasd-get-path-list fasd-pattern))))
-          (comint-kill-input)
-          (insert fasd-command)
-          (comint-send-input)
-          ))
-    ;; trigger the normal TAB completion:
-    ;; (yas-expand)
-    (completion-at-point)
-    ))
+    (if (string-prefix-p "d " user-input)
+        (let* ((pattern (substring user-input 2))
+               (paths (fasd-get-path-list pattern))
+               (path (and paths (ido-completing-read "cd to: " paths nil t))))
+          (if (and path (not (string-empty-p path)))
+              (progn
+                (comint-kill-input)
+                (insert "cd " (shell-quote-argument path))
+                (comint-send-input))
+            (message "No fasd directory matches: %s" pattern)))
+      (completion-at-point))))
 
 
 (define-minor-mode fasd-shell-mode

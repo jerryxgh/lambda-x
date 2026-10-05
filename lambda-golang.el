@@ -30,16 +30,15 @@
 
 (defun lambda--golang-eglot-format-and-organize ()
   "Format and organize imports for Go buffers when eglot is ready."
-  (when (and (bound-and-true-p eglot-mode)
-             (fboundp 'eglot-current-server)
+  (when (and (eglot-managed-p)
              (eglot-current-server))
-    (ignore-errors
-      ;; 避免保存时显示消息
-      (let ((inhibit-message t))
-        (eglot-format-buffer)
-        (when (fboundp 'eglot-code-action-organize-imports)
-          ;; 非交互执行，避免走 minibuffer 流程
-          (eglot-code-action-organize-imports))))))
+    (condition-case err
+        (progn
+          (eglot-format-buffer)
+          (eglot-code-action-organize-imports))
+      ;; Save the file even if the server cannot handle either operation.
+      (error (message "Go save processing failed: %s"
+                      (error-message-string err))))))
 
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode

@@ -1,6 +1,6 @@
 # Repository Guide
 
-This repository contains a modular GNU Emacs configuration targeting Emacs 31.1.
+This repository contains a modular GNU Emacs configuration for use in both GUI and terminal environments.
 
 ## Working conventions
 
@@ -16,12 +16,5 @@ This repository contains a modular GNU Emacs configuration targeting Emacs 31.1.
 
 ## Verification
 
-Use the Emacs 31.1 binary explicitly on this macOS workspace:
+Do not generate test files or test code, including temporary test scripts outside this repository. Use the verification commands below and existing checks without adding tests.
 
-```sh
-/Applications/Emacs.app/Contents/MacOS/Emacs --batch -Q --eval '(princ emacs-version)'
-```
-
-Run `check-parens` on every changed Emacs Lisp file. When package dependencies are available, load `lambda-init.el` in batch mode with `--debug-init`. A successful change leaves `git status` free of generated `.elc` files.
-
-Do not edit generated package contents under `packages/elpa/` or the ignored machine-local `lambda-custom.el` unless the task explicitly targets them.

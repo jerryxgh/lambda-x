@@ -727,9 +727,9 @@ POSITION: just inhibit warning.")
 
   (defun kill-magit-diff-buffer-in-current-repo (&rest _)
     "Delete the magit-diff buffer related to the current repo"
-    (let ((magit-diff-buffer-in-current-repo (magit-get-mode-buffer 'magit-diff-mode))
-          (magit-meta-diff-buffer-in-current-repo (magit-get-mode-buffer 'ediff-meta-mode)))
-      (kill-buffer magit-diff-buffer-in-current-repo)))
+    (let ((magit-diff-buffer-in-current-repo (magit-get-mode-buffer 'magit-diff-mode)))
+      (when (buffer-live-p magit-diff-buffer-in-current-repo)
+        (kill-buffer magit-diff-buffer-in-current-repo))))
   ;;
   ;; When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer,
   ;; delete the magit-diff buffer related to the current repo.
