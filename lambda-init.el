@@ -12,6 +12,9 @@
 
 ;;; Code:
 
+(when (version< emacs-version "30.1")
+  (error "lambda-x requires Emacs 30.1 or newer (running %s)" emacs-version))
+
 (add-to-list 'load-path
              (file-name-directory (or load-file-name (buffer-file-name))))
 

@@ -40,27 +40,22 @@
       (error (message "Go save processing failed: %s"
                       (error-message-string err))))))
 
+(defun lambda-golang-setup ()
+  "Configure indentation, Eglot and save processing for Go source buffers."
+  (setq-local tab-width 4)
+  (when (derived-mode-p 'go-ts-mode)
+    (setq-local go-ts-mode-indent-offset 4))
+  (setq-local eglot-workspace-configuration
+              '((:gopls . ((staticcheck . t)))))
+  (add-hook 'before-save-hook #'lambda--golang-eglot-format-and-organize nil t)
+  (eglot-ensure))
+
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode
-  :ensure
+  :ensure t
+  :hook ((go-mode . lambda-golang-setup)
+         (go-ts-mode . lambda-golang-setup))
   :config
-  ;; enable static check
-  (setq-default eglot-workspace-configuration
-                '((:gopls .
-                          ((staticcheck . t)))))
-
-  (add-hook 'go-ts-mode-hook
-            (lambda ()
-              (setq tab-width 4)
-              (setq go-ts-mode-indent-offset tab-width)
-              (setq go-mode-indent-offset tab-width)
-              (setq-default tab-width 4)
-              (setq-default go-ts-mode-indent-offset tab-width)
-              (setq-default go-mode-indent-offset tab-width)
-
-              (eglot-ensure)
-
-              (add-hook 'before-save-hook #'lambda--golang-eglot-format-and-organize nil t)))
 
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)
