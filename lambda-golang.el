@@ -21,12 +21,18 @@
 (require 'lambda-eglot)
 (require 'lambda-treesit)
 
-;; Use trae-gopls instead of the default gopls server for every Go mode.
+(defun lambda-golang-server-command (&optional _interactive)
+  "Choose a Go server using LAMBDA_GOPLS or the available executables."
+  (list (or (getenv "LAMBDA_GOPLS")
+            (executable-find "trae-gopls")
+            (executable-find "gopls")
+            "gopls")))
+
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '((go-mode go-dot-mod-mode go-dot-work-mode
                           go-ts-mode go-mod-ts-mode go-work-ts-mode)
-                 "trae-gopls")))
+                 . lambda-golang-server-command)))
 
 (defun lambda--golang-eglot-format-and-organize ()
   "Format and organize imports for Go buffers when eglot is ready."
@@ -35,7 +41,7 @@
     (condition-case err
         (progn
           (eglot-format-buffer)
-          (eglot-code-action-organize-imports))
+          (eglot-code-actions (point-min) (point-max) "source.organizeImports" t))
       ;; Save the file even if the server cannot handle either operation.
       (error (message "Go save processing failed: %s"
                       (error-message-string err))))))
@@ -54,12 +60,7 @@
 (use-package go-mode
   :ensure t
   :hook ((go-mode . lambda-golang-setup)
-         (go-ts-mode . lambda-golang-setup))
-  :config
-
-  (when (memq window-system '(mac ns))
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "GOPATH")))
+         (go-ts-mode . lambda-golang-setup)))
 
 (require 'go-template-mode)
 

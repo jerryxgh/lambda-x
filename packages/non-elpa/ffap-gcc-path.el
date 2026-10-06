@@ -1,4 +1,4 @@
-;;; ffap-gcc-path.el --- get gcc's include path for ffap-c-path
+;;; ffap-gcc-path.el --- Get gcc's include path for ffap-c-path -*- lexical-binding: nil -*-
 
 ;; Copyright 2007, 2008, 2009, 2011, 2012, 2013, 2014 Kevin Ryde
 

@@ -1,4 +1,4 @@
-;;; lambda-haskell.el --- Haskell
+;;; lambda-haskell.el --- Haskell -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

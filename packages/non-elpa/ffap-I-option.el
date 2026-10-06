@@ -1,4 +1,4 @@
-;;; ffap-I-option.el --- recognise -I/usr/include/foo
+;;; ffap-I-option.el --- recognise -I/usr/include/foo -*- lexical-binding: nil -*-
 
 ;; Copyright 2011 Kevin Ryde
 

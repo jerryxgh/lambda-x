@@ -1,4 +1,4 @@
-;; lambda-evil.el --- configuration for evil
+;;; lambda-evil.el --- configuration for evil -*- lexical-binding: t -*-
 
 ;; Time-stamp: <2025-05-16 20:19:59 Guanghui Xu>
 
@@ -10,6 +10,7 @@
 ;; evil ------- A wonderful editor in Emacs ------------------------------------
 
 (require 'lambda-core)
+(require 'hideshow)
 
 (use-package evil
   :ensure t
@@ -170,7 +171,7 @@
   (global-evil-visualstar-mode t))
 (require 'evil-visualstar)
 ;; evil-visualstar bugfix in terminal mode
-(evil-define-motion evil-visualstar/begin-search-forward (beg end)
+(evil-define-motion evil-visualstar/begin-search-forward (_beg _end)
   "Search for the visual selection forwards."
   :jump t
   :repeat nil
@@ -178,7 +179,7 @@
       (evil-visualstar/begin-search (region-beginning) (+ 1 (region-end)) t)))
 
 ;; evil-visualstar bugfix in terminal mode
-(evil-define-motion evil-visualstar/begin-search-backward (beg end)
+(evil-define-motion evil-visualstar/begin-search-backward (_beg _end)
   "Search for the visual selection backwards."
   :jump t
   :repeat nil
@@ -273,9 +274,10 @@ object."
   (let ((inner-name (make-symbol (concat "evil-inner-" name)))
         (outer-name (make-symbol (concat "evil-outer-" name))))
     `(progn
-       (evil-define-text-object ,inner-name (count &optional beg end type)
+       ;; Evil binds `type' inside the text-object body itself.
+       (evil-define-text-object ,inner-name (count &optional beg end _type)
          (evil-select-paren ,start-regexp ,end-regexp beg end type count nil))
-       (evil-define-text-object ,outer-name (count &optional beg end type)
+       (evil-define-text-object ,outer-name (count &optional beg end _type)
          (evil-select-paren ,start-regexp ,end-regexp beg end type count t))
        (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
        (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
@@ -291,7 +293,7 @@ object."
 (spacemacs|define-text-object "~" "tilde" "~" "~")
 (spacemacs|define-text-object "=" "equal" "=" "=")
 
-(evil-define-text-object evil-inner-buffer (count &optional beg end type)
+(evil-define-text-object evil-inner-buffer (count &optional _beg _end _type)
   (list (point-min) (point-max)))
 (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
 

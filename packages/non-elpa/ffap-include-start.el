@@ -1,4 +1,4 @@
-;;; ffap-include-start.el --- recognise C #include when at start of line
+;;; ffap-include-start.el --- recognise C #include when at start of line -*- lexical-binding: nil -*-
 
 ;; Copyright 2007, 2009, 2010, 2011, 2013 Kevin Ryde
 

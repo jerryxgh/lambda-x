@@ -1,4 +1,4 @@
-;;; vbnet-mode.el  --- A mode for editing Visual Basic .NET programs.
+;;; vbnet-mode.el  --- A mode for editing Visual Basic .NET programs. -*- lexical-binding: nil -*-
 ;;
 ;; Authors    : Fred White <fwhite@alum.mit.edu>
 ;;            : Dave Love <d.love@dl.ac.uk>

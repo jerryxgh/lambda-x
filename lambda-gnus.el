@@ -1,4 +1,4 @@
-;;; lambda-gnus.el --- for email about settings
+;;; lambda-gnus.el --- for email about settings -*- lexical-binding: t -*-
 
 ;; Time-stamp: <2016-05-19 13:42:38 Guanghui Xu>
 

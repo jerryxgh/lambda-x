@@ -1,4 +1,4 @@
-;;; lambda-init.el --- Emacs configuration start point.
+;;; lambda-init.el --- Emacs configuration start point. -*- lexical-binding: t -*-
 
 ;;; Commentary:
 
@@ -18,12 +18,6 @@
 (add-to-list 'load-path
              (file-name-directory (or load-file-name (buffer-file-name))))
 
-;; maximize frame
-(unless (frame-parameter nil 'fullscreen)
-      (toggle-frame-maximized))
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(redisplay)
-
 (defvar lambda-libraries
   '(
     lambda-package
@@ -39,6 +33,7 @@
 
     ;; lambda-ivy
     ;; lambda-company
+
     lambda-semantic
     lambda-treesit
 
@@ -50,26 +45,28 @@
     lambda-java
     lambda-groovy
     lambda-js
+
     lambda-json
     lambda-sql
     lambda-lua
     lambda-vb
     lambda-eden
+
     lambda-individual
     lambda-golang
     lambda-thrift
-    ;; lambda-dap
     lambda-python
 
     lambda-bison
 
     lambda-eglot
+    lambda-dired-subtree
 
+    ;; lambda-dap
     ;; lambda-csharp
     ;; lambda-octave
     ;; lambda-haskell
     ;; lambda-evil-im
-    lambda-dired-subtree
 
     ;; this should be loaded at last, restore buffers, minibuffer history, last
     ;; place of cursor, etc.

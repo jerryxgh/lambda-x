@@ -1,108 +1,69 @@
-;;; lambda-corfu.el --- auto complete config -*- lexical-binding: t -*-
+;;; lambda-corfu.el --- Completion in GUI and terminal frames -*- lexical-binding: t -*-
 
 ;;; Commentary:
+;; Keep fallback completion sources behind each major mode's own CAPFs.
 
 ;;; Code:
+
+(require 'lambda-core)
+
 (use-package corfu
-  :ensure
-  ;; Optional customizations
-  :custom
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
-  (corfu-auto-prefix 2)
-  ;; (corfu-auto-delay 0.2)
-  ;; Enable auto completion and configure quitting
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-quit-no-match 'separator) ;; or t
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
-  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-
-  ;; Enable Corfu only for certain modes.
-  ;; :hook ((prog-mode . corfu-mode)
-  ;;        (shell-mode . corfu-mode)
-  ;;        (eshell-mode . corfu-mode))
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :init
-  (corfu-history-mode)
-  (global-corfu-mode))
-
-;; A few more useful configurations...
-(use-package emacs
-  :init
-  ;; TAB cycle if there are only few candidates
-  (setq completion-cycle-threshold 3)
-
-  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
-  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
-  ;; Enable indentation+completion using the TAB key.
-  ;; `completion-at-point' is often bound to M-TAB.
-  (setq tab-always-indent 'complete))
-
-;; Use Dabbrev with Corfu!
-(use-package dabbrev
-  :config
-  (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
-  ;; Available since Emacs 29 (Use `dabbrev-ignored-buffer-regexps' on older Emacs)
-  (add-to-list 'dabbrev-ignored-buffer-modes 'authinfo-mode)
-  (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
-  (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
-  (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode))
-
-;; Add extensions
-(use-package cape
   :ensure t
   :custom
-  (cape-dabbrev-buffer-function 'cape-text-buffers)
-  ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
-  ;; Press C-c p ? to for help.
-  ;; :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
-  ;; Alternatively bind Cape commands individually.
-  ;; :bind (("C-c p d" . cape-dabbrev)
-  ;;        ("C-c p h" . cape-history)
-  ;;        ("C-c p f" . cape-file)
-  ;;        ...)
-  ;; Swap M-/ and C-M-/
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  :config
+  (corfu-history-mode 1)
+  (global-corfu-mode 1))
+
+;; Emacs 31 has native TTY child frames.  Older versions need Popon.
+;; Install the maintained package instead of shadowing it with a vendored copy.
+(unless (featurep 'tty-child-frames)
+  (use-package corfu-terminal
+    :ensure t
+    :after corfu
+    :no-require t
+    :commands corfu-terminal-mode
+    :init
+    (corfu-terminal-mode 1)))
+
+(setq completion-cycle-threshold 3
+      tab-always-indent 'complete)
+
+(use-package dabbrev
+  :ensure nil
+  :config
+  (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
+  (dolist (mode '(authinfo-mode doc-view-mode pdf-view-mode tags-table-mode))
+    (add-to-list 'dabbrev-ignored-buffer-modes mode)))
+
+(defun lambda-cape-setup ()
+  "Append a small set of buffer-local fallback completion functions."
+  (dolist (function '(cape-file cape-dabbrev))
+    (add-hook 'completion-at-point-functions function t t)))
+
+(use-package cape
+  :ensure t
   :bind (("M-/" . cape-dabbrev)
-         ("C-M-/" . dabbrev-expand))
-  :init
-  ;; Add to the global default value of `completion-at-point-functions' which is
-  ;; used by `completion-at-point'.  The order of the functions matters, the
-  ;; first function returning a result wins.  Note that the list of buffer-local
-  ;; completion functions takes precedence over the global list.
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-abbrev)
-  (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block)
-  (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
-  (add-hook 'completion-at-point-functions #'cape-emoji)
-  (add-hook 'completion-at-point-functions #'cape-dict)
-  (add-hook 'completion-at-point-functions #'cape-tex)
-  (add-hook 'completion-at-point-functions #'cape-history)
-  ;; ...
-)
+         ("C-M-/" . dabbrev-expand)
+         ("C-c /" . cape-prefix-map))
+  :hook ((prog-mode . lambda-cape-setup)
+         (text-mode . lambda-cape-setup)
+         (shell-mode . lambda-cape-setup)
+         (eshell-mode . lambda-cape-setup)
+         (eglot-managed-mode . lambda-cape-setup)))
 
-
+;; Text labels also render in TTY frames and do not require SVG support.
 (use-package kind-icon
   :ensure t
   :after corfu
   :custom
+  (kind-icon-use-icons nil)
   (kind-icon-blend-background t)
-  (kind-icon-default-face 'corfu-default) ; only needed with blend-background
-
+  (kind-icon-default-face 'corfu-default)
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 (provide 'lambda-corfu)
-
 ;;; lambda-corfu.el ends here

@@ -1,4 +1,4 @@
-;; lambda-core.el --- core settings, shared by all other modules
+;;; lambda-core.el --- core settings, shared by all other modules -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; Core settings, shared by all other modules.
@@ -75,19 +75,16 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; suppressing ad-handle-definition Warnings in Emacs
 (setq ad-redefinition-action 'accept)
 
-;; init PATH in mac, this should just after packages settings ==================
+;; Import the login-shell environment once, including daemon startup.
 (when (eq system-type 'darwin)
-  ;; open file in Find will reuse current frame instead creating a new one
-
-  ;; use command as control
-  (setq ns-command-modifier 'control)
-  (setq ns-pop-up-frames nil)
+  (setq ns-command-modifier 'control
+        ns-pop-up-frames nil)
   (use-package exec-path-from-shell
-    :ensure t)
-
-  (if (memq window-system '(mac ns))
-      (exec-path-from-shell-initialize)))
-;; init PATH in mac ends here ==================================================
+    :ensure t
+    :config
+    (dolist (name '("GOPATH" "GOBIN"))
+      (add-to-list 'exec-path-from-shell-variables name))
+    (exec-path-from-shell-initialize)))
 
 ;; Emacs UI about settings =====================================================
 
@@ -153,48 +150,47 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 ;; theme -----------------------------------------------------------------------
 
-(if (display-graphic-p)
-    ;;; if graphic
-    (progn
-      ;; fix title bar text color broken: https://github.com/d12frosted/homebrew-emacs-plus/issues/55
-      (when (and(eq system-type 'darwin) (> emacs-major-version 26))
-        (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+(defun lambda-configure-frame (frame)
+  "Configure fonts and display parameters for FRAME."
+  ;; Completion popups and other child frames must retain their own geometry.
+  (unless (frame-parameter frame 'parent-frame)
+    (with-selected-frame frame
+      (if (display-graphic-p frame)
+          (progn
+            (when (eq system-type 'darwin)
+              (set-frame-parameter frame 'ns-appearance 'dark))
+            (let* ((override (getenv "LAMBDA_EMACS_FONT"))
+                   (size (if (eq system-type 'darwin) 14.0 11.0))
+                   (family (pcase system-type
+                             ('darwin "Menlo")
+                             ('gnu/linux "Source Code Pro")
+                             (_ "Consolas")))
+                   (font (if override
+                             (font-spec :name override)
+                           (font-spec :family family :size size))))
+              ;; Keep the original point size even if the preferred font is absent.
+              (unless override
+                (set-face-attribute 'default frame :height (round (* size 10))))
+              (when (find-font font frame)
+                (set-frame-font font nil (list frame) t)))
+            (when (fboundp 'set-fontset-font)
+              (let ((family (if (eq system-type 'darwin)
+				"PingFang SC" "Noto Sans CJK SC")))
+		(when (find-font (font-spec :family family) frame)
+                  (set-fontset-font t 'han (font-spec :family family) frame))))
+            (unless (frame-parameter frame 'fullscreen)
+              (set-frame-parameter frame 'fullscreen 'maximized)))
+        (set-frame-parameter frame 'menu-bar-lines 0)))))
 
-      )
-  ;;; else (terminal)
-  ;; close menu bar
-  (menu-bar-mode -1)
-
-  ;; use command as control
-  (setq ns-command-modifier 'control))
+(add-hook 'after-make-frame-functions #'lambda-configure-frame)
 
 (defun lambda-load-theme (theme)
-  "Load THEME, plus that, set font and tweak mode-line style."
-  ;; make font in the vertical middle of line
+  "Load THEME and configure existing frames."
+  ;; Preserve the original vertical spacing and line height.
   (setq-default default-text-properties '(line-spacing 3 line-height 18))
-
   (load-theme theme t)
-
-  (cond ((eq system-type 'windows-nt)
-         (set-frame-font "Consolas-11")
-         (set-face-attribute 'default nil :font "Consolas-11")
-         (set-face-attribute 'default t :font "Consolas-11")
-         (set-face-attribute 'mode-line nil :font "Consolas-11"))
-
-        ((eq system-type 'gnu/linux)
-         (set-frame-font "Source Code Pro-11")
-         (if (fboundp 'set-fontset-font)
-             (set-fontset-font t 'unicode '("Noto Sans CJK SC" .
-                                            "unicode-bmp")))
-         ;; (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.2)))
-         (setq face-font-rescale-alist (list (cons "Noto Sans CJK SC" 1.0))))
-
-        ((eq system-type 'darwin)
-         (set-frame-font "menlo-14")
-         (set-fontset-font "fontset-default" 'han '("PingFang SC"))
-         ;; (setq face-font-rescale-alist (list (cons "PingFang SC" 1.2)))
-         (setq face-font-rescale-alist (list (cons "PingFang SC" 1.0)))
-         )))
+  (dolist (frame (frame-list))
+    (lambda-configure-frame frame)))
 
 ;; (lambda-package-ensure-install 'spacemacs-theme)
 ;; (lambda-load-theme 'spacemacs-dark)
@@ -223,9 +219,9 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
     (set-face-background 'hl-line "#333333")))
 
 ;; winum
-(defun window-numbering-install-mode-line (&optional position)
+(defun window-numbering-install-mode-line (&optional _position)
   "Do nothing, the display is handled by the spaceline(powerline).
-POSITION: just inhibit warning.")
+The optional position argument is intentionally ignored.")
 
 (use-package winum
   :ensure t
@@ -301,11 +297,13 @@ POSITION: just inhibit warning.")
 ;; auto insert newline at end of file if it has none
 (setq-default require-final-newline nil)
 
-;; directory to store all backup and autosave files
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+;; Backups stay disabled; keep crash-recovery autosaves out of system temp.
+(defconst lambda-auto-save-files-dir
+  (expand-file-name "files/" lambda-auto-save-dir)
+  "Directory for buffer autosaves.")
+(make-directory lambda-auto-save-files-dir t)
 (setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+      `((".*" ,lambda-auto-save-files-dir t)))
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode 1)
@@ -348,7 +346,9 @@ POSITION: just inhibit warning.")
        ))
   :config
   (smartparens-global-mode t)
-  (smartparens-global-strict-mode t)
+  ;; Strict structural editing is useful in Lisp, but intrusive elsewhere.
+  (dolist (hook '(emacs-lisp-mode-hook lisp-mode-hook scheme-mode-hook))
+    (add-hook hook #'smartparens-strict-mode))
   (show-smartparens-global-mode t)
   (diminish 'smartparens-mode)
    ;; load default config
@@ -357,7 +357,9 @@ POSITION: just inhibit warning.")
 ;; uniquify --- easy to distinguish same name buffers
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
+(if (boundp 'uniquify-after-kill-buffer-flag)
+    (setq uniquify-after-kill-buffer-flag t)
+  (setq uniquify-after-kill-buffer-p t))
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
 ;; use shift + arrow keys to switch between visible buffers
@@ -368,23 +370,6 @@ POSITION: just inhibit warning.")
   :config
   (require 'windmove)
   (windmove-default-keybindings))
-
-;;; tramp
-;; usage: type `C-x C-f' and then enter the filename`/user@machine:/path/to.file
-(require 'tramp)
-(require 'tramp-cache)
-(setq tramp-auto-save-directory  temporary-file-directory)
-(setq tramp-persistency-file-name (expand-file-name "tramp"
-                                                    lambda-auto-save-dir))
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
-(when (> emacs-major-version 23)
-  (require 'tramp-sh)
-  (delete "LC_ALL=C" tramp-remote-process-environment)
-  (add-to-list 'tramp-remote-process-environment "LANG=zh_CN.UTF-8" 'append)
-  (add-to-list 'tramp-remote-process-environment "LC_ALL=\"zh_CN.UTF-8\""
-               'append))
 
 ;;; imenu
 (set-default 'imenu-auto-rescan t)
@@ -750,7 +735,6 @@ POSITION: just inhibit warning.")
 
 ;;; fill-column ----------------------------------------------------------------
 (setq-default fill-column 80)
-(lambda-package-ensure-install 'fill-column-indicator)
 (add-hook 'prog-mode-hook #'(lambda ()
                               (turn-off-auto-fill)))
 ;; mode names typically end in "-mode", but for historical reasons
@@ -806,16 +790,15 @@ POSITION: just inhibit warning.")
 ;; for comment-indent
 (setq comment-fill-column 360)
 (defun lambda-comment-indent (&rest args)
-  "Apply CMD with ARGS to region lines if region is active.
-Just call (apply CMD ARGS) otherwise."
+  "Apply `comment-indent' with ARGS to region lines or the current line."
   (interactive)
   (if (use-region-p)
       (cl-letf (((symbol-function 'execute-kbd-macro)
-                 `(lambda (&rest _ignore)
+                 (lambda (&rest _ignore)
                     (interactive)
-                    (comment-indent ,@args))))
+                    (apply #'comment-indent args))))
         (apply-macro-to-region-lines (region-beginning) (region-end) 'ignore))
-    (comment-indent args)))
+    (apply #'comment-indent args)))
 (global-set-key (kbd "M-;") 'lambda-comment-indent)
 
 (defun lambda-tmp-buffer ()

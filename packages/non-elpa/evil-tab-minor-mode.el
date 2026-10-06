@@ -1,4 +1,4 @@
-;;; evil-tab-minor-mode.el --- Tweak <tab> behaviour of evil normal mode
+;;; evil-tab-minor-mode.el --- Tweak <tab> behaviour of evil normal mode -*- lexical-binding: nil -*-
 
 ;; Copyright 2012, 2013, 2014 Jerry Xu
 ;;

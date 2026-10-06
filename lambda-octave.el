@@ -1,4 +1,4 @@
-;;; lambda-octave.el --- octave script
+;;; lambda-octave.el --- octave script -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

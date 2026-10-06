@@ -1,4 +1,4 @@
-;;; lambda-emacs-lisp.el --- emacs lisp
+;;; lambda-emacs-lisp.el --- emacs lisp -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

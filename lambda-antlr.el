@@ -1,4 +1,4 @@
-;;; lambda-antlr.el --- antlr-mode
+;;; lambda-antlr.el --- antlr-mode -*- lexical-binding: t -*-
 
 ;; Time-stamp: <2016-05-19 13:42:27 Guanghui Xu>
 

@@ -1,4 +1,4 @@
-;;; lambda-groovy.el --- Groovy
+;;; lambda-groovy.el --- Groovy -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

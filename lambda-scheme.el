@@ -1,4 +1,4 @@
-;; lambda-scheme.el --- scheme - a member of the Lisp family of languages
+;;; lambda-scheme.el --- scheme - a member of the Lisp family of languages -*- lexical-binding: t -*-
 ;; Time-stamp: <2015-03-02 17:17:06 Jerry Xu>
 
 ;;; Commentary:

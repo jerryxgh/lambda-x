@@ -1,4 +1,4 @@
-;;; lambda-lua.el --- Lua script
+;;; lambda-lua.el --- Lua script -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

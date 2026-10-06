@@ -1,31 +1,23 @@
-;;; lambda-tramp.el --- tramp configuration -*- lexical-binding: t -*-
-
-;; This file is not part of GNU Emacs.
+;;; lambda-tramp.el --- Remote file configuration -*- lexical-binding: t -*-
 
 ;;; Commentary:
-
-;; For golang.
-
-;; Put this file into your load-path and the following into your ~/.emacs:
-;;   (require 'lambda-golang)
-
-;;; Change Log:
-
-;; Version $(1) 2025-04-20 GuanghuiXu
-;;   - Initial release
+;; Keep remote paths and session caches independent of remote locales.
 
 ;;; Code:
 
+(require 'lambda-core)
 (require 'tramp)
+(require 'tramp-cache)
 
-;;; tramp
-(setq tramp-default-method "sshx")
-(tramp-set-completion-function "sshx"
-                               '((tramp-parse-sconfig "/etc/ssh_config")
-                                 (tramp-parse-sconfig "~/.ssh/config")))
+(setq tramp-default-method "sshx"
+      tramp-auto-save-directory lambda-auto-save-files-dir
+      tramp-persistency-file-name (expand-file-name "tramp" lambda-auto-save-dir))
+
+;; Use each host's normal environment instead of forcing a Chinese locale.
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-
+(tramp-set-completion-function
+ "sshx" '((tramp-parse-sconfig "/etc/ssh/ssh_config")
+          (tramp-parse-sconfig "~/.ssh/config")))
 
 (provide 'lambda-tramp)
-
 ;;; lambda-tramp.el ends here

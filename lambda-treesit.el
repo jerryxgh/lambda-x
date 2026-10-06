@@ -35,8 +35,10 @@
 (use-package treesit-auto
   :ensure t
   :custom
-  (treesit-auto-install 'prompt)
+   ;; Install grammars explicitly to keep file visits offline and predictable.
+  (treesit-auto-install nil)
   :config
+  ;; Language modules own remapping; this adds modes for installed grammars.
   (treesit-auto-add-to-auto-mode-alist))
 
 (provide 'lambda-treesit)

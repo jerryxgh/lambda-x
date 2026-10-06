@@ -47,13 +47,9 @@ This value is set automaticly, DONT set by hand.")
         ("cselpa" . 50)
         ("nongnu" . 0)))
 
-;; do not auto load packages
-(setq package-enable-at-startup nil)
-
-;; Load packages explictly
-(package-initialize)
-(require'warnings)
-(setq warning-suppress-log-types '((package reinitialization)))
+;; Normal startup activates packages before init.el; -Q/manual loading does not.
+(unless package-activated-list
+  (package-initialize))
 
 (defun lambda-package-ensure-install (package)
   "This is like `package-install', but skip PACKAGE if it has been installed.

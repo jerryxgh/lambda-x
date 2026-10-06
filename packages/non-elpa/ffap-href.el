@@ -1,4 +1,4 @@
-;;; ffap-href.el --- find href URL/link anywhere in the tag
+;;; ffap-href.el --- find href URL/link anywhere in the tag -*- lexical-binding: nil -*-
 
 ;; Copyright 2007, 2009, 2010, 2011 Kevin Ryde
 

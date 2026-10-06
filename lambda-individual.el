@@ -1,4 +1,4 @@
-;;; lambda-individual.el --- Individual info of Emacs config
+;;; lambda-individual.el --- Individual info of Emacs config -*- lexical-binding: t -*-
 ;; Time-stamp: <2024-05-15 20:48:19 Guanghui Xu>
 
 ;;; Commentary:

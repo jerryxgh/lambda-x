@@ -1,4 +1,4 @@
-;;; lambda-js.el --- JavaScript
+;;; lambda-js.el --- JavaScript -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

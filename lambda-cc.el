@@ -1,4 +1,4 @@
-;;; lambda-cc.el --- c&c++
+;;; lambda-cc.el --- c&c++ -*- lexical-binding: t -*-
 
 ;;; Commentary:
 
@@ -7,46 +7,34 @@
 (require 'lambda-core)
 (require 'lambda-evil)
 
-(with-eval-after-load 'cc-mode
-  (define-key c-mode-base-map (kbd "RET") 'c-context-line-break)
-  (add-hook 'c-mode-common-hook
-            #'(lambda ()
-                ;;(setq ac-sources (append
-                ;;(list 'ac-source-gtags
-                ;;'ac-source-semantic 'ac-source-semantic-raw) ac-sources))
-                (add-to-list 'c-cleanup-list 'defun-close-semi)
-                (c-set-style "k&r")
-                ;; https://stackoverflow.com/questions/13825188/suppress-c-namespace-indentation-in-emacs
-                (defconst my-cc-style
-                  '("k&r"
-                    (c-offsets-alist . ((innamespace . [0])))))
-                (c-add-style "my-cc-style" my-cc-style)
-                (setq tab-width 8)
-                (setq indent-tabs-mode nil)
-                (setq c-basic-offset 4)
-                ;; equal to c-toggle-auto-newline + c-toggle-hungry-state
-                (c-toggle-electric-state 1)))
+(defun lambda-cc-setup ()
+  "Configure classic C-family indentation."
+  (c-add-style "lambda" '("k&r" (c-offsets-alist . ((innamespace . 0)))) t)
+  (add-to-list 'c-cleanup-list 'defun-close-semi)
+  (setq-local tab-width 8)
+  (setq-local indent-tabs-mode nil)
+  (setq-local c-basic-offset 4)
+  (c-toggle-electric-state 1))
 
-  ;;(semantic-mode 1)
-  ;;(global-semantic-highlight-edits-mode 1)
-  ;;(global-semantic-idle-local-symbol-highlight-mode 1)
-  ;;(global-semantic-idle-breadcrumbs-mode 1)
-  ;;(global-semantic-show-unmatched-syntax-mode 1)
-  ;;(global-semantic-show-parser-state-mode 1)
-  (require 'semantic/db-file)
-  (setq semanticdb-default-save-directory
-        (expand-file-name "semanticdb" lambda-auto-save-dir))
-  ;; (setq ede-project-placeholder-cache-file
-  ;;       (expand-file-name "ede-projects.el" lambda-auto-save-dir))
-                                        ;(semanticdb-enable-gnu-global-databases 'c-mode)
-                                        ;(semanticdb-enable-gnu-global-databases 'c++-mode)
-  )
+(with-eval-after-load 'cc-mode
+  (define-key c-mode-base-map (kbd "RET") #'c-context-line-break)
+  (add-hook 'c-mode-common-hook #'lambda-cc-setup))
+
+(defun lambda-cc-ts-setup ()
+  "Configure tree-sitter C-family indentation."
+  (setq-local tab-width 8)
+  (setq-local indent-tabs-mode nil)
+  (setq-local c-ts-mode-indent-offset 4)
+  (setq-local c-ts-mode-indent-style 'k&r))
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+  (add-to-list 'eglot-server-programs
+               '((c++-mode c-mode c++-ts-mode c-ts-mode) "clangd")))
 
-(add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
+(dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook hook #'eglot-ensure))
+(dolist (hook '(c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook hook #'lambda-cc-ts-setup))
 
 ;; ffap - find file at point ---------------------------------------------------
 (autoload 'ffap-href-enable "ffap-href" nil t)
@@ -56,6 +44,9 @@
   (require 'ffap-gcc-path)
   (ffap-href-enable)
   (ffap-I-option-enable))
+
+(defvar gud-mode-map)
+(defvar gdb-many-windows)
 
 ;; gdb configs -----------------------------------------------------------------
 (with-eval-after-load 'gud

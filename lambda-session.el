@@ -1,4 +1,4 @@
-;;; lambda-session.el --- auto save and load session
+;;; lambda-session.el --- auto save and load session -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; This should be loaded at last, restore buffers, minibuffer history, last
@@ -48,32 +48,22 @@
   :ensure t
   :diminish persp-mode
   :custom
-  (persp-keymap-prefix (kbd "C-;"))
+  (persp-keymap-prefix "C-;")
   (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
+  (persp-autokill-buffer-on-remove 'kill-weak)
+  (persp-kill-foreign-buffer-action 'kill)
   :config
-  (with-eval-after-load "persp-mode-autoloads"
-    ;; work with workgroups.el
-    (setq wg-morph-on nil)
-    ;; switch off the animation of restoring window configuration
-    (setq persp-autokill-buffer-on-remove 'kill-weak)
-    (add-hook 'after-init-hook (lambda () (persp-mode 1)))))
+  (if after-init-time
+      (persp-mode 1)
+    (add-hook 'after-init-hook #'lambda-enable-persp)))
 
-(defun persp-desktop-ignore-this-minor-mode (buffer)
-  "Installed as a minor-mode initializer for Desktop mode.
-BUFFER is the buffer to not initialize a Semantic minor mode in."
-  nil)
+(defun lambda-enable-persp ()
+  "Enable perspective session restoration once startup has completed."
+  (persp-mode 1))
 
-;; (add-to-list 'desktop-minor-mode-handlers
-;;              '(persp-mode . persp-desktop-ignore-this-minor-mode))
-
-(with-eval-after-load 'persp-mode-autoloads
-  (setq persp-autokill-buffer-on-remove 'kill-weak
-        persp-kill-foreign-buffer-action 'kill)
-  (add-hook
-   'after-init-hook
-   #'(lambda ()
-       (persp-mode 1)
-       (diminish 'persp-mode))))
+;; A prefix available even in terminals without extended-key support.
+(with-eval-after-load 'persp-mode
+  (define-key persp-mode-map (kbd "C-c w") 'persp-key-map))
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
@@ -87,24 +77,16 @@ BUFFER is the buffer to not initialize a Semantic minor mode in."
   :config
   (zoom-window-setup))
 
-;; Restore buffers automaticly -------------------------------------------------
-(require 'desktop)
-(use-package desktop
-  :ensure t
+;; Perspective owns buffer/window restoration; do not also restore Desktop.
+(setq history-length 100)
 
-  :custom
-  (desktop-path (list (expand-file-name lambda-auto-save-dir)))
-  (history-length 100)
-  (desktop-restore-frames t)
-  (desktop-files-not-to-save (concat desktop-files-not-to-save "\\|.*\\.gpg$"))
-  (desktop-base-file-name "emacs-desktop")
-
-  :config
-  (desktop-save-mode 1))
-
-;; Start the server so emacsclient can reuse this Emacs instance.
-(if (or (eq system-type 'darwin) (eq system-type 'gnu/linux))
-    (server-start))
+;; Let a daemon own its server; independent instances must not replace it.
+(require 'server)
+(when (and (not noninteractive)
+           (not (daemonp))
+           (memq system-type '(darwin gnu/linux))
+           (not (server-running-p)))
+  (server-start))
 
 (provide 'lambda-session)
 

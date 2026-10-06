@@ -45,15 +45,23 @@
   ;; (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
   )
 
+(defvar flymake-sqlfluff-program)
+
+;; A project may override the dialect through .dir-locals.el; do not force Spark.
+(defun lambda-sql-flymake-setup ()
+  "Enable SQL diagnostics when SQLFluff is installed."
+  (require 'flymake-sqlfluff)
+  (setq-local flymake-sqlfluff-dialect
+              (or (getenv "LAMBDA_SQL_DIALECT") "ansi"))
+  (when (executable-find flymake-sqlfluff-program)
+    (flymake-sqlfluff-load)
+    (flymake-mode 1)))
+
 (use-package flymake-sqlfluff
   :ensure t
-  :custom
-  (flymake-sqlfluff-dialect "sparksql")
+  :hook (sql-mode . lambda-sql-flymake-setup)
   :config
-  (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
-  (add-hook 'sql-mode-hook (lambda ()
-                             (flymake-sqlfluff-load)
-                             (flymake-mode 1))))
+  (put 'flymake-sqlfluff-dialect 'safe-local-variable #'stringp))
 
 (provide 'lambda-sql)
 

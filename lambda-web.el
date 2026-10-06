@@ -1,4 +1,4 @@
-;;; lambda-web.el --- Web
+;;; lambda-web.el --- Web -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; To use eglot, install git@code.byted.org:ecom/ecam-ai-assistant.git
@@ -42,10 +42,8 @@
 ;; (setq web-mode-disable-autocompletion t)
 
 (add-hook 'web-mode-hook #'(lambda ()
-                            "Disable auto-fill-mode and fci-mode in web mode,
-and set yas--extra-mode to use html snippets."
+                            "Disable auto-fill-mode and add HTML snippets."
                             (auto-fill-mode -1)
-                            (fci-mode -1)
                             (make-local-variable 'yas-extra-modes)
                             (add-to-list 'yas-extra-modes 'html-mode)
                             ;; (setq ac-sources

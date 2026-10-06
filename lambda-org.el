@@ -1,4 +1,4 @@
-;;; lambda-org --- org
+;;; lambda-org --- org -*- lexical-binding: t -*-
 ;; Time-stamp: <2024-11-07 17:33:40 Guanghui Xu>
 ;;; Commentary:
 ;; org about settings
@@ -16,7 +16,7 @@
 
 (setq org-use-speed-commands t
       org-src-fontify-natively t
-      org-completion-use-ido t
+      org-completion-use-ido nil
       org-odd-levels-only nil
       org-id-locations-file
       (expand-file-name ".org-id-locations" lambda-auto-save-dir)
@@ -85,7 +85,7 @@
 ;;sudo mktexlsr
 ;;kpsewhich org-article.cls
 (require 'ox-latex)
-(setq org-latex-listings t)
+(setq org-latex-src-block-backend 'listings)
 (add-to-list 'org-latex-classes
              '("org-article"
                "\\documentclass{org-article}
@@ -98,8 +98,10 @@
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 (setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode %b"
-        "xelatex -interaction nonstopmode %b"))
+      (if (executable-find "latexmk")
+          '("latexmk -xelatex -interaction=nonstopmode -output-directory=%o %f")
+        '("xelatex -interaction=nonstopmode -output-directory=%o %f"
+          "xelatex -interaction=nonstopmode -output-directory=%o %f")))
 
 ;; graphviz-dot-mode - mode for editing dot files ------------------------------
 (use-package graphviz-dot-mode
