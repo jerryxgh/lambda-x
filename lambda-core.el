@@ -99,9 +99,11 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (use-package delight
   :ensure t)
 
-;; toolbar is just a waste of valuable screen estate in a tty tool-bar-mode does
-;; not properly auto-load, and is already disabled anyway
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;; Load the built-in mode explicitly, including startup without a GUI frame.
+(when (require 'tool-bar nil t)
+  (tool-bar-mode -1))
+(setf (alist-get 'tool-bar-lines default-frame-alist) 0
+      (alist-get 'tool-bar-lines initial-frame-alist) 0)
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; disable startup screen
@@ -155,6 +157,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
   ;; Completion popups and other child frames must retain their own geometry.
   (unless (frame-parameter frame 'parent-frame)
     (with-selected-frame frame
+      (set-frame-parameter frame 'tool-bar-lines 0)
       (if (display-graphic-p frame)
           (progn
             (when (eq system-type 'darwin)
