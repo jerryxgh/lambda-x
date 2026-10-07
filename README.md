@@ -33,8 +33,8 @@ Emacs 31 uses native terminal child frames for Corfu. Emacs 30 installs the
 maintained `corfu-terminal` package and its dependencies through package.el.
 OSC 52 clipboard integration requires support in the terminal and multiplexer.
 Apply `misc/_tmux.conf` to enable extended keys; ordinary prefixes remain available:
-`C-c w` for perspectives, `C-c e d` for Embark DWIM, `C-c e .` for Embark actions,
-and `C-c /` for Cape completion commands. `C-;` remains the perspective prefix.
+`C-c e d` for Embark DWIM, `C-c e .` for Embark actions,
+and `C-c /` for Cape completion commands. `C-;` is the perspective prefix.
 
 Perspective owns session restoration. Desktop restoration is no longer enabled;
 existing Desktop save files are preserved. Dired uses text-only subtree expansion,

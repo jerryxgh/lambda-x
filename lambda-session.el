@@ -48,7 +48,7 @@
   :ensure t
   :diminish persp-mode
   :custom
-  (persp-keymap-prefix "C-;")
+  (persp-keymap-prefix (kbd "C-;"))
   (persp-save-dir (expand-file-name "persp-confs" lambda-auto-save-dir))
   (persp-autokill-buffer-on-remove 'kill-weak)
   (persp-kill-foreign-buffer-action 'kill)
@@ -60,10 +60,6 @@
 (defun lambda-enable-persp ()
   "Enable perspective session restoration once startup has completed."
   (persp-mode 1))
-
-;; A prefix available even in terminals without extended-key support.
-(with-eval-after-load 'persp-mode
-  (define-key persp-mode-map (kbd "C-c w") 'persp-key-map))
 
 ;; window zoom -----------------------------------------------------------------
 ;; enlarge current window temporarily
