@@ -237,8 +237,6 @@
   :ensure t
   :bind (:map evil-normal-state-map
               ("C-c +" . evil-numbers/inc-at-pt)
-              ("C-c +" . evil-numbers/inc-at-pt)
-              ("C-c -" . evil-numbers/dec-at-pt)
               ("C-c -" . evil-numbers/dec-at-pt)))
 
 ;; anzu for evil ---------------------------------------------------------------

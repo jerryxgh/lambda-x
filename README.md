@@ -57,3 +57,24 @@ JSON Lines uses a separate mode; `C-c C-f` validates every record before compact
 it to one line. Org PDF export uses latexmk with XeLaTeX when available, otherwise
 two XeLaTeX passes. Custom LaTeX classes such as `org-article` must be installed
 separately on each machine.
+
+Configuration ownership
+-----------------------
+
+`lambda-core.el` owns shared editor behavior. `lambda-vertico.el` owns minibuffer
+completion, including Marginalia and Embark; `lambda-emacs-lisp.el` owns Elisp
+Flymake and package linting. Language modules own their mode-specific hooks.
+Eglot, Flymake, Python, Which-key and Windmove use the built-in libraries;
+external language servers are still installed separately.
+
+The default module list retains the existing language support and interactive
+commands. Ivy, Company and DAP modules are already disabled and have no startup
+cost. Tern, FZF, SVN integration and the Evil commenting packages remain enabled
+for compatibility with existing workflows; remove them only if those commands
+are unused. Changing `lambda-libraries` can skip language modules, but keep
+`lambda-session` last and account for modules loaded through `require`.
+
+`lambda-custom.el` is still loaded for saved Custom values. Its package selection
+list may contain historical packages; do not treat it as a reliable list of the
+packages used by the current configuration or automatically delete packages from
+that list.

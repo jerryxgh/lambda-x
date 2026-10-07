@@ -5,31 +5,8 @@
 
 ;;; Code:
 
-;; Maxmize frame ---------------------------------------------------------------
-;; fullscreen when startup finished
-;; (custom-set-variables
-;;  '(initial-frame-alist (quote ((fullscreen . fullboth)))))
-
-;; (defun lambda-maxmize-frame ()
-;;   "Make Emacs frame maxmized."
-;;   (interactive)
-;;   (cond ((and (eq system-type 'windows-nt)
-;;               (fboundp 'w32-send-sys-command))
-;;          (w32-send-sys-command 61488))
-;;         ((eq system-type 'gnu/linux)
-;;          (set-frame-parameter nil 'fullscreen 'maximized))
-;;         (t
-;;          (set-frame-parameter nil 'fullscreen 'maximized))))
-
-;; (add-hook 'after-init-hook 'lambda-maxmize-frame)
-
 (require 'lambda-package)
 (require 'dired)
-
-(defconst current-user
-  (getenv
-   (if (equal system-type 'windows-nt) "USERNAME" "USER"))
-  "Current user name.")
 
 (defconst lambda-auto-save-dir (expand-file-name "auto-save-list/"
                                                  user-emacs-directory)
@@ -72,9 +49,6 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 
 (require 'lambda-widget)
 
-;; suppressing ad-handle-definition Warnings in Emacs
-(setq ad-redefinition-action 'accept)
-
 ;; Import the login-shell environment once, including daemon startup.
 (when (eq system-type 'darwin)
   (setq ns-command-modifier 'control
@@ -89,7 +63,7 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 ;; Emacs UI about settings =====================================================
 
 ;; enable y/n answers
-(fset 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 ;; diminish keeps the modeline tidy, this package is needed by others, so put
 ;; this at the beginning -------------------------------------------------------
@@ -110,13 +84,12 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
 (setq inhibit-startup-screen t)
 
 ;; nice scrolling in both keyboard and mouse
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)) ; three line at a time
-      mouse-wheel-progressive-speed nil ; donnot accelerate scrolling
-      ;; scroll-step 1
-      ;; scroll-margin 0
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 1))
+      mouse-wheel-progressive-speed nil
+      scroll-step 1
       scroll-preserve-screen-position t
       scroll-margin 0
-      scroll-conservatively 101)
+      scroll-conservatively most-positive-fixnum)
 
 ;; resize windows in pixel
 (setq window-resize-pixelwise t)
@@ -259,7 +232,7 @@ The optional position argument is intentionally ignored.")
 ;;; which-key --------------------------------------------------------------------
 ;; optional if you want which-key integration
 (use-package which-key
-  :ensure t
+  :ensure nil
   :delight which-key-mode
   :config
   ;; Allow C-h to trigger which-key before it is done automatically
@@ -360,14 +333,12 @@ The optional position argument is intentionally ignored.")
 ;; uniquify --- easy to distinguish same name buffers
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-(if (boundp 'uniquify-after-kill-buffer-flag)
-    (setq uniquify-after-kill-buffer-flag t)
-  (setq uniquify-after-kill-buffer-p t))
+(setq uniquify-after-kill-buffer-flag t)
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
 ;; use shift + arrow keys to switch between visible buffers
 (use-package windmove
-  :ensure t
+  :ensure nil
   :custom
   (windmove-allow-all-windows t)
   :config
@@ -444,8 +415,7 @@ The optional position argument is intentionally ignored.")
   (projectile-known-projects-file (expand-file-name
                                    "projectile-bookmarks.eld"
                                    lambda-auto-save-dir))
-  (projectile-ignored-project-function (lambda (project-root)
-                                         (lambda-x-under-gvm-directory-p project-root)))
+  (projectile-ignored-project-function #'lambda-x-under-gvm-directory-p)
 
   :config
   (defun lambda-projectile-project-files (original-function project-root
@@ -461,10 +431,10 @@ The optional position argument is intentionally ignored.")
 
 (defun lambda-x-under-gvm-directory-p (project-root)
   "When PROJECT-ROOT is under ~/.gvm directory, do not add it to projectile."
-  (let ((gvm-dir (expand-file-name "~/.gvm"))
-        (true-gvm-dir (file-truename "~/.gvm"))
-        (project-root-dir (expand-file-name project-root))
-        (true-project-root-dir (file-truename project-root)))
+  (let ((gvm-dir (file-name-as-directory (expand-file-name "~/.gvm")))
+        (true-gvm-dir (file-name-as-directory (file-truename "~/.gvm")))
+        (project-root-dir (file-name-as-directory (expand-file-name project-root)))
+        (true-project-root-dir (file-name-as-directory (file-truename project-root))))
 
     (or (string-prefix-p gvm-dir project-root-dir)
         (string-prefix-p true-gvm-dir project-root-dir)
@@ -544,8 +514,6 @@ The optional position argument is intentionally ignored.")
       gc-cons-threshold 20480000)
 
 
-(if (string< emacs-version "24.3.50")
-    (diminish 'global-visual-line-mode))
 (diminish 'visual-line-mode)
 ;; enable to support navigate in camelCase words
 (auto-compression-mode t)
@@ -590,17 +558,14 @@ The optional position argument is intentionally ignored.")
 
 ;; flymake - try best to use built-in package
 (use-package flymake
+  :ensure nil
   :custom
   (flymake-start-on-save-buffer t)
   :config
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
   (with-eval-after-load 'prog-mode
-    (with-eval-after-load 'flymake
-      (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
-      (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-      (with-eval-after-load 'go-mode
-        (define-key go-dot-mod-mode-map (kbd "M-n") 'flymake-goto-next-error)
-        (define-key go-dot-mod-mode-map (kbd "M-p") 'flymake-goto-prev-error)))))
+    (define-key prog-mode-map (kbd "M-n") #'flymake-goto-next-error)
+    (define-key prog-mode-map (kbd "M-p") #'flymake-goto-prev-error)))
 
 (use-package emacs
   :custom
@@ -611,7 +576,6 @@ The optional position argument is intentionally ignored.")
 (use-package undo-tree
   :ensure t
   :config
-  (require 'undo-tree)
   ;; autosave the undo-tree history
   (setq undo-tree-history-directory-alist
         `((".*" . ,temporary-file-directory))
@@ -627,7 +591,6 @@ The optional position argument is intentionally ignored.")
 (use-package temp-buffer-browse
   :ensure t
   :config
-  (require 'temp-buffer-browse)
   (temp-buffer-browse-mode 1))
 
 ;; shell configs ---------------------------------------------------------------
@@ -645,7 +608,7 @@ The optional position argument is intentionally ignored.")
 (setq comint-input-ignoredups t)
 (defun lambda-comint-init ()
   "Prevent shell commands from being echoed."
-  (setq comint-process-echoes t))
+  (setq-local comint-process-echoes t))
 (add-hook 'comint-mode-hook 'lambda-comint-init)
 
 ;; make a shell script executable automatically on save
@@ -666,8 +629,8 @@ The optional position argument is intentionally ignored.")
               (eldoc-mode 1)
               (define-key eshell-mode-map (kbd "C-j") 'eshell-send-input)))
 
-;; do not load custom file, all the configuration should be done by code
-(load "lambda-custom" t)
+;; Load saved Custom values from the explicit configuration path.
+(load custom-file t)
 
 ;;; magit --- use git in emacs--------------------------------------------------
 (use-package transient
@@ -746,12 +709,6 @@ The optional position argument is intentionally ignored.")
 
 ;; key-bindings for myself, you can change this to yours -----------------------
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
-
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 1)) ; three line at a time
-      mouse-wheel-progressive-speed nil ; don't accelerate scrolling
-      scroll-step 1
-      scroll-preserve-screen-position t
-      scroll-conservatively most-positive-fixnum)
 
 ;; YASnippet -------------------------------------------------------------------
 (lambda-package-ensure-install 'yasnippet)

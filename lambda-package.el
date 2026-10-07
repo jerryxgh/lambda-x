@@ -9,7 +9,7 @@
 ;; Keywords: extensions
 ;; Homepage: https://github.com/jerryxgh/lambda-x
 ;; Package-Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
+;; Package-Requires: ((emacs "30.1"))
 ;;
 
 ;; This file is not part of GNU Emacs.
@@ -89,7 +89,7 @@ used packages, this is mainly for getting unused packages."
 (defun lambda-package-get-pkg-with-reqs (package)
   "Get PACKAGE and requirements of PACKAGE and requirements of requirements."
   (if (and package
-           (not (assq package package--builtins)))
+           (not (package-built-in-p package)))
       (cons package (-flatten
                      (-map #'(lambda (req)
                                (lambda-package-get-pkg-with-reqs (car req)))

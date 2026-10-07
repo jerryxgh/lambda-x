@@ -17,7 +17,6 @@
 ;;; Code:
 
 (require 'lambda-core)
-(require 'lambda-cc)
 (require 'lambda-eglot)
 (require 'lambda-treesit)
 
@@ -61,6 +60,10 @@
   :ensure t
   :hook ((go-mode . lambda-golang-setup)
          (go-ts-mode . lambda-golang-setup)))
+
+(with-eval-after-load 'go-mode
+  (define-key go-dot-mod-mode-map (kbd "M-n") #'flymake-goto-next-error)
+  (define-key go-dot-mod-mode-map (kbd "M-p") #'flymake-goto-prev-error))
 
 (require 'go-template-mode)
 

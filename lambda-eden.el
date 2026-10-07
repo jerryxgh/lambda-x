@@ -64,7 +64,7 @@ Note the weekly scope of the command's precision.")
   :ensure t
   :config
   (add-to-list 'auto-mode-alist
-               '("modsecurity\.conf$" . nginx-mode)))
+               '("\\(?:\\`\\|/\\)modsecurity\\.conf\\'" . nginx-mode)))
 
 (use-package git-messenger
   :ensure t)
@@ -105,10 +105,6 @@ Note the weekly scope of the command's precision.")
 (use-package free-keys
   :ensure t)
 
-(use-package package-lint
-  :ensure t
-  :pin melpa)
-
 ;; (use-package copilot
 ;;   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
 ;;   :ensure t)
@@ -116,48 +112,6 @@ Note the weekly scope of the command's precision.")
 ;; (add-hook 'prog-mode-hook 'copilot-mode)
 ;; (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 ;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-
-(use-package marginalia
-  :ensure t
-  :config
-  (marginalia-mode))
-
-(use-package embark
-  :ensure t
-
-  :bind
-  (("C-." . embark-act)
-   ("C-c e ." . embark-act)         ;; pick some comfortable binding
-   ("C-c e d" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  ;; Show the Embark target at point via Eldoc. You may adjust the
-  ;; Eldoc strategy, if you want to see the documentation from
-  ;; multiple providers. Beware that using this can be a little
-  ;; jarring since the message shown in the minibuffer can be more
-  ;; than one line, causing the modeline to move up and down:
-
-  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package fzf
   :bind
@@ -179,15 +133,6 @@ Note the weekly scope of the command's precision.")
   :config
   (require 'vimrc-mode)
   (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
-
-(use-package package-lint
-  :ensure t
-  :config
-  (require 'package-lint-flymake)
-  (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
-
-(use-package elisp-autofmt
-  :ensure t)
 
 (use-package agent-shell
   :config

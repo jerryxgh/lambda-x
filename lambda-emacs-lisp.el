@@ -11,7 +11,7 @@
           #'(lambda ()
               (eldoc-mode 1)
               (flymake-mode 1)
-              (setq elisp-flymake-byte-compile-load-path load-path)
+              (setq-local elisp-flymake-byte-compile-load-path load-path)
               (diminish 'eldoc-mode)))
 
 ;; morlock --- more font-lock keywords for elisp -------------------------------
@@ -19,6 +19,16 @@
   :ensure t
   :config
   (morlock-mode 1))
+
+(use-package package-lint
+  :ensure t
+  :pin melpa
+  :config
+  (require 'package-lint-flymake)
+  (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
+
+(use-package elisp-autofmt
+  :ensure t)
 
 (provide 'lambda-emacs-lisp)
 

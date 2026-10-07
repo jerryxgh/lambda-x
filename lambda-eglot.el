@@ -18,7 +18,6 @@
 ;;; Code:
 
 (require 'lambda-core)
-(require 'lambda-cc)
 
 ;; speed up lsp https://github.com/blahgeek/emacs-lsp-booster
 ;; (use-package eglot-booster
@@ -26,7 +25,7 @@
 ;;         :config	(eglot-booster-mode))
 
 (use-package eglot
-  :ensure
+  :ensure nil
   :custom
   (eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit) ; auto show doc info in minibuffer
   :bind (:map eglot-mode-map

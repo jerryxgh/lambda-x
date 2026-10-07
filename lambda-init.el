@@ -74,18 +74,13 @@
   "Libraries to be loaded of lambda-x.")
 
 ;; load libraries and show the progress
-(let* ((progress-reporter
-        (make-progress-reporter "[lambda-x]: loading..." 0 100))
-       (library-num (length lambda-libraries))
-       (step (/ 99 library-num))
-       (progress 0))
-
+(let ((progress-reporter
+       (make-progress-reporter "[lambda-x]: loading..."
+                               0 (length lambda-libraries)))
+      (progress 0))
   (dolist (library lambda-libraries)
     (require library)
-    (setq progress (+ progress step))
-    (progress-reporter-update progress-reporter progress)
-    (redisplay))
-
+    (progress-reporter-update progress-reporter (setq progress (1+ progress))))
   (progress-reporter-done progress-reporter))
 
 (provide 'lambda-init)
