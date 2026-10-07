@@ -6,6 +6,7 @@ Emacs extensions and configuration.
 GNU Emacs 30.1 or newer is required, including built-in `use-package` support
 for the `:vc` keyword. Put this in file ~/.emacs.d/init.el:
 
+    ;;; -*- lexical-binding: t -*-
     (load "path-to-<lambda-init.el>")
 
 Add `;;; -*- lexical-binding: t -*-` as the first line of your init file.
