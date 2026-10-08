@@ -8,9 +8,6 @@
 (require 'lambda-package)
 (require 'dired)
 
-(setq with-editor-emacsclient-executable
-      "/opt/homebrew/opt/emacs-plus@31/bin/emacsclient")
-
 (defconst lambda-auto-save-dir (expand-file-name "auto-save-list/"
                                                  user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
