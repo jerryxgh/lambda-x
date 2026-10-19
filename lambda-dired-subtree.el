@@ -7,30 +7,18 @@
 
 ;;; Code:
 
-(require 'lambda-treemacs)
+(require 'lambda-evil)
 
 (use-package dired-subtree
   :ensure t
   :bind (:map dired-mode-map
               ("<tab>" . dired-subtree-cycle)
-              ("TAB" . dired-subtree-cycle)))
-
-(use-package evil-collection
-  :ensure t
-  :custom
-  ;; minibuffer use emacs default key bindings
-  ;; (evil-collection-setup-minibuffer t)
-  (evil-collection-outline-enable-in-minor-mode-p nil)
+              ("TAB" . dired-subtree-cycle))
   :config
-  (setq evil-collection-mode-list
-        (seq-remove (lambda (item) (memq item '(comint company)))
-                    evil-collection-mode-list))
-  (evil-collection-init)
-  (with-eval-after-load 'dired-subtree
-    ;; Override Evil Collection's higher-priority subtree toggle binding.
-    (evil-define-key 'normal dired-mode-map
-      (kbd "<tab>") #'dired-subtree-cycle
-      (kbd "TAB") #'dired-subtree-cycle)))
+  ;; Override Evil Collection's higher-priority subtree toggle binding.
+  (evil-define-key 'normal dired-mode-map
+    (kbd "<tab>") #'dired-subtree-cycle
+    (kbd "TAB") #'dired-subtree-cycle))
 
 (provide 'lambda-dired-subtree)
 

@@ -347,6 +347,16 @@ object."
   (setq mwheel-scroll-down-function 'mwheel-scroll-all-scroll-down-all)
   )
 
+(use-package evil-collection
+  :ensure t
+  :custom
+  (evil-collection-outline-enable-in-minor-mode-p nil)
+  :config
+  (setq evil-collection-mode-list
+        (seq-remove (lambda (item) (memq item '(comint company)))
+                    evil-collection-mode-list))
+  (evil-collection-init))
+
 (provide 'lambda-evil)
 
 ;;; lambda-evil.el ends here
