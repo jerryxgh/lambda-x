@@ -25,7 +25,12 @@
   (setq evil-collection-mode-list
         (seq-remove (lambda (item) (memq item '(comint company)))
                     evil-collection-mode-list))
-  (evil-collection-init))
+  (evil-collection-init)
+  (with-eval-after-load 'dired-subtree
+    ;; Override Evil Collection's higher-priority subtree toggle binding.
+    (evil-define-key 'normal dired-mode-map
+      (kbd "<tab>") #'dired-subtree-cycle
+      (kbd "TAB") #'dired-subtree-cycle)))
 
 (provide 'lambda-dired-subtree)
 
