@@ -11,6 +11,8 @@
 
 (use-package dired-subtree
   :ensure t
+  ;; Install Evil overrides before terminal TAB can invoke `evil-jump-forward'.
+  :demand t
   :bind (:map dired-mode-map
               ("<tab>" . dired-subtree-cycle)
               ("TAB" . dired-subtree-cycle))
