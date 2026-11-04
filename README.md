@@ -36,12 +36,44 @@ Long lines wrap visually by default, including in side-by-side Ediff windows;
 this does not insert newlines into files. Modes that explicitly enable truncation
 can still override the default; use `M-x toggle-truncate-lines` in those buffers.
 
-Copying with Evil `y`/`yy` or `M-w` in a local macOS terminal uses `pbcopy`
-to update the system clipboard. SSH sessions and other platforms use Clipetty's
-OSC 52 integration, which requires support in the terminal and multiplexer.
+Copying with Evil `y`/`yy` or `M-w` in terminal frames uses Clipetty's OSC 52
+integration, which requires support in the terminal and multiplexer.
 Apply `misc/_tmux.conf` to enable extended keys; ordinary prefixes remain available:
 `C-c e d` for Embark DWIM, `C-c e .` for Embark actions,
 and `C-c /` for Cape completion commands. `C-;` is the perspective prefix.
+
+For Alacritty -> SSH -> Linux tmux -> Emacs, configure clipboard forwarding
+on the Linux host as shown below. Alacritty's local `[terminal]` setting
+`osc52` must allow copying (`"OnlyCopy"` or `"CopyPaste"`); the supplied
+`misc/alacritty.toml` already uses `"CopyPaste"`.
+
+To persist these settings, add the following to `~/.tmux.conf` on the Linux host:
+
+```tmux
+set -s set-clipboard on
+set -as terminal-features ',alacritty*:clipboard,xterm*:clipboard'
+set -ag update-environment 'SSH_TTY'
+```
+
+Reload the file in the existing tmux server without ending sessions:
+
+```sh
+tmux source-file ~/.tmux.conf
+tmux show -s set-clipboard
+```
+
+The last command should print `set-clipboard on`. New tmux servers read the
+file automatically.
+
+Detach and reattach from the current SSH connection to refresh the session's
+`SSH_TTY`. Clipetty normally writes directly to that SSH terminal, bypassing
+remote tmux; a stale `SSH_TTY` can still break copying even when tmux's clipboard
+settings are correct. Inside Emacs, enable `M-x global-clipetty-mode` if needed
+(use a positive prefix argument, `C-u 1`, to enable rather than toggle it).
+Copy with Evil `y`/`yy` or `M-w`, then paste into a local application using the
+system paste shortcut. These Emacs settings do not configure a separate Vim
+process, and reading the local clipboard with Evil `p` over SSH is a separate
+operation.
 
 Perspective owns session restoration. Desktop restoration is no longer enabled;
 existing Desktop save files are preserved. Dired uses text-only subtree expansion,

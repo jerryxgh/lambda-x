@@ -8,31 +8,11 @@
 (require 'lambda-core)
 (require 'lambda-evil)
 
-(defun lambda-tty-clipboard-cut (original-function cut-function text)
-  "Copy TEXT with pbcopy locally, otherwise use Clipetty's ORIGINAL-FUNCTION.
-CUT-FUNCTION is the clipboard function wrapped by Clipetty.  GUI frames
-and SSH sessions retain Clipetty's normal dispatch."
-  (let ((pbcopy (and (eq system-type 'darwin)
-                     (not (display-graphic-p))
-                     (not (getenv "SSH_TTY" (selected-frame)))
-                     (not (getenv "SSH_CONNECTION" (selected-frame)))
-                     (executable-find "pbcopy"))))
-    (unless (and pbcopy
-                 (with-temp-buffer
-                   (insert text)
-                   (let ((coding-system-for-write 'utf-8-unix))
-                     (eq 0 (call-process-region
-                            (point-min) (point-max) pbcopy nil nil nil)))))
-      (funcall original-function cut-function text))))
-
 ;; Clipetty checks the selected frame before emitting OSC 52 sequences.
 (use-package clipetty
   :ensure t
   :no-require t
-  :commands global-clipetty-mode
-  :config
-  ;; Use the public cut entry point to avoid OSC 52 restrictions on local macOS.
-  (advice-add 'clipetty-cut :around #'lambda-tty-clipboard-cut))
+  :commands global-clipetty-mode)
 
 (use-package evil-terminal-cursor-changer
   :ensure t
