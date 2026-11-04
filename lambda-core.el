@@ -495,8 +495,9 @@ The optional position argument is intentionally ignored.")
       ;; automatically scroll to first error
       compilation-scroll-output 'first-error)
 
-;; let one line display as one line, even if it over the window
-(setq-default truncate-lines t)
+;; Wrap long lines visually, including in narrow side-by-side Ediff windows.
+(setq-default truncate-lines nil
+              truncate-partial-width-windows nil)
 (setq-default indent-tabs-mode nil)
 ;; set text-mode as the default major mode, instead of fundamental-mode
 (setq-default major-mode 'text-mode)

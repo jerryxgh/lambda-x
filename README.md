@@ -32,7 +32,13 @@ including daemon startup.
 
 Emacs 31 uses native terminal child frames for Corfu. Emacs 30 installs the
 maintained `corfu-terminal` package and its dependencies through package.el.
-OSC 52 clipboard integration requires support in the terminal and multiplexer.
+Long lines wrap visually by default, including in side-by-side Ediff windows;
+this does not insert newlines into files. Modes that explicitly enable truncation
+can still override the default; use `M-x toggle-truncate-lines` in those buffers.
+
+Copying with Evil `y`/`yy` or `M-w` in a local macOS terminal uses `pbcopy`
+to update the system clipboard. SSH sessions and other platforms use Clipetty's
+OSC 52 integration, which requires support in the terminal and multiplexer.
 Apply `misc/_tmux.conf` to enable extended keys; ordinary prefixes remain available:
 `C-c e d` for Embark DWIM, `C-c e .` for Embark actions,
 and `C-c /` for Cape completion commands. `C-;` is the perspective prefix.
