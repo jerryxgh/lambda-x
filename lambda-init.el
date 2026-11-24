@@ -34,7 +34,6 @@
     ;; lambda-ivy
     ;; lambda-company
 
-    lambda-semantic
     lambda-treesit
 
     lambda-cc
