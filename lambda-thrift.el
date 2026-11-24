@@ -98,6 +98,9 @@
   :bind (:map thrift-mode-map
               ("M-." . xref-find-definitions))
   :config
+  (with-eval-after-load 'evil
+    (evil-define-key '(normal insert) thrift-mode-map
+      (kbd "M-.") #'xref-find-definitions))
   (setq thrift-mode-syntax-table lambda-thrift-syntax-table))
 
 (provide 'lambda-thrift)
