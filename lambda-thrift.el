@@ -86,21 +86,34 @@
     table)
   "Syntax table for Thrift (.thrift) files.")
 
-;; use thrift-ls https://github.com/joyme123/thrift-ls?lang=zh-CN&open_in_browser=true
-;; go install github.com/joyme123/thrift-ls@latest
+(require 'project)
+
+(defvar eglot-lsp-context)
+
+(defun lambda-thrift-eglot-project (directory)
+  "Use the top-level idl DIRECTORY as the Thrift workspace when applicable."
+  (when (bound-and-true-p eglot-lsp-context)
+    (when-let* ((root (locate-dominating-file directory ".git"))
+                (idl (expand-file-name "idl/" root)))
+      (when (or (equal (file-name-as-directory directory) idl)
+                (file-in-directory-p directory idl))
+        (cons 'transient idl)))))
+
+(defun lambda-thrift-eglot-ensure ()
+  "Start Eglot with a workspace scoped to the Thrift IDL tree when possible."
+  ;; thrift-ls recursively scans the workspace before replying to initialize.
+  (add-hook 'project-find-functions #'lambda-thrift-eglot-project nil t)
+  (eglot-ensure))
+
+;; Install the server with `go install github.com/joyme123/thrift-ls@latest'.
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '(thrift-mode . ("thrift-ls"))))
 
 (use-package thrift
   :ensure t
-  :hook (thrift-mode . eglot-ensure)
-  :bind (:map thrift-mode-map
-              ("M-." . xref-find-definitions))
+  :hook (thrift-mode . lambda-thrift-eglot-ensure)
   :config
-  (with-eval-after-load 'evil
-    (evil-define-key '(normal insert) thrift-mode-map
-      (kbd "M-.") #'xref-find-definitions))
   (setq thrift-mode-syntax-table lambda-thrift-syntax-table))
 
 (provide 'lambda-thrift)
