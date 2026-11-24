@@ -1,0 +1,143 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /Users/bytedance/Library/Application Support/com.mitchellh.ghostty/config.ghostty
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options.
+# Note that you should not paste the output of `ghostty +show-config
+# --default` into your config: some default options actually conflict with each other
+# when explicitly set in a configuration file. Instead, only set the
+# options you actually need.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+#
+# Ghostty can reload the configuration while running by using the menu
+# options or the bound key (default: Command + Shift + comma on macOS and
+# Control + Shift + comma on other platforms). Not all config options can be
+# reloaded while running; some only apply to new windows and others may require
+# a full restart to take effect.
+
+# Config syntax crash course
+# ==========================
+# # The config file consists of simple key-value pairs,
+# # separated by equals signs.
+# font-family = Iosevka
+# window-padding-x = 2
+#
+# # Spacing around the equals sign does not matter.
+# # All of these are identical:
+# key=value
+# key= value
+# key =value
+# key = value
+#
+# # Any line beginning with a # is a comment. It's not possible to put
+# # a comment after a config option, since it would be interpreted as a
+# # part of the value. For example, this will have a value of "#123abc":
+# background = #123abc
+#
+# # Empty values are used to reset config keys to default.
+# key =
+#
+# # Some config options have unique syntaxes for their value,
+# # which is explained in the docs for that config option.
+# # Just for example:
+# resize-overlay-duration = 4s 200ms
+
+# Appearance and terminal behavior
+font-family = Menlo
+font-size = 14
+adjust-cell-height = 9
+adjust-cell-width = -1
+adjust-font-baseline = -3
+font-thicken = true
+font-thicken-strength = 128
+background = #181818
+foreground = #d8d8d8
+window-padding-x = 0
+window-padding-y = 0
+maximize = true
+command = direct:/bin/zsh -l
+macos-option-as-alt = true
+scrollback-limit-lines = 10000
+cursor-style = block
+cursor-style-blink = true
+cursor-color = cell-foreground
+cursor-text = cell-background
+selection-background = cell-foreground
+selection-foreground = cell-background
+search-background = #ac4242
+search-foreground = #181818
+search-selected-background = #f4bf75
+search-selected-foreground = #181818
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+confirm-close-surface = false
+clipboard-read = allow
+palette = 0=#181818
+palette = 1=#ac4242
+palette = 2=#90a959
+palette = 3=#f4bf75
+palette = 4=#6a9fb5
+palette = 5=#aa759f
+palette = 6=#75b5aa
+palette = 7=#d8d8d8
+palette = 8=#6b6b6b
+palette = 9=#c55555
+palette = 10=#aac474
+palette = 11=#feca88
+palette = 12=#82b8c8
+palette = 13=#c28cb8
+palette = 14=#93d3c3
+palette = 15=#f8f8f8
+
+# Keyboard shortcuts
+keybind = ctrl+semicolon=text:\x1b\x5b\x32\x37\x3b\x35\x3b\x35\x39\x7e
+keybind = super+semicolon=text:\x1b\x5b\x32\x37\x3b\x35\x3b\x35\x39\x7e
+keybind = super+a=text:\x01
+keybind = super+b=text:\x02
+keybind = super+c=text:\x03
+keybind = super+d=text:\x04
+keybind = super+e=text:\x05
+keybind = super+f=text:\x06
+keybind = super+g=text:\x07
+keybind = super+h=text:\x08
+keybind = super+i=text:\x09
+keybind = super+j=text:\x0a
+keybind = super+k=text:\x0b
+keybind = super+l=text:\x0c
+keybind = super+m=text:\x0d
+keybind = super+n=text:\x0e
+keybind = super+o=text:\x0f
+keybind = super+p=text:\x10
+keybind = super+q=quit
+keybind = super+r=text:\x12
+keybind = super+s=text:\x13
+keybind = super+t=text:\x14
+keybind = super+u=text:\x15
+keybind = super+w=text:\x17
+keybind = super+x=text:\x18
+keybind = super+y=text:\x19
+keybind = super+z=text:\x1a
+keybind = ctrl+slash=text:\x1f
+keybind = super+slash=text:\x1f
+keybind = super+shift+n=new_window
+keybind = super+shift+t=new_tab
+keybind = super+shift+arrow_up=previous_tab
+keybind = super+shift+arrow_down=next_tab
+keybind = super+shift+c=copy_to_clipboard
+keybind = super+shift+v=paste_from_clipboard
+keybind = super+shift+equal=increase_font_size:0.5
+keybind = super+shift+minus=decrease_font_size:0.5
+keybind = super+shift+digit_0=reset_font_size
+keybind = super+arrow_left=text:\x1b\x1f\x54\x62\x1f
+keybind = super+shift+arrow_left=text:\x1b\x1f\x54\x63\x1f
+keybind = super+arrow_right=text:\x1b\x1f\x55\x42\x1f
+keybind = super+shift+arrow_right=text:\x1b\x1f\x55\x43\x1f

@@ -361,11 +361,17 @@ bindings = [
     { key = "/", mods = "Command", chars = "\u001f" },
     { key = "n", mods = "Command | Shift", action = "CreateNewWindow" },
     { key = "t", mods = "Command | Shift", action = "CreateNewTab" },
-    { key = "ArrowLeft", mods = "Command | Shift", action = "SelectPreviousTab" },
-    { key = "ArrowRight", mods = "Command | Shift", action = "SelectNextTab" },
+    { key = "Up", mods = "Command | Shift", action = "SelectPreviousTab" },
+    { key = "Down", mods = "Command | Shift", action = "SelectNextTab" },
     { key = "c", mods = "Command | Shift", action = "Copy" },
     { key = "v", mods = "Command | Shift", action = "Paste" },
     { key = "+", mods = "Command | Shift", action = "IncreaseFontSize" },
     { key = "_", mods = "Command | Shift", action = "DecreaseFontSize" },
     { key = ")", mods = "Command | Shift", action = "ResetFontSize" },
+
+    { key = "Left", mods = "Command", chars = "\u001b\u001f\u0054\u0062\u001f" },
+    { key = "Left", mods = "Command | Shift", chars = "\u001b\u001f\u0054\u0063\u001f" },
+
+    { key = "Right", mods = "Command", chars = "\u001b\u001f\u0055\u0042\u001f" },
+    { key = "Right", mods = "Command | Shift", chars = "\u001b\u001f\u0055\u0043\u001f" },
 ]
