@@ -58,7 +58,12 @@ If a directory name is one of EXCLUDE-DIRECTORIES-LIST, then this directory and
     :config
     (dolist (name '("GOPATH" "GOBIN"))
       (add-to-list 'exec-path-from-shell-variables name))
-    (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize)
+    ;; Homebrew can install Emacs.app separately from its matching client.
+    ;; exec-directory still points into PREFIX/libexec/emacs/VERSION/ARCH.
+    (let ((bin (expand-file-name "../../../../bin" exec-directory)))
+      (when (file-executable-p (expand-file-name "emacsclient" bin))
+        (add-to-list 'exec-path bin)))))
 
 ;; Emacs UI about settings =====================================================
 
